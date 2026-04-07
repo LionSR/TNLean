@@ -1,0 +1,875 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.Calculus.InverseFunctionTheorem.ApproximatesLinearOn</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.Calculus.InverseFunctionTheorem.ApproximatesLinearOn";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">Calculus</span>.<span class="name">InverseFunctionTheorem</span>.<span class="name">ApproximatesLinearOn</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Basic.html">Mathlib.Topology.OpenPartialHomeomorph.Basic</a></li><li><a href="../../../.././Mathlib/Analysis/Normed/Operator/Banach.html">Mathlib.Analysis.Normed.Operator.Banach</a></li><li><a href="../../../.././Mathlib/Analysis/Normed/Operator/NormedSpace.html">Mathlib.Analysis.Normed.Operator.NormedSpace</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.Calculus.InverseFunctionTheorem.ApproximatesLinearOn" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn"><span class="name">ApproximatesLinearOn</span></a></div><div class="nav_link"><a class="break_within" href="#approximatesLinearOn_empty"><span class="name">approximatesLinearOn_empty</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.mono_num"><span class="name">ApproximatesLinearOn</span>.<span class="name">mono_num</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.mono_set"><span class="name">ApproximatesLinearOn</span>.<span class="name">mono_set</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith"><span class="name">ApproximatesLinearOn</span>.<span class="name">approximatesLinearOn_iff_lipschitzOnWith</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.lipschitzOnWith"><span class="name">ApproximatesLinearOn</span>.<span class="name">lipschitzOnWith</span></a></div><div class="nav_link"><a class="break_within" href="#LipschitzOnWith.approximatesLinearOn"><span class="name">LipschitzOnWith</span>.<span class="name">approximatesLinearOn</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.lipschitz_sub"><span class="name">ApproximatesLinearOn</span>.<span class="name">lipschitz_sub</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.lipschitz"><span class="name">ApproximatesLinearOn</span>.<span class="name">lipschitz</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.continuous"><span class="name">ApproximatesLinearOn</span>.<span class="name">continuous</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.continuousOn"><span class="name">ApproximatesLinearOn</span>.<span class="name">continuousOn</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.surjOn_closedBall_of_nonlinearRightInverse"><span class="name">ApproximatesLinearOn</span>.<span class="name">surjOn_closedBall_of_nonlinearRightInverse</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.open_image"><span class="name">ApproximatesLinearOn</span>.<span class="name">open_image</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.image_mem_nhds"><span class="name">ApproximatesLinearOn</span>.<span class="name">image_mem_nhds</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.map_nhds_eq"><span class="name">ApproximatesLinearOn</span>.<span class="name">map_nhds_eq</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.antilipschitz"><span class="name">ApproximatesLinearOn</span>.<span class="name">antilipschitz</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.injective"><span class="name">ApproximatesLinearOn</span>.<span class="name">injective</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.injOn"><span class="name">ApproximatesLinearOn</span>.<span class="name">injOn</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.surjective"><span class="name">ApproximatesLinearOn</span>.<span class="name">surjective</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.toPartialEquiv"><span class="name">ApproximatesLinearOn</span>.<span class="name">toPartialEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.inverse_continuousOn"><span class="name">ApproximatesLinearOn</span>.<span class="name">inverse_continuousOn</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.to_inv"><span class="name">ApproximatesLinearOn</span>.<span class="name">to_inv</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.toOpenPartialHomeomorph"><span class="name">ApproximatesLinearOn</span>.<span class="name">toOpenPartialHomeomorph</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.toOpenPartialHomeomorph_coe"><span class="name">ApproximatesLinearOn</span>.<span class="name">toOpenPartialHomeomorph_coe</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.toOpenPartialHomeomorph_source"><span class="name">ApproximatesLinearOn</span>.<span class="name">toOpenPartialHomeomorph_source</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.toOpenPartialHomeomorph_target"><span class="name">ApproximatesLinearOn</span>.<span class="name">toOpenPartialHomeomorph_target</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.toHomeomorph"><span class="name">ApproximatesLinearOn</span>.<span class="name">toHomeomorph</span></a></div><div class="nav_link"><a class="break_within" href="#ApproximatesLinearOn.closedBall_subset_target"><span class="name">ApproximatesLinearOn</span>.<span class="name">closedBall_subset_target</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Non-linear-maps-close-to-affine-maps" class="markdown-heading">Non-linear maps close to affine maps <a class="hover-link" href="#Non-linear-maps-close-to-affine-maps">#</a></h1><p>In this file we study a map <code>f</code> such that <code>‖f x - f y - f' (x - y)‖ ≤ c * ‖x - y‖</code> on an open set
+<code>s</code>, where <code>f' : E →L[𝕜] F</code> is a continuous linear map and <code>c</code> is suitably small. Maps of this type
+behave like <code>f a + f' (x - a)</code> near each <code>a ∈ s</code>.</p><p>When <code>f'</code> is onto, we show that <code>f</code> is locally onto.</p><p>When <code>f'</code> is a continuous linear equiv, we show that <code>f</code> is a homeomorphism
+between <code>s</code> and <code>f '' s</code>. More precisely, we define <code><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">ApproximatesLinearOn.toOpenPartialHomeomorph</a></code>
+to be an <code><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a></code> with <code>toFun = f</code>, <code>source = s</code>, and <code>target = f '' s</code>.
+between <code>s</code> and <code>f '' s</code>. More precisely, we define <code><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">ApproximatesLinearOn.toOpenPartialHomeomorph</a></code>
+to be an <code><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a></code> with <code>toFun = f</code>, <code>source = s</code>, and <code>target = f '' s</code>.</p><p>Maps of this type naturally appear in the proof of the inverse function theorem (see next section),
+and <code><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">ApproximatesLinearOn.toOpenPartialHomeomorph</a></code> will imply that the locally inverse function
+and <code><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">ApproximatesLinearOn.toOpenPartialHomeomorph</a></code> will imply that the locally inverse function
+exists.</p><p>We define this auxiliary notion to split the proof of the inverse function theorem into small
+lemmas. This approach makes it possible</p><ul><li><p>to prove a lower estimate on the size of the domain of the inverse function;</p></li><li><p>to reuse parts of the proofs in the case if a function is not strictly differentiable. E.g., for a
+function <code>f : E × F → G</code> with estimates on <code>f x y₁ - f x y₂</code> but not on <code>f x₁ y - f x₂ y</code>.</p></li></ul><h2 id="Notation" class="markdown-heading">Notation <a class="hover-link" href="#Notation">#</a></h2><p>We introduce some <code>local notation</code> to make formulas shorter:</p><ul><li>by <code>N</code> we denote <code>‖f'⁻¹‖</code>;</li><li>by <code>g</code> we denote the auxiliary contracting map <code>x ↦ x + f'.<a href="../../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a> (y - f x)</code> used to prove that
+<code>{x | f x = y}</code> is nonempty.</li></ul></div><div class="decl" id="ApproximatesLinearOn"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L66-L73">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn"><span class="name">ApproximatesLinearOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Prop</a></div></div><p>We say that <code>f</code> approximates a continuous linear map <code>f'</code> on <code>s</code> with constant <code>c</code>,
+if <code>‖f x - f y - f' (x - y)‖ ≤ c * ‖x - y‖</code> whenever <code>x, y ∈ s</code>.</p><p>This predicate is defined to facilitate the splitting of the inverse function theorem into small
+lemmas. Some of these lemmas can be useful, e.g., to prove that the inverse function is defined
+on a specific set.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn">∀ <span class="fn">y</span> ∈ <span class="fn">s</span>, <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f'</span> (<span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn">c</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></span></span></li></ul></details><details id="instances-for-list-ApproximatesLinearOn" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="approximatesLinearOn_empty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L75-L77">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#approximatesLinearOn_empty"><span class="name">approximatesLinearOn_empty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <a href="../../../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a> <span class="fn">c</span></span></div></div></div></div><div class="mod_doc"><p>First we prove some properties of a function that <code><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a></code> a (not necessarily
+invertible) continuous linear map.</p></div><div class="decl" id="ApproximatesLinearOn.mono_num"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L91-L93">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.mono_num"><span class="name">ApproximatesLinearOn</span>.<span class="name">mono_num</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c </span><span class="fn">c'</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c'</span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.mono_set"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L95-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.mono_set"><span class="name">ApproximatesLinearOn</span>.<span class="name">mono_set</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hst</span> : <span class="fn">s</span> <a href="../../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">t</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">t</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L98-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith"><span class="name">ApproximatesLinearOn</span>.<span class="name">approximatesLinearOn_iff_lipschitzOnWith</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Topology/EMetricSpace/Lipschitz.html#LipschitzOnWith">LipschitzOnWith</a> <span class="fn">c</span> (<span class="fn">f</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">⇑<span class="fn">f'</span></span>) <span class="fn">s</span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.lipschitzOnWith"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L104-L105">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.lipschitzOnWith"><span class="name">ApproximatesLinearOn</span>.<span class="name">lipschitzOnWith</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span> → <span class="fn"><a href="../../../.././Mathlib/Topology/EMetricSpace/Lipschitz.html#LipschitzOnWith">LipschitzOnWith</a> <span class="fn">c</span> (<span class="fn">f</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">⇑<span class="fn">f'</span></span>) <span class="fn">s</span></span></span></div></div><p><strong>Alias</strong> of the forward direction of <code><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith">ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith</a></code>.</p></div></div><div class="decl" id="LipschitzOnWith.approximatesLinearOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L104-L105">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#LipschitzOnWith.approximatesLinearOn"><span class="name">LipschitzOnWith</span>.<span class="name">approximatesLinearOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../../.././Mathlib/Topology/EMetricSpace/Lipschitz.html#LipschitzOnWith">LipschitzOnWith</a> <span class="fn">c</span> (<span class="fn">f</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">⇑<span class="fn">f'</span></span>) <span class="fn">s</span></span> → <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith">ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith</a></code>.</p></div></div><div class="decl" id="ApproximatesLinearOn.lipschitz_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L107-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.lipschitz_sub"><span class="name">ApproximatesLinearOn</span>.<span class="name">lipschitz_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/EMetricSpace/Lipschitz.html#LipschitzWith">LipschitzWith</a> <span class="fn">c</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">↑<span class="fn">s</span></span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">↑<span class="fn">x</span></span></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f'</span> <span class="fn">↑<span class="fn">x</span></span></span></span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.lipschitz"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L111-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.lipschitz"><span class="name">ApproximatesLinearOn</span>.<span class="name">lipschitz</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/EMetricSpace/Lipschitz.html#LipschitzWith">LipschitzWith</a> (<a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">f'</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">c</span>) <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.continuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L116-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.continuous"><span class="name">ApproximatesLinearOn</span>.<span class="name">continuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.continuousOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L119-L120">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.continuousOn"><span class="name">ApproximatesLinearOn</span>.<span class="name">continuousOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">f</span> <span class="fn">s</span></span></div></div></div></div><div class="mod_doc"><p>We prove that a function which is linearly approximated by a continuous linear map with a nonlinear
+right inverse is locally onto. This will apply to the case where the approximating map is a linear
+equivalence, for the local inverse theorem, but also whenever the approximating map is onto,
+by Banach's open mapping theorem.</p></div><div class="decl" id="ApproximatesLinearOn.surjOn_closedBall_of_nonlinearRightInverse"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L135-L273">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.surjOn_closedBall_of_nonlinearRightInverse"><span class="name">ApproximatesLinearOn</span>.<span class="name">surjOn_closedBall_of_nonlinearRightInverse</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'symm</span> : <span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Analysis/Normed/Operator/Banach.html#ContinuousLinearMap.NonlinearRightInverse">NonlinearRightInverse</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">E</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ε0</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">ε</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hε</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Metric.closedBall">Metric.closedBall</a> <span class="fn">b</span> <span class="fn">ε</span></span> <a href="../../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Data/Set/Operations.html#Set.SurjOn">Set.SurjOn</a> <span class="fn">f</span> <span class="fn">(<a href="../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Metric.closedBall">Metric.closedBall</a> <span class="fn">b</span> <span class="fn">ε</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Metric.closedBall">Metric.closedBall</a> <span class="fn">(<span class="fn">f</span> <span class="fn">b</span>)</span> ((<span class="fn">(↑<span class="fn"><span class="fn">f'symm</span>.<a href="../../../.././Mathlib/Analysis/Normed/Operator/Banach.html#ContinuousLinearMap.NonlinearRightInverse.nnnorm">nnnorm</a></span>)</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">↑<span class="fn">c</span></span>) <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">ε</span>))</span></span></div></div><p>If a function is linearly approximated by a continuous linear map with a (possibly nonlinear)
+right inverse, then it is locally onto: a ball of an explicit radius is included in the image
+of the map.</p></div></div><div class="decl" id="ApproximatesLinearOn.open_image"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L275-L283">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.open_image"><span class="name">ApproximatesLinearOn</span>.<span class="name">open_image</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'symm</span> : <span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Analysis/Normed/Operator/Banach.html#ContinuousLinearMap.NonlinearRightInverse">NonlinearRightInverse</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">F</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f'symm</span>.<a href="../../../.././Mathlib/Analysis/Normed/Operator/Banach.html#ContinuousLinearMap.NonlinearRightInverse.nnnorm">nnnorm</a></span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> (<span class="fn">f</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.image_mem_nhds"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L285-L289">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.image_mem_nhds"><span class="name">ApproximatesLinearOn</span>.<span class="name">image_mem_nhds</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'symm</span> : <span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Analysis/Normed/Operator/Banach.html#ContinuousLinearMap.NonlinearRightInverse">NonlinearRightInverse</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">E</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">s</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">F</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f'symm</span>.<a href="../../../.././Mathlib/Analysis/Normed/Operator/Banach.html#ContinuousLinearMap.NonlinearRightInverse.nnnorm">nnnorm</a></span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.map_nhds_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L291-L297">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.map_nhds_eq"><span class="name">ApproximatesLinearOn</span>.<span class="name">map_nhds_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">f'</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'symm</span> : <span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Analysis/Normed/Operator/Banach.html#ContinuousLinearMap.NonlinearRightInverse">NonlinearRightInverse</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">E</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">s</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">F</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f'symm</span>.<a href="../../../.././Mathlib/Analysis/Normed/Operator/Banach.html#ContinuousLinearMap.NonlinearRightInverse.nnnorm">nnnorm</a></span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.map">Filter.map</a> <span class="fn">f</span> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="mod_doc"><p>From now on we assume that <code>f</code> approximates an invertible continuous linear map <code>f : E ≃L[𝕜] F</code>.</p><p>We also assume that either <code>E = {0}</code>, or <code>c &lt; ‖f'⁻¹‖⁻¹</code>. We use <code>N</code> as an abbreviation for <code>‖f'⁻¹‖</code>.</p></div><div class="decl" id="ApproximatesLinearOn.antilipschitz"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L312-L317">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.antilipschitz"><span class="name">ApproximatesLinearOn</span>.<span class="name">antilipschitz</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Antilipschitz.html#AntilipschitzWith">AntilipschitzWith</a> (<a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">c</span>)<a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L319-L321">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.injective"><span class="name">ApproximatesLinearOn</span>.<span class="name">injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.injOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L323-L325">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.injOn"><span class="name">ApproximatesLinearOn</span>.<span class="name">injOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Data/Set/Operations.html#Set.InjOn">Set.InjOn</a> <span class="fn">f</span> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L327-L341">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.surjective"><span class="name">ApproximatesLinearOn</span>.<span class="name">surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.toPartialEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L343-L350">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toPartialEquiv"><span class="name">ApproximatesLinearOn</span>.<span class="name">toPartialEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv">PartialEquiv</a> <span class="fn">E</span> <span class="fn">F</span></span></div></div><p>A map approximating a linear equivalence on a set defines a partial equivalence on this set.
+Should not be used outside of this file, because it is superseded by <code><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">toOpenPartialHomeomorph</a></code>
+below.</p><p>This is a first step towards the inverse function.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">hf</span>.<a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toPartialEquiv">toPartialEquiv</a></span> <span class="fn">hc</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#Set.InjOn.toPartialEquiv">Set.InjOn.toPartialEquiv</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-ApproximatesLinearOn.toPartialEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ApproximatesLinearOn.inverse_continuousOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L352-L358">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.inverse_continuousOn"><span class="name">ApproximatesLinearOn</span>.<span class="name">inverse_continuousOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(↑<span class="fn"><span class="fn">(<span class="fn"><span class="fn">hf</span>.<a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toPartialEquiv">toPartialEquiv</a></span> <span class="fn">hc</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span>)</span> (<span class="fn">f</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div><p>The inverse function is continuous on <code>f '' s</code>.
+Use properties of <code><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a></code> instead.</p></div></div><div class="decl" id="ApproximatesLinearOn.to_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L360-L382">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.to_inv"><span class="name">ApproximatesLinearOn</span>.<span class="name">to_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">(↑<span class="fn"><span class="fn">(<span class="fn"><span class="fn">hf</span>.<a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toPartialEquiv">toPartialEquiv</a></span> <span class="fn">hc</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span>)</span> <span class="fn">(↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span>)</span> (<span class="fn">f</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>) (<a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> (<a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">c</span>)<a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span>)</span></div></div><p>The inverse function is approximated linearly on <code>f '' s</code> by <code>f'.<a href="../../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a></code>.</p></div></div><div class="decl" id="ApproximatesLinearOn.toOpenPartialHomeomorph"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L390-L399">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph"><span class="name">ApproximatesLinearOn</span>.<span class="name">toOpenPartialHomeomorph</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">E</span> <span class="fn">F</span></span></div></div><p>Given a function <code>f</code> that approximates a linear equivalence on an open set <code>s</code>,
+returns an open partial homeomorphism with <code>toFun = f</code> and <code>source = s</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">ApproximatesLinearOn.toOpenPartialHomeomorph</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">hf</span> <span class="fn">hc</span> <span class="fn">hs</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph.mk">{</a> <span class="fn">toPartialEquiv</span> := <span class="fn"><span class="fn"><span class="fn">hf</span>.<a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toPartialEquiv">toPartialEquiv</a></span> <span class="fn">hc</span></span>, <span class="fn">open_source</span> := <span class="fn">hs</span>, <span class="fn">open_target</span> := <span class="fn">⋯</span>, <span class="fn">continuousOn_toFun</span> := <span class="fn">⋯</span>,
+    <span class="fn">continuousOn_invFun</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph.mk">}</a></li></ul></details><details id="instances-for-list-ApproximatesLinearOn.toOpenPartialHomeomorph" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ApproximatesLinearOn.toOpenPartialHomeomorph_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L401-L405">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph_coe"><span class="name">ApproximatesLinearOn</span>.<span class="name">toOpenPartialHomeomorph_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">toOpenPartialHomeomorph</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">hf</span> <span class="fn">hc</span> <span class="fn">hs</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.toOpenPartialHomeomorph_source"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L407-L411">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph_source"><span class="name">ApproximatesLinearOn</span>.<span class="name">toOpenPartialHomeomorph_source</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">toOpenPartialHomeomorph</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">hf</span> <span class="fn">hc</span> <span class="fn">hs</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">s</span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.toOpenPartialHomeomorph_target"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L413-L417">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph_target"><span class="name">ApproximatesLinearOn</span>.<span class="name">toOpenPartialHomeomorph_target</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">toOpenPartialHomeomorph</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">hf</span> <span class="fn">hc</span> <span class="fn">hs</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span></div></div></div></div><div class="decl" id="ApproximatesLinearOn.toHomeomorph"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L419-L425">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toHomeomorph"><span class="name">ApproximatesLinearOn</span>.<span class="name">toHomeomorph</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph">≃ₜ</a> <span class="fn">F</span></div></div><p>A function <code>f</code> that approximates a linear equivalence on the whole space is a homeomorphism.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toHomeomorph">ApproximatesLinearOn.toHomeomorph</a> <span class="fn">f</span> <span class="fn">hf</span> <span class="fn">hc</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">ApproximatesLinearOn.toOpenPartialHomeomorph</a> <span class="fn">f</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> <span class="fn">hf</span> <span class="fn">hc</span> <span class="fn">⋯</span>)</span>.<a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Basic.html#OpenPartialHomeomorph.toHomeomorphOfSourceEqUnivTargetEqUniv">toHomeomorphOfSourceEqUnivTargetEqUniv</a></span> <span class="fn">⋯</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-ApproximatesLinearOn.toHomeomorph" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ApproximatesLinearOn.closedBall_subset_target"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.lean#L429-L433">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.closedBall_subset_target"><span class="name">ApproximatesLinearOn</span>.<span class="name">closedBall_subset_target</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">E</span> <a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">≃L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv">]</a> <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn">ApproximatesLinearOn</a> <span class="fn">f</span> <span class="fn">(↑<span class="fn">f'</span>)</span> <span class="fn">s</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">E</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ε0</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">ε</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hε</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Metric.closedBall">Metric.closedBall</a> <span class="fn">b</span> <span class="fn">ε</span></span> <a href="../../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Metric.closedBall">Metric.closedBall</a> <span class="fn">(<span class="fn">f</span> <span class="fn">b</span>)</span> ((<span class="fn">↑<a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">↑<span class="fn"><span class="fn">f'</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.symm">symm</a></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">↑<span class="fn">c</span></span>) <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">ε</span>)</span> <a href="../../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Calculus/InverseFunctionTheorem/ApproximatesLinearOn.html#ApproximatesLinearOn.toOpenPartialHomeomorph">toOpenPartialHomeomorph</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">hf</span> <span class="fn">hc</span> <span class="fn">hs</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

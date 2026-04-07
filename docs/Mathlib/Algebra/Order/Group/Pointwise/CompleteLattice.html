@@ -1,0 +1,456 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../../.././style.css"></link><link rel="icon" href="../../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Order.Group.Pointwise.CompleteLattice</title><script defer="true" src="../../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Order.Group.Pointwise.CompleteLattice";</script><script type="module" src="../../../../.././jump-src.js"></script><script type="module" src="../../../../.././search.js"></script><script type="module" src="../../../../.././expand-nav.js"></script><script type="module" src="../../../../.././how-about.js"></script><script type="module" src="../../../../.././instances.js"></script><script type="module" src="../../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Order</span>.<span class="name">Group</span>.<span class="name">Pointwise</span>.<span class="name">CompleteLattice</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../../.././Init.html">Init</a></li><li><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Indexed.html">Mathlib.Order.ConditionallyCompleteLattice.Indexed</a></li><li><a href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/Bounds.html">Mathlib.Algebra.Order.Group.Pointwise.Bounds</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Order.Group.Pointwise.CompleteLattice" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#csSup_one"><span class="name">csSup_one</span></a></div><div class="nav_link"><a class="break_within" href="#csSup_zero"><span class="name">csSup_zero</span></a></div><div class="nav_link"><a class="break_within" href="#csInf_one"><span class="name">csInf_one</span></a></div><div class="nav_link"><a class="break_within" href="#csInf_zero"><span class="name">csInf_zero</span></a></div><div class="nav_link"><a class="break_within" href="#csSup_inv"><span class="name">csSup_inv</span></a></div><div class="nav_link"><a class="break_within" href="#csSup_neg"><span class="name">csSup_neg</span></a></div><div class="nav_link"><a class="break_within" href="#csInf_inv"><span class="name">csInf_inv</span></a></div><div class="nav_link"><a class="break_within" href="#csInf_neg"><span class="name">csInf_neg</span></a></div><div class="nav_link"><a class="break_within" href="#csSup_mul"><span class="name">csSup_mul</span></a></div><div class="nav_link"><a class="break_within" href="#csSup_add"><span class="name">csSup_add</span></a></div><div class="nav_link"><a class="break_within" href="#csInf_mul"><span class="name">csInf_mul</span></a></div><div class="nav_link"><a class="break_within" href="#csInf_add"><span class="name">csInf_add</span></a></div><div class="nav_link"><a class="break_within" href="#csSup_div"><span class="name">csSup_div</span></a></div><div class="nav_link"><a class="break_within" href="#csSup_sub"><span class="name">csSup_sub</span></a></div><div class="nav_link"><a class="break_within" href="#csInf_div"><span class="name">csInf_div</span></a></div><div class="nav_link"><a class="break_within" href="#csInf_sub"><span class="name">csInf_sub</span></a></div><div class="nav_link"><a class="break_within" href="#sSup_one"><span class="name">sSup_one</span></a></div><div class="nav_link"><a class="break_within" href="#sSup_zero"><span class="name">sSup_zero</span></a></div><div class="nav_link"><a class="break_within" href="#sInf_one"><span class="name">sInf_one</span></a></div><div class="nav_link"><a class="break_within" href="#sInf_zero"><span class="name">sInf_zero</span></a></div><div class="nav_link"><a class="break_within" href="#sSup_inv"><span class="name">sSup_inv</span></a></div><div class="nav_link"><a class="break_within" href="#sSup_neg"><span class="name">sSup_neg</span></a></div><div class="nav_link"><a class="break_within" href="#sInf_inv"><span class="name">sInf_inv</span></a></div><div class="nav_link"><a class="break_within" href="#sInf_neg"><span class="name">sInf_neg</span></a></div><div class="nav_link"><a class="break_within" href="#sSup_mul"><span class="name">sSup_mul</span></a></div><div class="nav_link"><a class="break_within" href="#sSup_add"><span class="name">sSup_add</span></a></div><div class="nav_link"><a class="break_within" href="#sInf_mul"><span class="name">sInf_mul</span></a></div><div class="nav_link"><a class="break_within" href="#sInf_add"><span class="name">sInf_add</span></a></div><div class="nav_link"><a class="break_within" href="#sSup_div"><span class="name">sSup_div</span></a></div><div class="nav_link"><a class="break_within" href="#sSup_sub"><span class="name">sSup_sub</span></a></div><div class="nav_link"><a class="break_within" href="#sInf_div"><span class="name">sInf_div</span></a></div><div class="nav_link"><a class="break_within" href="#sInf_sub"><span class="name">sInf_sub</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Infima-suprema-in-ordered-monoids-and-groups" class="markdown-heading">Infima/suprema in ordered monoids and groups <a class="hover-link" href="#Infima-suprema-in-ordered-monoids-and-groups">#</a></h1><p>In this file we prove a few facts like “The infimum of <code>-s</code> is <code>-</code> the supremum of <code>s</code>”.</p><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><p><code>sSup (s • t) = sSup s • sSup t</code> and <code>sInf (s • t) = sInf s • sInf t</code> hold as well but
+<code><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#CovariantClass">CovariantClass</a></code> is currently not polymorphic enough to state it.</p></div><div class="decl" id="csSup_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L35-L35">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csSup_one"><span class="name">csSup_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#One">One</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">1</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="csSup_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L35-L35">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csSup_zero"><span class="name">csSup_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">0</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="csInf_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L36-L36">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csInf_one"><span class="name">csInf_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#One">One</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">1</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="csInf_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L36-L36">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csInf_zero"><span class="name">csInf_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">0</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="csSup_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L44-L47">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csSup_inv"><span class="name">csSup_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span><a href="../../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span>)</span><a href="../../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div></div></div><div class="decl" id="csSup_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L44-L44">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csSup_neg"><span class="name">csSup_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">s</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="csInf_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L49-L52">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csInf_inv"><span class="name">csInf_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span><a href="../../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span>)</span><a href="../../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div></div></div><div class="decl" id="csInf_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L49-L49">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csInf_neg"><span class="name">csInf_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">s</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="csSup_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L54-L58">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csSup_mul"><span class="name">csSup_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₀</span> : <span class="fn"><span class="fn">t</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="csSup_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L54-L54">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csSup_add"><span class="name">csSup_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₀</span> : <span class="fn"><span class="fn">t</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="csInf_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L60-L64">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csInf_mul"><span class="name">csInf_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₀</span> : <span class="fn"><span class="fn">t</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="csInf_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L60-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csInf_add"><span class="name">csInf_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₀</span> : <span class="fn"><span class="fn">t</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="csSup_div"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L66-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csSup_div"><span class="name">csSup_div</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₀</span> : <span class="fn"><span class="fn">t</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="csSup_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L66-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csSup_sub"><span class="name">csSup_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₀</span> : <span class="fn"><span class="fn">t</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="csInf_div"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L71-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csInf_div"><span class="name">csInf_div</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₀</span> : <span class="fn"><span class="fn">t</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="csInf_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L71-L71">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#csInf_sub"><span class="name">csInf_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs₀</span> : <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₀</span> : <span class="fn"><span class="fn">t</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht₁</span> : <span class="fn"><a href="../../../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="sSup_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L85-L85">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sSup_one"><span class="name">sSup_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#One">One</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">1</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="sSup_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L85-L85">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sSup_zero"><span class="name">sSup_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">0</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="sInf_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L86-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sInf_one"><span class="name">sInf_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#One">One</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">1</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="sInf_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L86-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sInf_zero"><span class="name">sInf_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">0</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="sSup_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L94-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sSup_inv"><span class="name">sSup_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span><a href="../../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span>)</span><a href="../../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div></div></div><div class="decl" id="sSup_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L94-L94">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sSup_neg"><span class="name">sSup_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">s</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="sInf_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L99-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sInf_inv"><span class="name">sInf_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span><a href="../../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span>)</span><a href="../../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div></div></div><div class="decl" id="sInf_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L99-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sInf_neg"><span class="name">sInf_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">s</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="sSup_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L104-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sSup_mul"><span class="name">sSup_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="sSup_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L104-L104">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sSup_add"><span class="name">sSup_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="sInf_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L109-L112">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sInf_mul"><span class="name">sInf_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="sInf_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L109-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sInf_add"><span class="name">sInf_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="sSup_div"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L114-L115">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sSup_div"><span class="name">sSup_div</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="sSup_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L114-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sSup_sub"><span class="name">sSup_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="sInf_div"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L117-L118">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sInf_div"><span class="name">sInf_div</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulLeftMono">MulLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#MulRightMono">MulRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="sInf_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.lean#L117-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Order/Group/Pointwise/CompleteLattice.html#sInf_sub"><span class="name">sInf_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">t</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">t</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

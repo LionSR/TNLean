@@ -1,0 +1,359 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.Clopen</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Topology.Clopen";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">Clopen</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Topology/ContinuousOn.html">Mathlib.Topology.ContinuousOn</a></li><li><a href="../.././Mathlib/Data/Set/BoolIndicator.html">Mathlib.Data.Set.BoolIndicator</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.Clopen" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsClopen.isOpen"><span class="name">IsClopen</span>.<span class="name">isOpen</span></a></div><div class="nav_link"><a class="break_within" href="#IsClopen.isClosed"><span class="name">IsClopen</span>.<span class="name">isClosed</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_iff_frontier_eq_empty"><span class="name">isClopen_iff_frontier_eq_empty</span></a></div><div class="nav_link"><a class="break_within" href="#IsClopen.frontier_eq"><span class="name">IsClopen</span>.<span class="name">frontier_eq</span></a></div><div class="nav_link"><a class="break_within" href="#IsClopen.union"><span class="name">IsClopen</span>.<span class="name">union</span></a></div><div class="nav_link"><a class="break_within" href="#IsClopen.inter"><span class="name">IsClopen</span>.<span class="name">inter</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_empty"><span class="name">isClopen_empty</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_univ"><span class="name">isClopen_univ</span></a></div><div class="nav_link"><a class="break_within" href="#IsClopen.compl"><span class="name">IsClopen</span>.<span class="name">compl</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_compl_iff"><span class="name">isClopen_compl_iff</span></a></div><div class="nav_link"><a class="break_within" href="#IsClopen.diff"><span class="name">IsClopen</span>.<span class="name">diff</span></a></div><div class="nav_link"><a class="break_within" href="#IsClopen.himp"><span class="name">IsClopen</span>.<span class="name">himp</span></a></div><div class="nav_link"><a class="break_within" href="#IsClopen.prod"><span class="name">IsClopen</span>.<span class="name">prod</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_iUnion_of_finite"><span class="name">isClopen_iUnion_of_finite</span></a></div><div class="nav_link"><a class="break_within" href="#Set.Finite.isClopen_biUnion"><span class="name">Set</span>.<span class="name">Finite</span>.<span class="name">isClopen_biUnion</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_biUnion_finset"><span class="name">isClopen_biUnion_finset</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_iInter_of_finite"><span class="name">isClopen_iInter_of_finite</span></a></div><div class="nav_link"><a class="break_within" href="#Set.Finite.isClopen_biInter"><span class="name">Set</span>.<span class="name">Finite</span>.<span class="name">isClopen_biInter</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_biInter_finset"><span class="name">isClopen_biInter_finset</span></a></div><div class="nav_link"><a class="break_within" href="#IsClopen.preimage"><span class="name">IsClopen</span>.<span class="name">preimage</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOn.preimage_isClopen_of_isClopen"><span class="name">ContinuousOn</span>.<span class="name">preimage_isClopen_of_isClopen</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_inter_of_disjoint_cover_clopen"><span class="name">isClopen_inter_of_disjoint_cover_clopen</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_inter_of_disjoint_cover_clopen'"><span class="name">isClopen_inter_of_disjoint_cover_clopen'</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_of_disjoint_cover_open"><span class="name">isClopen_of_disjoint_cover_open</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_discrete"><span class="name">isClopen_discrete</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_range_inl"><span class="name">isClopen_range_inl</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_range_inr"><span class="name">isClopen_range_inr</span></a></div><div class="nav_link"><a class="break_within" href="#isClopen_range_sigmaMk"><span class="name">isClopen_range_sigmaMk</span></a></div><div class="nav_link"><a class="break_within" href="#Topology.IsQuotientMap.isClopen_preimage"><span class="name">Topology</span>.<span class="name">IsQuotientMap</span>.<span class="name">isClopen_preimage</span></a></div><div class="nav_link"><a class="break_within" href="#continuous_boolIndicator_iff_isClopen"><span class="name">continuous_boolIndicator_iff_isClopen</span></a></div><div class="nav_link"><a class="break_within" href="#continuousOn_boolIndicator_iff_isClopen"><span class="name">continuousOn_boolIndicator_iff_isClopen</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Clopen-sets" class="markdown-heading">Clopen sets <a class="hover-link" href="#Clopen-sets">#</a></h1><p>A clopen set is a set that is both closed and open.</p></div><div class="decl" id="IsClopen.isOpen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L28-L28">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#IsClopen.isOpen"><span class="name">IsClopen</span>.<span class="name">isOpen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="IsClopen.isClosed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L30-L30">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#IsClopen.isClosed"><span class="name">IsClopen</span>.<span class="name">isClosed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="isClopen_iff_frontier_eq_empty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L32-L36">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_iff_frontier_eq_empty"><span class="name">isClopen_iff_frontier_eq_empty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#frontier">frontier</a> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a></div></div></div></div><div class="decl" id="IsClopen.frontier_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L38-L38">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#IsClopen.frontier_eq"><span class="name">IsClopen</span>.<span class="name">frontier_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span> → <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#frontier">frontier</a> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a></span></div></div><p><strong>Alias</strong> of the forward direction of <code><a href="../.././Mathlib/Topology/Clopen.html#isClopen_iff_frontier_eq_empty">isClopen_iff_frontier_eq_empty</a></code>.</p></div></div><div class="decl" id="IsClopen.union"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L40-L41">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#IsClopen.union"><span class="name">IsClopen</span>.<span class="name">union</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<span class="fn">s</span> <a href="../.././Init/Core.html#Union.union">∪</a> <span class="fn">t</span>)</span></div></div></div></div><div class="decl" id="IsClopen.inter"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L43-L44">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#IsClopen.inter"><span class="name">IsClopen</span>.<span class="name">inter</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<span class="fn">s</span> <a href="../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">t</span>)</span></div></div></div></div><div class="decl" id="isClopen_empty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L46-L46">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_empty"><span class="name">isClopen_empty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a></span></div></div></div></div><div class="decl" id="isClopen_univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L48-L48">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_univ"><span class="name">isClopen_univ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <a href="../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a></span></div></div></div></div><div class="decl" id="IsClopen.compl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L50-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#IsClopen.compl"><span class="name">IsClopen</span>.<span class="name">compl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span><a href="../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a></span></div></div></div></div><div class="decl" id="isClopen_compl_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L53-L55">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_compl_iff"><span class="name">isClopen_compl_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span><a href="../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="IsClopen.diff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L57-L58">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#IsClopen.diff"><span class="name">IsClopen</span>.<span class="name">diff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<span class="fn">s</span> <a href="../.././Init/Core.html#SDiff.sdiff">\</a> <span class="fn">t</span>)</span></div></div></div></div><div class="decl" id="IsClopen.himp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L60-L61">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#IsClopen.himp"><span class="name">IsClopen</span>.<span class="name">himp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<span class="fn">s</span> <a href="../.././Mathlib/Order/Notation.html#HImp.himp">⇨</a> <span class="fn">t</span>)</span></div></div></div></div><div class="decl" id="IsClopen.prod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L63-L64">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#IsClopen.prod"><span class="name">IsClopen</span>.<span class="name">prod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<span class="fn">s</span> <a href="../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn">t</span>)</span></div></div></div></div><div class="decl" id="isClopen_iUnion_of_finite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L66-L68">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_iUnion_of_finite"><span class="name">isClopen_iUnion_of_finite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">Y</span>), <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(<span class="fn">s</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(⋃ (<span class="fn">i</span> : <span class="fn">Y</span>), <span class="fn"><span class="fn">s</span> <span class="fn">i</span></span>)</span></span></div></div></div></div><div class="decl" id="Set.Finite.isClopen_biUnion"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L70-L72">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#Set.Finite.isClopen_biUnion"><span class="name">Set</span>.<span class="name">Finite</span>.<span class="name">isClopen_biUnion</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(⋃ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span></span></div></div></div></div><div class="decl" id="isClopen_biUnion_finset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L74-L76">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_biUnion_finset"><span class="name">isClopen_biUnion_finset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(⋃ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span></span></div></div></div></div><div class="decl" id="isClopen_iInter_of_finite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L78-L80">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_iInter_of_finite"><span class="name">isClopen_iInter_of_finite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">Y</span>), <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(<span class="fn">s</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(⋂ (<span class="fn">i</span> : <span class="fn">Y</span>), <span class="fn"><span class="fn">s</span> <span class="fn">i</span></span>)</span></span></div></div></div></div><div class="decl" id="Set.Finite.isClopen_biInter"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L82-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#Set.Finite.isClopen_biInter"><span class="name">Set</span>.<span class="name">Finite</span>.<span class="name">isClopen_biInter</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(⋂ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span></span></div></div></div></div><div class="decl" id="isClopen_biInter_finset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L86-L88">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_biInter_finset"><span class="name">isClopen_biInter_finset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(⋂ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span></span></div></div></div></div><div class="decl" id="IsClopen.preimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L90-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#IsClopen.preimage"><span class="name">IsClopen</span>.<span class="name">preimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="ContinuousOn.preimage_isClopen_of_isClopen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L94-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#ContinuousOn.preimage_isClopen_of_isClopen"><span class="name">ContinuousOn</span>.<span class="name">preimage_isClopen_of_isClopen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">f</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<span class="fn">s</span> <a href="../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">t</span>)</span></div></div></div></div><div class="decl" id="isClopen_inter_of_disjoint_cover_clopen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L99-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_inter_of_disjoint_cover_clopen"><span class="name">isClopen_inter_of_disjoint_cover_clopen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">a </span><span class="fn">b</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">cover</span> : <span class="fn">s</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">a</span> <a href="../.././Init/Core.html#Union.union">∪</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hab</span> : <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">a</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<span class="fn">s</span> <a href="../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">a</span>)</span></div></div><p>The intersection of a disjoint covering by two open sets of a clopen set will be clopen.</p></div></div><div class="decl" id="isClopen_inter_of_disjoint_cover_clopen'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L109-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_inter_of_disjoint_cover_clopen'"><span class="name">isClopen_inter_of_disjoint_cover_clopen'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">a </span><span class="fn">b</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">cover</span> : <span class="fn">s</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">a</span> <a href="../.././Init/Core.html#Union.union">∪</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hab</span> : <span class="fn">s</span> <a href="../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">a</span> <a href="../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<span class="fn">s</span> <a href="../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">a</span>)</span></div></div><p>Variant of <code><a href="../.././Mathlib/Topology/Clopen.html#isClopen_inter_of_disjoint_cover_clopen">isClopen_inter_of_disjoint_cover_clopen</a></code> with weaker disjointness condition.</p></div></div><div class="decl" id="isClopen_of_disjoint_cover_open"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L118-L120">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_of_disjoint_cover_open"><span class="name">isClopen_of_disjoint_cover_open</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cover</span> : <a href="../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">a</span> <a href="../.././Init/Core.html#Union.union">∪</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hab</span> : <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">a</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="isClopen_discrete"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L122-L124">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_discrete"><span class="name">isClopen_discrete</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="isClopen_range_inl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L126-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_range_inl"><span class="name">isClopen_range_inl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <a href="../.././Init/Core.html#Sum.inl">Sum.inl</a>)</span></span></div></div></div></div><div class="decl" id="isClopen_range_inr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L129-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_range_inr"><span class="name">isClopen_range_inr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <a href="../.././Init/Core.html#Sum.inr">Sum.inr</a>)</span></span></div></div></div></div><div class="decl" id="isClopen_range_sigmaMk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L132-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#isClopen_range_sigmaMk"><span class="name">isClopen_range_sigmaMk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><span class="fn">ι</span> → <a href="../.././foundational_types.html">Type</a> u_2</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<span class="fn">X</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">(<a href="../.././Init/Core.html#Sigma.mk">Sigma.mk</a> <span class="fn">i</span>)</span>)</span></span></div></div></div></div><div class="decl" id="Topology.IsQuotientMap.isClopen_preimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L136-L138">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#Topology.IsQuotientMap.isClopen_preimage"><span class="name">Topology</span>.<span class="name">IsQuotientMap</span>.<span class="name">isClopen_preimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Induced.html#Topology.IsQuotientMap">IsQuotientMap</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">s</span>)</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="continuous_boolIndicator_iff_isClopen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L140-L142">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#continuous_boolIndicator_iff_isClopen"><span class="name">continuous_boolIndicator_iff_isClopen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn"><span class="fn">U</span>.<a href="../.././Mathlib/Data/Set/BoolIndicator.html#Set.boolIndicator">boolIndicator</a></span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <span class="fn">U</span></span></div></div></div></div><div class="decl" id="continuousOn_boolIndicator_iff_isClopen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Clopen.lean#L144-L147">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/Clopen.html#continuousOn_boolIndicator_iff_isClopen"><span class="name">continuousOn_boolIndicator_iff_isClopen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">U</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn"><span class="fn">U</span>.<a href="../.././Mathlib/Data/Set/BoolIndicator.html#Set.boolIndicator">boolIndicator</a></span> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> (<a href="../.././Init/Prelude.html#Subtype.val">Subtype.val</a> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">U</span>)</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

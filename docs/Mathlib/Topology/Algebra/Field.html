@@ -1,0 +1,429 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.Algebra.Field</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.Algebra.Field";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">Algebra</span>.<span class="name">Field</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/GroupWithZero/Divisibility.html">Mathlib.Algebra.GroupWithZero.Divisibility</a></li><li><a href="../../.././Mathlib/Topology/Algebra/GroupWithZero.html">Mathlib.Topology.Algebra.GroupWithZero</a></li><li><a href="../../.././Mathlib/Topology/Order/LocalExtr.html">Mathlib.Topology.Order.LocalExtr</a></li><li><a href="../../.././Mathlib/Algebra/Field/Subfield/Defs.html">Mathlib.Algebra.Field.Subfield.Defs</a></li><li><a href="../../.././Mathlib/Topology/Algebra/Ring/Basic.html">Mathlib.Topology.Algebra.Ring.Basic</a></li><li><a href="../../.././Mathlib/Algebra/Order/Group/Pointwise/Interval.html">Mathlib.Algebra.Order.Group.Pointwise.Interval</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.Algebra.Field" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_cocompact_mul_left₀"><span class="name">Filter</span>.<span class="name">tendsto_cocompact_mul_left₀</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_cocompact_mul_right₀"><span class="name">Filter</span>.<span class="name">tendsto_cocompact_mul_right₀</span></a></div><div class="nav_link"><a class="break_within" href="#DivisionRing.finite_of_compactSpace_of_t2Space"><span class="name">DivisionRing</span>.<span class="name">finite_of_compactSpace_of_t2Space</span></a></div><div class="nav_link"><a class="break_within" href="#IsTopologicalDivisionRing"><span class="name">IsTopologicalDivisionRing</span></a></div><div class="nav_link"><a class="break_within" href="#Subfield.topologicalClosure"><span class="name">Subfield</span>.<span class="name">topologicalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Subfield.le_topologicalClosure"><span class="name">Subfield</span>.<span class="name">le_topologicalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Subfield.isClosed_topologicalClosure"><span class="name">Subfield</span>.<span class="name">isClosed_topologicalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Subfield.topologicalClosure_minimal"><span class="name">Subfield</span>.<span class="name">topologicalClosure_minimal</span></a></div><div class="nav_link"><a class="break_within" href="#Nonneg.unitsHomeomorphPos"><span class="name">Nonneg</span>.<span class="name">unitsHomeomorphPos</span></a></div><div class="nav_link"><a class="break_within" href="#Nonneg.unitsHomeomorphPos_apply_coe"><span class="name">Nonneg</span>.<span class="name">unitsHomeomorphPos_apply_coe</span></a></div><div class="nav_link"><a class="break_within" href="#Nonneg.val_inv_unitsHomeomorphPos_symm_apply_coe"><span class="name">Nonneg</span>.<span class="name">val_inv_unitsHomeomorphPos_symm_apply_coe</span></a></div><div class="nav_link"><a class="break_within" href="#Nonneg.val_unitsHomeomorphPos_symm_apply_coe"><span class="name">Nonneg</span>.<span class="name">val_unitsHomeomorphPos_symm_apply_coe</span></a></div><div class="nav_link"><a class="break_within" href="#affineHomeomorph"><span class="name">affineHomeomorph</span></a></div><div class="nav_link"><a class="break_within" href="#affineHomeomorph_symm_apply"><span class="name">affineHomeomorph_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#affineHomeomorph_apply"><span class="name">affineHomeomorph_apply</span></a></div><div class="nav_link"><a class="break_within" href="#affineHomeomorph_image_Icc"><span class="name">affineHomeomorph_image_Icc</span></a></div><div class="nav_link"><a class="break_within" href="#affineHomeomorph_image_Ico"><span class="name">affineHomeomorph_image_Ico</span></a></div><div class="nav_link"><a class="break_within" href="#affineHomeomorph_image_Ioc"><span class="name">affineHomeomorph_image_Ioc</span></a></div><div class="nav_link"><a class="break_within" href="#affineHomeomorph_image_Ioo"><span class="name">affineHomeomorph_image_Ioo</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocalMin.inv"><span class="name">IsLocalMin</span>.<span class="name">inv</span></a></div><div class="nav_link"><a class="break_within" href="#IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq"><span class="name">IsPreconnected</span>.<span class="name">eq_one_or_eq_neg_one_of_sq_eq</span></a></div><div class="nav_link"><a class="break_within" href="#IsPreconnected.eq_or_eq_neg_of_sq_eq"><span class="name">IsPreconnected</span>.<span class="name">eq_or_eq_neg_of_sq_eq</span></a></div><div class="nav_link"><a class="break_within" href="#IsPreconnected.eq_of_sq_eq"><span class="name">IsPreconnected</span>.<span class="name">eq_of_sq_eq</span></a></div><div class="nav_link"><a class="break_within" href="#Subfield.continuousSMul"><span class="name">Subfield</span>.<span class="name">continuousSMul</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Topological-fields" class="markdown-heading">Topological fields <a class="hover-link" href="#Topological-fields">#</a></h1><p>A topological division ring is a topological ring whose inversion function is continuous at every
+non-zero element.</p></div><div class="decl" id="Filter.tendsto_cocompact_mul_left₀"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L27-L31">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Filter.tendsto_cocompact_mul_left₀"><span class="name">Filter</span>.<span class="name">tendsto_cocompact_mul_left₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#SeparatelyContinuousMul">SeparatelyContinuousMul</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">K</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">K</span>) =&gt; <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#Filter.cocompact">cocompact</a> <span class="fn">K</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#Filter.cocompact">cocompact</a> <span class="fn">K</span>)</span></span></div></div><p>Left-multiplication by a nonzero element of a topological division ring is proper, i.e.,
+inverse images of compact sets are compact.</p></div></div><div class="decl" id="Filter.tendsto_cocompact_mul_right₀"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L33-L37">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Filter.tendsto_cocompact_mul_right₀"><span class="name">Filter</span>.<span class="name">tendsto_cocompact_mul_right₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#SeparatelyContinuousMul">SeparatelyContinuousMul</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">K</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">K</span>) =&gt; <span class="fn">x</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#Filter.cocompact">cocompact</a> <span class="fn">K</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#Filter.cocompact">cocompact</a> <span class="fn">K</span>)</span></span></div></div><p>Right-multiplication by a nonzero element of a topological division ring is proper, i.e.,
+inverse images of compact sets are compact.</p></div></div><div class="decl" id="DivisionRing.finite_of_compactSpace_of_t2Space"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L39-L46">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#DivisionRing.finite_of_compactSpace_of_t2Space"><span class="name">DivisionRing</span>.<span class="name">finite_of_compactSpace_of_t2Space</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">K</span></span></div></div><p>Compact Hausdorff topological fields are finite. This is not an instance, as it would apply to
+every <code><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a></code> goal, causing slowly failing typeclass search in some cases.</p></div></div><div class="decl" id="IsTopologicalDivisionRing"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L50-L52">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#IsTopologicalDivisionRing"><span class="name">IsTopologicalDivisionRing</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="IsTopologicalDivisionRing.toIsTopologicalRing"><span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">K</span></span></span>, <span id="IsTopologicalDivisionRing.toContinuousInv₀"><span class="fn"><a href="../../.././Mathlib/Topology/Algebra/GroupWithZero.html#ContinuousInv₀">ContinuousInv₀</a> <span class="fn">K</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A topological division ring is a division ring with a topology where all operations are
+continuous, including inversion.</p><ul class="structure_fields" id="IsTopologicalDivisionRing.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd.continuous_add">continuous_add</a> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">p</span> : <span class="fn">K</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">K</span>) =&gt; <span class="fn"><span class="fn">p</span>.1</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">p</span>.2</span></span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousMul.continuous_mul">continuous_mul</a> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">p</span> : <span class="fn">K</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">K</span>) =&gt; <span class="fn"><span class="fn">p</span>.1</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">p</span>.2</span></span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Topology/Algebra/Group/Defs.html#ContinuousNeg.continuous_neg">continuous_neg</a> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">a</span> : <span class="fn">K</span>) =&gt; <a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">a</span></span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Topology/Algebra/GroupWithZero.html#ContinuousInv₀.continuousAt_inv₀">continuousAt_inv₀</a><span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">x</span> : <span class="fn">K</span>⦄</span></span>
+</span> : <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> → <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousAt">ContinuousAt</a> <a href="../../.././Init/Prelude.html#Inv.inv">Inv.inv</a> <span class="fn">x</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-IsTopologicalDivisionRing" class="instances-list"></ul></details></div></div><div class="decl" id="Subfield.topologicalClosure"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L58-L67">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Subfield.topologicalClosure"><span class="name">Subfield</span>.<span class="name">topologicalClosure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Field.html#IsTopologicalDivisionRing">IsTopologicalDivisionRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">α</span></span></div></div><p>The (topological-space) closure of a subfield of a topological field is
+itself a subfield.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">K</span>.<a href="../../.././Mathlib/Topology/Algebra/Field.html#Subfield.topologicalClosure">topologicalClosure</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield.mk">{</a> <span class="fn">carrier</span> := <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#closure">closure</a> <span class="fn">↑<span class="fn">K</span></span></span>, <span class="fn">mul_mem'</span> := <span class="fn">⋯</span>, <span class="fn">one_mem'</span> := <span class="fn">⋯</span>, <span class="fn">add_mem'</span> := <span class="fn">⋯</span>, <span class="fn">zero_mem'</span> := <span class="fn">⋯</span>, <span class="fn">neg_mem'</span> := <span class="fn">⋯</span>, <span class="fn">inv_mem'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield.mk">}</a></li></ul></details><details id="instances-for-list-Subfield.topologicalClosure" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Subfield.le_topologicalClosure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L69-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Subfield.le_topologicalClosure"><span class="name">Subfield</span>.<span class="name">le_topologicalClosure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Field.html#IsTopologicalDivisionRing">IsTopologicalDivisionRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">s</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Topology/Algebra/Field.html#Subfield.topologicalClosure">topologicalClosure</a></span></div></div></div></div><div class="decl" id="Subfield.isClosed_topologicalClosure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L72-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Subfield.isClosed_topologicalClosure"><span class="name">Subfield</span>.<span class="name">isClosed_topologicalClosure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Field.html#IsTopologicalDivisionRing">IsTopologicalDivisionRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Topology/Algebra/Field.html#Subfield.topologicalClosure">topologicalClosure</a></span></span></span></div></div></div></div><div class="decl" id="Subfield.topologicalClosure_minimal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L76-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Subfield.topologicalClosure_minimal"><span class="name">Subfield</span>.<span class="name">topologicalClosure_minimal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Field.html#IsTopologicalDivisionRing">IsTopologicalDivisionRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">t</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">↑<span class="fn">t</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Topology/Algebra/Field.html#Subfield.topologicalClosure">topologicalClosure</a></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">t</span></div></div></div></div><div class="decl" id="Nonneg.unitsHomeomorphPos"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L84-L100">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Nonneg.unitsHomeomorphPos"><span class="name">Nonneg</span>.<span class="name">unitsHomeomorphPos</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionSemiring">DivisionSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Unbundled/Defs.html#PosMulReflectLT">PosMulReflectLT</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/GroupWithZero.html#ContinuousInv₀">ContinuousInv₀</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Subtype">{</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Subtype">:</a> <span class="fn">R</span> <a href="../../.././Init/Prelude.html#Subtype">//</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Subtype">}</a><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a> <a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph">≃ₜ</a> <a href="../../.././Init/Prelude.html#Subtype">{</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Subtype">:</a> <span class="fn">R</span> <a href="../../.././Init/Prelude.html#Subtype">//</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Subtype">}</a></div></div><p>In an ordered field, the units of the nonnegative elements are the positive elements.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Field.html#Nonneg.unitsHomeomorphPos">Nonneg.unitsHomeomorphPos</a> <span class="fn">R</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph.mk">{</a> <span class="fn">toEquiv</span> := <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Order/Nonneg/Field.html#Nonneg.unitsEquivPos">Nonneg.unitsEquivPos</a> <span class="fn">R</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv.toEquiv">toEquiv</a></span>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span>, <span class="fn">continuous_invFun</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph.mk">}</a></li></ul></details><details id="instances-for-list-Nonneg.unitsHomeomorphPos" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Nonneg.unitsHomeomorphPos_apply_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L85-L85">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Nonneg.unitsHomeomorphPos_apply_coe"><span class="name">Nonneg</span>.<span class="name">unitsHomeomorphPos_apply_coe</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionSemiring">DivisionSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Unbundled/Defs.html#PosMulReflectLT">PosMulReflectLT</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/GroupWithZero.html#ContinuousInv₀">ContinuousInv₀</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../.././Init/Prelude.html#Subtype">{</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Subtype">:</a> <span class="fn">R</span> <a href="../../.././Init/Prelude.html#Subtype">//</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Subtype">}</a><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Field.html#Nonneg.unitsHomeomorphPos">unitsHomeomorphPos</a> <span class="fn">R</span>)</span> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">↑<span class="fn">r</span></span></span></div></div></div></div><div class="decl" id="Nonneg.val_inv_unitsHomeomorphPos_symm_apply_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L85-L85">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Nonneg.val_inv_unitsHomeomorphPos_symm_apply_coe"><span class="name">Nonneg</span>.<span class="name">val_inv_unitsHomeomorphPos_symm_apply_coe</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionSemiring">DivisionSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Unbundled/Defs.html#PosMulReflectLT">PosMulReflectLT</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/GroupWithZero.html#ContinuousInv₀">ContinuousInv₀</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../.././Init/Prelude.html#Subtype">{</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Subtype">:</a> <span class="fn">R</span> <a href="../../.././Init/Prelude.html#Subtype">//</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Subtype">}</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Field.html#Nonneg.unitsHomeomorphPos">unitsHomeomorphPos</a> <span class="fn">R</span>)</span>.<a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph.symm">symm</a></span> <span class="fn">r</span>)</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(↑<span class="fn">r</span>)</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div></div></div><div class="decl" id="Nonneg.val_unitsHomeomorphPos_symm_apply_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L85-L85">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Nonneg.val_unitsHomeomorphPos_symm_apply_coe"><span class="name">Nonneg</span>.<span class="name">val_unitsHomeomorphPos_symm_apply_coe</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionSemiring">DivisionSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Unbundled/Defs.html#PosMulReflectLT">PosMulReflectLT</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/GroupWithZero.html#ContinuousInv₀">ContinuousInv₀</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../.././Init/Prelude.html#Subtype">{</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Subtype">:</a> <span class="fn">R</span> <a href="../../.././Init/Prelude.html#Subtype">//</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Subtype">}</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Field.html#Nonneg.unitsHomeomorphPos">unitsHomeomorphPos</a> <span class="fn">R</span>)</span>.<a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph.symm">symm</a></span> <span class="fn">r</span>)</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">r</span></span></div></div></div></div><div class="mod_doc"><p>This section is about affine homeomorphisms from a topological field <code>𝕜</code> to itself.
+Technically it does not require <code>𝕜</code> to be a topological field, a topological ring that
+happens to be a field is enough.</p></div><div class="decl" id="affineHomeomorph"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L115-L126">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph"><span class="name">affineHomeomorph</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">𝕜</span> <a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph">≃ₜ</a> <span class="fn">𝕜</span></div></div><p>The map <code>fun x =&gt; a * x + b</code>, as a homeomorphism from <code>𝕜</code> (a topological field) to itself,
+when <code>a ≠ 0</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph">affineHomeomorph</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">h</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">x</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span></span>, <span class="fn">invFun</span> := <span class="fn">fun (<span class="fn">y</span> : <span class="fn">𝕜</span>) =&gt; (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">b</span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">a</span></span>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>, <span class="fn">right_inv</span> := <span class="fn">⋯</span>,
+    <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span>, <span class="fn">continuous_invFun</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph.mk">}</a></li></ul></details><details id="instances-for-list-affineHomeomorph" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="affineHomeomorph_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L119-L119">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph_symm_apply"><span class="name">affineHomeomorph_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph">affineHomeomorph</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">h</span>)</span>.<a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph.symm">symm</a></span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">b</span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="affineHomeomorph_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L119-L119">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph_apply"><span class="name">affineHomeomorph_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph">affineHomeomorph</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">h</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span></div></div></div></div><div class="decl" id="affineHomeomorph_image_Icc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L128-L132">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph_image_Icc"><span class="name">affineHomeomorph_image_Icc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b </span><span class="fn">c </span><span class="fn">d</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph">affineHomeomorph</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">⋯</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Icc">Set.Icc</a> <span class="fn">c</span> <span class="fn">d</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Icc">Set.Icc</a> (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">d</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>)</span></div></div></div></div><div class="decl" id="affineHomeomorph_image_Ico"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L134-L138">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph_image_Ico"><span class="name">affineHomeomorph_image_Ico</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b </span><span class="fn">c </span><span class="fn">d</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph">affineHomeomorph</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">⋯</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ico">Set.Ico</a> <span class="fn">c</span> <span class="fn">d</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ico">Set.Ico</a> (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">d</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>)</span></div></div></div></div><div class="decl" id="affineHomeomorph_image_Ioc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L140-L144">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph_image_Ioc"><span class="name">affineHomeomorph_image_Ioc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b </span><span class="fn">c </span><span class="fn">d</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph">affineHomeomorph</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">⋯</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ioc">Set.Ioc</a> <span class="fn">c</span> <span class="fn">d</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ioc">Set.Ioc</a> (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">d</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>)</span></div></div></div></div><div class="decl" id="affineHomeomorph_image_Ioo"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L146-L150">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph_image_Ioo"><span class="name">affineHomeomorph_image_Ioo</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b </span><span class="fn">c </span><span class="fn">d</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Field.html#affineHomeomorph">affineHomeomorph</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">⋯</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ioo">Set.Ioo</a> <span class="fn">c</span> <span class="fn">d</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ioo">Set.Ioo</a> (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">d</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>)</span></div></div></div></div><div class="decl" id="IsLocalMin.inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L161-L163">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#IsLocalMin.inv"><span class="name">IsLocalMin</span>.<span class="name">inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Semifield">Semifield</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h1</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Order/LocalExtr.html#IsLocalMin">IsLocalMin</a> <span class="fn">f</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h2</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">z</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">a</span></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">z</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Order/LocalExtr.html#IsLocalMax">IsLocalMax</a> <span class="fn">f</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">a</span></span></div></div></div></div><div class="mod_doc"><p>Some results about functions on preconnected sets valued in a ring or field with a topology.</p></div><div class="decl" id="IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L176-L183">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq"><span class="name">IsPreconnected</span>.<span class="name">eq_one_or_eq_neg_one_of_sq_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Separation/Basic.html#T1Space">T1Space</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#NoZeroDivisors">NoZeroDivisors</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Connected/Basic.html#IsPreconnected">IsPreconnected</a> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">f</span> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsq</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) <span class="fn">1</span> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> <span class="fn">f</span> <span class="fn">1</span> <span class="fn">S</span></span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> <span class="fn">f</span> <span class="fn">(-<span class="fn">1</span>)</span> <span class="fn">S</span></span></div></div><p>If <code>f</code> is a function <code>α → 𝕜</code> which is continuous on a preconnected set <code>S</code>, and
+<code>f ^ 2 = 1</code> on <code>S</code>, then either <code>f = 1</code> on <code>S</code>, or <code>f = -1</code> on <code>S</code>.</p></div></div><div class="decl" id="IsPreconnected.eq_or_eq_neg_of_sq_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L185-L195">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#IsPreconnected.eq_or_eq_neg_of_sq_eq"><span class="name">IsPreconnected</span>.<span class="name">eq_or_eq_neg_of_sq_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Separation/Basic.html#T1Space">T1Space</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/GroupWithZero.html#ContinuousInv₀">ContinuousInv₀</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousMul">ContinuousMul</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Connected/Basic.html#IsPreconnected">IsPreconnected</a> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">f</span> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">g</span> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsq</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg_ne</span> : <span class="fn">∀ {<span class="fn">x</span> : <span class="fn">α</span>}, <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> → <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">S</span></span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> <span class="fn">f</span> (<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">g</span>) <span class="fn">S</span></span></div></div><p>If <code>f, g</code> are functions <code>α → 𝕜</code>, both continuous on a preconnected set <code>S</code>, with
+<code>f ^ 2 = g ^ 2</code> on <code>S</code>, and <code>g z ≠ 0</code> all <code>z ∈ S</code>, then either <code>f = g</code> or <code>f = -g</code> on
+<code>S</code>.</p></div></div><div class="decl" id="IsPreconnected.eq_of_sq_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L197-L207">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#IsPreconnected.eq_of_sq_eq"><span class="name">IsPreconnected</span>.<span class="name">eq_of_sq_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Separation/Basic.html#T1Space">T1Space</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/GroupWithZero.html#ContinuousInv₀">ContinuousInv₀</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousMul">ContinuousMul</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Connected/Basic.html#IsPreconnected">IsPreconnected</a> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">f</span> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">g</span> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsq</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg_ne</span> : <span class="fn">∀ {<span class="fn">x</span> : <span class="fn">α</span>}, <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> → <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy'</span> : <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">S</span></span></div></div><p>If <code>f, g</code> are functions <code>α → 𝕜</code>, both continuous on a preconnected set <code>S</code>, with
+<code>f ^ 2 = g ^ 2</code> on <code>S</code>, and <code>g z ≠ 0</code> all <code>z ∈ S</code>, then as soon as <code>f = g</code> holds at
+one point of <code>S</code> it holds for all points.</p></div></div><div class="decl" id="Subfield.continuousSMul"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Field.lean#L216-L217">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Algebra/Field.html#Subfield.continuousSMul"><span class="name">Subfield</span>.<span class="name">continuousSMul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">F</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">F</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">(↥<span class="fn">M</span>)</span> <span class="fn">X</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

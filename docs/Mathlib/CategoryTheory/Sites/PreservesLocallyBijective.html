@@ -1,0 +1,223 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.Sites.PreservesLocallyBijective</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.Sites.PreservesLocallyBijective";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">Sites</span>.<span class="name">PreservesLocallyBijective</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/CategoryTheory/Sites/LocallySurjective.html">Mathlib.CategoryTheory.Sites.LocallySurjective</a></li><li><a href="../../.././Mathlib/CategoryTheory/Sites/DenseSubsite/Basic.html">Mathlib.CategoryTheory.Sites.DenseSubsite.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.Sites.PreservesLocallyBijective" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Presheaf.isLocallyInjective_whisker"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallyInjective_whisker</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Presheaf.isLocallyInjective_of_whisker"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallyInjective_of_whisker</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Presheaf.isLocallyInjective_whisker_iff"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallyInjective_whisker_iff</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Presheaf.isLocallySurjective_whisker"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallySurjective_whisker</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Presheaf.isLocallySurjective_of_whisker"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallySurjective_of_whisker</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Presheaf.isLocallySurjective_whisker_iff"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallySurjective_whisker_iff</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Preserving-and-reflecting-local-injectivity-and-surjectivity" class="markdown-heading">Preserving and reflecting local injectivity and surjectivity <a class="hover-link" href="#Preserving-and-reflecting-local-injectivity-and-surjectivity">#</a></h1><p>This file proves that precomposition with a cocontinuous functor preserves local injectivity and
+surjectivity of morphisms of presheaves, and that precomposition with a cover-preserving and
+cover-dense functor reflects the same properties.</p></div><div class="decl" id="CategoryTheory.Presheaf.isLocallyInjective_whisker"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.lean#L35-L37">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.html#CategoryTheory.Presheaf.isLocallyInjective_whisker"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallyInjective_whisker</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span><a href="../../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">G</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">FA</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">CA</span> : <span class="fn"><span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">A</span>) → <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">(<span class="fn">FA</span> <span class="fn">X</span> <span class="fn">Y</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">Y</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/ConcreteCategory/Basic.html#CategoryTheory.ConcreteCategory">ConcreteCategory</a> <span class="fn">A</span> <span class="fn">FA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Sites/CoverLifting.html#CategoryTheory.Functor.IsCocontinuous">IsCocontinuous</a></span> <span class="fn">J</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallyInjective.html#CategoryTheory.Presheaf.IsLocallyInjective">IsLocallyInjective</a> <span class="fn">K</span> <span class="fn">f</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallyInjective.html#CategoryTheory.Presheaf.IsLocallyInjective">IsLocallyInjective</a> <span class="fn">J</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Opposites.html#CategoryTheory.Functor.op">op</a></span>.<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskerLeft">whiskerLeft</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Presheaf.isLocallyInjective_of_whisker"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.lean#L40-L54">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.html#CategoryTheory.Presheaf.isLocallyInjective_of_whisker"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallyInjective_of_whisker</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span><a href="../../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">G</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">FA</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">CA</span> : <span class="fn"><span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">A</span>) → <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">(<span class="fn">FA</span> <span class="fn">X</span> <span class="fn">Y</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">Y</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/ConcreteCategory/Basic.html#CategoryTheory.ConcreteCategory">ConcreteCategory</a> <span class="fn">A</span> <span class="fn">FA</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hH</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/CoverPreserving.html#CategoryTheory.CoverPreserving">CoverPreserving</a> <span class="fn">J</span> <span class="fn">K</span> <span class="fn">H</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Sites/DenseSubsite/Basic.html#CategoryTheory.Functor.IsCoverDense">IsCoverDense</a></span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallyInjective.html#CategoryTheory.Presheaf.IsLocallyInjective">IsLocallyInjective</a> <span class="fn">J</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Opposites.html#CategoryTheory.Functor.op">op</a></span>.<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskerLeft">whiskerLeft</a></span> <span class="fn">f</span>)</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallyInjective.html#CategoryTheory.Presheaf.IsLocallyInjective">IsLocallyInjective</a> <span class="fn">K</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Presheaf.isLocallyInjective_whisker_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.lean#L56-L59">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.html#CategoryTheory.Presheaf.isLocallyInjective_whisker_iff"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallyInjective_whisker_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span><a href="../../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">G</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">FA</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">CA</span> : <span class="fn"><span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">A</span>) → <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">(<span class="fn">FA</span> <span class="fn">X</span> <span class="fn">Y</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">Y</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/ConcreteCategory/Basic.html#CategoryTheory.ConcreteCategory">ConcreteCategory</a> <span class="fn">A</span> <span class="fn">FA</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hH</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/CoverPreserving.html#CategoryTheory.CoverPreserving">CoverPreserving</a> <span class="fn">J</span> <span class="fn">K</span> <span class="fn">H</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Sites/CoverLifting.html#CategoryTheory.Functor.IsCocontinuous">IsCocontinuous</a></span> <span class="fn">J</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Sites/DenseSubsite/Basic.html#CategoryTheory.Functor.IsCoverDense">IsCoverDense</a></span> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallyInjective.html#CategoryTheory.Presheaf.IsLocallyInjective">IsLocallyInjective</a> <span class="fn">J</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Opposites.html#CategoryTheory.Functor.op">op</a></span>.<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskerLeft">whiskerLeft</a></span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallyInjective.html#CategoryTheory.Presheaf.IsLocallyInjective">IsLocallyInjective</a> <span class="fn">K</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Presheaf.isLocallySurjective_whisker"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.lean#L61-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.html#CategoryTheory.Presheaf.isLocallySurjective_whisker"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallySurjective_whisker</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span><a href="../../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">G</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">FA</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">CA</span> : <span class="fn"><span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">A</span>) → <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">(<span class="fn">FA</span> <span class="fn">X</span> <span class="fn">Y</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">Y</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/ConcreteCategory/Basic.html#CategoryTheory.ConcreteCategory">ConcreteCategory</a> <span class="fn">A</span> <span class="fn">FA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Sites/CoverLifting.html#CategoryTheory.Functor.IsCocontinuous">IsCocontinuous</a></span> <span class="fn">J</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallySurjective.html#CategoryTheory.Presheaf.IsLocallySurjective">IsLocallySurjective</a> <span class="fn">K</span> <span class="fn">f</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallySurjective.html#CategoryTheory.Presheaf.IsLocallySurjective">IsLocallySurjective</a> <span class="fn">J</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Opposites.html#CategoryTheory.Functor.op">op</a></span>.<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskerLeft">whiskerLeft</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Presheaf.isLocallySurjective_of_whisker"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.lean#L65-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.html#CategoryTheory.Presheaf.isLocallySurjective_of_whisker"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallySurjective_of_whisker</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span><a href="../../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">G</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">FA</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">CA</span> : <span class="fn"><span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">A</span>) → <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">(<span class="fn">FA</span> <span class="fn">X</span> <span class="fn">Y</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">Y</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/ConcreteCategory/Basic.html#CategoryTheory.ConcreteCategory">ConcreteCategory</a> <span class="fn">A</span> <span class="fn">FA</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hH</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/CoverPreserving.html#CategoryTheory.CoverPreserving">CoverPreserving</a> <span class="fn">J</span> <span class="fn">K</span> <span class="fn">H</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Sites/DenseSubsite/Basic.html#CategoryTheory.Functor.IsCoverDense">IsCoverDense</a></span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallySurjective.html#CategoryTheory.Presheaf.IsLocallySurjective">IsLocallySurjective</a> <span class="fn">J</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Opposites.html#CategoryTheory.Functor.op">op</a></span>.<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskerLeft">whiskerLeft</a></span> <span class="fn">f</span>)</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallySurjective.html#CategoryTheory.Presheaf.IsLocallySurjective">IsLocallySurjective</a> <span class="fn">K</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Presheaf.isLocallySurjective_whisker_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.lean#L79-L82">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Sites/PreservesLocallyBijective.html#CategoryTheory.Presheaf.isLocallySurjective_whisker_iff"><span class="name">CategoryTheory</span>.<span class="name">Presheaf</span>.<span class="name">isLocallySurjective_whisker_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/Grothendieck.html#CategoryTheory.GrothendieckTopology">GrothendieckTopology</a> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span><a href="../../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">G</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">FA</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">CA</span> : <span class="fn"><span class="fn">A</span> → <a href="../../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">A</span>) → <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">(<span class="fn">FA</span> <span class="fn">X</span> <span class="fn">Y</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn">CA</span> <span class="fn">Y</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/ConcreteCategory/Basic.html#CategoryTheory.ConcreteCategory">ConcreteCategory</a> <span class="fn">A</span> <span class="fn">FA</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hH</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/CoverPreserving.html#CategoryTheory.CoverPreserving">CoverPreserving</a> <span class="fn">J</span> <span class="fn">K</span> <span class="fn">H</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Sites/CoverLifting.html#CategoryTheory.Functor.IsCocontinuous">IsCocontinuous</a></span> <span class="fn">J</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Sites/DenseSubsite/Basic.html#CategoryTheory.Functor.IsCoverDense">IsCoverDense</a></span> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallySurjective.html#CategoryTheory.Presheaf.IsLocallySurjective">IsLocallySurjective</a> <span class="fn">J</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Opposites.html#CategoryTheory.Functor.op">op</a></span>.<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskerLeft">whiskerLeft</a></span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Sites/LocallySurjective.html#CategoryTheory.Presheaf.IsLocallySurjective">IsLocallySurjective</a> <span class="fn">K</span> <span class="fn">f</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

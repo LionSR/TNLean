@@ -1,0 +1,397 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.Nullstellensatz</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.Nullstellensatz";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">Nullstellensatz</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/FieldTheory/IsAlgClosed/Basic.html">Mathlib.FieldTheory.IsAlgClosed.Basic</a></li><li><a href="../.././Mathlib/RingTheory/Jacobson/Ring.html">Mathlib.RingTheory.Jacobson.Ring</a></li><li><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Basic.html">Mathlib.RingTheory.Spectrum.Prime.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.Nullstellensatz" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.zeroLocus"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.mem_zeroLocus_iff"><span class="name">MvPolynomial</span>.<span class="name">mem_zeroLocus_iff</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.zeroLocus_anti_mono"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_anti_mono</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.zeroLocus_bot"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_bot</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.zeroLocus_top"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_top</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.vanishingIdeal"><span class="name">MvPolynomial</span>.<span class="name">vanishingIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.mem_vanishingIdeal_iff"><span class="name">MvPolynomial</span>.<span class="name">mem_vanishingIdeal_iff</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.vanishingIdeal_anti_mono"><span class="name">MvPolynomial</span>.<span class="name">vanishingIdeal_anti_mono</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.vanishingIdeal_empty"><span class="name">MvPolynomial</span>.<span class="name">vanishingIdeal_empty</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.le_vanishingIdeal_zeroLocus"><span class="name">MvPolynomial</span>.<span class="name">le_vanishingIdeal_zeroLocus</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.zeroLocus_vanishingIdeal_le"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_vanishingIdeal_le</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.zeroLocus_vanishingIdeal_galoisConnection"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_vanishingIdeal_galoisConnection</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.le_zeroLocus_iff_le_vanishingIdeal"><span class="name">MvPolynomial</span>.<span class="name">le_zeroLocus_iff_le_vanishingIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.zeroLocus_span"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_span</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.mem_vanishingIdeal_singleton_iff"><span class="name">MvPolynomial</span>.<span class="name">mem_vanishingIdeal_singleton_iff</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.instIsPrimeVanishingIdealSingletonForallSet"><span class="name">MvPolynomial</span>.<span class="name">instIsPrimeVanishingIdealSingletonForallSet</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.instIsMaximalVanishingIdealSingletonForallSet"><span class="name">MvPolynomial</span>.<span class="name">instIsMaximalVanishingIdealSingletonForallSet</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.radical_le_vanishingIdeal_zeroLocus"><span class="name">MvPolynomial</span>.<span class="name">radical_le_vanishingIdeal_zeroLocus</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.pointToPoint"><span class="name">MvPolynomial</span>.<span class="name">pointToPoint</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.vanishingIdeal_pointToPoint"><span class="name">MvPolynomial</span>.<span class="name">vanishingIdeal_pointToPoint</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.pointToPoint_zeroLocus_le"><span class="name">MvPolynomial</span>.<span class="name">pointToPoint_zeroLocus_le</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.eq_vanishingIdeal_singleton_of_isMaximal"><span class="name">MvPolynomial</span>.<span class="name">eq_vanishingIdeal_singleton_of_isMaximal</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.isMaximal_iff_eq_vanishingIdeal_singleton"><span class="name">MvPolynomial</span>.<span class="name">isMaximal_iff_eq_vanishingIdeal_singleton</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.vanishingIdeal_zeroLocus_eq_radical"><span class="name">MvPolynomial</span>.<span class="name">vanishingIdeal_zeroLocus_eq_radical</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.IsPrime.vanishingIdeal_zeroLocus"><span class="name">MvPolynomial</span>.<span class="name">IsPrime</span>.<span class="name">vanishingIdeal_zeroLocus</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Nullstellensatz" class="markdown-heading">Nullstellensatz <a class="hover-link" href="#Nullstellensatz">#</a></h1><p>This file establishes a version of Hilbert's classical Nullstellensatz for <code><a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a></code>s.
+The main statement of the theorem is <code><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal_zeroLocus_eq_radical">MvPolynomial.vanishingIdeal_zeroLocus_eq_radical</a></code>.</p><p>The statement is in terms of new definitions <code><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a></code> and <code><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a></code>.
+Mathlib already has versions of these in terms of the prime spectrum of a ring,
+but those are not well-suited for expressing this result.
+Suggestions for better ways to state this theorem or organize things are welcome.</p><p>The machinery around <code><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a></code> and <code><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a></code> is also minimal, I only added lemmas
+directly needed in this proof, since I'm not sure if they are the right approach.</p></div><div class="decl" id="MvPolynomial.zeroLocus"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L38-L40">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<span class="fn">σ</span> → <span class="fn">K</span>)</span></span></div></div><p>Set of points that are zeroes of all polynomials in an ideal</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">MvPolynomial.zeroLocus</a> <span class="fn">K</span> <span class="fn">I</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><span class="fn">σ</span> → <span class="fn">K</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">∀ <span class="fn">p</span> ∈ <span class="fn">I</span>, <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">MvPolynomial.aeval</a> <span class="fn">x</span>)</span> <span class="fn">p</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></li></ul></details><details id="instances-for-list-MvPolynomial.zeroLocus" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MvPolynomial.mem_zeroLocus_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L42-L45">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.mem_zeroLocus_iff"><span class="name">MvPolynomial</span>.<span class="name">mem_zeroLocus_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">K</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">I</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ <span class="fn">p</span> ∈ <span class="fn">I</span>, <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">aeval</a> <span class="fn">x</span>)</span> <span class="fn">p</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></div></div></div></div><div class="decl" id="MvPolynomial.zeroLocus_anti_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L47-L48">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus_anti_mono"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_anti_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">J</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">J</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">I</span></span></div></div></div></div><div class="decl" id="MvPolynomial.zeroLocus_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L50-L52">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus_bot"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="MvPolynomial.zeroLocus_top"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L54-L57">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus_top"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_top</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="MvPolynomial.vanishingIdeal"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L60-L66">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal"><span class="name">MvPolynomial</span>.<span class="name">vanishingIdeal</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<span class="fn">σ</span> → <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span></div></div><p>Ideal of polynomials with common zeroes at all elements of a set</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">MvPolynomial.vanishingIdeal</a> <span class="fn">k</span> <span class="fn">V</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">{</a> <span class="fn">carrier</span> := <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">p</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn">V</span>, <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">MvPolynomial.aeval</a> <span class="fn">x</span>)</span> <span class="fn">p</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a>, <span class="fn">add_mem'</span> := <span class="fn">⋯</span>, <span class="fn">zero_mem'</span> := <span class="fn">⋯</span>,
+    <span class="fn">smul_mem'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">}</a></li></ul></details><details id="instances-for-list-MvPolynomial.vanishingIdeal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MvPolynomial.mem_vanishingIdeal_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L68-L71">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.mem_vanishingIdeal_iff"><span class="name">MvPolynomial</span>.<span class="name">mem_vanishingIdeal_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<span class="fn">σ</span> → <span class="fn">K</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <span class="fn">V</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn">V</span>, <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">aeval</a> <span class="fn">x</span>)</span> <span class="fn">p</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></div></div></div></div><div class="decl" id="MvPolynomial.vanishingIdeal_anti_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L73-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal_anti_mono"><span class="name">MvPolynomial</span>.<span class="name">vanishingIdeal_anti_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<span class="fn">σ</span> → <span class="fn">K</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">A</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <span class="fn">B</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="MvPolynomial.vanishingIdeal_empty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L76-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal_empty"><span class="name">MvPolynomial</span>.<span class="name">vanishingIdeal_empty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="MvPolynomial.le_vanishingIdeal_zeroLocus"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L79-L80">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.le_vanishingIdeal_zeroLocus"><span class="name">MvPolynomial</span>.<span class="name">le_vanishingIdeal_zeroLocus</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">I</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.zeroLocus_vanishingIdeal_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L82-L83">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus_vanishingIdeal_le"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_vanishingIdeal_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<span class="fn">σ</span> → <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">V</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <span class="fn">V</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.zeroLocus_vanishingIdeal_galoisConnection"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L85-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus_vanishingIdeal_galoisConnection"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_vanishingIdeal_galoisConnection</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/GaloisConnection/Defs.html#GaloisConnection">GaloisConnection</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.le_zeroLocus_iff_le_vanishingIdeal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L91-L93">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.le_zeroLocus_iff_le_vanishingIdeal"><span class="name">MvPolynomial</span>.<span class="name">le_zeroLocus_iff_le_vanishingIdeal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<span class="fn">σ</span> → <span class="fn">K</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">V</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">I</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <span class="fn">V</span></span></div></div></div></div><div class="decl" id="MvPolynomial.zeroLocus_span"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L95-L98">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus_span"><span class="name">MvPolynomial</span>.<span class="name">zeroLocus_span</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Ideal/Span.html#Ideal.span">Ideal.span</a> <span class="fn">S</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><span class="fn">σ</span> → <span class="fn">K</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">∀ <span class="fn">p</span> ∈ <span class="fn">S</span>, <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">aeval</a> <span class="fn">x</span>)</span> <span class="fn">p</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></div></div></div></div><div class="decl" id="MvPolynomial.mem_vanishingIdeal_singleton_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L100-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.mem_vanishingIdeal_singleton_iff"><span class="name">MvPolynomial</span>.<span class="name">mem_vanishingIdeal_singleton_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">K</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../.././Init/Core.html#Singleton.singleton">}</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">aeval</a> <span class="fn">x</span>)</span> <span class="fn">p</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="MvPolynomial.instIsPrimeVanishingIdealSingletonForallSet"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L104-L106">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.instIsPrimeVanishingIdealSingletonForallSet"><span class="name">MvPolynomial</span>.<span class="name">instIsPrimeVanishingIdealSingletonForallSet</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">K</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../.././Init/Core.html#Singleton.singleton">}</a>)</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span></div></div></div></div><div class="decl" id="MvPolynomial.instIsMaximalVanishingIdealSingletonForallSet"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L108-L111">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.instIsMaximalVanishingIdealSingletonForallSet"><span class="name">MvPolynomial</span>.<span class="name">instIsMaximalVanishingIdealSingletonForallSet</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">K</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">K</span> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../.././Init/Core.html#Singleton.singleton">}</a>)</span>.<a href="../.././Mathlib/RingTheory/Ideal/Maximal.html#Ideal.IsMaximal">IsMaximal</a></span></div></div></div></div><div class="decl" id="MvPolynomial.radical_le_vanishingIdeal_zeroLocus"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L113-L122">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.radical_le_vanishingIdeal_zeroLocus"><span class="name">MvPolynomial</span>.<span class="name">radical_le_vanishingIdeal_zeroLocus</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">I</span>.<a href="../.././Mathlib/RingTheory/Ideal/Operations.html#Ideal.radical">radical</a></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">I</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.pointToPoint"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L124-L126">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.pointToPoint"><span class="name">MvPolynomial</span>.<span class="name">pointToPoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">K</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span></div></div><p>The point in the prime spectrum associated to a given point</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.pointToPoint">MvPolynomial.pointToPoint</a> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.mk">{</a> <span class="fn">asIdeal</span> := <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">MvPolynomial.vanishingIdeal</a> <span class="fn">k</span> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../.././Init/Core.html#Singleton.singleton">}</a></span>, <span class="fn">isPrime</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.mk">}</a></li></ul></details><details id="instances-for-list-MvPolynomial.pointToPoint" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MvPolynomial.vanishingIdeal_pointToPoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L128-L139">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal_pointToPoint"><span class="name">MvPolynomial</span>.<span class="name">vanishingIdeal_pointToPoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<span class="fn">σ</span> → <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Basic.html#PrimeSpectrum.vanishingIdeal">PrimeSpectrum.vanishingIdeal</a> (<a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.pointToPoint">pointToPoint</a> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">V</span>)</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <span class="fn">V</span></span></div></div></div></div><div class="decl" id="MvPolynomial.pointToPoint_zeroLocus_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L141-L146">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.pointToPoint_zeroLocus_le"><span class="name">MvPolynomial</span>.<span class="name">pointToPoint_zeroLocus_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.pointToPoint">pointToPoint</a> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">I</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Basic.html#PrimeSpectrum.zeroLocus">PrimeSpectrum.zeroLocus</a> <span class="fn">↑<span class="fn">I</span></span></span></div></div></div></div><div class="decl" id="MvPolynomial.eq_vanishingIdeal_singleton_of_isMaximal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L151-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.eq_vanishingIdeal_singleton_of_isMaximal"><span class="name">MvPolynomial</span>.<span class="name">eq_vanishingIdeal_singleton_of_isMaximal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/IsAlgClosed/Basic.html#IsAlgClosed">IsAlgClosed</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">σ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hI</span> : <span class="fn"><span class="fn">I</span>.<a href="../.././Mathlib/RingTheory/Ideal/Maximal.html#Ideal.IsMaximal">IsMaximal</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">x</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">K</span></span>), <span class="fn">I</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../.././Init/Core.html#Singleton.singleton">}</a></span></span></div></div></div></div><div class="decl" id="MvPolynomial.isMaximal_iff_eq_vanishingIdeal_singleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L164-L167">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.isMaximal_iff_eq_vanishingIdeal_singleton"><span class="name">MvPolynomial</span>.<span class="name">isMaximal_iff_eq_vanishingIdeal_singleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/IsAlgClosed/Basic.html#IsAlgClosed">IsAlgClosed</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">σ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">K</span>)</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">I</span>.<a href="../.././Mathlib/RingTheory/Ideal/Maximal.html#Ideal.IsMaximal">IsMaximal</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">x</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">K</span></span>), <span class="fn">I</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">K</span> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../.././Init/Core.html#Singleton.singleton">}</a></span></span></div></div></div></div><div class="decl" id="MvPolynomial.vanishingIdeal_zeroLocus_eq_radical"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L169-L180">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal_zeroLocus_eq_radical"><span class="name">MvPolynomial</span>.<span class="name">vanishingIdeal_zeroLocus_eq_radical</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/IsAlgClosed/Basic.html#IsAlgClosed">IsAlgClosed</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">σ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">I</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">I</span>.<a href="../.././Mathlib/RingTheory/Ideal/Operations.html#Ideal.radical">radical</a></span></div></div><p>Main statement of the Nullstellensatz</p></div></div><div class="decl" id="MvPolynomial.IsPrime.vanishingIdeal_zeroLocus"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nullstellensatz.lean#L182-L185">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.IsPrime.vanishingIdeal_zeroLocus"><span class="name">MvPolynomial</span>.<span class="name">IsPrime</span>.<span class="name">vanishingIdeal_zeroLocus</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/IsAlgClosed/Basic.html#IsAlgClosed">IsAlgClosed</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">σ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">k</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><span class="fn">P</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.vanishingIdeal">vanishingIdeal</a> <span class="fn">k</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Nullstellensatz.html#MvPolynomial.zeroLocus">zeroLocus</a> <span class="fn">K</span> <span class="fn">P</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">P</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

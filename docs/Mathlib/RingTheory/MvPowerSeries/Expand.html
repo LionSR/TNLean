@@ -1,0 +1,373 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.MvPowerSeries.Expand</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.MvPowerSeries.Expand";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">MvPowerSeries</span>.<span class="name">Expand</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/CharP/Frobenius.html">Mathlib.Algebra.CharP.Frobenius</a></li><li><a href="../../.././Mathlib/Algebra/MvPolynomial/Expand.html">Mathlib.Algebra.MvPolynomial.Expand</a></li><li><a href="../../.././Mathlib/RingTheory/MvPolynomial/Expand.html">Mathlib.RingTheory.MvPolynomial.Expand</a></li><li><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html">Mathlib.RingTheory.MvPowerSeries.Substitution</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.MvPowerSeries.Expand" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand"><span class="name">MvPowerSeries</span>.<span class="name">expand</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_C"><span class="name">MvPowerSeries</span>.<span class="name">expand_C</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_X"><span class="name">MvPowerSeries</span>.<span class="name">expand_X</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_monomial"><span class="name">MvPowerSeries</span>.<span class="name">expand_monomial</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_one"><span class="name">MvPowerSeries</span>.<span class="name">expand_one</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_one_apply"><span class="name">MvPowerSeries</span>.<span class="name">expand_one_apply</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.map_expand"><span class="name">MvPowerSeries</span>.<span class="name">map_expand</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.HasSubst.expand"><span class="name">MvPowerSeries</span>.<span class="name">HasSubst</span>.<span class="name">expand</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_comp_substAlgHom"><span class="name">MvPowerSeries</span>.<span class="name">expand_comp_substAlgHom</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_substAlgHom"><span class="name">MvPowerSeries</span>.<span class="name">expand_substAlgHom</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_subst"><span class="name">MvPowerSeries</span>.<span class="name">expand_subst</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_mul_eq_comp"><span class="name">MvPowerSeries</span>.<span class="name">expand_mul_eq_comp</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_mul"><span class="name">MvPowerSeries</span>.<span class="name">expand_mul</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.coeff_expand_smul"><span class="name">MvPowerSeries</span>.<span class="name">coeff_expand_smul</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.constantCoeff_expand"><span class="name">MvPowerSeries</span>.<span class="name">constantCoeff_expand</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.coeff_expand_of_not_dvd"><span class="name">MvPowerSeries</span>.<span class="name">coeff_expand_of_not_dvd</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.support_expand_subset"><span class="name">MvPowerSeries</span>.<span class="name">support_expand_subset</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.support_expand"><span class="name">MvPowerSeries</span>.<span class="name">support_expand</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.order_expand"><span class="name">MvPowerSeries</span>.<span class="name">order_expand</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.expand_eq_expand"><span class="name">MvPowerSeries</span>.<span class="name">expand_eq_expand</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.trunc'_expand"><span class="name">MvPowerSeries</span>.<span class="name">trunc'_expand</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.trunc'_expand_trunc'"><span class="name">MvPowerSeries</span>.<span class="name">trunc'_expand_trunc'</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.map_frobenius_expand"><span class="name">MvPowerSeries</span>.<span class="name">map_frobenius_expand</span></a></div><div class="nav_link"><a class="break_within" href="#MvPowerSeries.map_iterateFrobenius_expand"><span class="name">MvPowerSeries</span>.<span class="name">map_iterateFrobenius_expand</span></a></div></nav><main>
+<div class="mod_doc"><h2 id="Expand-multivariate-power-series" class="markdown-heading">Expand multivariate power series <a class="hover-link" href="#Expand-multivariate-power-series">#</a></h2><p>Given a multivariate power series <code>φ</code>, one may replace every occurrence of <code>X i</code> by <code>X i ^ n</code>,
+for some nonzero natural number <code>n</code>.
+This operation is called <code><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">MvPowerSeries.expand</a></code> and it is an algebra homomorphism.</p><h3 id="Main-declaration" class="markdown-heading">Main declaration <a class="hover-link" href="#Main-declaration">#</a></h3><ul><li><code><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">MvPowerSeries.expand</a></code>: expand a multi variate power series by a nonzero factor of p,
+so <code>∑ aₙ xⁿ</code> becomes <code>∑ aₙ xⁿᵖ</code>.</li></ul></div><div class="decl" id="MvPowerSeries.expand"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L32-L36">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand"><span class="name">MvPowerSeries</span>.<span class="name">expand</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span></div></div><p>Expand the power series by a factor of p, so <code>∑ aₙ xⁿ</code> becomes <code>∑ aₙ xⁿᵖ</code>.</p><p>See also <code><a href="../../.././Mathlib/RingTheory/PowerSeries/Expand.html#PowerSeries.expand">PowerSeries.expand</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">MvPowerSeries.expand</a> <span class="fn">p</span> <span class="fn">hp</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.substAlgHom">MvPowerSeries.substAlgHom</a> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-MvPowerSeries.expand" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MvPowerSeries.expand_C"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L38-L40">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_C"><span class="name">MvPowerSeries</span>.<span class="name">expand_C</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.C">C</a> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.C">C</a> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.expand_X"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L42-L44">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_X"><span class="name">MvPowerSeries</span>.<span class="name">expand_X</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">σ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.X">X</a> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.X">X</a> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span></div></div></div></div><div class="decl" id="MvPowerSeries.expand_monomial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L46-L52">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_monomial"><span class="name">MvPowerSeries</span>.<span class="name">expand_monomial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.monomial">monomial</a> <span class="fn">d</span>)</span> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.monomial">monomial</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">d</span>))</span> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.expand_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L54-L57">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_one"><span class="name">MvPowerSeries</span>.<span class="name">expand_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">1</span> <span class="fn">⋯</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.id">AlgHom.id</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span>)</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.expand_one_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L59-L59">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_one_apply"><span class="name">MvPowerSeries</span>.<span class="name">expand_one_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">1</span> <span class="fn">⋯</span>)</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="MvPowerSeries.map_expand"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L61-L64">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.map_expand"><span class="name">MvPowerSeries</span>.<span class="name">map_expand</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.map">map</a> <span class="fn">f</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.map">map</a> <span class="fn">f</span>)</span> <span class="fn">φ</span>)</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.HasSubst.expand"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L68-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.HasSubst.expand"><span class="name">MvPowerSeries</span>.<span class="name">HasSubst</span>.<span class="name">expand</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">τ</span> <span class="fn">S</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.HasSubst">HasSubst</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.HasSubst">HasSubst</a> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">σ</span>) =&gt; <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">MvPowerSeries.expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span></span></div></div></div></div><div class="decl" id="MvPowerSeries.expand_comp_substAlgHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L71-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_comp_substAlgHom"><span class="name">MvPowerSeries</span>.<span class="name">expand_comp_substAlgHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">τ</span> <span class="fn">S</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.HasSubst">HasSubst</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span>.<a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.substAlgHom">substAlgHom</a> <span class="fn">hf</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.substAlgHom">substAlgHom</a> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.expand_substAlgHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L76-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_substAlgHom"><span class="name">MvPowerSeries</span>.<span class="name">expand_substAlgHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">τ</span> <span class="fn">S</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.HasSubst">HasSubst</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.substAlgHom">substAlgHom</a> <span class="fn">hf</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.substAlgHom">substAlgHom</a> <span class="fn">⋯</span>)</span> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.expand_subst"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L80-L82">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_subst"><span class="name">MvPowerSeries</span>.<span class="name">expand_subst</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">τ</span> <span class="fn">R</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.HasSubst">HasSubst</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.subst">subst</a> <span class="fn">f</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Substitution.html#MvPowerSeries.subst">subst</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">σ</span>) =&gt; <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.expand_mul_eq_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L92-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_mul_eq_comp"><span class="name">MvPowerSeries</span>.<span class="name">expand_mul_eq_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn">q</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">q</span>) <span class="fn">⋯</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span>.<a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">q</span> <span class="fn">hq</span>)</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.expand_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L98-L100">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_mul"><span class="name">MvPowerSeries</span>.<span class="name">expand_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn">q</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">q</span>) <span class="fn">⋯</span>)</span> <span class="fn">φ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">q</span> <span class="fn">hq</span>)</span> <span class="fn">φ</span>)</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.coeff_expand_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L102-L113">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.coeff_expand_smul"><span class="name">MvPowerSeries</span>.<span class="name">coeff_expand_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.coeff">coeff</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">m</span>))</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.coeff">coeff</a> <span class="fn">m</span>)</span> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.constantCoeff_expand"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L115-L119">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.constantCoeff_expand"><span class="name">MvPowerSeries</span>.<span class="name">constantCoeff_expand</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.constantCoeff">constantCoeff</a> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.constantCoeff">constantCoeff</a> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.coeff_expand_of_not_dvd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L121-L137">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.coeff_expand_of_not_dvd"><span class="name">MvPowerSeries</span>.<span class="name">coeff_expand_of_not_dvd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">σ</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn"><span class="fn">m</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.coeff">coeff</a> <span class="fn">m</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="MvPowerSeries.support_expand_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L139-L147">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.support_expand_subset"><span class="name">MvPowerSeries</span>.<span class="name">support_expand_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Support.html#Function.support">Function.support</a> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Support.html#Function.support">Function.support</a> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.support_expand"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L149-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.support_expand"><span class="name">MvPowerSeries</span>.<span class="name">support_expand</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Support.html#Function.support">Function.support</a> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Support.html#Function.support">Function.support</a> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.order_expand"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L160-L178">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.order_expand"><span class="name">MvPowerSeries</span>.<span class="name">order_expand</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">φ</span>)</span>.<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Order.html#MvPowerSeries.order">order</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">φ</span>.<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Order.html#MvPowerSeries.order">order</a></span></div></div></div></div><div class="decl" id="MvPowerSeries.expand_eq_expand"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L182-L194">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand_eq_expand"><span class="name">MvPowerSeries</span>.<span class="name">expand_eq_expand</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">↑<span class="fn">φ</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Expand.html#MvPolynomial.expand">MvPolynomial.expand</a> <span class="fn">p</span>)</span> <span class="fn">φ</span>)</span></span></div></div><p>For any multivariate polynomial <code>φ</code>, then <code><a href="../../.././Mathlib/Algebra/MvPolynomial/Expand.html#MvPolynomial.expand">MvPolynomial.expand</a> p φ</code> and
+<code><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">MvPowerSeries.expand</a> p hp ↑φ</code> coincide.</p></div></div><div class="decl" id="MvPowerSeries.trunc'_expand"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L196-L218">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.trunc'_expand"><span class="name">MvPowerSeries</span>.<span class="name">trunc'_expand</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">σ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Trunc.html#MvPowerSeries.trunc'">trunc'</a> <span class="fn">R</span> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">n</span>))</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Expand.html#MvPolynomial.expand">MvPolynomial.expand</a> <span class="fn">p</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Trunc.html#MvPowerSeries.trunc'">trunc'</a> <span class="fn">R</span> <span class="fn">n</span>)</span> <span class="fn">φ</span>)</span></span></div></div></div></div><div class="decl" id="MvPowerSeries.trunc'_expand_trunc'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L221-L224">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.trunc'_expand_trunc'"><span class="name">MvPowerSeries</span>.<span class="name">trunc'_expand_trunc'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n </span><span class="fn">m</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">n</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">m</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">σ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Expand.html#MvPolynomial.expand">MvPolynomial.expand</a> <span class="fn">p</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Trunc.html#MvPowerSeries.trunc'">trunc'</a> <span class="fn">R</span> <span class="fn">n</span>)</span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Trunc.html#MvPowerSeries.trunc'">trunc'</a> <span class="fn">R</span> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">n</span>))</span> <span class="fn">↑<span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Expand.html#MvPolynomial.expand">MvPolynomial.expand</a> <span class="fn">p</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Trunc.html#MvPowerSeries.trunc'">trunc'</a> <span class="fn">R</span> <span class="fn">m</span>)</span> <span class="fn">f</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="MvPowerSeries.map_frobenius_expand"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L232-L247">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.map_frobenius_expand"><span class="name">MvPowerSeries</span>.<span class="name">map_frobenius_expand</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharP/Defs.html#ExpChar">ExpChar</a> <span class="fn">R</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.map">map</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/CharP/Lemmas.html#frobenius">frobenius</a> <span class="fn">R</span> <span class="fn">p</span>)</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> <span class="fn">p</span> <span class="fn">hp</span>)</span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span></div></div></div></div><div class="decl" id="MvPowerSeries.map_iterateFrobenius_expand"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/MvPowerSeries/Expand.lean#L249-L257">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.map_iterateFrobenius_expand"><span class="name">MvPowerSeries</span>.<span class="name">map_iterateFrobenius_expand</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharP/Defs.html#ExpChar">ExpChar</a> <span class="fn">R</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries.map">map</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/CharP/Lemmas.html#iterateFrobenius">iterateFrobenius</a> <span class="fn">R</span> <span class="fn">p</span> <span class="fn">n</span>)</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/MvPowerSeries/Expand.html#MvPowerSeries.expand">expand</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>) <span class="fn">⋯</span>)</span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

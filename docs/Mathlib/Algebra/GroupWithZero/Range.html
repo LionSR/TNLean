@@ -1,0 +1,728 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.GroupWithZero.Range</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.GroupWithZero.Range";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">GroupWithZero</span>.<span class="name">Range</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/GroupWithZero/WithZero.html">Mathlib.Algebra.GroupWithZero.WithZero</a></li><li><a href="../../.././Mathlib/Algebra/Group/Subgroup/Pointwise.html">Mathlib.Algebra.Group.Subgroup.Pointwise</a></li><li><a href="../../.././Mathlib/Algebra/GroupWithZero/Submonoid/Instances.html">Mathlib.Algebra.GroupWithZero.Submonoid.Instances</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.GroupWithZero.Range" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.mrange_nontrivial"><span class="name">MonoidWithZeroHom</span>.<span class="name">mrange_nontrivial</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.range_nontrivial"><span class="name">MonoidWithZeroHom</span>.<span class="name">range_nontrivial</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.valueMonoid"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueMonoid</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.one_mem_valueMonoid"><span class="name">MonoidWithZeroHom</span>.<span class="name">one_mem_valueMonoid</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.coe_one"><span class="name">MonoidWithZeroHom</span>.<span class="name">coe_one</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.mem_valueMonoid_iff"><span class="name">MonoidWithZeroHom</span>.<span class="name">mem_valueMonoid_iff</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.valueMonoid_eq_closure"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueMonoid_eq_closure</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.valueGroup"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.valueGroup_def"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup_def</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueMonoid₀"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueMonoid₀</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.mem_valueMonoid"><span class="name">MonoidWithZeroHom</span>.<span class="name">mem_valueMonoid</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.mem_valueGroup"><span class="name">MonoidWithZeroHom</span>.<span class="name">mem_valueGroup</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.inv_mem_valueGroup"><span class="name">MonoidWithZeroHom</span>.<span class="name">inv_mem_valueGroup</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.embedding"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">embedding</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.embedding_apply"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">embedding_apply</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.restrict₀"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.restrict₀_apply"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_apply</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.restrict₀_of_ne_zero"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_of_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.restrict₀_eq_zero_iff"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_eq_zero_iff</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.restrict₀_eq_one_iff"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_eq_one_iff</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.embedding_restrict₀"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">embedding_restrict₀</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.valueMonoid_eq_valueGroup"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueMonoid_eq_valueGroup</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.valueMonoid_eq_valueGroup'"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueMonoid_eq_valueGroup'</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.valueGroup_eq_range"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup_eq_range</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.restrict₀_range_eq_top"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_range_eq_top</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.restrict₀_surjective"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.mem_valueGroup_iff_of_comm"><span class="name">MonoidWithZeroHom</span>.<span class="name">mem_valueGroup_iff_of_comm</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.mem_valueGroup_iff_of_comm'"><span class="name">MonoidWithZeroHom</span>.<span class="name">mem_valueGroup_iff_of_comm'</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.valueGroup.mk"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup</span>.<span class="name">mk</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.valueGroup.mk_inj"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup</span>.<span class="name">mk_inj</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.valueGroup.mk_mul"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup</span>.<span class="name">mk_mul</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.mk"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">mk</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.mk_eq_of_ne_zero"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">mk_eq_of_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.zero_or_exists_mk"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">zero_or_exists_mk</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.ValueGroup₀.zero_or_exists_mk'"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">zero_or_exists_mk'</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidWithZeroHom.instCommGroupWithZeroValueGroup₀"><span class="name">MonoidWithZeroHom</span>.<span class="name">instCommGroupWithZeroValueGroup₀</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="The-range-of-a-MonoidWithZeroHom" class="markdown-heading">The range of a MonoidWithZeroHom <a class="hover-link" href="#The-range-of-a-MonoidWithZeroHom">#</a></h1><p>Given a <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHom">MonoidWithZeroHom</a></code> <code>f : A → B</code> whose codomain <code>B</code> is a <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a></code>, we define the
+type <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">MonoidWithZeroHom.valueMonoid</a></code> as the submonoid of <code>Bˣ</code> generated by the invertible elements
+in the range of <code>f</code>. For example, if <code>A = ℕ</code>, <code>f</code> is the natural cast to <code>B</code> where <code>B</code> is</p><ul><li><code>ℝ≥0</code>, then <code>MonoidWithZero.<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">valueMonoid</a></code> are the positive natural numbers in <code>ℝ≥0</code>;</li><li><code><a href="../../.././Mathlib/Algebra/Group/WithOne/Defs.html#WithZero">WithZero</a> ℤ</code>, then <code>MonoidWithZero.<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">valueMonoid</a> = {1}</code>.</li></ul><p><code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueMonoid₀">MonoidWithZeroHom.ValueMonoid₀</a></code> is the <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a></code> obtained by
+adjoining <code>0</code> to the previous type.</p><p>Likewise, <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">MonoidWithZeroHom.valueGroup</a></code> is the <em>subgroup</em> of <code>Bˣ</code> generated by the invertible
+elements in <code>range f</code> and <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">MonoidWithZeroHom.ValueGroup₀</a></code> adds a <code>0</code> to the previous group.</p><p>When <code>B</code> is commutative, then both <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">MonoidWithZeroHom.valueGroup</a> f</code> and
+<code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">MonoidWithZeroHom.ValueGroup₀</a> f</code> are also commutative and the former can be described more
+explicitly (see <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.mem_valueGroup_iff_of_comm">MonoidWithZeroHom.mem_valueGroup_iff_of_comm</a></code> and <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.mem_valueGroup_iff_of_comm'">mem_valueGroup_iff_of_comm'</a></code>).</p><h2 id="Main-declarations" class="markdown-heading">Main declarations <a class="hover-link" href="#Main-declarations">#</a></h2><ul><li><code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">valueMonoid</a> f</code> is the smallest submonoid of <code>Bˣ</code> containing the range of <code>f</code>;</li><li><code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueMonoid₀">ValueMonoid₀</a> f</code> is the smallest monoid with <code>0</code> containing the range of <code>f</code>;</li><li><code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> f</code> is the smallest subgroup of <code>Bˣ</code> containing the range of <code>f</code>;</li><li><code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueMonoid₀">ValueMonoid₀</a> f</code> is the smallest group with <code>0</code> containing the range of <code>f</code>;</li><li>When <code>B</code> is a group with zero, rather than merely a monoid with zero, the above definitions
+all coincide: see <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid_eq_valueGroup">valueMonoid_eq_valueGroup</a></code> for an equality as submonoids and
+<code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid_eq_valueGroup'">valueMonoid_eq_valueGroup'</a></code> for an equality as subsets.</li><li>When <code>B</code> is a <em>commutative</em> group with zero, <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">MonoidWithZeroHom.valueGroup</a></code> can be
+explicitly described as the elements that are ratios of terms in <code>range f</code>, see
+<code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.mem_valueGroup_iff_of_comm">MonoidWithZeroHom.mem_valueGroup_iff_of_comm</a></code>.</li></ul><h2 id="Implementation-details" class="markdown-heading">Implementation details <a class="hover-link" href="#Implementation-details">#</a></h2><p><code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">MonoidWithZeroHom.valueMonoid</a></code> is defined explicitly in terms of its carrier, by proving the
+required properties; that it coincides with the submonoid generated by the closure is proven in
+<code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid_eq_closure">MonoidWithZeroHom.valueMonoid_eq_closure</a></code>, but using the latter as definition yields to unwanted
+unfolding.</p></div><div class="decl" id="MonoidWithZeroHom.mrange_nontrivial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L59-L61">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.mrange_nontrivial"><span class="name">MonoidWithZeroHom</span>.<span class="name">mrange_nontrivial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MulZeroOneClass">MulZeroOneClass</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MulZeroOneClass">MulZeroOneClass</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHom">→*₀</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Group/Submonoid/Operations.html#MonoidHom.mrange">MonoidHom.mrange</a> <span class="fn">f</span>)</span></span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.range_nontrivial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L63-L65">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.range_nontrivial"><span class="name">MonoidWithZeroHom</span>.<span class="name">range_nontrivial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MulZeroOneClass">MulZeroOneClass</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MulZeroOneClass">MulZeroOneClass</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHom">→*₀</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">f</span></span>)</span>.<a href="../../.././Mathlib/Data/Set/Subsingleton.html#Set.Nontrivial">Nontrivial</a></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.valueMonoid"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L75-L84">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueMonoid</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid">Submonoid</a> <span class="fn">B</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a></span></div></div><p>For a morphism of monoids with zero <code>f</code>, this is a smallest submonoid of the invertible
+elements in the codomain containing the range of <code>f</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">MonoidWithZeroHom.valueMonoid</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid.mk">{</a> <span class="fn">carrier</span> := <a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units.val">Units.val</a> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">f</span></span></span>, <span class="fn">mul_mem'</span> := <span class="fn">⋯</span>, <span class="fn">one_mem'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid.mk">}</a></li></ul></details><details id="instances-for-list-MonoidWithZeroHom.valueMonoid" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MonoidWithZeroHom.one_mem_valueMonoid"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L86-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.one_mem_valueMonoid"><span class="name">MonoidWithZeroHom</span>.<span class="name">one_mem_valueMonoid</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">1</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">valueMonoid</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.coe_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L88-L88">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.coe_one"><span class="name">MonoidWithZeroHom</span>.<span class="name">coe_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn">1</span>, <span class="fn">⋯</span><a href="../../.././Init/Prelude.html#Subtype.mk">⟩</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.mem_valueMonoid_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L90-L90">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.mem_valueMonoid_iff"><span class="name">MonoidWithZeroHom</span>.<span class="name">mem_valueMonoid_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">B</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">b</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">valueMonoid</a> <span class="fn">f</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units.val">Units.val</a> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">f</span></span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.valueMonoid_eq_closure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L92-L93">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid_eq_closure"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueMonoid_eq_closure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">valueMonoid</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Basic.html#Submonoid.closure">Submonoid.closure</a> (<a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units.val">Units.val</a> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.valueGroup"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L95-L97">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">B</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a></span></div></div><p>For a morphism of monoids with zero <code>f</code>, this is the smallest subgroup of the invertible
+elements in the codomain containing the range of <code>f</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">MonoidWithZeroHom.valueGroup</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Lattice.html#Subgroup.closure">Subgroup.closure</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">MonoidWithZeroHom.valueMonoid</a> <span class="fn">f</span>)</span></span></span></li></ul></details><details id="instances-for-list-MonoidWithZeroHom.valueGroup" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MonoidWithZeroHom.valueGroup_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L99-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup_def"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Lattice.html#Subgroup.closure">Subgroup.closure</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">valueMonoid</a> <span class="fn">f</span>)</span></span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueMonoid₀"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L101-L103">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueMonoid₀"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueMonoid₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Type</a> u_2</div></div><p>For a morphism of monoids with zero <code>f</code>, this is the smallest submonoid with zero of the
+codomain containing the range of <code>f</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueMonoid₀">MonoidWithZeroHom.ValueMonoid₀</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Group/WithOne/Defs.html#WithZero">WithZero</a> <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">MonoidWithZeroHom.valueMonoid</a> <span class="fn">f</span>)</span></span></span></li></ul></details><details id="instances-for-list-MonoidWithZeroHom.ValueMonoid₀" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L105-L107">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Type</a> u_2</div></div><p>For a morphism of monoids with zero <code>f</code>, this is a smallest subgroup with zero of the
+codomain containing the range of <code>f</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">MonoidWithZeroHom.ValueGroup₀</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Group/WithOne/Defs.html#WithZero">WithZero</a> <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">MonoidWithZeroHom.valueGroup</a> <span class="fn">f</span>)</span></span></span></li></ul></details><details id="instances-for-list-MonoidWithZeroHom.ValueGroup₀" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MonoidWithZeroHom.mem_valueMonoid"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L109-L110">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.mem_valueMonoid"><span class="name">MonoidWithZeroHom</span>.<span class="name">mem_valueMonoid</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">B</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">↑<span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">b</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">valueMonoid</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.mem_valueGroup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L112-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.mem_valueGroup"><span class="name">MonoidWithZeroHom</span>.<span class="name">mem_valueGroup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">B</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">↑<span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">b</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.inv_mem_valueGroup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L116-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.inv_mem_valueGroup"><span class="name">MonoidWithZeroHom</span>.<span class="name">inv_mem_valueGroup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">B</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">↑<span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">b</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.embedding"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L125-L131">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.embedding"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">embedding</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">ValueGroup₀</a> <span class="fn">f</span></span> <a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHom">→*₀</a> <span class="fn">B</span></div></div><p>The inclusion of the subgroup with zero generated by the range of a monoid with zero
+hom <code>f : A \to B</code> into the codomain <code>B</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.embedding">MonoidWithZeroHom.ValueGroup₀.embedding</a> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn">(↑<a href="../../.././Mathlib/Algebra/GroupWithZero/WithZero.html#WithZero.withZeroUnitsEquiv">WithZero.withZeroUnitsEquiv</a>)</span>.<a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/WithZero.html#WithZero.map'">WithZero.map'</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">MonoidWithZeroHom.valueGroup</a> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.subtype">subtype</a></span>)</span></span></li></ul></details><details id="instances-for-list-MonoidWithZeroHom.ValueGroup₀.embedding" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.embedding_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L127-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.embedding_apply"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">embedding_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a✝</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">ValueGroup₀</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.embedding">embedding</a> <span class="fn">a✝</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Group/WithOne/Defs.html#WithZero.recZeroCoe">WithZero.recZeroCoe</a> <span class="fn">0</span> <a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units.val">Units.val</a> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/WithZero.html#WithZero.map'">WithZero.map'</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.subtype">subtype</a></span>)</span> <span class="fn">a✝</span>)</span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.restrict₀"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L134-L142">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">A</span> <a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHom">→*₀</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">ValueGroup₀</a> <span class="fn">f</span></span></div></div><p>This is the restriction of <code>f</code> as a function taking values in <code>valueGroup₀ f</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀">MonoidWithZeroHom.ValueGroup₀.restrict₀</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">a</span> : <span class="fn">A</span>) =&gt; <span class="fn">if h : <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> then <span class="fn">0</span> else <span class="fn">↑<a href="../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Units/Basic.html#Units.mk0">Units.mk0</a> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span> <span class="fn">h</span></span>, <span class="fn">⋯</span><a href="../../.././Init/Prelude.html#Subtype.mk">⟩</a></span></span></span>, <span class="fn">map_zero'</span> := <span class="fn">⋯</span>, <span class="fn">map_one'</span> := <span class="fn">⋯</span>,
+    <span class="fn">map_mul'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHom.mk">}</a></li></ul></details><details id="instances-for-list-MonoidWithZeroHom.ValueGroup₀.restrict₀" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.restrict₀_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L135-L135">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀_apply"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀">restrict₀</a> <span class="fn">f</span>)</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">if h : <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> then <span class="fn">0</span> else <span class="fn">↑<a href="../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Units/Basic.html#Units.mk0">Units.mk0</a> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span> <span class="fn">h</span></span>, <span class="fn">⋯</span><a href="../../.././Init/Prelude.html#Subtype.mk">⟩</a></span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.restrict₀_of_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L146-L148">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀_of_ne_zero"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_of_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀">restrict₀</a> <span class="fn">f</span>)</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<a href="../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Units/Basic.html#Units.mk0">Units.mk0</a> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span> <span class="fn">h</span></span>, <span class="fn">⋯</span><a href="../../.././Init/Prelude.html#Subtype.mk">⟩</a></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.restrict₀_eq_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L150-L151">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀_eq_zero_iff"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_eq_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀">restrict₀</a> <span class="fn">f</span>)</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.restrict₀_eq_one_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L153-L157">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀_eq_one_iff"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_eq_one_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀">restrict₀</a> <span class="fn">f</span>)</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.embedding_restrict₀"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L159-L162">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.embedding_restrict₀"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">embedding_restrict₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.embedding">embedding</a> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀">restrict₀</a> <span class="fn">f</span>)</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.valueMonoid_eq_valueGroup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L173-L180">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid_eq_valueGroup"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueMonoid_eq_valueGroup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">valueMonoid</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.toSubmonoid">toSubmonoid</a></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.valueMonoid_eq_valueGroup'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L184-L185">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid_eq_valueGroup'"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueMonoid_eq_valueGroup'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueMonoid">valueMonoid</a> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.valueGroup_eq_range"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L187-L196">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup_eq_range"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup_eq_range</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units.val">Units.val</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">f</span></span></span> <a href="../../.././Init/Core.html#SDiff.sdiff">\</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">0</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.restrict₀_range_eq_top"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L198-L209">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀_range_eq_top"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_range_eq_top</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀">restrict₀</a> <span class="fn">f</span>)</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.restrict₀_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L213-L214">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀_surjective"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">restrict₀_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.restrict₀">restrict₀</a> <span class="fn">f</span>)</span></span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.mem_valueGroup_iff_of_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L222-L251">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.mem_valueGroup_iff_of_comm"><span class="name">MonoidWithZeroHom</span>.<span class="name">mem_valueGroup_iff_of_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn">B</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> <span class="fn">f</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">a</span> : <span class="fn">A</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∃ (<span class="fn">x</span> : <span class="fn">A</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.mem_valueGroup_iff_of_comm'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L253-L256">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.mem_valueGroup_iff_of_comm'"><span class="name">MonoidWithZeroHom</span>.<span class="name">mem_valueGroup_iff_of_comm'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn">B</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> <span class="fn">f</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">a</span> : <span class="fn">A</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∃ (<span class="fn">x</span> : <span class="fn">A</span>), <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.valueGroup.mk"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L262-L266">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup</span>.<span class="name">mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">s</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn"><span class="fn">f</span> <span class="fn">r</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup">valueGroup</a> <span class="fn">f</span>)</span></span></div></div><p>The map sending a pair of nonzero <code>r s : A</code> to the element <code>(v r)⁻¹ * (v s)</code>
+of <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">ValueGroup₀</a> v</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk">MonoidWithZeroHom.valueGroup.mk</a> <span class="fn">f</span> <span class="fn">r</span> <span class="fn">s</span> <span class="fn">hr</span> <span class="fn">hs</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Units/Basic.html#Units.mk0">Units.mk0</a> <span class="fn">(<span class="fn">f</span> <span class="fn">r</span>)</span> <span class="fn">hr</span>)</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Units/Basic.html#Units.mk0">Units.mk0</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span>)</span> <span class="fn">hs</span></span>, <span class="fn">⋯</span><a href="../../.././Init/Prelude.html#Subtype.mk">⟩</a></li></ul></details><details id="instances-for-list-MonoidWithZeroHom.valueGroup.mk" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MonoidWithZeroHom.valueGroup.mk_inj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L268-L272">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk_inj"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup</span>.<span class="name">mk_inj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₁ </span><span class="fn">s₁ </span><span class="fn">r₂ </span><span class="fn">s₂</span> : <span class="fn">A</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hr₁</span> : <span class="fn"><span class="fn">f</span> <span class="fn">r₁</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs₁</span> : <span class="fn"><span class="fn">f</span> <span class="fn">s₁</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hr₂</span> : <span class="fn"><span class="fn">f</span> <span class="fn">r₂</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs₂</span> : <span class="fn"><span class="fn">f</span> <span class="fn">s₂</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk">mk</a> <span class="fn">f</span> <span class="fn">r₁</span> <span class="fn">s₁</span> <span class="fn">hr₁</span> <span class="fn">hs₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk">mk</a> <span class="fn">f</span> <span class="fn">r₂</span> <span class="fn">s₂</span> <span class="fn">hr₂</span> <span class="fn">hs₂</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> (<span class="fn">r₁</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">s₂</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> (<span class="fn">r₂</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">s₁</span>)</span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.valueGroup.mk_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L274-L278">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk_mul"><span class="name">MonoidWithZeroHom</span>.<span class="name">valueGroup</span>.<span class="name">mk_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₁ </span><span class="fn">s₁ </span><span class="fn">r₂ </span><span class="fn">s₂</span> : <span class="fn">A</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hr₁</span> : <span class="fn"><span class="fn">f</span> <span class="fn">r₁</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs₁</span> : <span class="fn"><span class="fn">f</span> <span class="fn">s₁</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hr₂</span> : <span class="fn"><span class="fn">f</span> <span class="fn">r₂</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs₂</span> : <span class="fn"><span class="fn">f</span> <span class="fn">s₂</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk">mk</a> <span class="fn">f</span> <span class="fn">r₁</span> <span class="fn">s₁</span> <span class="fn">hr₁</span> <span class="fn">hs₁</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk">mk</a> <span class="fn">f</span> <span class="fn">r₂</span> <span class="fn">s₂</span> <span class="fn">hr₂</span> <span class="fn">hs₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk">mk</a> <span class="fn">f</span> (<span class="fn">r₁</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">r₂</span>) (<span class="fn">s₁</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">s₂</span>) <span class="fn">⋯</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.mk"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L283-L287">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.mk"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidablePred">DecidablePred</a> <span class="fn">fun (<span class="fn">b</span> : <span class="fn">B</span>) =&gt; <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">s</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">ValueGroup₀</a> <span class="fn">f</span></span></div></div><p>The map sending a pair of nonzero <code>r s : A</code> to the element <code>(v r)⁻¹ * (v s)</code>
+of <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">ValueGroup₀</a> v</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.mk">MonoidWithZeroHom.ValueGroup₀.mk</a> <span class="fn">f</span> <span class="fn">r</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">if h : <span class="fn"><span class="fn">f</span> <span class="fn">r</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> then <span class="fn">0</span> else <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk">MonoidWithZeroHom.valueGroup.mk</a> <span class="fn">f</span> <span class="fn">r</span> <span class="fn">s</span> <span class="fn">⋯</span> <span class="fn">⋯</span>)</span></span></span></li></ul></details><details id="instances-for-list-MonoidWithZeroHom.ValueGroup₀.mk" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.mk_eq_of_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L289-L291">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.mk_eq_of_ne_zero"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">mk_eq_of_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidablePred">DecidablePred</a> <span class="fn">fun (<span class="fn">b</span> : <span class="fn">B</span>) =&gt; <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">s</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn"><span class="fn">f</span> <span class="fn">r</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.mk">mk</a> <span class="fn">f</span> <span class="fn">r</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk">valueGroup.mk</a> <span class="fn">f</span> <span class="fn">r</span> <span class="fn">s</span> <span class="fn">hr</span> <span class="fn">hs</span>)</span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.zero_or_exists_mk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L293-L302">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.zero_or_exists_mk"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">zero_or_exists_mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">ValueGroup₀</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">∃ (<span class="fn">r</span> : <span class="fn">A</span>) (<span class="fn">s</span> : <span class="fn">A</span>) (<span class="fn">hr</span> : <span class="fn"><span class="fn">f</span> <span class="fn">r</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>) (<span class="fn">hs</span> : <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>), <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk">valueGroup.mk</a> <span class="fn">f</span> <span class="fn">r</span> <span class="fn">s</span> <span class="fn">hr</span> <span class="fn">hs</span>)</span></span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.ValueGroup₀.zero_or_exists_mk'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L304-L307">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀.zero_or_exists_mk'"><span class="name">MonoidWithZeroHom</span>.<span class="name">ValueGroup₀</span>.<span class="name">zero_or_exists_mk'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">ValueGroup₀</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">∃ (<span class="fn">d</span> : <a href="../../.././Init/Prelude.html#Subtype">{</a> <span class="fn">xy</span> <a href="../../.././Init/Prelude.html#Subtype">:</a> <span class="fn">A</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">A</span> <a href="../../.././Init/Prelude.html#Subtype">//</a> <span class="fn"><span class="fn">f</span> <span class="fn"><span class="fn">xy</span>.1</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn"><span class="fn">xy</span>.2</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#Subtype">}</a>), <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.valueGroup.mk">valueGroup.mk</a> <span class="fn">f</span> <span class="fn"><span class="fn">(↑<span class="fn">d</span>)</span>.1</span> <span class="fn"><span class="fn">(↑<span class="fn">d</span>)</span>.2</span> <span class="fn">⋯</span> <span class="fn">⋯</span>)</span></span></span></div></div></div></div><div class="decl" id="MonoidWithZeroHom.instCommGroupWithZeroValueGroup₀"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/GroupWithZero/Range.lean#L311-L311">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.instCommGroupWithZeroValueGroup₀"><span class="name">MonoidWithZeroHom</span>.<span class="name">instCommGroupWithZeroValueGroup₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Hom.html#MonoidWithZeroHomClass">MonoidWithZeroHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommGroupWithZero">CommGroupWithZero</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Range.html#MonoidWithZeroHom.ValueGroup₀">ValueGroup₀</a> <span class="fn">f</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,273 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.IntegralDomain</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.IntegralDomain";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">IntegralDomain</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Tactic/FieldSimp.html">Mathlib.Tactic.FieldSimp</a></li><li><a href="../.././Mathlib/Algebra/Polynomial/Roots.html">Mathlib.Algebra.Polynomial.Roots</a></li><li><a href="../.././Mathlib/Algebra/Ring/GeomSum.html">Mathlib.Algebra.Ring.GeomSum</a></li><li><a href="../.././Mathlib/Data/Fintype/Inv.html">Mathlib.Data.Fintype.Inv</a></li><li><a href="../.././Mathlib/GroupTheory/SpecificGroups/Cyclic.html">Mathlib.GroupTheory.SpecificGroups.Cyclic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.IntegralDomain" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#mul_right_bijective_of_finite₀"><span class="name">mul_right_bijective_of_finite₀</span></a></div><div class="nav_link"><a class="break_within" href="#mul_left_bijective_of_finite₀"><span class="name">mul_left_bijective_of_finite₀</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.groupWithZeroOfCancel"><span class="name">Fintype</span>.<span class="name">groupWithZeroOfCancel</span></a></div><div class="nav_link"><a class="break_within" href="#exists_eq_pow_of_mul_eq_pow_of_coprime"><span class="name">exists_eq_pow_of_mul_eq_pow_of_coprime</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_eq_pow_of_mul_eq_pow_of_coprime"><span class="name">Finset</span>.<span class="name">exists_eq_pow_of_mul_eq_pow_of_coprime</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.divisionRingOfIsDomain"><span class="name">Fintype</span>.<span class="name">divisionRingOfIsDomain</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.fieldOfDomain"><span class="name">Fintype</span>.<span class="name">fieldOfDomain</span></a></div><div class="nav_link"><a class="break_within" href="#Finite.isField_of_domain"><span class="name">Finite</span>.<span class="name">isField_of_domain</span></a></div><div class="nav_link"><a class="break_within" href="#card_nthRoots_subgroup_units"><span class="name">card_nthRoots_subgroup_units</span></a></div><div class="nav_link"><a class="break_within" href="#isCyclic_of_injective_ringHom"><span class="name">isCyclic_of_injective_ringHom</span></a></div><div class="nav_link"><a class="break_within" href="#isCyclic_of_subgroup_isDomain"><span class="name">isCyclic_of_subgroup_isDomain</span></a></div><div class="nav_link"><a class="break_within" href="#instIsCyclicUnitsOfFinite"><span class="name">instIsCyclicUnitsOfFinite</span></a></div><div class="nav_link"><a class="break_within" href="#isCyclic_subgroup_units"><span class="name">isCyclic_subgroup_units</span></a></div><div class="nav_link"><a class="break_within" href="#subgroup_units_cyclic"><span class="name">subgroup_units_cyclic</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.div_eq_quo_add_rem_div"><span class="name">Polynomial</span>.<span class="name">div_eq_quo_add_rem_div</span></a></div><div class="nav_link"><a class="break_within" href="#sum_hom_units_eq_zero"><span class="name">sum_hom_units_eq_zero</span></a></div><div class="nav_link"><a class="break_within" href="#sum_hom_units"><span class="name">sum_hom_units</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Integral-domains" class="markdown-heading">Integral domains <a class="hover-link" href="#Integral-domains">#</a></h1><p>Assorted theorems about integral domains.</p><h2 id="Main-theorems" class="markdown-heading">Main theorems <a class="hover-link" href="#Main-theorems">#</a></h2><ul><li><code><a href="../.././Mathlib/RingTheory/IntegralDomain.html#isCyclic_of_subgroup_isDomain">isCyclic_of_subgroup_isDomain</a></code>: A finite subgroup of the units of an integral domain is cyclic.</li><li><code><a href="../.././Mathlib/RingTheory/IntegralDomain.html#Fintype.fieldOfDomain">Fintype.fieldOfDomain</a></code>: A finite integral domain is a field.</li></ul><h2 id="Notes" class="markdown-heading">Notes <a class="hover-link" href="#Notes">#</a></h2><p>Wedderburn's little theorem, which shows that all finite division rings are actually fields,
+is in <code><a href="../.././Mathlib/RingTheory/LittleWedderburn.html">Mathlib/RingTheory/LittleWedderburn.lean</a></code>.</p><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>integral domain, finite integral domain, finite field</p></div><div class="decl" id="mul_right_bijective_of_finite₀"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L45-L47">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#mul_right_bijective_of_finite₀"><span class="name">mul_right_bijective_of_finite₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/GroupWithZero/Defs.html#IsLeftCancelMulZero">IsLeftCancelMulZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">fun (<span class="fn">b</span> : <span class="fn">M</span>) =&gt; <span class="fn">a</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span></span></span></div></div></div></div><div class="decl" id="mul_left_bijective_of_finite₀"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L49-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#mul_left_bijective_of_finite₀"><span class="name">mul_left_bijective_of_finite₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/GroupWithZero/Defs.html#IsRightCancelMulZero">IsRightCancelMulZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">fun (<span class="fn">b</span> : <span class="fn">M</span>) =&gt; <span class="fn">b</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span></span></span></div></div></div></div><div class="decl" id="Fintype.groupWithZeroOfCancel"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L53-L63">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#Fintype.groupWithZeroOfCancel"><span class="name">Fintype</span>.<span class="name">groupWithZeroOfCancel</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/GroupWithZero/Defs.html#IsLeftCancelMulZero">IsLeftCancelMulZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/GroupWithZero/Defs.html#GroupWithZero">GroupWithZero</a> <span class="fn">M</span></span></div></div><p>Every finite nontrivial cancellative monoid with zero is a group with zero.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Fintype.groupWithZeroOfCancel" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="exists_eq_pow_of_mul_eq_pow_of_coprime"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L65-L72">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#exists_eq_pow_of_mul_eq_pow_of_coprime"><span class="name">exists_eq_pow_of_mul_eq_pow_of_coprime</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/GCDMonoid/Basic.html#GCDMonoid">GCDMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">R</span><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b </span><span class="fn">c</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cp</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Coprime/Basic.html#IsCoprime">IsCoprime</a> <span class="fn">a</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">d</span> : <span class="fn">R</span>), <span class="fn">a</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">d</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Finset.exists_eq_pow_of_mul_eq_pow_of_coprime"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L74-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#Finset.exists_eq_pow_of_mul_eq_pow_of_coprime"><span class="name">Finset</span>.<span class="name">exists_eq_pow_of_mul_eq_pow_of_coprime</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/GCDMonoid/Basic.html#GCDMonoid">GCDMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">R</span><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn">∀ <span class="fn">j</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">i</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">j</span> → <span class="fn"><a href="../.././Mathlib/RingTheory/Coprime/Basic.html#IsCoprime">IsCoprime</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">j</span>)</span></span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hprod</span> : <span class="fn">∏ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">i</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn">∃ (<span class="fn">d</span> : <span class="fn">R</span>), <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">d</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></span></span></div></div></div></div><div class="decl" id="Fintype.divisionRingOfIsDomain"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L94-L104">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#Fintype.divisionRingOfIsDomain"><span class="name">Fintype</span>.<span class="name">divisionRingOfIsDomain</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">R</span></span></div></div><p>Every finite domain is a division ring. More generally, they are fields; this can be found in
+<code><a href="../.././Mathlib/RingTheory/LittleWedderburn.html">Mathlib/RingTheory/LittleWedderburn.lean</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Fintype.divisionRingOfIsDomain" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Fintype.fieldOfDomain"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L106-L110">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#Fintype.fieldOfDomain"><span class="name">Fintype</span>.<span class="name">fieldOfDomain</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span></div></div><p>Every finite commutative domain is a field. More generally, commutativity is not required: this
+can be found in <code><a href="../.././Mathlib/RingTheory/LittleWedderburn.html">Mathlib/RingTheory/LittleWedderburn.lean</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Fintype.fieldOfDomain" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Finite.isField_of_domain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L112-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#Finite.isField_of_domain"><span class="name">Finite</span>.<span class="name">isField_of_domain</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Field/IsField.html#IsField">IsField</a> <span class="fn">R</span></span></div></div></div></div><div class="decl" id="card_nthRoots_subgroup_units"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L120-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#card_nthRoots_subgroup_units"><span class="name">card_nthRoots_subgroup_units</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g₀</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">{<span class="fn">g</span> : <span class="fn">G</span> | <span class="fn">g</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g₀</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Polynomial/Roots.html#Polynomial.nthRoots">Polynomial.nthRoots</a> <span class="fn">n</span> <span class="fn">(<span class="fn">f</span> <span class="fn">g₀</span>)</span>)</span>.<a href="../.././Mathlib/Data/Multiset/Defs.html#Multiset.card">card</a></span></div></div></div></div><div class="decl" id="isCyclic_of_injective_ringHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L129-L135">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#isCyclic_of_injective_ringHom"><span class="name">isCyclic_of_injective_ringHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#IsCyclic">IsCyclic</a> <span class="fn">G</span></span></div></div><p>A finite subgroup of the unit group of an integral domain is cyclic.</p></div></div><div class="decl" id="isCyclic_of_subgroup_isDomain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L137-L138">source</a></div><div class="attributes">@[deprecated isCyclic_of_injective_ringHom (since := &quot;2026-03-04&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#isCyclic_of_subgroup_isDomain"><span class="name">isCyclic_of_subgroup_isDomain</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#IsCyclic">IsCyclic</a> <span class="fn">G</span></span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/RingTheory/IntegralDomain.html#isCyclic_of_injective_ringHom">isCyclic_of_injective_ringHom</a></code>.</p><hr>
+<p>A finite subgroup of the unit group of an integral domain is cyclic.</p></div></div><div class="decl" id="instIsCyclicUnitsOfFinite"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L140-L145">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#instIsCyclicUnitsOfFinite"><span class="name">instIsCyclicUnitsOfFinite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">R</span><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#IsCyclic">IsCyclic</a> <span class="fn">R</span><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a></span></div></div><p>The unit group of a finite integral domain is cyclic.</p><p>To support <code>ℤˣ</code> and other infinite monoids with finite groups of units, this requires only
+<code><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> Rˣ</code> rather than deducing it from <code><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> R</code>.</p></div></div><div class="decl" id="isCyclic_subgroup_units"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L151-L154">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#isCyclic_subgroup_units"><span class="name">isCyclic_subgroup_units</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">R</span><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">↥<span class="fn">S</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#IsCyclic">IsCyclic</a> <span class="fn">↥<span class="fn">S</span></span></span></div></div><p>A finite subgroup of the units of an integral domain is cyclic.</p></div></div><div class="decl" id="subgroup_units_cyclic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L156-L156">source</a></div><div class="attributes">@[deprecated isCyclic_subgroup_units (since := &quot;2026-03-03&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#subgroup_units_cyclic"><span class="name">subgroup_units_cyclic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">R</span><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">↥<span class="fn">S</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#IsCyclic">IsCyclic</a> <span class="fn">↥<span class="fn">S</span></span></span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/RingTheory/IntegralDomain.html#isCyclic_subgroup_units">isCyclic_subgroup_units</a></code>.</p><hr>
+<p>A finite subgroup of the units of an integral domain is cyclic.</p></div></div><div class="decl" id="Polynomial.div_eq_quo_add_rem_div"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L167-L176">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#Polynomial.div_eq_quo_add_rem_div"><span class="name">Polynomial</span>.<span class="name">div_eq_quo_add_rem_div</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span>)</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#IsFractionRing">IsFractionRing</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span>)</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/Algebra/Polynomial/Degree/Defs.html#Polynomial.Monic">Monic</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">q</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>) (<span class="fn">r</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>),
+  <span class="fn"><span class="fn">r</span>.<a href="../.././Mathlib/Algebra/Polynomial/Degree/Defs.html#Polynomial.degree">degree</a></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/Algebra/Polynomial/Degree/Defs.html#Polynomial.degree">degree</a></span> <a href="../.././Init/Prelude.html#And">∧</a>     <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span>)</span> <span class="fn">K</span>)</span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span>)</span> <span class="fn">K</span>)</span> <span class="fn">g</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>       <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span>)</span> <span class="fn">K</span>)</span> <span class="fn">q</span></span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span>)</span> <span class="fn">K</span>)</span> <span class="fn">r</span></span> <a href="../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span>)</span> <span class="fn">K</span>)</span> <span class="fn">g</span></span></span></div></div></div></div><div class="decl" id="sum_hom_units_eq_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L184-L225">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#sum_hom_units_eq_zero"><span class="name">sum_hom_units_eq_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">f</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">g</span> : <span class="fn">G</span>, <span class="fn"><span class="fn">f</span> <span class="fn">g</span></span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div><p>In an integral domain, a sum indexed by a nontrivial homomorphism from a finite group is zero.</p></div></div><div class="decl" id="sum_hom_units"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/IntegralDomain.lean#L227-L235">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/IntegralDomain.html#sum_hom_units"><span class="name">sum_hom_units</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">R</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Decidable">Decidable</a> (<span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span>)</span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">g</span> : <span class="fn">G</span>, <span class="fn"><span class="fn">f</span> <span class="fn">g</span></span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑(<a href="../.././Init/Prelude.html#ite">if</a> <span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span> <a href="../.././Init/Prelude.html#ite">then</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">G</span></span> <a href="../.././Init/Prelude.html#ite">else</a> <span class="fn">0</span>)</span></div></div><p>In an integral domain, a sum indexed by a homomorphism from a finite group is zero,
+unless the homomorphism is trivial, in which case the sum is equal to the cardinality of the group.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

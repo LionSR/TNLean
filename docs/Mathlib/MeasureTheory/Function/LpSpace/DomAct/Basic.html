@@ -1,0 +1,959 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../../.././style.css"></link><link rel="icon" href="../../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.MeasureTheory.Function.LpSpace.DomAct.Basic</title><script defer="true" src="../../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../../.././";</script><script>const MODULE_NAME="Mathlib.MeasureTheory.Function.LpSpace.DomAct.Basic";</script><script type="module" src="../../../../.././jump-src.js"></script><script type="module" src="../../../../.././search.js"></script><script type="module" src="../../../../.././expand-nav.js"></script><script type="module" src="../../../../.././how-about.js"></script><script type="module" src="../../../../.././instances.js"></script><script type="module" src="../../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">MeasureTheory</span>.<span class="name">Function</span>.<span class="name">LpSpace</span>.<span class="name">DomAct</span>.<span class="name">Basic</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../../.././Init.html">Init</a></li><li><a href="../../../../.././Mathlib/MeasureTheory/Function/AEEqFun/DomAct.html">Mathlib.MeasureTheory.Function.AEEqFun.DomAct</a></li><li><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Indicator.html">Mathlib.MeasureTheory.Function.LpSpace.Indicator</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.MeasureTheory.Function.LpSpace.DomAct.Basic" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#DomMulAct.instSMulSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instSMulSubtypeAEEqFunMemAddSubgroupLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.instVAddSubtypeAEEqFunMemAddAddSubgroupLp"><span class="name">DomAddAct</span>.<span class="name">instVAddSubtypeAEEqFunMemAddAddSubgroupLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.smul_Lp_val"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_val</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.vadd_Lp_val"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_val</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.smul_Lp_ae_eq"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_ae_eq</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.vadd_Lp_ae_eq"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_ae_eq</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.mk_smul_toLp"><span class="name">DomMulAct</span>.<span class="name">mk_smul_toLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.mk_vadd_toLp"><span class="name">DomAddAct</span>.<span class="name">mk_vadd_toLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.smul_Lp_const"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_const</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.vadd_Lp_const"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_const</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.mk_smul_indicatorConstLp"><span class="name">DomMulAct</span>.<span class="name">mk_smul_indicatorConstLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.mk_vadd_indicatorConstLp"><span class="name">DomAddAct</span>.<span class="name">mk_vadd_indicatorConstLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp_1"><span class="name">DomMulAct</span>.<span class="name">instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp_1</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp_2"><span class="name">DomMulAct</span>.<span class="name">instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp_2</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.smul_Lp_add"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_add</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.vadd_Lp_add"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_add</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.smul_Lp_zero"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_zero</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.vadd_Lp_zero"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_zero</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.smul_Lp_neg"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_neg</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.vadd_Lp_neg"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_neg</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.smul_Lp_sub"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_sub</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.vadd_Lp_sub"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_sub</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.instDistribSMulSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instDistribSMulSubtypeAEEqFunMemAddSubgroupLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.norm_smul_Lp"><span class="name">DomMulAct</span>.<span class="name">norm_smul_Lp</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.norm_vadd_Lp"><span class="name">DomAddAct</span>.<span class="name">norm_vadd_Lp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.nnnorm_smul_Lp"><span class="name">DomMulAct</span>.<span class="name">nnnorm_smul_Lp</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.nnnorm_vadd_Lp"><span class="name">DomAddAct</span>.<span class="name">nnnorm_vadd_Lp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.dist_smul_Lp"><span class="name">DomMulAct</span>.<span class="name">dist_smul_Lp</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.dist_vadd_Lp"><span class="name">DomAddAct</span>.<span class="name">dist_vadd_Lp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.edist_smul_Lp"><span class="name">DomMulAct</span>.<span class="name">edist_smul_Lp</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.edist_vadd_Lp"><span class="name">DomAddAct</span>.<span class="name">edist_vadd_Lp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.instIsIsometricSMulSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instIsIsometricSMulSubtypeAEEqFunMemAddSubgroupLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.instIsIsometricVAddSubtypeAEEqFunMemAddAddSubgroupLp"><span class="name">DomAddAct</span>.<span class="name">instIsIsometricVAddSubtypeAEEqFunMemAddAddSubgroupLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.instMulActionSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instMulActionSubtypeAEEqFunMemAddSubgroupLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomAddAct.instAddActionSubtypeAEEqFunMemAddAddSubgroupLp"><span class="name">DomAddAct</span>.<span class="name">instAddActionSubtypeAEEqFunMemAddAddSubgroupLp</span></a></div><div class="nav_link"><a class="break_within" href="#DomMulAct.instDistribMulActionSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instDistribMulActionSubtypeAEEqFunMemAddSubgroupLp</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Action-of-Mᵈᵐᵃ-on-Lᵖ-spaces" class="markdown-heading">Action of <code>Mᵈᵐᵃ</code> on <code>Lᵖ</code> spaces <a class="hover-link" href="#Action-of-Mᵈᵐᵃ-on-Lᵖ-spaces">#</a></h1><p>In this file we define action of <code>Mᵈᵐᵃ</code> on <code><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> E p μ</code>
+If <code>f : α → E</code> is a function representing an equivalence class in <code>Lᵖ(α, E)</code>, <code>M</code> acts on <code>α</code>,
+and <code>c : M</code>, then <code>(.mk c : Mᵈᵐᵃ) • [f]</code> is represented by the function <code>a ↦ f (c • a)</code>.</p><p>We also prove basic properties of this action.</p></div><div class="decl" id="DomMulAct.instSMulSubtypeAEEqFunMemAddSubgroupLp"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L35-L37">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instSMulSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instSMulSubtypeAEEqFunMemAddSubgroupLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="DomAddAct.instVAddSubtypeAEEqFunMemAddAddSubgroupLp"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L35-L35">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.instVAddSubtypeAEEqFunMemAddAddSubgroupLp"><span class="name">DomAddAct</span>.<span class="name">instVAddSubtypeAEEqFunMemAddAddSubgroupLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="DomMulAct.smul_Lp_val"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L39-L40">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.smul_Lp_val"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_val</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑(<span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">↑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="DomAddAct.vadd_Lp_val"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L39-L39">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.vadd_Lp_val"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_val</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑(<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">↑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="DomMulAct.smul_Lp_ae_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L42-L44">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.smul_Lp_ae_eq"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_ae_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">↑(<span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>)</span></span> <a href="../../../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᵐ[</a><span class="fn">μ</span><a href="../../../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">↑<span class="fn">↑<span class="fn">f</span></span></span> (<span class="fn"><span class="fn"><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct.mk">mk</a>.<a href="../../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">c</span></span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="DomAddAct.vadd_Lp_ae_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L42-L42">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.vadd_Lp_ae_eq"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_ae_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">↑(<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span>)</span></span> <a href="../../../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᵐ[</a><span class="fn">μ</span><a href="../../../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">↑<span class="fn">↑<span class="fn">f</span></span></span> (<span class="fn"><span class="fn"><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct.mk">mk</a>.<a href="../../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">c</span></span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="DomMulAct.mk_smul_toLp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L46-L50">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.mk_smul_toLp"><span class="name">DomMulAct</span>.<span class="name">mk_smul_toLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MeasureTheory.MemLp</a> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct.mk">mk</a> <span class="fn">c</span></span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.MemLp.toLp">MeasureTheory.MemLp.toLp</a> <span class="fn">f</span> <span class="fn">hf</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.MemLp.toLp">MeasureTheory.MemLp.toLp</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">f</span> (<span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="DomAddAct.mk_vadd_toLp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L46-L46">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.mk_vadd_toLp"><span class="name">DomAddAct</span>.<span class="name">mk_vadd_toLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MeasureTheory.MemLp</a> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct.mk">mk</a> <span class="fn">c</span></span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.MemLp.toLp">MeasureTheory.MemLp.toLp</a> <span class="fn">f</span> <span class="fn">hf</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.MemLp.toLp">MeasureTheory.MemLp.toLp</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">f</span> (<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">x</span>)</span>)</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="DomMulAct.smul_Lp_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L52-L55">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.smul_Lp_const"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Indicator.html#MeasureTheory.Lp.const">MeasureTheory.Lp.const</a> <span class="fn">p</span> <span class="fn">μ</span>)</span> <span class="fn">a</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Indicator.html#MeasureTheory.Lp.const">MeasureTheory.Lp.const</a> <span class="fn">p</span> <span class="fn">μ</span>)</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="DomAddAct.vadd_Lp_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L52-L52">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.vadd_Lp_const"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Indicator.html#MeasureTheory.Lp.const">MeasureTheory.Lp.const</a> <span class="fn">p</span> <span class="fn">μ</span>)</span> <span class="fn">a</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Indicator.html#MeasureTheory.Lp.const">MeasureTheory.Lp.const</a> <span class="fn">p</span> <span class="fn">μ</span>)</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="DomMulAct.mk_smul_indicatorConstLp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L57-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.mk_smul_indicatorConstLp"><span class="name">DomMulAct</span>.<span class="name">mk_smul_indicatorConstLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμs</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../../.././Init/Core.html#Ne">≠</a> <a href="../../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct.mk">mk</a> <span class="fn">c</span></span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Indicator.html#MeasureTheory.indicatorConstLp">MeasureTheory.indicatorConstLp</a> <span class="fn">p</span> <span class="fn">hs</span> <span class="fn">hμs</span> <span class="fn">b</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Indicator.html#MeasureTheory.indicatorConstLp">MeasureTheory.indicatorConstLp</a> <span class="fn">p</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="DomAddAct.mk_vadd_indicatorConstLp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L57-L57">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.mk_vadd_indicatorConstLp"><span class="name">DomAddAct</span>.<span class="name">mk_vadd_indicatorConstLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμs</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../../.././Init/Core.html#Ne">≠</a> <a href="../../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct.mk">mk</a> <span class="fn">c</span></span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Indicator.html#MeasureTheory.indicatorConstLp">MeasureTheory.indicatorConstLp</a> <span class="fn">p</span> <span class="fn">hs</span> <span class="fn">hμs</span> <span class="fn">b</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Indicator.html#MeasureTheory.indicatorConstLp">MeasureTheory.indicatorConstLp</a> <span class="fn">p</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="DomMulAct.instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L65-L67">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">N</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">M</span> <span class="fn">N</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">N</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">N</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a> <span class="fn">N</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div></div></div><div class="decl" id="DomMulAct.instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp_1"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L69-L71">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp_1"><span class="name">DomMulAct</span>.<span class="name">instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp_1</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a> <span class="fn">𝕜</span> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div></div></div><div class="decl" id="DomMulAct.instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp_2"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L73-L75">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp_2"><span class="name">DomMulAct</span>.<span class="name">instSMulCommClassSubtypeAEEqFunMemAddSubgroupLp_2</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div></div></div><div class="decl" id="DomMulAct.smul_Lp_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L81-L83">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.smul_Lp_add"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> (<span class="fn">f</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">g</span>) <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="DomAddAct.vadd_Lp_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L81-L81">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.vadd_Lp_add"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">g</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> (<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span>) <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> (<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">g</span>)</div></div></div></div><div class="decl" id="DomMulAct.smul_Lp_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L86-L87">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.smul_Lp_zero"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">0</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="DomAddAct.vadd_Lp_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L86-L86">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.vadd_Lp_zero"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">0</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="DomMulAct.smul_Lp_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L89-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.smul_Lp_neg"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">f</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a>(<span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>)</div></div></div></div><div class="decl" id="DomAddAct.vadd_Lp_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L89-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.vadd_Lp_neg"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">f</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a>(<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span>)</div></div></div></div><div class="decl" id="DomMulAct.smul_Lp_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L93-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.smul_Lp_sub"><span class="name">DomMulAct</span>.<span class="name">smul_Lp_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> (<span class="fn">f</span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">g</span>) <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="DomAddAct.vadd_Lp_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L93-L93">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.vadd_Lp_sub"><span class="name">DomAddAct</span>.<span class="name">vadd_Lp_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">g</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> (<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span>) <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> (<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">g</span>)</div></div></div></div><div class="decl" id="DomMulAct.instDistribSMulSubtypeAEEqFunMemAddSubgroupLp"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L97-L99">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instDistribSMulSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instDistribSMulSubtypeAEEqFunMemAddSubgroupLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/GroupWithZero/Action/Defs.html#DistribSMul">DistribSMul</a> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instDistribSMulSubtypeAEEqFunMemAddSubgroupLp">DomMulAct.instDistribSMulSubtypeAEEqFunMemAddSubgroupLp</a> <a href="../../../../.././Init/Prelude.html#Eq">=</a>   <a href="../../../../.././Mathlib/Algebra/GroupWithZero/Action/Defs.html#DistribSMul.mk">{</a> <span class="fn">toSMul</span> := <a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instSMulSubtypeAEEqFunMemAddSubgroupLp">DomMulAct.instSMulSubtypeAEEqFunMemAddSubgroupLp</a>, <span class="fn">smul_zero</span> := <span class="fn">⋯</span>, <span class="fn">smul_add</span> := <span class="fn">⋯</span> <a href="../../../../.././Mathlib/Algebra/GroupWithZero/Action/Defs.html#DistribSMul.mk">}</a></li></ul></details></div></div><div class="decl" id="DomMulAct.norm_smul_Lp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L102-L104">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.norm_smul_Lp"><span class="name">DomMulAct</span>.<span class="name">norm_smul_Lp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">f</span><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="DomAddAct.norm_vadd_Lp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L102-L102">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.norm_vadd_Lp"><span class="name">DomAddAct</span>.<span class="name">norm_vadd_Lp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">f</span><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="DomMulAct.nnnorm_smul_Lp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L106-L108">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.nnnorm_smul_Lp"><span class="name">DomMulAct</span>.<span class="name">nnnorm_smul_Lp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">f</span><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a></div></div></div></div><div class="decl" id="DomAddAct.nnnorm_vadd_Lp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L106-L106">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.nnnorm_vadd_Lp"><span class="name">DomAddAct</span>.<span class="name">nnnorm_vadd_Lp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">f</span><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a></div></div></div></div><div class="decl" id="DomMulAct.dist_smul_Lp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L110-L112">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.dist_smul_Lp"><span class="name">DomMulAct</span>.<span class="name">dist_smul_Lp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> (<span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>) (<span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">g</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">f</span> <span class="fn">g</span></span></div></div></div></div><div class="decl" id="DomAddAct.dist_vadd_Lp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L110-L110">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.dist_vadd_Lp"><span class="name">DomAddAct</span>.<span class="name">dist_vadd_Lp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> (<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span>) (<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">g</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">f</span> <span class="fn">g</span></span></div></div></div></div><div class="decl" id="DomMulAct.edist_smul_Lp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L114-L116">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.edist_smul_Lp"><span class="name">DomMulAct</span>.<span class="name">edist_smul_Lp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/EMetricSpace/Defs.html#EDist.edist">edist</a> (<span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>) (<span class="fn">c</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">g</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/EMetricSpace/Defs.html#EDist.edist">edist</a> <span class="fn">f</span> <span class="fn">g</span></span></div></div></div></div><div class="decl" id="DomAddAct.edist_vadd_Lp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L114-L114">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.edist_vadd_Lp"><span class="name">DomAddAct</span>.<span class="name">edist_vadd_Lp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/EMetricSpace/Defs.html#EDist.edist">edist</a> (<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">f</span>) (<span class="fn">c</span> <a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">g</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Topology/EMetricSpace/Defs.html#EDist.edist">edist</a> <span class="fn">f</span> <span class="fn">g</span></span></div></div></div></div><div class="decl" id="DomMulAct.instIsIsometricSMulSubtypeAEEqFunMemAddSubgroupLp"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L120-L121">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instIsIsometricSMulSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instIsIsometricSMulSubtypeAEEqFunMemAddSubgroupLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/MetricSpace/IsometricSMul.html#IsIsometricSMul">IsIsometricSMul</a> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div></div></div><div class="decl" id="DomAddAct.instIsIsometricVAddSubtypeAEEqFunMemAddAddSubgroupLp"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L120-L120">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.instIsIsometricVAddSubtypeAEEqFunMemAddAddSubgroupLp"><span class="name">DomAddAct</span>.<span class="name">instIsIsometricVAddSubtypeAEEqFunMemAddAddSubgroupLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Topology/MetricSpace/IsometricSMul.html#IsIsometricVAdd">IsIsometricVAdd</a> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div></div></div><div class="decl" id="DomMulAct.instMulActionSubtypeAEEqFunMemAddSubgroupLp"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L129-L130">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instMulActionSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instMulActionSubtypeAEEqFunMemAddSubgroupLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instMulActionSubtypeAEEqFunMemAddSubgroupLp">DomMulAct.instMulActionSubtypeAEEqFunMemAddSubgroupLp</a> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#Function.Injective.mulAction">Function.Injective.mulAction</a> <a href="../../../../.././Init/Prelude.html#Subtype.val">Subtype.val</a> <span class="fn">⋯</span> <span class="fn">⋯</span></span></li></ul></details></div></div><div class="decl" id="DomAddAct.instAddActionSubtypeAEEqFunMemAddAddSubgroupLp"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L129-L129">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.instAddActionSubtypeAEEqFunMemAddAddSubgroupLp"><span class="name">DomAddAct</span>.<span class="name">instAddActionSubtypeAEEqFunMemAddAddSubgroupLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">MeasureTheory.VAddInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstVAdd">MeasurableConstVAdd</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomAddAct">ᵈᵃᵃ</a> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomAddAct.instAddActionSubtypeAEEqFunMemAddAddSubgroupLp">DomAddAct.instAddActionSubtypeAEEqFunMemAddAddSubgroupLp</a> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#Function.Injective.addAction">Function.Injective.addAction</a> <a href="../../../../.././Init/Prelude.html#Subtype.val">Subtype.val</a> <span class="fn">⋯</span> <span class="fn">⋯</span></span></li></ul></details></div></div><div class="decl" id="DomMulAct.instDistribMulActionSubtypeAEEqFunMemAddSubgroupLp"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.lean#L132-L133">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/DomAct/Basic.html#DomMulAct.instDistribMulActionSubtypeAEEqFunMemAddSubgroupLp"><span class="name">DomMulAct</span>.<span class="name">instDistribMulActionSubtypeAEEqFunMemAddSubgroupLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">MeasureTheory.SMulInvariantMeasure</a> <span class="fn">M</span> <span class="fn">α</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableConstSMul">MeasurableConstSMul</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/GroupWithZero/Action/Defs.html#DistribMulAction">DistribMulAction</a> <span class="fn">M</span><a href="../../../../.././Mathlib/GroupTheory/GroupAction/DomAct/Basic.html#DomMulAct">ᵈᵐᵃ</a> <span class="fn">↥<span class="fn">(<a href="../../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

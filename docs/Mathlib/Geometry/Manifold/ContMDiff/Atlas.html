@@ -1,0 +1,801 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Geometry.Manifold.ContMDiff.Atlas</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Geometry.Manifold.ContMDiff.Atlas";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Geometry</span>.<span class="name">Manifold</span>.<span class="name">ContMDiff</span>.<span class="name">Atlas</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Basic.html">Mathlib.Geometry.Manifold.ContMDiff.Basic</a></li><li><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/NormedSpace.html">Mathlib.Geometry.Manifold.ContMDiff.NormedSpace</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Geometry.Manifold.ContMDiff.Atlas" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#contMDiff_model"><span class="name">contMDiff_model</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffOn_model_symm"><span class="name">contMDiffOn_model_symm</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffOn_of_mem_maximalAtlas"><span class="name">contMDiffOn_of_mem_maximalAtlas</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffOn_symm_of_mem_maximalAtlas"><span class="name">contMDiffOn_symm_of_mem_maximalAtlas</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffAt_of_mem_maximalAtlas"><span class="name">contMDiffAt_of_mem_maximalAtlas</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffAt_symm_of_mem_maximalAtlas"><span class="name">contMDiffAt_symm_of_mem_maximalAtlas</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffOn_chart"><span class="name">contMDiffOn_chart</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffOn_chart_symm"><span class="name">contMDiffOn_chart_symm</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffAt_extend"><span class="name">contMDiffAt_extend</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffOn_extend"><span class="name">contMDiffOn_extend</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffAt_extChartAt'"><span class="name">contMDiffAt_extChartAt'</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffAt_extChartAt"><span class="name">contMDiffAt_extChartAt</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffOn_extChartAt"><span class="name">contMDiffOn_extChartAt</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffOn_extend_symm"><span class="name">contMDiffOn_extend_symm</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffOn_extChartAt_symm"><span class="name">contMDiffOn_extChartAt_symm</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffWithinAt_extChartAt_symm_target"><span class="name">contMDiffWithinAt_extChartAt_symm_target</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffWithinAt_extChartAt_symm_range"><span class="name">contMDiffWithinAt_extChartAt_symm_range</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffWithinAt_extChartAt_symm_target_self"><span class="name">contMDiffWithinAt_extChartAt_symm_target_self</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffWithinAt_extChartAt_symm_range_self"><span class="name">contMDiffWithinAt_extChartAt_symm_range_self</span></a></div><div class="nav_link"><a class="break_within" href="#contMDiffOn_of_mem_contDiffGroupoid"><span class="name">contMDiffOn_of_mem_contDiffGroupoid</span></a></div><div class="nav_link"><a class="break_within" href="#isLocalStructomorphOn_contDiffGroupoid_iff_aux"><span class="name">isLocalStructomorphOn_contDiffGroupoid_iff_aux</span></a></div><div class="nav_link"><a class="break_within" href="#isLocalStructomorphOn_contDiffGroupoid_iff"><span class="name">isLocalStructomorphOn_contDiffGroupoid_iff</span></a></div><div class="nav_link"><a class="break_within" href="#OpenPartialHomeomorph.contMDiffWithinAt_writtenInExtend_iff"><span class="name">OpenPartialHomeomorph</span>.<span class="name">contMDiffWithinAt_writtenInExtend_iff</span></a></div><div class="nav_link"><a class="break_within" href="#OpenPartialHomeomorph.contMDiffOn_writtenInExtend_iff"><span class="name">OpenPartialHomeomorph</span>.<span class="name">contMDiffOn_writtenInExtend_iff</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Smoothness-of-charts-and-local-structomorphisms" class="markdown-heading">Smoothness of charts and local structomorphisms <a class="hover-link" href="#Smoothness-of-charts-and-local-structomorphisms">#</a></h1><p>We show that the model with corners, charts, extended charts and their inverses are <code>C^n</code>,
+and that local structomorphisms are <code>C^n</code> with <code>C^n</code> inverses.</p><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>This file uses the name <code>writtenInExtend</code> (in analogy to <code>writtenInExtChart</code>) to refer to a
+composition <code>ψ.extend J ∘ f ∘ φ.extend I</code> of <code>f : M → N</code> with charts <code>ψ</code> and <code>φ</code> extended by the
+appropriate models with corners. This is not a definition, so technically deviating from the naming
+convention.</p><p><code>isLocalStructomorphOn</code> is another made-up name.</p></div><div class="mod_doc"><h3 id="Atlas-members-are-C^n" class="markdown-heading">Atlas members are <code>C^n</code> <a class="hover-link" href="#Atlas-members-are-C^n">#</a></h3></div><div class="decl" id="contMDiff_model"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L49-L55">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiff_model"><span class="name">contMDiff_model</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiff">ContMDiff</a> <span class="fn">I</span> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">n</span> <span class="fn">↑<span class="fn">I</span></span></span></div></div></div></div><div class="decl" id="contMDiffOn_model_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L57-L61">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffOn_model_symm"><span class="name">contMDiffOn_model_symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners.symm">symm</a></span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">↑<span class="fn">I</span></span>)</span></span></div></div></div></div><div class="decl" id="contMDiffOn_of_mem_maximalAtlas"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L63-L67">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffOn_of_mem_maximalAtlas"><span class="name">contMDiffOn_of_mem_maximalAtlas</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">e</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">e</span>)</span> <span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span></div></div><p>An atlas member is <code>C^n</code> for any <code>n</code>.</p></div></div><div class="decl" id="contMDiffOn_symm_of_mem_maximalAtlas"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L69-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffOn_symm_of_mem_maximalAtlas"><span class="name">contMDiffOn_symm_of_mem_maximalAtlas</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">e</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph.symm">symm</a></span>)</span> <span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span></span></div></div><p>The inverse of an atlas member is <code>C^n</code> for any <code>n</code>.</p></div></div><div class="decl" id="contMDiffAt_of_mem_maximalAtlas"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L75-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffAt_of_mem_maximalAtlas"><span class="name">contMDiffAt_of_mem_maximalAtlas</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">e</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffAt">ContMDiffAt</a> <span class="fn">I</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">e</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="contMDiffAt_symm_of_mem_maximalAtlas"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L79-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffAt_symm_of_mem_maximalAtlas"><span class="name">contMDiffAt_symm_of_mem_maximalAtlas</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">H</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">e</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffAt">ContMDiffAt</a> <span class="fn">I</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph.symm">symm</a></span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="contMDiffOn_chart"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L83-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffOn_chart"><span class="name">contMDiffOn_chart</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#chartAt">chartAt</a> <span class="fn">H</span> <span class="fn">x</span>)</span>)</span> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#chartAt">chartAt</a> <span class="fn">H</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span></div></div></div></div><div class="decl" id="contMDiffOn_chart_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L86-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffOn_chart_symm"><span class="name">contMDiffOn_chart_symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#chartAt">chartAt</a> <span class="fn">H</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph.symm">symm</a></span>)</span> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#chartAt">chartAt</a> <span class="fn">H</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span></span></div></div></div></div><div class="decl" id="contMDiffAt_extend"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L89-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffAt_extend"><span class="name">contMDiffAt_extend</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">e</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffAt">ContMDiffAt</a> <span class="fn">I</span> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">(<span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.extend">extend</a></span> <span class="fn">I</span>)</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="contMDiffOn_extend"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L93-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffOn_extend"><span class="name">contMDiffOn_extend</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">e</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">(<span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.extend">extend</a></span> <span class="fn">I</span>)</span>)</span> <span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span></div></div></div></div><div class="decl" id="contMDiffAt_extChartAt'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L97-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffAt_extChartAt'"><span class="name">contMDiffAt_extChartAt'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">x'</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">x'</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#chartAt">chartAt</a> <span class="fn">H</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffAt">ContMDiffAt</a> <span class="fn">I</span> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>)</span> <span class="fn">x'</span></span></div></div></div></div><div class="decl" id="contMDiffAt_extChartAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L102-L106">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffAt_extChartAt"><span class="name">contMDiffAt_extChartAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffAt">ContMDiffAt</a> <span class="fn">I</span> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="contMDiffOn_extChartAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L108-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffOn_extChartAt"><span class="name">contMDiffOn_extChartAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>)</span> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#chartAt">chartAt</a> <span class="fn">H</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span></div></div></div></div><div class="decl" id="contMDiffOn_extend_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L111-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffOn_extend_symm"><span class="name">contMDiffOn_extend_symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">e</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">(<span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.extend">extend</a></span> <span class="fn">I</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span>)</span> (<span class="fn">↑<span class="fn">I</span></span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span>)</span></div></div></div></div><div class="decl" id="contMDiffOn_extChartAt_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L118-L123">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffOn_extChartAt_symm"><span class="name">contMDiffOn_extChartAt_symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span>)</span> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span></span></div></div></div></div><div class="decl" id="contMDiffWithinAt_extChartAt_symm_target"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L125-L128">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffWithinAt_extChartAt_symm_target"><span class="name">contMDiffWithinAt_extChartAt_symm_target</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn">E</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">y</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffWithinAt">ContMDiffWithinAt</a> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span>)</span> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="contMDiffWithinAt_extChartAt_symm_range"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L130-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffWithinAt_extChartAt_symm_range"><span class="name">contMDiffWithinAt_extChartAt_symm_range</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn">E</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">y</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffWithinAt">ContMDiffWithinAt</a> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">↑<span class="fn">I</span></span>)</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="contMDiffWithinAt_extChartAt_symm_target_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L137-L147">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffWithinAt_extChartAt_symm_target_self"><span class="name">contMDiffWithinAt_extChartAt_symm_target_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffWithinAt">ContMDiffWithinAt</a> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span>)</span> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span> <span class="fn">(<span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span></span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="contMDiffWithinAt_extChartAt_symm_range_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L150-L153">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffWithinAt_extChartAt_symm_range_self"><span class="name">contMDiffWithinAt_extChartAt_symm_range_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffWithinAt">ContMDiffWithinAt</a> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">↑<span class="fn">I</span></span>)</span> <span class="fn">(<span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#extChartAt">extChartAt</a> <span class="fn">I</span> <span class="fn">x</span>)</span></span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="contMDiffOn_of_mem_contDiffGroupoid"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L155-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#contMDiffOn_of_mem_contDiffGroupoid"><span class="name">contMDiffOn_of_mem_contDiffGroupoid</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e'</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">H</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">e'</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#contDiffGroupoid">contDiffGroupoid</a> <span class="fn">n</span> <span class="fn">I</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">e'</span>)</span> <span class="fn"><span class="fn">e'</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span></div></div><p>An element of <code><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#contDiffGroupoid">contDiffGroupoid</a> n I</code> is <code>C^n</code>.</p></div></div><div class="mod_doc"><h3 id="local-structomorphisms-are-C^n" class="markdown-heading">(local) structomorphisms are <code>C^n</code> <a class="hover-link" href="#local-structomorphisms-are-C^n">#</a></h3></div><div class="decl" id="isLocalStructomorphOn_contDiffGroupoid_iff_aux"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L168-L209">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#isLocalStructomorphOn_contDiffGroupoid_iff_aux"><span class="name">isLocalStructomorphOn_contDiffGroupoid_iff_aux</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M'</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">IsM'</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">M'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/LocalInvariantProperties.html#ChartedSpace.LiftPropOn">ChartedSpace.LiftPropOn</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#contDiffGroupoid">contDiffGroupoid</a> <span class="fn">n</span> <span class="fn">I</span>)</span>.<a href="../../../.././Mathlib/Geometry/Manifold/LocalInvariantProperties.html#StructureGroupoid.IsLocalStructomorphWithinAt">IsLocalStructomorphWithinAt</a></span> <span class="fn">(↑<span class="fn">f</span>)</span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">f</span>)</span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span></div></div></div></div><div class="decl" id="isLocalStructomorphOn_contDiffGroupoid_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L211-L305">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#isLocalStructomorphOn_contDiffGroupoid_iff"><span class="name">isLocalStructomorphOn_contDiffGroupoid_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M'</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">IsM'</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">M'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/LocalInvariantProperties.html#ChartedSpace.LiftPropOn">ChartedSpace.LiftPropOn</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#contDiffGroupoid">contDiffGroupoid</a> <span class="fn">n</span> <span class="fn">I</span>)</span>.<a href="../../../.././Mathlib/Geometry/Manifold/LocalInvariantProperties.html#StructureGroupoid.IsLocalStructomorphWithinAt">IsLocalStructomorphWithinAt</a></span> <span class="fn">(↑<span class="fn">f</span>)</span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span> <a href="../../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn">f</span>)</span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">(↑<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph.symm">symm</a></span>)</span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.target">target</a></span></span></div></div><p>Let <code>M</code> and <code>M'</code> be manifolds with the same model-with-corners, <code>I</code>.  Then <code>f : M → M'</code>
+is a local structomorphism for <code>I</code>, if and only if it is manifold-<code>C^n</code> on the domain of definition
+in both directions.</p></div></div><div class="decl" id="OpenPartialHomeomorph.contMDiffWithinAt_writtenInExtend_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L315-L327">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#OpenPartialHomeomorph.contMDiffWithinAt_writtenInExtend_iff"><span class="name">OpenPartialHomeomorph</span>.<span class="name">contMDiffWithinAt_writtenInExtend_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">F</span> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">G</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">J</span> <span class="fn">n</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">M</span> → <span class="fn">N</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ψ</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">N</span> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn">φ</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn">ψ</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">J</span> <span class="fn">n</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">y</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">φ</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hgy</span> : <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">ψ</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hmaps</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn"><span class="fn">ψ</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffWithinAt">ContMDiffWithinAt</a> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">F</span>)</span> <span class="fn">n</span> (<span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">ψ</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.extend">extend</a></span> <span class="fn">J</span>)</span></span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">↑<span class="fn"><span class="fn">(<span class="fn"><span class="fn">φ</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.extend">extend</a></span> <span class="fn">I</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span></span>)
+    (<span class="fn">↑<span class="fn"><span class="fn">(<span class="fn"><span class="fn">φ</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.extend">extend</a></span> <span class="fn">I</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span></span> <a href="../../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">s</span> <a href="../../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn"><a href="../../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">↑<span class="fn">I</span></span></span>) <span class="fn">(<span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">φ</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.extend">extend</a></span> <span class="fn">I</span>)</span></span> <span class="fn">y</span>)</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffWithinAt">ContMDiffWithinAt</a> <span class="fn">I</span> <span class="fn">J</span> <span class="fn">n</span> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">y</span></span></div></div><p>This is a smooth analogue of <code><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.continuousWithinAt_writtenInExtend_iff">OpenPartialHomeomorph.continuousWithinAt_writtenInExtend_iff</a></code>.</p></div></div><div class="decl" id="OpenPartialHomeomorph.contMDiffOn_writtenInExtend_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/ContMDiff/Atlas.lean#L329-L339">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Atlas.html#OpenPartialHomeomorph.contMDiffOn_writtenInExtend_iff"><span class="name">OpenPartialHomeomorph</span>.<span class="name">contMDiffOn_writtenInExtend_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">F</span> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">G</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">J</span> <span class="fn">n</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">M</span> → <span class="fn">N</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">M</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ψ</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">N</span> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn">φ</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn">ψ</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold.maximalAtlas">IsManifold.maximalAtlas</a> <span class="fn">J</span> <span class="fn">n</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">s</span> <a href="../../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><span class="fn">φ</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hmaps</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn"><span class="fn">ψ</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.source">source</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">E</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">F</span>)</span> <span class="fn">n</span> (<span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">ψ</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.extend">extend</a></span> <span class="fn">J</span>)</span></span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">↑<span class="fn"><span class="fn">(<span class="fn"><span class="fn">φ</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.extend">extend</a></span> <span class="fn">I</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/PartialEquiv.html#PartialEquiv.symm">symm</a></span></span>)
+    (<span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">φ</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/ExtChartAt.html#OpenPartialHomeomorph.extend">extend</a></span> <span class="fn">I</span>)</span></span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span> <a href="../../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiffOn">ContMDiffOn</a> <span class="fn">I</span> <span class="fn">J</span> <span class="fn">n</span> <span class="fn">f</span> <span class="fn">s</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

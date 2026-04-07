@@ -1,0 +1,919 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.LinearAlgebra.Matrix.Hermitian</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.LinearAlgebra.Matrix.Hermitian";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">LinearAlgebra</span>.<span class="name">Matrix</span>.<span class="name">Hermitian</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/Star/Pi.html">Mathlib.Algebra.Star.Pi</a></li><li><a href="../../.././Mathlib/LinearAlgebra/Matrix/ZPow.html">Mathlib.LinearAlgebra.Matrix.ZPow</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.LinearAlgebra.Matrix.Hermitian" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian"><span class="name">Matrix</span>.<span class="name">IsHermitian</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.instDecidableIsHermitianOfEqConjTranspose"><span class="name">Matrix</span>.<span class="name">instDecidableIsHermitianOfEqConjTranspose</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.eq"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">eq</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_iff_isSelfAdjoint"><span class="name">Matrix</span>.<span class="name">isHermitian_iff_isSelfAdjoint</span></a></div><div class="nav_link"><a class="break_within" href="#IsSelfAdjoint.isHermitian"><span class="name">IsSelfAdjoint</span>.<span class="name">isHermitian</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.isSelfAdjoint"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">isSelfAdjoint</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.ext"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">ext</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.apply"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">apply</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.ext_iff"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">ext_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.map"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">map</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_map_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_map_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.of_subsingleton"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">of_subsingleton</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.transpose"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">transpose</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_transpose_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_transpose_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.conjTranspose"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">conjTranspose</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.submatrix"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">submatrix</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_submatrix_equiv"><span class="name">Matrix</span>.<span class="name">isHermitian_submatrix_equiv</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.reindex"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">reindex</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_reindex_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_reindex_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.conjTranspose_comp"><span class="name">Matrix</span>.<span class="name">conjTranspose_comp</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.conjTranspose_comp'"><span class="name">Matrix</span>.<span class="name">conjTranspose_comp'</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_comp_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_comp_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_comp_iff_forall"><span class="name">Matrix</span>.<span class="name">isHermitian_comp_iff_forall</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_conjTranspose_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_conjTranspose_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.fromBlocks"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">fromBlocks</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_fromBlocks_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_fromBlocks_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_diagonal_of_self_adjoint"><span class="name">Matrix</span>.<span class="name">isHermitian_diagonal_of_self_adjoint</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_diagonal_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_diagonal_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_diagonal"><span class="name">Matrix</span>.<span class="name">isHermitian_diagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_zero"><span class="name">Matrix</span>.<span class="name">isHermitian_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.add"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">add</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_add_transpose_self"><span class="name">Matrix</span>.<span class="name">isHermitian_add_transpose_self</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_transpose_add_self"><span class="name">Matrix</span>.<span class="name">isHermitian_transpose_add_self</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.neg"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">neg</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_neg_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_neg_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.sub"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">sub</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.smul"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">smul</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.of_smul"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">of_smul</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.of_smul'"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">of_smul'</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_smul_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_smul_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_mul_conjTranspose_self"><span class="name">Matrix</span>.<span class="name">isHermitian_mul_conjTranspose_self</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_conjTranspose_mul_self"><span class="name">Matrix</span>.<span class="name">isHermitian_conjTranspose_mul_self</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_transpose_mul_self"><span class="name">Matrix</span>.<span class="name">isHermitian_transpose_mul_self</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_conjTranspose_mul_mul"><span class="name">Matrix</span>.<span class="name">isHermitian_conjTranspose_mul_mul</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_mul_mul_conjTranspose"><span class="name">Matrix</span>.<span class="name">isHermitian_mul_mul_conjTranspose</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.commute_iff"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">commute_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_one"><span class="name">Matrix</span>.<span class="name">isHermitian_one</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_natCast"><span class="name">Matrix</span>.<span class="name">isHermitian_natCast</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.pow"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">pow</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_intCast"><span class="name">Matrix</span>.<span class="name">isHermitian_intCast</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.inv"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">inv</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isHermitian_inv"><span class="name">Matrix</span>.<span class="name">isHermitian_inv</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.adjugate"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">adjugate</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.zpow"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">zpow</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.«term_⊕ᵥ_»"><span class="name">Matrix</span>.<span class="name">«term_⊕ᵥ_»</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.schur_complement_eq₁₁"><span class="name">Matrix</span>.<span class="name">schur_complement_eq₁₁</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.schur_complement_eq₂₂"><span class="name">Matrix</span>.<span class="name">schur_complement_eq₂₂</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.fromBlocks₁₁"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">fromBlocks₁₁</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.fromBlocks₂₂"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">fromBlocks₂₂</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Hermitian-matrices" class="markdown-heading">Hermitian matrices <a class="hover-link" href="#Hermitian-matrices">#</a></h1><p>This file defines Hermitian matrices and some basic results about them.</p><p>See also <code><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a></code>, which generalizes this definition to other star rings.</p><h2 id="Main-definition" class="markdown-heading">Main definition <a class="hover-link" href="#Main-definition">#</a></h2><ul><li><code><a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">Matrix.IsHermitian</a></code> : a matrix <code>A : <a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> n n α</code> is Hermitian if <code>Aᴴ = A</code>.</li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>self-adjoint matrix, hermitian matrix</p></div><div class="decl" id="Matrix.IsHermitian"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L41-L43">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian"><span class="name">Matrix</span>.<span class="name">IsHermitian</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A matrix is Hermitian if it is equal to its conjugate transpose. On the reals, this definition
+captures symmetric matrices.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> (<span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">A</span>)</li></ul></details><details id="instances-for-list-Matrix.IsHermitian" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Matrix.instDecidableIsHermitianOfEqConjTranspose"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L45-L46">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.instDecidableIsHermitianOfEqConjTranspose"><span class="name">Matrix</span>.<span class="name">instDecidableIsHermitianOfEqConjTranspose</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Decidable">Decidable</a> (<span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">A</span>)</span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Decidable">Decidable</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.instDecidableIsHermitianOfEqConjTranspose">instDecidableIsHermitianOfEqConjTranspose</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.instDecidableIsHermitianOfEqConjTranspose">Matrix.instDecidableIsHermitianOfEqConjTranspose._aux_1</a> <span class="fn">A</span></span></li></ul></details></div></div><div class="decl" id="Matrix.IsHermitian.eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L48-L48">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.eq"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">A</span></div></div></div></div><div class="decl" id="Matrix.isHermitian_iff_isSelfAdjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L50-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_iff_isSelfAdjoint"><span class="name">Matrix</span>.<span class="name">isHermitian_iff_isSelfAdjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="IsSelfAdjoint.isHermitian"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L53-L54">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#IsSelfAdjoint.isHermitian"><span class="name">IsSelfAdjoint</span>.<span class="name">isHermitian</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <span class="fn">A</span></span> → <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_iff_isSelfAdjoint">Matrix.isHermitian_iff_isSelfAdjoint</a></code>.</p></div></div><div class="decl" id="Matrix.IsHermitian.isSelfAdjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L53-L54">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.isSelfAdjoint"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">isSelfAdjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <span class="fn">A</span></span></span></div></div><p><strong>Alias</strong> of the forward direction of <code><a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_iff_isSelfAdjoint">Matrix.isHermitian_iff_isSelfAdjoint</a></code>.</p></div></div><div class="decl" id="Matrix.IsHermitian.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L56-L57">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.ext"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(∀ (<span class="fn">i </span><span class="fn">j</span> : <span class="fn">n</span>), <span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <span class="fn">(<span class="fn">A</span> <span class="fn">j</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">A</span> <span class="fn">i</span> <span class="fn">j</span></span>)</span> → <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L59-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.apply"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i </span><span class="fn">j</span> : <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <span class="fn">(<span class="fn">A</span> <span class="fn">j</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">A</span> <span class="fn">i</span> <span class="fn">j</span></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.ext_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L62-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.ext_iff"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">ext_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">i </span><span class="fn">j</span> : <span class="fn">n</span>), <span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <span class="fn">(<span class="fn">A</span> <span class="fn">j</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">A</span> <span class="fn">i</span> <span class="fn">j</span></span></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L65-L68">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.map"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">f</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.map">map</a></span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_map_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L70-L73">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_map_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_map_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">f</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hinj</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.map">map</a></span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.of_subsingleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L75-L77">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.of_subsingleton"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">of_subsingleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.transpose"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L79-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.transpose"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">transpose</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.transpose">transpose</a></span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_transpose_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L83-L85">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_transpose_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_transpose_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.transpose">transpose</a></span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.conjTranspose"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L87-L88">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.conjTranspose"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">conjTranspose</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.submatrix"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L90-L92">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.submatrix"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">submatrix</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">m</span> → <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.submatrix">submatrix</a></span> <span class="fn">f</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_submatrix_equiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L94-L97">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_submatrix_equiv"><span class="name">Matrix</span>.<span class="name">isHermitian_submatrix_equiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">m</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.submatrix">submatrix</a></span> <span class="fn">⇑<span class="fn">e</span></span> <span class="fn">⇑<span class="fn">e</span></span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.reindex"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L99-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.reindex"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">reindex</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">n</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">m</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.reindex">Matrix.reindex</a> <span class="fn">f</span> <span class="fn">f</span>)</span> <span class="fn">A</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_reindex_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L104-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_reindex_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_reindex_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">n</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">m</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.reindex">reindex</a> <span class="fn">f</span> <span class="fn">f</span>)</span> <span class="fn">A</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.conjTranspose_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L109-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.conjTranspose_comp"><span class="name">Matrix</span>.<span class="name">conjTranspose_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">I</span> <span class="fn">J</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">K</span> <span class="fn">L</span> <span class="fn">α</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Composition.html#Matrix.comp">comp</a> <span class="fn">I</span> <span class="fn">J</span> <span class="fn">K</span> <span class="fn">L</span> <span class="fn">α</span>)</span> <span class="fn">M</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Composition.html#Matrix.comp">comp</a> <span class="fn">J</span> <span class="fn">I</span> <span class="fn">L</span> <span class="fn">K</span> <span class="fn">α</span>)</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.transpose">transpose</a></span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.map">map</a></span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">K</span> <span class="fn">L</span> <span class="fn">α</span></span>) =&gt; <span class="fn"><span class="fn">x</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span></span>)</span></span></div></div></div></div><div class="decl" id="Matrix.conjTranspose_comp'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L113-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.conjTranspose_comp'"><span class="name">Matrix</span>.<span class="name">conjTranspose_comp'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">I</span> <span class="fn">J</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">K</span> <span class="fn">K</span> <span class="fn">α</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Composition.html#Matrix.comp">comp</a> <span class="fn">I</span> <span class="fn">J</span> <span class="fn">K</span> <span class="fn">K</span> <span class="fn">α</span>)</span> <span class="fn">M</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Composition.html#Matrix.comp">comp</a> <span class="fn">J</span> <span class="fn">I</span> <span class="fn">K</span> <span class="fn">K</span> <span class="fn">α</span>)</span> <span class="fn"><span class="fn">M</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span></span></div></div><p>When the inner matrices are square we can use the induced star operation</p></div></div><div class="decl" id="Matrix.isHermitian_comp_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L118-L120">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_comp_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_comp_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Composition.html#Matrix.comp">comp</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span>)</span> <span class="fn">A</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_comp_iff_forall"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L122-L125">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_comp_iff_forall"><span class="name">Matrix</span>.<span class="name">isHermitian_comp_iff_forall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Composition.html#Matrix.comp">comp</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span>)</span> <span class="fn">A</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">i </span><span class="fn">j</span> : <span class="fn">m</span>) (<span class="fn">i' </span><span class="fn">j'</span> : <span class="fn">n</span>), <span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <span class="fn">(<span class="fn">A</span> <span class="fn">j</span> <span class="fn">i</span> <span class="fn">j'</span> <span class="fn">i'</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">A</span> <span class="fn">i</span> <span class="fn">j</span> <span class="fn">i'</span> <span class="fn">j'</span></span></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_conjTranspose_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L133-L135">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_conjTranspose_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_conjTranspose_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#InvolutiveStar">InvolutiveStar</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.fromBlocks"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L137-L144">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.fromBlocks"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">fromBlocks</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#InvolutiveStar">InvolutiveStar</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hBC</span> : <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">C</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hD</span> : <span class="fn"><span class="fn">D</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Block.html#Matrix.fromBlocks">Matrix.fromBlocks</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn">C</span> <span class="fn">D</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p>A block matrix <code>A.from_blocks B C D</code> is Hermitian,
+if <code>A</code> and <code>D</code> are Hermitian and <code>Bᴴ = C</code>.</p></div></div><div class="decl" id="Matrix.isHermitian_fromBlocks_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L146-L153">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_fromBlocks_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_fromBlocks_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#InvolutiveStar">InvolutiveStar</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Block.html#Matrix.fromBlocks">fromBlocks</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn">C</span> <span class="fn">D</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">C</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">C</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">B</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">D</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p>This is the <code>iff</code> version of <code><a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.fromBlocks">Matrix.IsHermitian.fromBlocks</a></code>.</p></div></div><div class="decl" id="Matrix.isHermitian_diagonal_of_self_adjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L161-L165">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_diagonal_of_self_adjoint"><span class="name">Matrix</span>.<span class="name">isHermitian_diagonal_of_self_adjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <span class="fn">v</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">v</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p>A diagonal matrix is Hermitian if the entries are self-adjoint (as a vector)</p></div></div><div class="decl" id="Matrix.isHermitian_diagonal_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L167-L170">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_diagonal_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_diagonal_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">d</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">n</span>), <span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <span class="fn">(<span class="fn">d</span> <span class="fn">i</span>)</span></span></span></div></div><p>A diagonal matrix is Hermitian if each diagonal entry is self-adjoint</p></div></div><div class="decl" id="Matrix.isHermitian_diagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L172-L177">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_diagonal"><span class="name">Matrix</span>.<span class="name">isHermitian_diagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#TrivialStar">TrivialStar</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">v</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p>A diagonal matrix is Hermitian if the entries have the trivial <code>star</code> operation
+(such as on the reals).</p></div></div><div class="decl" id="Matrix.isHermitian_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L179-L181">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_zero"><span class="name">Matrix</span>.<span class="name">isHermitian_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a> <span class="fn">0</span></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L183-L186">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.add"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hB</span> : <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">A</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">B</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_add_transpose_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L194-L195">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_add_transpose_self"><span class="name">Matrix</span>.<span class="name">isHermitian_add_transpose_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">A</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_transpose_add_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L197-L198">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_transpose_add_self"><span class="name">Matrix</span>.<span class="name">isHermitian_transpose_add_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">A</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L206-L208">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.neg"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">A</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_neg_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L210-L214">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_neg_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_neg_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">A</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L216-L219">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.sub"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hB</span> : <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">A</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">B</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L227-L229">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.smul"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">R</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarModule">StarModule</a> <span class="fn">R</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hk</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <span class="fn">k</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">A</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.of_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L237-L240">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.of_smul"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">of_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">R</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarModule">StarModule</a> <span class="fn">R</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">(<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">A</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hk</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <span class="fn">k</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.of_smul'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L242-L247">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.of_smul'"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">of_smul'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">R</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarModule">StarModule</a> <span class="fn">R</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">(<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">A</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hk</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <a href="../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible.invOf">⅟</a><span class="fn">k</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p>Assumes <code><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> ⅟k</code> instead of <code><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> k</code>.
+These are equivalent given <code><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarMul">StarMul</a> R</code></p></div></div><div class="decl" id="Matrix.isHermitian_smul_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L249-L252">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_smul_iff"><span class="name">Matrix</span>.<span class="name">isHermitian_smul_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">R</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarModule">StarModule</a> <span class="fn">R</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hk</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <span class="fn">k</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">A</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_mul_conjTranspose_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L260-L262">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_mul_conjTranspose_self"><span class="name">Matrix</span>.<span class="name">isHermitian_mul_conjTranspose_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalSemiring">NonUnitalSemiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">A</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p>Note this is more general than <code><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint.mul_star_self">IsSelfAdjoint.mul_star_self</a></code> as <code>B</code> can be rectangular.</p></div></div><div class="decl" id="Matrix.isHermitian_conjTranspose_mul_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L264-L267">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_conjTranspose_mul_self"><span class="name">Matrix</span>.<span class="name">isHermitian_conjTranspose_mul_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalSemiring">NonUnitalSemiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p>Note this is more general than <code><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint.star_mul_self">IsSelfAdjoint.star_mul_self</a></code> as <code>B</code> can be rectangular.</p></div></div><div class="decl" id="Matrix.isHermitian_transpose_mul_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L269-L270">source</a></div><div class="attributes">@[deprecated Matrix.isHermitian_conjTranspose_mul_self (since := &quot;2025-11-10&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_transpose_mul_self"><span class="name">Matrix</span>.<span class="name">isHermitian_transpose_mul_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalSemiring">NonUnitalSemiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p><strong>Alias</strong> of <code><a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_conjTranspose_mul_self">Matrix.isHermitian_conjTranspose_mul_self</a></code>.</p><hr>
+<p>Note this is more general than <code><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint.star_mul_self">IsSelfAdjoint.star_mul_self</a></code> as <code>B</code> can be rectangular.</p></div></div><div class="decl" id="Matrix.isHermitian_conjTranspose_mul_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L272-L275">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_conjTranspose_mul_mul"><span class="name">Matrix</span>.<span class="name">isHermitian_conjTranspose_mul_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalSemiring">NonUnitalSemiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">B</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p>Note this is more general than <code><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint.conjugate'">IsSelfAdjoint.conjugate'</a></code> as <code>B</code> can be rectangular.</p></div></div><div class="decl" id="Matrix.isHermitian_mul_mul_conjTranspose"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L277-L280">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_mul_mul_conjTranspose"><span class="name">Matrix</span>.<span class="name">isHermitian_mul_mul_conjTranspose</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalSemiring">NonUnitalSemiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">m</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">B</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p>Note this is more general than <code><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint.conjugate">IsSelfAdjoint.conjugate</a></code> as <code>B</code> can be rectangular.</p></div></div><div class="decl" id="Matrix.IsHermitian.commute_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L282-L284">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.commute_iff"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">commute_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalSemiring">NonUnitalSemiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hB</span> : <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Commute/Defs.html#Commute">Commute</a> <span class="fn">A</span> <span class="fn">B</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">(<span class="fn">A</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">B</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L292-L296">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_one"><span class="name">Matrix</span>.<span class="name">isHermitian_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonAssocSemiring">NonAssocSemiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a> <span class="fn">1</span></span></div></div><p>Note this is more general for matrices than <code>isSelfAdjoint_one</code> as it does not
+require <code><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> n</code>, which is necessary for <code><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> (Matrix n n R)</code>.</p></div></div><div class="decl" id="Matrix.isHermitian_natCast"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L304-L306">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_natCast"><span class="name">Matrix</span>.<span class="name">isHermitian_natCast</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(↑<span class="fn">d</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.pow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L308-L309">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.pow"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">pow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">A</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_intCast"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L316-L318">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_intCast"><span class="name">Matrix</span>.<span class="name">isHermitian_intCast</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(↑<span class="fn">d</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L326-L327">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.inv"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.isHermitian_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L329-L332">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.isHermitian_inv"><span class="name">Matrix</span>.<span class="name">isHermitian_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.adjugate"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L334-L335">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.adjugate"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">adjugate</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Adjugate.html#Matrix.adjugate">adjugate</a></span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.zpow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L337-L341">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.zpow"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">zpow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">A</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div><p>Note that <code><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint.zpow">IsSelfAdjoint.zpow</a></code> does not apply to matrices as they are not a division ring.</p></div></div><div class="decl" id="Matrix.«term_⊕ᵥ_»"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L345-L346">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.«term_⊕ᵥ_»"><span class="name">Matrix</span>.<span class="name">«term_⊕ᵥ_»</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Lean.TrailingParserDescr">Lean.TrailingParserDescr</a></div></div><p>Notation for <code><a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a></code>, scoped within the <code><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a></code> namespace.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.«term_⊕ᵥ_»">Matrix.«term_⊕ᵥ_»</a> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Init/Prelude.html#Lean.ParserDescr.trailingNode">Lean.ParserDescr.trailingNode</a> <span class="fn">`Matrix.«term_⊕ᵥ_»</span> <span class="fn">65</span> <span class="fn">65</span>
+    <span class="fn">(<a href="../../.././Init/Prelude.html#Lean.ParserDescr.binary">Lean.ParserDescr.binary</a> <span class="fn">`andthen</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Lean.ParserDescr.symbol">Lean.ParserDescr.symbol</a> <span class="fn">&quot; ⊕ᵥ &quot;</span>)</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Lean.ParserDescr.cat">Lean.ParserDescr.cat</a> <span class="fn">`term</span> <span class="fn">66</span>)</span>)</span></span></li></ul></details><details id="instances-for-list-Matrix.«term_⊕ᵥ_»" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Matrix.schur_complement_eq₁₁"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L348-L357">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.schur_complement_eq₁₁"><span class="name">Matrix</span>.<span class="name">schur_complement_eq₁₁</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">D</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><span class="fn">m</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Matrix/Mul.html#Matrix.vecMul">vecMul</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <span class="fn">(<a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> <span class="fn">x</span> <span class="fn">y</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Block.html#Matrix.fromBlocks">fromBlocks</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <span class="fn">D</span>)</span></span> <a href="../../.././Mathlib/Data/Matrix/Mul.html#dotProduct">⬝ᵥ</a> <span class="fn"><a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/Data/Matrix/Mul.html#Matrix.vecMul">vecMul</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">(<span class="fn">A</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">B</span>).<a href="../../.././Mathlib/Data/Matrix/Mul.html#Matrix.mulVec">mulVec</a></span> <span class="fn">y</span></span>))</span> <span class="fn">A</span></span> <a href="../../.././Mathlib/Data/Matrix/Mul.html#dotProduct">⬝ᵥ</a> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">(<span class="fn">A</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">B</span>).<a href="../../.././Mathlib/Data/Matrix/Mul.html#Matrix.mulVec">mulVec</a></span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a>     <span class="fn"><a href="../../.././Mathlib/Data/Matrix/Mul.html#Matrix.vecMul">vecMul</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <span class="fn">y</span>)</span> (<span class="fn">D</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">B</span>)</span> <a href="../../.././Mathlib/Data/Matrix/Mul.html#dotProduct">⬝ᵥ</a> <span class="fn">y</span></div></div></div></div><div class="decl" id="Matrix.schur_complement_eq₂₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L359-L368">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.schur_complement_eq₂₂"><span class="name">Matrix</span>.<span class="name">schur_complement_eq₂₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><span class="fn">m</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hD</span> : <span class="fn"><span class="fn">D</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Matrix/Mul.html#Matrix.vecMul">vecMul</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <span class="fn">(<a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> <span class="fn">x</span> <span class="fn">y</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Block.html#Matrix.fromBlocks">fromBlocks</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <span class="fn">D</span>)</span></span> <a href="../../.././Mathlib/Data/Matrix/Mul.html#dotProduct">⬝ᵥ</a> <span class="fn"><a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/Data/Matrix/Mul.html#Matrix.vecMul">vecMul</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> (<span class="fn"><span class="fn">(<span class="fn">D</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span>).<a href="../../.././Mathlib/Data/Matrix/Mul.html#Matrix.mulVec">mulVec</a></span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">y</span>))</span> <span class="fn">D</span></span> <a href="../../.././Mathlib/Data/Matrix/Mul.html#dotProduct">⬝ᵥ</a> (<span class="fn"><span class="fn">(<span class="fn">D</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span>).<a href="../../.././Mathlib/Data/Matrix/Mul.html#Matrix.mulVec">mulVec</a></span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">y</span>) <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a>     <span class="fn"><a href="../../.././Mathlib/Data/Matrix/Mul.html#Matrix.vecMul">vecMul</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <span class="fn">x</span>)</span> (<span class="fn">A</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">B</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">D</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span>)</span> <a href="../../.././Mathlib/Data/Matrix/Mul.html#dotProduct">⬝ᵥ</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.fromBlocks₁₁"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L372-L378">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.fromBlocks₁₁"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">fromBlocks₁₁</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">D</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Block.html#Matrix.fromBlocks">Matrix.fromBlocks</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <span class="fn">D</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">(<span class="fn">D</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">B</span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.fromBlocks₂₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Hermitian.lean#L380-L385">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian.fromBlocks₂₂"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">fromBlocks₂₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hD</span> : <span class="fn"><span class="fn">D</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Matrix/Block.html#Matrix.fromBlocks">Matrix.fromBlocks</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span> <span class="fn">D</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">(<span class="fn">A</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">B</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">D</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span>).<a href="../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

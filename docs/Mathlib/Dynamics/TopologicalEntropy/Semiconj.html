@@ -1,0 +1,348 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Dynamics.TopologicalEntropy.Semiconj</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Dynamics.TopologicalEntropy.Semiconj";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Dynamics</span>.<span class="name">TopologicalEntropy</span>.<span class="name">Semiconj</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html">Mathlib.Dynamics.TopologicalEntropy.CoverEntropy</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Dynamics.TopologicalEntropy.Semiconj" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Dynamics.IsDynCoverOf.image"><span class="name">Dynamics</span>.<span class="name">IsDynCoverOf</span>.<span class="name">image</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.IsDynCoverOf.preimage"><span class="name">Dynamics</span>.<span class="name">IsDynCoverOf</span>.<span class="name">preimage</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.le_coverMincard_image"><span class="name">Dynamics</span>.<span class="name">le_coverMincard_image</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverMincard_image_le"><span class="name">Dynamics</span>.<span class="name">coverMincard_image_le</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.le_coverEntropyEntourage_image"><span class="name">Dynamics</span>.<span class="name">le_coverEntropyEntourage_image</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.le_coverEntropyInfEntourage_image"><span class="name">Dynamics</span>.<span class="name">le_coverEntropyInfEntourage_image</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropyEntourage_image_le"><span class="name">Dynamics</span>.<span class="name">coverEntropyEntourage_image_le</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropyInfEntourage_image_le"><span class="name">Dynamics</span>.<span class="name">coverEntropyInfEntourage_image_le</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropy_image_of_comap"><span class="name">Dynamics</span>.<span class="name">coverEntropy_image_of_comap</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropyInf_image_of_comap"><span class="name">Dynamics</span>.<span class="name">coverEntropyInf_image_of_comap</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropy_restrict_subset"><span class="name">Dynamics</span>.<span class="name">coverEntropy_restrict_subset</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropyInf_restrict_subset"><span class="name">Dynamics</span>.<span class="name">coverEntropyInf_restrict_subset</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropy_restrict"><span class="name">Dynamics</span>.<span class="name">coverEntropy_restrict</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropy_image_le_of_uniformContinuous"><span class="name">Dynamics</span>.<span class="name">coverEntropy_image_le_of_uniformContinuous</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropyInf_image_le_of_uniformContinuous"><span class="name">Dynamics</span>.<span class="name">coverEntropyInf_image_le_of_uniformContinuous</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropy_image_le_of_uniformContinuousOn_invariant"><span class="name">Dynamics</span>.<span class="name">coverEntropy_image_le_of_uniformContinuousOn_invariant</span></a></div><div class="nav_link"><a class="break_within" href="#Dynamics.coverEntropyInf_image_le_of_uniformContinuousOn_invariant"><span class="name">Dynamics</span>.<span class="name">coverEntropyInf_image_le_of_uniformContinuousOn_invariant</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Topological-entropy-of-the-image-of-a-set-under-a-semiconjugacy" class="markdown-heading">Topological entropy of the image of a set under a semiconjugacy <a class="hover-link" href="#Topological-entropy-of-the-image-of-a-set-under-a-semiconjugacy">#</a></h1><p>Consider two dynamical systems <code>(X, S)</code> and <code>(Y, T)</code> together with a semiconjugacy <code>φ</code>:</p><pre><code>X ---S--&gt; X
+|         |
+φ         φ
+|         |
+v         v
+Y ---T--&gt; Y
+</code></pre><p>We relate the topological entropy of a subset <code>F ⊆ X</code> with the topological entropy
+of its image <code>φ '' F ⊆ Y</code>.</p><p>The best-known theorem is that, if all maps are uniformly continuous, then
+<code>coverEntropy T (φ '' F) ≤ coverEntropy S F</code>. This is theorem
+<code><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropy_image_le_of_uniformContinuous">coverEntropy_image_le_of_uniformContinuous</a></code> herein. We actually prove the much more general
+statement that <code>coverEntropy T (φ '' F) = coverEntropy S F</code> if <code>X</code> is endowed with the pullback
+by <code>φ</code> of the uniform structure of <code>Y</code>.</p><p>This more general statement has another direct consequence: if <code>F</code> is <code>S</code>-invariant, then the
+topological entropy of the restriction of <code>S</code> to <code>F</code> is exactly <code>coverEntropy S F</code>. This
+corollary is essential: in most references, the entropy of an invariant subset (or subsystem) <code>F</code> is
+defined as the entropy of the restriction to <code>F</code> of the system. We chose instead to give a direct
+definition of the topological entropy of a subset, so as to avoid working with subtypes. Theorem
+<code><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropy_restrict">coverEntropy_restrict</a></code> shows that this choice is coherent with the literature.</p><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>We use only the definition of the topological entropy using covers; the simplest version of
+<code><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.IsDynCoverOf.image">IsDynCoverOf.image</a></code> for nets fails.</p><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropy_image_of_comap">coverEntropy_image_of_comap</a></code>/<code><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropyInf_image_of_comap">coverEntropyInf_image_of_comap</a></code>: the entropy of <code>φ '' F</code> equals
+the entropy of <code>F</code> if <code>X</code> is endowed with the pullback by <code>φ</code> of the uniform structure of <code>Y</code>.</li><li><code><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropy_image_le_of_uniformContinuous">coverEntropy_image_le_of_uniformContinuous</a></code>/<code><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropyInf_image_le_of_uniformContinuous">coverEntropyInf_image_le_of_uniformContinuous</a></code>:
+the entropy of <code>φ '' F</code> is lower than the entropy of <code>F</code> if <code>φ</code> is uniformly continuous.</li><li><code><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropy_restrict">coverEntropy_restrict</a></code>: the entropy of the restriction of <code>S</code> to an invariant set <code>F</code> is
+<code>coverEntropy S F</code>.</li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>entropy, semiconjugacy</p></div><div class="decl" id="Dynamics.IsDynCoverOf.image"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L65-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.IsDynCoverOf.image"><span class="name">Dynamics</span>.<span class="name">IsDynCoverOf</span>.<span class="name">image</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel">SetRel</a> <span class="fn">Y</span> <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h'</span> : <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.IsDynCoverOf">IsDynCoverOf</a> <span class="fn">S</span> <span class="fn">F</span> (<span class="fn"><a href="../../.././Init/Core.html#Prod.map">Prod.map</a> <span class="fn">φ</span> <span class="fn">φ</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">V</span>) <span class="fn">n</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.IsDynCoverOf">IsDynCoverOf</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>) <span class="fn">V</span> <span class="fn">n</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="Dynamics.IsDynCoverOf.preimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L72-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.IsDynCoverOf.preimage"><span class="name">Dynamics</span>.<span class="name">IsDynCoverOf</span>.<span class="name">preimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel">SetRel</a> <span class="fn">Y</span> <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">V</span>.<a href="../../.././Mathlib/Data/Rel.html#SetRel.IsSymm">IsSymm</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h'</span> : <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.IsDynCoverOf">IsDynCoverOf</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>) <span class="fn">V</span> <span class="fn">n</span> <span class="fn">↑<span class="fn">t</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">X</span></span>), <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.IsDynCoverOf">IsDynCoverOf</a> <span class="fn">S</span> <span class="fn">F</span> (<span class="fn"><a href="../../.././Init/Core.html#Prod.map">Prod.map</a> <span class="fn">φ</span> <span class="fn">φ</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><span class="fn"><span class="fn">V</span>.<a href="../../.././Mathlib/Data/Rel.html#SetRel.comp">comp</a></span> <span class="fn">V</span></span>) <span class="fn">n</span> <span class="fn">↑<span class="fn">s</span></span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span></div></div></div></div><div class="decl" id="Dynamics.le_coverMincard_image"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L93-L100">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.le_coverMincard_image"><span class="name">Dynamics</span>.<span class="name">le_coverMincard_image</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel">SetRel</a> <span class="fn">Y</span> <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">V</span>.<a href="../../.././Mathlib/Data/Rel.html#SetRel.IsSymm">IsSymm</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverMincard">coverMincard</a> <span class="fn">S</span> <span class="fn">F</span> (<span class="fn"><a href="../../.././Init/Core.html#Prod.map">Prod.map</a> <span class="fn">φ</span> <span class="fn">φ</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><span class="fn"><span class="fn">V</span>.<a href="../../.././Mathlib/Data/Rel.html#SetRel.comp">comp</a></span> <span class="fn">V</span></span>) <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverMincard">coverMincard</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>) <span class="fn">V</span> <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Dynamics.coverMincard_image_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L102-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverMincard_image_le"><span class="name">Dynamics</span>.<span class="name">coverMincard_image_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel">SetRel</a> <span class="fn">Y</span> <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverMincard">coverMincard</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>) <span class="fn">V</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverMincard">coverMincard</a> <span class="fn">S</span> <span class="fn">F</span> (<span class="fn"><a href="../../.././Init/Core.html#Prod.map">Prod.map</a> <span class="fn">φ</span> <span class="fn">φ</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">V</span>) <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Dynamics.le_coverEntropyEntourage_image"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L115-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.le_coverEntropyEntourage_image"><span class="name">Dynamics</span>.<span class="name">le_coverEntropyEntourage_image</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel">SetRel</a> <span class="fn">Y</span> <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">V</span>.<a href="../../.././Mathlib/Data/Rel.html#SetRel.IsSymm">IsSymm</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyEntourage">coverEntropyEntourage</a> <span class="fn">S</span> <span class="fn">F</span> (<span class="fn"><a href="../../.././Init/Core.html#Prod.map">Prod.map</a> <span class="fn">φ</span> <span class="fn">φ</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><span class="fn"><span class="fn">V</span>.<a href="../../.././Mathlib/Data/Rel.html#SetRel.comp">comp</a></span> <span class="fn">V</span></span>)</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyEntourage">coverEntropyEntourage</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>) <span class="fn">V</span></span></div></div></div></div><div class="decl" id="Dynamics.le_coverEntropyInfEntourage_image"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L119-L121">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.le_coverEntropyInfEntourage_image"><span class="name">Dynamics</span>.<span class="name">le_coverEntropyInfEntourage_image</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel">SetRel</a> <span class="fn">Y</span> <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">V</span>.<a href="../../.././Mathlib/Data/Rel.html#SetRel.IsSymm">IsSymm</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInfEntourage">coverEntropyInfEntourage</a> <span class="fn">S</span> <span class="fn">F</span> (<span class="fn"><a href="../../.././Init/Core.html#Prod.map">Prod.map</a> <span class="fn">φ</span> <span class="fn">φ</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><span class="fn"><span class="fn">V</span>.<a href="../../.././Mathlib/Data/Rel.html#SetRel.comp">comp</a></span> <span class="fn">V</span></span>)</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInfEntourage">coverEntropyInfEntourage</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>) <span class="fn">V</span></span></div></div></div></div><div class="decl" id="Dynamics.coverEntropyEntourage_image_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L123-L125">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropyEntourage_image_le"><span class="name">Dynamics</span>.<span class="name">coverEntropyEntourage_image_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel">SetRel</a> <span class="fn">Y</span> <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyEntourage">coverEntropyEntourage</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>) <span class="fn">V</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyEntourage">coverEntropyEntourage</a> <span class="fn">S</span> <span class="fn">F</span> (<span class="fn"><a href="../../.././Init/Core.html#Prod.map">Prod.map</a> <span class="fn">φ</span> <span class="fn">φ</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">V</span>)</span></div></div></div></div><div class="decl" id="Dynamics.coverEntropyInfEntourage_image_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L127-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropyInfEntourage_image_le"><span class="name">Dynamics</span>.<span class="name">coverEntropyInfEntourage_image_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel">SetRel</a> <span class="fn">Y</span> <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInfEntourage">coverEntropyInfEntourage</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>) <span class="fn">V</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInfEntourage">coverEntropyInfEntourage</a> <span class="fn">S</span> <span class="fn">F</span> (<span class="fn"><a href="../../.././Init/Core.html#Prod.map">Prod.map</a> <span class="fn">φ</span> <span class="fn">φ</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">V</span>)</span></div></div></div></div><div class="decl" id="Dynamics.coverEntropy_image_of_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L131-L150">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropy_image_of_comap"><span class="name">Dynamics</span>.<span class="name">coverEntropy_image_of_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">u</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">Y</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropy">coverEntropy</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropy">coverEntropy</a> <span class="fn">S</span> <span class="fn">F</span></span></div></div><p>The entropy of <code>φ '' F</code> equals the entropy of <code>F</code> if <code>X</code> is endowed with the pullback by <code>φ</code>
+of the uniform structure of <code>Y</code>.</p></div></div><div class="decl" id="Dynamics.coverEntropyInf_image_of_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L152-L171">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropyInf_image_of_comap"><span class="name">Dynamics</span>.<span class="name">coverEntropyInf_image_of_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">u</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">Y</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInf">coverEntropyInf</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInf">coverEntropyInf</a> <span class="fn">S</span> <span class="fn">F</span></span></div></div><p>The entropy of <code>φ '' F</code> equals the entropy of <code>F</code> if <code>X</code> is endowed with the pullback by <code>φ</code>
+of the uniform structure of <code>Y</code>. This version uses a <code>liminf</code>.</p></div></div><div class="decl" id="Dynamics.coverEntropy_restrict_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L175-L179">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropy_restrict_subset"><span class="name">Dynamics</span>.<span class="name">coverEntropy_restrict_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn">F</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hG</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">T</span> <span class="fn">G</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropy">coverEntropy</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo.restrict">Set.MapsTo.restrict</a> <span class="fn">T</span> <span class="fn">G</span> <span class="fn">G</span> <span class="fn">hG</span>)</span> (<a href="../../.././Init/Prelude.html#Subtype.val">Subtype.val</a> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">F</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropy">coverEntropy</a> <span class="fn">T</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="Dynamics.coverEntropyInf_restrict_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L181-L185">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropyInf_restrict_subset"><span class="name">Dynamics</span>.<span class="name">coverEntropyInf_restrict_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn">F</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hG</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">T</span> <span class="fn">G</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInf">coverEntropyInf</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo.restrict">Set.MapsTo.restrict</a> <span class="fn">T</span> <span class="fn">G</span> <span class="fn">G</span> <span class="fn">hG</span>)</span> (<a href="../../.././Init/Prelude.html#Subtype.val">Subtype.val</a> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">F</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInf">coverEntropyInf</a> <span class="fn">T</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="Dynamics.coverEntropy_restrict"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L187-L191">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropy_restrict"><span class="name">Dynamics</span>.<span class="name">coverEntropy_restrict</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">T</span> <span class="fn">F</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropy">coverEntropy</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo.restrict">Set.MapsTo.restrict</a> <span class="fn">T</span> <span class="fn">F</span> <span class="fn">F</span> <span class="fn">h</span>)</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropy">coverEntropy</a> <span class="fn">T</span> <span class="fn">F</span></span></div></div><p>The entropy of the restriction of <code>T</code> to an invariant set <code>F</code> is <code>coverEntropy T F</code>. This
+theorem justifies our definition of <code>coverEntropy T F</code>.</p></div></div><div class="decl" id="Dynamics.coverEntropy_image_le_of_uniformContinuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L193-L198">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropy_image_le_of_uniformContinuous"><span class="name">Dynamics</span>.<span class="name">coverEntropy_image_le_of_uniformContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuous">UniformContinuous</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropy">coverEntropy</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>)</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropy">coverEntropy</a> <span class="fn">S</span> <span class="fn">F</span></span></div></div><p>The entropy of <code>φ '' F</code> is at most the entropy of <code>F</code> if <code>φ</code> is uniformly continuous.</p></div></div><div class="decl" id="Dynamics.coverEntropyInf_image_le_of_uniformContinuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L200-L206">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropyInf_image_le_of_uniformContinuous"><span class="name">Dynamics</span>.<span class="name">coverEntropyInf_image_le_of_uniformContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuous">UniformContinuous</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInf">coverEntropyInf</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>)</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInf">coverEntropyInf</a> <span class="fn">S</span> <span class="fn">F</span></span></div></div><p>The entropy of <code>φ '' F</code> is at most the entropy of <code>F</code> if <code>φ</code> is uniformly continuous. This
+version uses a <code>liminf</code>.</p></div></div><div class="decl" id="Dynamics.coverEntropy_image_le_of_uniformContinuousOn_invariant"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L208-L218">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropy_image_le_of_uniformContinuousOn_invariant"><span class="name">Dynamics</span>.<span class="name">coverEntropy_image_le_of_uniformContinuousOn_invariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuousOn">UniformContinuousOn</a> <span class="fn">φ</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn">F</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hG</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">S</span> <span class="fn">G</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropy">coverEntropy</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>)</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropy">coverEntropy</a> <span class="fn">S</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="Dynamics.coverEntropyInf_image_le_of_uniformContinuousOn_invariant"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/TopologicalEntropy/Semiconj.lean#L220-L230">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/TopologicalEntropy/Semiconj.html#Dynamics.coverEntropyInf_image_le_of_uniformContinuousOn_invariant"><span class="name">Dynamics</span>.<span class="name">coverEntropyInf_image_le_of_uniformContinuousOn_invariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">φ</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuousOn">UniformContinuousOn</a> <span class="fn">φ</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn">F</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hG</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">S</span> <span class="fn">G</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInf">coverEntropyInf</a> <span class="fn">T</span> (<span class="fn">φ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">F</span>)</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/TopologicalEntropy/CoverEntropy.html#Dynamics.coverEntropyInf">coverEntropyInf</a> <span class="fn">S</span> <span class="fn">F</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,740 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Lie.Weights.Linear</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Lie.Weights.Linear";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Lie</span>.<span class="name">Weights</span>.<span class="name">Linear</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/LinearAlgebra/Trace.html">Mathlib.LinearAlgebra.Trace</a></li><li><a href="../../../.././Mathlib/LinearAlgebra/FreeModule/PID.html">Mathlib.LinearAlgebra.FreeModule.PID</a></li><li><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html">Mathlib.Algebra.Lie.Weights.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Lie.Weights.Linear" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#LieModule.LinearWeights"><span class="name">LieModule</span>.<span class="name">LinearWeights</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.Weight.toLinear"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">toLinear</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.Weight.toLinear_apply"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">toLinear_apply</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.Weight.instCoeLinearMap"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">instCoeLinearMap</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.Weight.instLinearMapClass"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">instLinearMapClass</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.Weight.apply_lie"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">apply_lie</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.Weight.coe_coe"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">coe_coe</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.Weight.coe_toLinear_eq_zero_iff"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">coe_toLinear_eq_zero_iff</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.Weight.coe_toLinear_ne_zero_iff"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">coe_toLinear_ne_zero_iff</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.Weight.ker"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">ker</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.instLinearWeightsOfIsLieAbelian"><span class="name">LieModule</span>.<span class="name">instLinearWeightsOfIsLieAbelian</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.trace_comp_toEnd_genWeightSpace_eq"><span class="name">LieModule</span>.<span class="name">trace_comp_toEnd_genWeightSpace_eq</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.zero_lt_finrank_genWeightSpace"><span class="name">LieModule</span>.<span class="name">zero_lt_finrank_genWeightSpace</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.instLinearWeightsOfCharZero"><span class="name">LieModule</span>.<span class="name">instLinearWeightsOfCharZero</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.shiftedGenWeightSpace"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.shiftedGenWeightSpace.instLieRingModuleSubtypeMemLieSubmodule"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">instLieRingModuleSubtypeMemLieSubmodule</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.shiftedGenWeightSpace.coe_lie_shiftedGenWeightSpace_apply"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">coe_lie_shiftedGenWeightSpace_apply</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.shiftedGenWeightSpace.instSubtypeMemLieSubmodule"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">instSubtypeMemLieSubmodule</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.shiftedGenWeightSpace.shift"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">shift</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.shiftedGenWeightSpace.shift_apply"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">shift_apply</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.shiftedGenWeightSpace.shift_symm_apply"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">shift_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.shiftedGenWeightSpace.toEnd_eq"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">toEnd_eq</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.shiftedGenWeightSpace.instIsNilpotentSubtypeMemLieSubmoduleOfIsNoetherian"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">instIsNilpotentSubtypeMemLieSubmoduleOfIsNoetherian</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.exists_forall_lie_eq_smul"><span class="name">LieModule</span>.<span class="name">exists_forall_lie_eq_smul</span></a></div><div class="nav_link"><a class="break_within" href="#LieModule.exists_nontrivial_weightSpace_of_isNilpotent"><span class="name">LieModule</span>.<span class="name">exists_nontrivial_weightSpace_of_isNilpotent</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Lie-modules-with-linear-weights" class="markdown-heading">Lie modules with linear weights <a class="hover-link" href="#Lie-modules-with-linear-weights">#</a></h1><p>Given a Lie module <code>M</code> over a nilpotent Lie algebra <code>L</code> with coefficients in <code>R</code>, one frequently
+studies <code>M</code> via its weights. These are functions <code>χ : L → R</code> whose corresponding weight space
+<code><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">LieModule.genWeightSpace</a> M χ</code>, is non-trivial. If <code>L</code> is Abelian or if <code>R</code> has characteristic zero
+(and <code>M</code> is finite-dimensional) then such <code>χ</code> are necessarily <code>R</code>-linear. However in general
+non-linear weights do exist. For example if we take:</p><ul><li><code>R</code>: the field with two elements (or indeed any perfect field of characteristic two),</li><li><code>L</code>: <code>sl₂</code> (this is nilpotent in characteristic two),</li><li><code>M</code>: the natural two-dimensional representation of <code>L</code>,</li></ul><p>then there is a single weight and it is non-linear. (See remark following Proposition 9 of
+chapter VII, §1.3 in <a href="../../../.././bourbaki1975b">N. Bourbaki, Chapters 7--9</a>.)</p><p>We thus introduce a typeclass <code><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LieModule.LinearWeights</a></code> to encode the fact that a Lie module does
+have linear weights and provide typeclass instances in the two important cases that <code>L</code> is Abelian
+or <code>R</code> has characteristic zero.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LieModule.LinearWeights</a></code>: a typeclass encoding the fact that a given Lie module has linear
+weights, and furthermore that the weights vanish on the derived ideal.</li><li><code><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.instLinearWeightsOfCharZero">LieModule.instLinearWeightsOfCharZero</a></code>: a typeclass instance encoding the fact that for an
+Abelian Lie algebra, the weights of any Lie module are linear.</li><li><code><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.instLinearWeightsOfIsLieAbelian">LieModule.instLinearWeightsOfIsLieAbelian</a></code>: a typeclass instance encoding the fact that in
+characteristic zero, the weights of any finite-dimensional Lie module are linear.</li><li><code><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.exists_forall_lie_eq_smul">LieModule.exists_forall_lie_eq_smul</a></code>: existence of simultaneous
+eigenvectors from existence of simultaneous generalized eigenvectors for Noetherian Lie modules
+with linear weights.</li></ul></div><div class="decl" id="LieModule.LinearWeights"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L53-L58">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights"><span class="name">LieModule</span>.<span class="name">LinearWeights</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Prop</a></div></div><p>A typeclass encoding the fact that a given Lie module has linear weights, vanishing on the
+derived ideal.</p><ul class="structure_fields" id="LieModule.LinearWeights.mk"><li id="LieModule.LinearWeights.map_add" class="structure_field"><div class="structure_field_info">map_add<span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+ : <span class="fn"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> → <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">L</span>), <span class="fn"><span class="fn">χ</span> (<span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">y</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">χ</span> <span class="fn">y</span></span></span></span></div></li><li id="LieModule.LinearWeights.map_smul" class="structure_field"><div class="structure_field_info">map_smul<span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+ : <span class="fn"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> → <span class="fn">∀ (<span class="fn">t</span> : <span class="fn">R</span>) (<span class="fn">x</span> : <span class="fn">L</span>), <span class="fn"><span class="fn">χ</span> (<span class="fn">t</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">t</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">χ</span> <span class="fn">x</span></span></span></span></div></li><li id="LieModule.LinearWeights.map_lie" class="structure_field"><div class="structure_field_info">map_lie<span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+ : <span class="fn"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> → <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">L</span>), <span class="fn"><span class="fn">χ</span> <a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁅</a><span class="fn">x</span><a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">,</a> <span class="fn">y</span><a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁆</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-LieModule.LinearWeights" class="instances-list"></ul></details></div></div><div class="decl" id="LieModule.Weight.toLinear"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L64-L69">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">toLinear</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">Weight</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">L</span> <a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">R</span></div></div><p>A weight of a Lie module, bundled as a linear map.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear">LieModule.Weight.toLinear</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.mk">{</a> <span class="fn">toFun</span> := <span class="fn">⇑<span class="fn">χ</span></span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">map_smul'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.mk">}</a></li></ul></details><details id="instances-for-list-LieModule.Weight.toLinear" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieModule.Weight.toLinear_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L65-L65">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear_apply"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">toLinear_apply</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">Weight</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">L</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear">toLinear</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="LieModule.Weight.instCoeLinearMap"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L71-L72">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.instCoeLinearMap"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">instCoeLinearMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Coe.html#CoeOut">CoeOut</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">Weight</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span>)</span> (<span class="fn">L</span> <a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">R</span>)</span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.instCoeLinearMap">LieModule.Weight.instCoeLinearMap</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Init/Coe.html#CoeOut.mk">{</a> <span class="fn">coe</span> := <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear">LieModule.Weight.toLinear</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span> <a href="../../../.././Init/Coe.html#CoeOut.mk">}</a></li></ul></details></div></div><div class="decl" id="LieModule.Weight.instLinearMapClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L74-L76">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.instLinearMapClass"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">instLinearMapClass</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMapClass">LinearMapClass</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">Weight</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span>)</span> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">R</span></span></div></div></div></div><div class="decl" id="LieModule.Weight.apply_lie"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L80-L83">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.apply_lie"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">apply_lie</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">Weight</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">L</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">χ</span> <a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁅</a><span class="fn">x</span><a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">,</a> <span class="fn">y</span><a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁆</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="LieModule.Weight.coe_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L85-L85">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.coe_coe"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">coe_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">Weight</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear">toLinear</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">χ</span></span></div></div></div></div><div class="decl" id="LieModule.Weight.coe_toLinear_eq_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L87-L88">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.coe_toLinear_eq_zero_iff"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">coe_toLinear_eq_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">Weight</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear">toLinear</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">χ</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight.IsZero">IsZero</a></span></div></div></div></div><div class="decl" id="LieModule.Weight.coe_toLinear_ne_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L90-L90">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.coe_toLinear_ne_zero_iff"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">coe_toLinear_ne_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">Weight</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear">toLinear</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">χ</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight.IsNonZero">IsNonZero</a></span></div></div></div></div><div class="decl" id="LieModule.Weight.ker"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L92-L93">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.ker"><span class="name">LieModule</span>.<span class="name">Weight</span>.<span class="name">ker</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">Weight</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">L</span></span></div></div><p>The kernel of a weight of a Lie module with linear weights.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.ker">LieModule.Weight.ker</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear">LieModule.Weight.toLinear</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span>.<a href="../../../.././Mathlib/Algebra/Module/Submodule/Ker.html#LinearMap.ker">ker</a></span></li></ul></details><details id="instances-for-list-LieModule.Weight.ker" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieModule.instLinearWeightsOfIsLieAbelian"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L97-L115">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.instLinearWeightsOfIsLieAbelian"><span class="name">LieModule</span>.<span class="name">instLinearWeightsOfIsLieAbelian</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Abelian.html#IsLieAbelian">IsLieAbelian</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span></div></div><p>For an Abelian Lie algebra, the weights of any Lie module are linear.</p></div></div><div class="decl" id="LieModule.trace_comp_toEnd_genWeightSpace_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L124-L128">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.trace_comp_toEnd_genWeightSpace_eq"><span class="name">LieModule</span>.<span class="name">trace_comp_toEnd_genWeightSpace_eq</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/Ideal/Span.html#IsPrincipalIdealRing">IsPrincipalIdealRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FreeModule/Basic.html#Module.Free">Module.Free</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Trace.html#LinearMap.trace">LinearMap.trace</a> <span class="fn">R</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span>)</span></span></span> <a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.comp">∘ₗ</a> <span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/OfAssociative.html#LieModule.toEnd">toEnd</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span>)</span></span>)</span></span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">R</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span>)</span></span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">χ</span></div></div></div></div><div class="decl" id="LieModule.zero_lt_finrank_genWeightSpace"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L131-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.zero_lt_finrank_genWeightSpace"><span class="name">LieModule</span>.<span class="name">zero_lt_finrank_genWeightSpace</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/Ideal/Span.html#IsPrincipalIdealRing">IsPrincipalIdealRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FreeModule/Basic.html#Module.Free">Module.Free</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">R</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span>)</span></span></span></div></div></div></div><div class="decl" id="LieModule.instLinearWeightsOfCharZero"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L136-L149">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.instLinearWeightsOfCharZero"><span class="name">LieModule</span>.<span class="name">instLinearWeightsOfCharZero</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/Ideal/Span.html#IsPrincipalIdealRing">IsPrincipalIdealRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FreeModule/Basic.html#Module.Free">Module.Free</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span></div></div><p>In characteristic zero, the weights of any finite-dimensional Lie module are linear and vanish
+on the derived ideal.</p></div></div><div class="decl" id="LieModule.shiftedGenWeightSpace"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L155-L157">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubmodule">LieSubmodule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span></div></div><p>A type synonym for the <code>χ</code>-weight space but with the action of <code>x : L</code>
+on <code>m : genWeightSpace M χ</code>, shifted to act as <code>⁅x, m⁆ - χ x • m</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace">LieModule.shiftedGenWeightSpace</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">LieModule.genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span></span></li></ul></details><details id="instances-for-list-LieModule.shiftedGenWeightSpace" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieModule.shiftedGenWeightSpace.instLieRingModuleSubtypeMemLieSubmodule"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L166-L180">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.instLieRingModuleSubtypeMemLieSubmodule"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">instLieRingModuleSubtypeMemLieSubmodule</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace">shiftedGenWeightSpace</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="LieModule.shiftedGenWeightSpace.coe_lie_shiftedGenWeightSpace_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L182-L185">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.coe_lie_shiftedGenWeightSpace_apply"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">coe_lie_shiftedGenWeightSpace_apply</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">L</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace">shiftedGenWeightSpace</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁅</a><span class="fn">x</span><a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">,</a> <span class="fn">m</span><a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁆</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁅</a><span class="fn">x</span><a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">,</a> <span class="fn">↑<span class="fn">m</span></span><a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁆</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">χ</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">↑<span class="fn">m</span></span></div></div></div></div><div class="decl" id="LieModule.shiftedGenWeightSpace.instSubtypeMemLieSubmodule"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L187-L201">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.instSubtypeMemLieSubmodule"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">instSubtypeMemLieSubmodule</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace">shiftedGenWeightSpace</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span></span></span></div></div></div></div><div class="decl" id="LieModule.shiftedGenWeightSpace.shift"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L203-L205">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.shift"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">shift</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span>)</span></span> <a href="../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace">shiftedGenWeightSpace</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span></span></div></div><p>Forgetting the action of <code>L</code>,
+the spaces <code>genWeightSpace M χ</code> and <code><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace">shiftedGenWeightSpace</a> R L M χ</code> are equivalent.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.shift">LieModule.shiftedGenWeightSpace.shift</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.refl">LinearEquiv.refl</a> <span class="fn">R</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">LieModule.genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span>)</span></span></span></li></ul></details><details id="instances-for-list-LieModule.shiftedGenWeightSpace.shift" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieModule.shiftedGenWeightSpace.shift_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L205-L205">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.shift_apply"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">shift_apply</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.shift">shift</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="LieModule.shiftedGenWeightSpace.shift_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L205-L205">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.shift_symm_apply"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">shift_symm_apply</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a✝</span> : <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.shift">shift</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span>.<a href="../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">a✝</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a✝</span></div></div></div></div><div class="decl" id="LieModule.shiftedGenWeightSpace.toEnd_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L207-L210">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.toEnd_eq"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">toEnd_eq</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">L</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/OfAssociative.html#LieModule.toEnd">toEnd</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace">shiftedGenWeightSpace</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span></span>)</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.shift">shift</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span>.<a href="../../../.././Mathlib/Algebra/Module/Equiv/Basic.html#LinearEquiv.conj">conj</a></span> (<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/OfAssociative.html#LieModule.toEnd">toEnd</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.genWeightSpace">genWeightSpace</a> <span class="fn">M</span> <span class="fn">χ</span>)</span></span>)</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">χ</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.id">LinearMap.id</a>)</span></div></div></div></div><div class="decl" id="LieModule.shiftedGenWeightSpace.instIsNilpotentSubtypeMemLieSubmoduleOfIsNoetherian"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L213-L216">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace.instIsNilpotentSubtypeMemLieSubmoduleOfIsNoetherian"><span class="name">LieModule</span>.<span class="name">shiftedGenWeightSpace</span>.<span class="name">instIsNilpotentSubtypeMemLieSubmoduleOfIsNoetherian</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><span class="fn">L</span> → <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/Noetherian/Defs.html#IsNoetherian">IsNoetherian</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieModule.IsNilpotent">IsNilpotent</a> <span class="fn">L</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.shiftedGenWeightSpace">shiftedGenWeightSpace</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span> <span class="fn">χ</span>)</span></span></span></div></div><p>By Engel's theorem, if <code>M</code> is Noetherian, the shifted action <code>⁅x, m⁆ - χ x • m</code> makes the
+<code>χ</code>-weight space into a nilpotent Lie module.</p></div></div><div class="decl" id="LieModule.exists_forall_lie_eq_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L221-L235">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.exists_forall_lie_eq_smul"><span class="name">LieModule</span>.<span class="name">exists_forall_lie_eq_smul</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/Noetherian/Defs.html#IsNoetherian">IsNoetherian</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">Weight</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">m</span> : <span class="fn">M</span>), <span class="fn">m</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">L</span>), <a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁅</a><span class="fn">x</span><a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">,</a> <span class="fn">m</span><a href="../../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁆</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">m</span></span></span></div></div><p>Given a Lie module <code>M</code> of a nilpotent Lie algebra <code>L</code> with coefficients in <code>R</code>,
+if a function <code>χ : L → R</code> has a simultaneous generalized eigenvector for the action of <code>L</code>
+then it has a simultaneous true eigenvector, provided <code>M</code> is Noetherian and has linear weights.</p></div></div><div class="decl" id="LieModule.exists_nontrivial_weightSpace_of_isNilpotent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/Linear.lean#L237-L248">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.exists_nontrivial_weightSpace_of_isNilpotent"><span class="name">LieModule</span>.<span class="name">exists_nontrivial_weightSpace_of_isNilpotent</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRingModule">LieRingModule</a> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Nilpotent.html#LieRing.IsNilpotent">LieRing.IsNilpotent</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">k</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">k</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieModule">LieModule</a> <span class="fn">k</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.LinearWeights">LinearWeights</a> <span class="fn">k</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">IsTriangularizable</a> <span class="fn">k</span> <span class="fn">L</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">χ</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Dual/Defs.html#Module.Dual">Module.Dual</a> <span class="fn">k</span> <span class="fn">L</span></span>), <span class="fn"><a href="../../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.weightSpace">weightSpace</a> <span class="fn">M</span> <span class="fn">⇑<span class="fn">χ</span></span>)</span></span></span></span></div></div><p>See <code><a href="../../../.././Mathlib/Algebra/Lie/LieTheorem.html#LieModule.exists_nontrivial_weightSpace_of_isSolvable">LieModule.exists_nontrivial_weightSpace_of_isSolvable</a></code> for the variant that
+only assumes that <code>L</code> is solvable but additionally requires <code>k</code> to be of characteristic zero.</p></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

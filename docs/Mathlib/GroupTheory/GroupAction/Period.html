@@ -1,0 +1,434 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.GroupTheory.GroupAction.Period</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.GroupTheory.GroupAction.Period";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">GroupTheory</span>.<span class="name">GroupAction</span>.<span class="name">Period</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/GroupTheory/Exponent.html">Mathlib.GroupTheory.Exponent</a></li><li><a href="../../.././Mathlib/Dynamics/PeriodicPts/Lemmas.html">Mathlib.Dynamics.PeriodicPts.Lemmas</a></li><li><a href="../../.././Mathlib/GroupTheory/GroupAction/Basic.html">Mathlib.GroupTheory.GroupAction.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.GroupTheory.GroupAction.Period" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MulAction.le_period"><span class="name">MulAction</span>.<span class="name">le_period</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.le_period"><span class="name">AddAction</span>.<span class="name">le_period</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_le_of_fixed"><span class="name">MulAction</span>.<span class="name">period_le_of_fixed</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_le_of_fixed"><span class="name">AddAction</span>.<span class="name">period_le_of_fixed</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_pos_of_fixed"><span class="name">MulAction</span>.<span class="name">period_pos_of_fixed</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_pos_of_fixed"><span class="name">AddAction</span>.<span class="name">period_pos_of_fixed</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_eq_one_iff"><span class="name">MulAction</span>.<span class="name">period_eq_one_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_eq_zero_iff"><span class="name">AddAction</span>.<span class="name">period_eq_zero_iff</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.pow_smul_ne_of_lt_period"><span class="name">MulAction</span>.<span class="name">pow_smul_ne_of_lt_period</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.nsmul_vadd_ne_of_lt_period"><span class="name">AddAction</span>.<span class="name">nsmul_vadd_ne_of_lt_period</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_one"><span class="name">MulAction</span>.<span class="name">period_one</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_zero"><span class="name">AddAction</span>.<span class="name">period_zero</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_inv"><span class="name">MulAction</span>.<span class="name">period_inv</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_neg"><span class="name">AddAction</span>.<span class="name">period_neg</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_dvd_orderOf"><span class="name">MulAction</span>.<span class="name">period_dvd_orderOf</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_dvd_addOrderOf"><span class="name">AddAction</span>.<span class="name">period_dvd_addOrderOf</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_pos_of_orderOf_pos"><span class="name">MulAction</span>.<span class="name">period_pos_of_orderOf_pos</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_pos_of_addOrderOf_pos"><span class="name">AddAction</span>.<span class="name">period_pos_of_addOrderOf_pos</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_le_orderOf"><span class="name">MulAction</span>.<span class="name">period_le_orderOf</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_le_addOrderOf"><span class="name">AddAction</span>.<span class="name">period_le_addOrderOf</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_dvd_exponent"><span class="name">MulAction</span>.<span class="name">period_dvd_exponent</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_dvd_exponent"><span class="name">AddAction</span>.<span class="name">period_dvd_exponent</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_pos_of_exponent_pos"><span class="name">MulAction</span>.<span class="name">period_pos_of_exponent_pos</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_pos_of_exponent_pos"><span class="name">AddAction</span>.<span class="name">period_pos_of_exponent_pos</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_le_exponent"><span class="name">MulAction</span>.<span class="name">period_le_exponent</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_le_exponent"><span class="name">AddAction</span>.<span class="name">period_le_exponent</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.period_bounded_of_exponent_pos"><span class="name">MulAction</span>.<span class="name">period_bounded_of_exponent_pos</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.period_bounded_of_exponent_pos"><span class="name">AddAction</span>.<span class="name">period_bounded_of_exponent_pos</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Period-of-a-group-action" class="markdown-heading">Period of a group action <a class="hover-link" href="#Period-of-a-group-action">#</a></h1><p>This module defines some helpful lemmas around [<code><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">MulAction.period</a></code>] and [<code><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">AddAction.period</a></code>].
+The period of a point <code>a</code> by a group element <code>g</code> is the smallest <code>m</code> such that <code>g ^ m • a = a</code>
+(resp. <code>(m • g) +ᵥ a = a</code>) for a given <code>g : G</code> and <code>a : α</code>.</p><p>If such an <code>m</code> does not exist,
+then by convention <code><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">MulAction.period</a></code> and <code><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">AddAction.period</a></code> return 0.</p></div><div class="decl" id="MulAction.le_period"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L32-L37">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.le_period"><span class="name">MulAction</span>.<span class="name">le_period</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">period_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">moved</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">k</span> → <span class="fn"><span class="fn">k</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn">m</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">a</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">n</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span></div></div><p>If the action is periodic, then a lower bound for its period can be computed.</p></div></div><div class="decl" id="AddAction.le_period"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L33-L33">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.le_period"><span class="name">AddAction</span>.<span class="name">le_period</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">period_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">moved</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">k</span> → <span class="fn"><span class="fn">k</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn">k</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">m</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">a</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">n</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span></div></div><p>If the action is periodic, then a lower bound for its period can be computed.</p></div></div><div class="decl" id="MulAction.period_le_of_fixed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L39-L43">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_le_of_fixed"><span class="name">MulAction</span>.<span class="name">period_le_of_fixed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">fixed</span> : <span class="fn">m</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">n</span></div></div><p>If for some <code>n</code>, <code>m ^ n • a = a</code>, then <code>period m a ≤ n</code>.</p></div></div><div class="decl" id="AddAction.period_le_of_fixed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L40-L40">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_le_of_fixed"><span class="name">AddAction</span>.<span class="name">period_le_of_fixed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">fixed</span> : <span class="fn">n</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">m</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">n</span></div></div><p>If for some <code>n</code>, <code>(n • m) +ᵥ a = a</code>, then <code>period m a ≤ n</code>.</p></div></div><div class="decl" id="MulAction.period_pos_of_fixed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L45-L49">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_pos_of_fixed"><span class="name">MulAction</span>.<span class="name">period_pos_of_fixed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">fixed</span> : <span class="fn">m</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span></div></div><p>If for some <code>n</code>, <code>m ^ n • a = a</code>, then <code>0 &lt; period m a</code>.</p></div></div><div class="decl" id="AddAction.period_pos_of_fixed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L46-L46">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_pos_of_fixed"><span class="name">AddAction</span>.<span class="name">period_pos_of_fixed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">fixed</span> : <span class="fn">n</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">m</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span></div></div><p>If for some <code>n</code>, <code>(n • m) +ᵥ a = a</code>, then <code>0 &lt; period m a</code>.</p></div></div><div class="decl" id="MulAction.period_eq_one_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L51-L56">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_eq_one_iff"><span class="name">MulAction</span>.<span class="name">period_eq_one_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">m</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="AddAction.period_eq_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L51-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_eq_zero_iff"><span class="name">AddAction</span>.<span class="name">period_eq_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">m</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="MulAction.pow_smul_ne_of_lt_period"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L58-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.pow_smul_ne_of_lt_period"><span class="name">MulAction</span>.<span class="name">pow_smul_ne_of_lt_period</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n_lt_period</span> : <span class="fn">n</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">m</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">a</span></div></div><p>For any non-zero <code>n</code> less than the period of <code>m</code> on <code>a</code>, <code>a</code> is moved by <code>m ^ n</code>.</p></div></div><div class="decl" id="AddAction.nsmul_vadd_ne_of_lt_period"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L59-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.nsmul_vadd_ne_of_lt_period"><span class="name">AddAction</span>.<span class="name">nsmul_vadd_ne_of_lt_period</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n_lt_period</span> : <span class="fn">n</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">n</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">m</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">a</span></div></div><p>For any non-zero <code>n</code> less than the period of <code>m</code> on <code>a</code>, <code>a</code> is moved by <code>n • m</code>.</p></div></div><div class="mod_doc"><h3 id="MulAction-period-for-common-group-elements" class="markdown-heading"><code><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">MulAction.period</a></code> for common group elements <a class="hover-link" href="#MulAction-period-for-common-group-elements">#</a></h3></div><div class="decl" id="MulAction.period_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L71-L72">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_one"><span class="name">MulAction</span>.<span class="name">period_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">1</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="AddAction.period_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L71-L71">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_zero"><span class="name">AddAction</span>.<span class="name">period_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">0</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="MulAction.period_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L74-L79">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_inv"><span class="name">MulAction</span>.<span class="name">period_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">g</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">g</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="AddAction.period_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L74-L74">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_neg"><span class="name">AddAction</span>.<span class="name">period_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> (<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">g</span>) <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">g</span> <span class="fn">a</span></span></div></div></div></div><div class="mod_doc"><h3 id="MulAction-period-and-group-exponents" class="markdown-heading"><code><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">MulAction.period</a></code> and group exponents <a class="hover-link" href="#MulAction-period-and-group-exponents">#</a></h3><p>The period of a given element <code>m : M</code> can be bounded by the <code><a href="../../.././Mathlib/GroupTheory/Exponent.html#Monoid.exponent">Monoid.exponent</a> M</code> or <code><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#orderOf">orderOf</a> m</code>.</p></div><div class="decl" id="MulAction.period_dvd_orderOf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L90-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_dvd_orderOf"><span class="name">MulAction</span>.<span class="name">period_dvd_orderOf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#orderOf">orderOf</a> <span class="fn">m</span></span></div></div></div></div><div class="decl" id="AddAction.period_dvd_addOrderOf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L90-L90">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_dvd_addOrderOf"><span class="name">AddAction</span>.<span class="name">period_dvd_addOrderOf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#addOrderOf">addOrderOf</a> <span class="fn">m</span></span></div></div></div></div><div class="decl" id="MulAction.period_pos_of_orderOf_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L94-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_pos_of_orderOf_pos"><span class="name">MulAction</span>.<span class="name">period_pos_of_orderOf_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">order_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#orderOf">orderOf</a> <span class="fn">m</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="AddAction.period_pos_of_addOrderOf_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L94-L94">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_pos_of_addOrderOf_pos"><span class="name">AddAction</span>.<span class="name">period_pos_of_addOrderOf_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">order_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#addOrderOf">addOrderOf</a> <span class="fn">m</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="MulAction.period_le_orderOf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L99-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_le_orderOf"><span class="name">MulAction</span>.<span class="name">period_le_orderOf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">order_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#orderOf">orderOf</a> <span class="fn">m</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#orderOf">orderOf</a> <span class="fn">m</span></span></div></div></div></div><div class="decl" id="AddAction.period_le_addOrderOf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L99-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_le_addOrderOf"><span class="name">AddAction</span>.<span class="name">period_le_addOrderOf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">order_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#addOrderOf">addOrderOf</a> <span class="fn">m</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#addOrderOf">addOrderOf</a> <span class="fn">m</span></span></div></div></div></div><div class="decl" id="MulAction.period_dvd_exponent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L104-L106">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_dvd_exponent"><span class="name">MulAction</span>.<span class="name">period_dvd_exponent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/Exponent.html#Monoid.exponent">Monoid.exponent</a> <span class="fn">M</span></span></div></div></div></div><div class="decl" id="AddAction.period_dvd_exponent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L104-L104">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_dvd_exponent"><span class="name">AddAction</span>.<span class="name">period_dvd_exponent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/Exponent.html#AddMonoid.exponent">AddMonoid.exponent</a> <span class="fn">M</span></span></div></div></div></div><div class="decl" id="MulAction.period_pos_of_exponent_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L108-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_pos_of_exponent_pos"><span class="name">MulAction</span>.<span class="name">period_pos_of_exponent_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">exp_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/Exponent.html#Monoid.exponent">Monoid.exponent</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="AddAction.period_pos_of_exponent_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L108-L108">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_pos_of_exponent_pos"><span class="name">AddAction</span>.<span class="name">period_pos_of_exponent_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">exp_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/Exponent.html#AddMonoid.exponent">AddMonoid.exponent</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="MulAction.period_le_exponent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L113-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_le_exponent"><span class="name">MulAction</span>.<span class="name">period_le_exponent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">exp_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/Exponent.html#Monoid.exponent">Monoid.exponent</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/Exponent.html#Monoid.exponent">Monoid.exponent</a> <span class="fn">M</span></span></div></div></div></div><div class="decl" id="AddAction.period_le_exponent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L113-L113">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_le_exponent"><span class="name">AddAction</span>.<span class="name">period_le_exponent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">exp_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/Exponent.html#AddMonoid.exponent">AddMonoid.exponent</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/Exponent.html#AddMonoid.exponent">AddMonoid.exponent</a> <span class="fn">M</span></span></div></div></div></div><div class="decl" id="MulAction.period_bounded_of_exponent_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L120-L124">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#MulAction.period_bounded_of_exponent_pos"><span class="name">MulAction</span>.<span class="name">period_bounded_of_exponent_pos</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">exp_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/Exponent.html#Monoid.exponent">Monoid.exponent</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">fun (<span class="fn">a</span> : <span class="fn">α</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#MulAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span></span>)</span></span></div></div></div></div><div class="decl" id="AddAction.period_bounded_of_exponent_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Period.lean#L120-L120">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Period.html#AddAction.period_bounded_of_exponent_pos"><span class="name">AddAction</span>.<span class="name">period_bounded_of_exponent_pos</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">exp_pos</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/Exponent.html#AddMonoid.exponent">AddMonoid.exponent</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">fun (<span class="fn">a</span> : <span class="fn">α</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Dynamics/PeriodicPts/Defs.html#AddAction.period">period</a> <span class="fn">m</span> <span class="fn">a</span></span></span>)</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

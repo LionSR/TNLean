@@ -1,0 +1,356 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.Polynomial.GaussNorm</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.Polynomial.GaussNorm";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">Polynomial</span>.<span class="name">GaussNorm</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/RingTheory/PowerSeries/GaussNorm.html">Mathlib.RingTheory.PowerSeries.GaussNorm</a></li><li><a href="../../.././Mathlib/Algebra/Order/Ring/IsNonarchimedean.html">Mathlib.Algebra.Order.Ring.IsNonarchimedean</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.Polynomial.GaussNorm" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm"><span class="name">Polynomial</span>.<span class="name">gaussNorm</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm_zero"><span class="name">Polynomial</span>.<span class="name">gaussNorm_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.exists_eq_gaussNorm"><span class="name">Polynomial</span>.<span class="name">exists_eq_gaussNorm</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm_C"><span class="name">Polynomial</span>.<span class="name">gaussNorm_C</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm_monomial"><span class="name">Polynomial</span>.<span class="name">gaussNorm_monomial</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm_coe_powerSeries"><span class="name">Polynomial</span>.<span class="name">gaussNorm_coe_powerSeries</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm_eq_zero_iff"><span class="name">Polynomial</span>.<span class="name">gaussNorm_eq_zero_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm_nonneg"><span class="name">Polynomial</span>.<span class="name">gaussNorm_nonneg</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.le_gaussNorm"><span class="name">Polynomial</span>.<span class="name">le_gaussNorm</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm_zero_right"><span class="name">Polynomial</span>.<span class="name">gaussNorm_zero_right</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.exists_min_eq_gaussNorm"><span class="name">Polynomial</span>.<span class="name">exists_min_eq_gaussNorm</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.isNonarchimedean_gaussNorm"><span class="name">Polynomial</span>.<span class="name">isNonarchimedean_gaussNorm</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm_mul_le"><span class="name">Polynomial</span>.<span class="name">gaussNorm_mul_le</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm_mul"><span class="name">Polynomial</span>.<span class="name">gaussNorm_mul</span></a></div><div class="nav_link"><a class="break_within" href="#Polynomial.gaussNorm_isAbsoluteValue"><span class="name">Polynomial</span>.<span class="name">gaussNorm_isAbsoluteValue</span></a></div><div class="nav_link"><a class="break_within" href="#PowerSeries.gaussNorm_C"><span class="name">PowerSeries</span>.<span class="name">gaussNorm_C</span></a></div><div class="nav_link"><a class="break_within" href="#PowerSeries.gaussNorm_monomial"><span class="name">PowerSeries</span>.<span class="name">gaussNorm_monomial</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Gauss-norm-for-polynomials" class="markdown-heading">Gauss norm for polynomials <a class="hover-link" href="#Gauss-norm-for-polynomials">#</a></h1><p>This file defines the Gauss norm for polynomials. Given a polynomial <code>p</code> in <code>R[X]</code>, a function
+<code>v : R → ℝ</code> and a real number <code>c</code>, the Gauss norm is defined as the supremum of the set of all
+values of <code>v (p.coeff i) * c ^ i</code> for all <code>i</code> in the support of <code>p</code>.</p><p>This is mostly useful when <code>v</code> is an absolute value on <code>R</code> and <code>c</code> is set to be <code>1</code>, in which case
+the Gauss norm corresponds to the maximum of the absolute values of the coefficients of <code>p</code>. When
+<code>R</code> is a subring of <code>ℂ</code> and <code>v</code> is the standard absolute value, this is sometimes called the
+&quot;height&quot; of <code>p</code>.</p><p>In the file <code><a href="../../.././Mathlib/RingTheory/PowerSeries/GaussNorm.html">Mathlib/RingTheory/PowerSeries/GaussNorm.lean</a></code>, the Gauss norm is defined for power
+series. This is a generalization of the Gauss norm defined in this file in case <code>v</code> is a
+nonnegative function with <code>v 0 = 0</code> and <code>c ≥ 0</code>.</p><h2 id="Main-Definitions-and-Results" class="markdown-heading">Main Definitions and Results <a class="hover-link" href="#Main-Definitions-and-Results">#</a></h2><ul><li><code><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">Polynomial.gaussNorm</a></code> is the supremum of the set of all values of <code>v (p.coeff i) * c ^ i</code>
+for all <code>i</code> in the support of <code>p</code>, where <code>p</code> is a polynomial in <code>R[X]</code>, <code>v : R → ℝ</code> is a function
+and <code>c</code> is a real number.</li><li><code><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_coe_powerSeries">Polynomial.gaussNorm_coe_powerSeries</a></code>: if <code>v</code> is a nonnegative function with <code>v 0 = 0</code> and <code>c</code>
+is nonnegative, the Gauss norm of a polynomial is equal to its Gauss norm as a power series.</li><li><code><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.exists_min_eq_gaussNorm">Polynomial.exists_min_eq_gaussNorm</a></code>: if <code>v</code> is a nonnegative function with <code>v 0 = 0</code> and <code>c</code>
+is nonnegative, there exists a minimal index <code>i</code> such that the Gauss norm of <code>p</code> at <code>c</code> is
+attained at <code>i</code>.</li><li><code><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.isNonarchimedean_gaussNorm">Polynomial.isNonarchimedean_gaussNorm</a></code>: if <code>v</code> is a nonnegative nonarchimedean function with
+<code>v 0 = 0</code> and <code>c</code> is nonnegative, the Gauss norm is nonarchimedean.</li><li><code><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_mul">Polynomial.gaussNorm_mul</a></code>: if <code>v</code> is a nonarchimedean absolute value, then the Gauss norm is
+multiplicative.</li><li><code><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_isAbsoluteValue">Polynomial.gaussNorm_isAbsoluteValue</a></code>: if <code>v</code> is a nonarchimedean absolute value, then the
+Gauss norm is an absolute value.</li></ul></div><div class="decl" id="Polynomial.gaussNorm"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L50-L54">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm"><span class="name">Polynomial</span>.<span class="name">gaussNorm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></div></div><p>Given a polynomial <code>p</code> in <code>R[X]</code>, a function <code>v : R → ℝ</code> and a real number <code>c</code>, the Gauss norm
+is defined as the supremum of the set of all values of <code>v (p.coeff i) * c ^ i</code> for all <code>i</code> in the
+support of <code>p</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">Polynomial.gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">if h : <span class="fn"><span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.support">support</a></span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span> then <span class="fn"><span class="fn"><span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.support">support</a></span>.<a href="../../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup'">sup'</a></span> <span class="fn">h</span> <span class="fn">fun (<span class="fn">i</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.coeff">coeff</a></span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">i</span></span></span> else <span class="fn">0</span></span></li></ul></details><details id="instances-for-list-Polynomial.gaussNorm" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Polynomial.gaussNorm_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L56-L57">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_zero"><span class="name">Polynomial</span>.<span class="name">gaussNorm_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="Polynomial.exists_eq_gaussNorm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L61-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.exists_eq_gaussNorm"><span class="name">Polynomial</span>.<span class="name">exists_eq_gaussNorm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">i</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.coeff">coeff</a></span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="Polynomial.gaussNorm_C"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L68-L70">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_C"><span class="name">Polynomial</span>.<span class="name">gaussNorm_C</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">C</a> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">v</span> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="Polynomial.gaussNorm_monomial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L72-L75">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_monomial"><span class="name">Polynomial</span>.<span class="name">gaussNorm_monomial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.monomial">monomial</a> <span class="fn">n</span>)</span> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">v</span> <span class="fn">r</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div></div></div><div class="decl" id="Polynomial.gaussNorm_coe_powerSeries"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L102-L120">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_coe_powerSeries"><span class="name">Polynomial</span>.<span class="name">gaussNorm_coe_powerSeries</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Hom/Basic.html#NonnegHomClass">NonnegHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/GaussNorm.html#PowerSeries.gaussNorm">PowerSeries.gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">↑<span class="fn">p</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">p</span></span></div></div><p>If <code>v</code> is a nonnegative function with <code>v 0 = 0</code> and <code>c</code> is nonnegative, the Gauss norm of a
+polynomial is equal to its Gauss norm as a power series.</p></div></div><div class="decl" id="Polynomial.gaussNorm_eq_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L122-L129">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_eq_zero_iff"><span class="name">Polynomial</span>.<span class="name">gaussNorm_eq_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Hom/Basic.html#NonnegHomClass">NonnegHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_eq_zero</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">R</span>), <span class="fn"><span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> → <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div><p>If <code>v x = 0 → x = 0</code> for all <code>x : R</code> and <code>v</code> is nonnegative, then the Gauss norm is zero if and
+only if the polynomial is zero.</p></div></div><div class="decl" id="Polynomial.gaussNorm_nonneg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L132-L135">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_nonneg"><span class="name">Polynomial</span>.<span class="name">gaussNorm_nonneg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Hom/Basic.html#NonnegHomClass">NonnegHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">p</span></span></div></div><p>If <code>v</code> is a nonnegative function, then the Gauss norm is nonnegative.</p></div></div><div class="decl" id="Polynomial.le_gaussNorm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L137-L140">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.le_gaussNorm"><span class="name">Polynomial</span>.<span class="name">le_gaussNorm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Hom/Basic.html#NonnegHomClass">NonnegHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.coeff">coeff</a></span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">i</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="Polynomial.gaussNorm_zero_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L142-L150">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_zero_right"><span class="name">Polynomial</span>.<span class="name">gaussNorm_zero_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Hom/Basic.html#NonnegHomClass">NonnegHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">0</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.coeff">coeff</a></span> <span class="fn">0</span>)</span></span></div></div></div></div><div class="decl" id="Polynomial.exists_min_eq_gaussNorm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L152-L163">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.exists_min_eq_gaussNorm"><span class="name">Polynomial</span>.<span class="name">exists_min_eq_gaussNorm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Hom/Basic.html#NonnegHomClass">NonnegHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">i</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.coeff">coeff</a></span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">i</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ <span class="fn">j</span> &lt; <span class="fn">i</span>, <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.coeff">coeff</a></span> <span class="fn">j</span>)</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">j</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">p</span></span></span></span></div></div><p>If <code>v</code> is a nonnegative function with <code>v 0 = 0</code> and <code>c</code> is nonnegative, there exists a minimal
+index <code>i</code> such that the Gauss norm of <code>p</code> at <code>c</code> is attained at <code>i</code>.</p></div></div><div class="decl" id="Polynomial.isNonarchimedean_gaussNorm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L165-L189">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.isNonarchimedean_gaussNorm"><span class="name">Polynomial</span>.<span class="name">isNonarchimedean_gaussNorm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Hom/Basic.html#NonnegHomClass">NonnegHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hna</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Basic.html#IsNonarchimedean">IsNonarchimedean</a> <span class="fn">⇑<span class="fn">v</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Basic.html#IsNonarchimedean">IsNonarchimedean</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span>)</span></span></div></div><p>If <code>v</code> is a nonnegative nonarchimedean function with <code>v 0 = 0</code> and <code>c</code> is nonnegative, the
+Gauss norm is nonarchimedean.</p></div></div><div class="decl" id="Polynomial.gaussNorm_mul_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L192-L216">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_mul_le"><span class="name">Polynomial</span>.<span class="name">gaussNorm_mul_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Hom/Basic.html#NonnegHomClass">NonnegHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MulHomClass">MulHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hna</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Basic.html#IsNonarchimedean">IsNonarchimedean</a> <span class="fn">⇑<span class="fn">v</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">q</span>)</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">q</span></span></div></div><p>If <code>v</code> is a nonnegative nonarchimedean multiplicative function with <code>v 0 = 0</code> and <code>c</code> is
+nonnegative, then the Gauss norm is submultiplicative.</p></div></div><div class="decl" id="Polynomial.gaussNorm_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L272-L276">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_mul"><span class="name">Polynomial</span>.<span class="name">gaussNorm_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hna</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Basic.html#IsNonarchimedean">IsNonarchimedean</a> <span class="fn">⇑<span class="fn">v</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">q</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">q</span></span></div></div><p>If <code>v</code> is a nonarchimedean absolute value, then the Gauss norm is multiplicative.</p></div></div><div class="decl" id="Polynomial.gaussNorm_isAbsoluteValue"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L279-L286">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm_isAbsoluteValue"><span class="name">Polynomial</span>.<span class="name">gaussNorm_isAbsoluteValue</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hna</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Basic.html#IsNonarchimedean">IsNonarchimedean</a> <span class="fn">⇑<span class="fn">v</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#IsAbsoluteValue">IsAbsoluteValue</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#Polynomial.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span>)</span></span></div></div><p>If <code>v</code> is a nonarchimedean absolute value, then the Gauss norm is an absolute value.</p></div></div><div class="decl" id="PowerSeries.gaussNorm_C"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L296-L299">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#PowerSeries.gaussNorm_C"><span class="name">PowerSeries</span>.<span class="name">gaussNorm_C</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Hom/Basic.html#NonnegHomClass">NonnegHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/GaussNorm.html#PowerSeries.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries.C">C</a> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">v</span> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="PowerSeries.gaussNorm_monomial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Polynomial/GaussNorm.lean#L301-L304">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Polynomial/GaussNorm.html#PowerSeries.gaussNorm_monomial"><span class="name">PowerSeries</span>.<span class="name">gaussNorm_monomial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Hom/Basic.html#NonnegHomClass">NonnegHomClass</a> <span class="fn">F</span> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/GaussNorm.html#PowerSeries.gaussNorm">gaussNorm</a> <span class="fn">v</span> <span class="fn">c</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries.monomial">monomial</a> <span class="fn">n</span>)</span> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">v</span> <span class="fn">r</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

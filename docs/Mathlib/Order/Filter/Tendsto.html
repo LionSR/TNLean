@@ -1,0 +1,925 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Order.Filter.Tendsto</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Order.Filter.Tendsto";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Order</span>.<span class="name">Filter</span>.<span class="name">Tendsto</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Order/Filter/Basic.html">Mathlib.Order.Filter.Basic</a></li><li><a href="../../.././Mathlib/Order/Filter/Map.html">Mathlib.Order.Filter.Map</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Order.Filter.Tendsto" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_def"><span class="name">Filter</span>.<span class="name">tendsto_def</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_iff_eventually"><span class="name">Filter</span>.<span class="name">tendsto_iff_eventually</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_iff_forall_eventually_mem"><span class="name">Filter</span>.<span class="name">tendsto_iff_forall_eventually_mem</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.eventually_mem"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">eventually_mem</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.eventually"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">eventually</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.not_tendsto_iff_exists_frequently_notMem"><span class="name">Filter</span>.<span class="name">not_tendsto_iff_exists_frequently_notMem</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.frequently"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">frequently</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.frequently_map"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">frequently_map</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_bot"><span class="name">Filter</span>.<span class="name">tendsto_bot</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.of_neBot_imp"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">of_neBot_imp</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_top"><span class="name">Filter</span>.<span class="name">tendsto_top</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.le_map_of_right_inverse"><span class="name">Filter</span>.<span class="name">le_map_of_right_inverse</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_of_isEmpty"><span class="name">Filter</span>.<span class="name">tendsto_of_isEmpty</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.eventuallyEq_of_left_inv_of_right_inv"><span class="name">Filter</span>.<span class="name">eventuallyEq_of_left_inv_of_right_inv</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_iff_comap"><span class="name">Filter</span>.<span class="name">tendsto_iff_comap</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.le_comap"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">le_comap</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.disjoint"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">disjoint</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_congr'"><span class="name">Filter</span>.<span class="name">tendsto_congr'</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.congr'"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">congr'</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_congr"><span class="name">Filter</span>.<span class="name">tendsto_congr</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.congr"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">congr</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_id'"><span class="name">Filter</span>.<span class="name">tendsto_id'</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_id"><span class="name">Filter</span>.<span class="name">tendsto_id</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.comp"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.iterate"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">iterate</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.mono_left"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">mono_left</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.mono_right"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">mono_right</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.neBot"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">neBot</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_map"><span class="name">Filter</span>.<span class="name">tendsto_map</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_map'_iff"><span class="name">Filter</span>.<span class="name">tendsto_map'_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_map'"><span class="name">Filter</span>.<span class="name">tendsto_map'</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_comap"><span class="name">Filter</span>.<span class="name">tendsto_comap</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_comap_iff"><span class="name">Filter</span>.<span class="name">tendsto_comap_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_comap'_iff"><span class="name">Filter</span>.<span class="name">tendsto_comap'_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.of_tendsto_comp"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">of_tendsto_comp</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.comap_eq_of_inverse"><span class="name">Filter</span>.<span class="name">comap_eq_of_inverse</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.map_eq_of_inverse"><span class="name">Filter</span>.<span class="name">map_eq_of_inverse</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_inf"><span class="name">Filter</span>.<span class="name">tendsto_inf</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_inf_left"><span class="name">Filter</span>.<span class="name">tendsto_inf_left</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_inf_right"><span class="name">Filter</span>.<span class="name">tendsto_inf_right</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.inf"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">inf</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_iInf"><span class="name">Filter</span>.<span class="name">tendsto_iInf</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_iInf'"><span class="name">Filter</span>.<span class="name">tendsto_iInf'</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_iInf_iInf"><span class="name">Filter</span>.<span class="name">tendsto_iInf_iInf</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_sup"><span class="name">Filter</span>.<span class="name">tendsto_sup</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.sup"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">sup</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.sup_sup"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">sup_sup</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_iSup"><span class="name">Filter</span>.<span class="name">tendsto_iSup</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_iSup_iSup"><span class="name">Filter</span>.<span class="name">tendsto_iSup_iSup</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_principal"><span class="name">Filter</span>.<span class="name">tendsto_principal</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_principal_principal"><span class="name">Filter</span>.<span class="name">tendsto_principal_principal</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_pure"><span class="name">Filter</span>.<span class="name">tendsto_pure</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_pure_pure"><span class="name">Filter</span>.<span class="name">tendsto_pure_pure</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_const_pure"><span class="name">Filter</span>.<span class="name">tendsto_const_pure</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.pure_le_iff"><span class="name">Filter</span>.<span class="name">pure_le_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.tendsto_pure_left"><span class="name">Filter</span>.<span class="name">tendsto_pure_left</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.map_inf_principal_preimage"><span class="name">Filter</span>.<span class="name">map_inf_principal_preimage</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.not_tendsto"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">not_tendsto</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.if"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">if</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.if'"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">if'</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.piecewise"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">piecewise</span></a></div><div class="nav_link"><a class="break_within" href="#Set.MapsTo.tendsto"><span class="name">Set</span>.<span class="name">MapsTo</span>.<span class="name">tendsto</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.EventuallyEq.comp_tendsto"><span class="name">Filter</span>.<span class="name">EventuallyEq</span>.<span class="name">comp_tendsto</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.map_mapsTo_Iic_iff_tendsto"><span class="name">Filter</span>.<span class="name">map_mapsTo_Iic_iff_tendsto</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.Tendsto.map_mapsTo_Iic"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">map_mapsTo_Iic</span></a></div><div class="nav_link"><a class="break_within" href="#Filter.map_mapsTo_Iic_iff_mapsTo"><span class="name">Filter</span>.<span class="name">map_mapsTo_Iic_iff_mapsTo</span></a></div><div class="nav_link"><a class="break_within" href="#Set.MapsTo.filter_map_Iic"><span class="name">Set</span>.<span class="name">MapsTo</span>.<span class="name">filter_map_Iic</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Convergence-in-terms-of-filters" class="markdown-heading">Convergence in terms of filters <a class="hover-link" href="#Convergence-in-terms-of-filters">#</a></h1><p>The general notion of limit of a map with respect to filters on the source and target types
+is <code><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a></code>. It is defined in terms of the order and the push-forward operation.</p><p>For instance, anticipating on Topology.Basic, the statement: &quot;if a sequence <code>u</code> converges to
+some <code>x</code> and <code>u n</code> belongs to a set <code>M</code> for <code>n</code> large enough then <code>x</code> is in the closure of
+<code>M</code>&quot; is formalized as: <code>Tendsto u atTop (𝓝 x) → (∀ᶠ n in atTop, u n ∈ M) → x ∈ <a href="../../.././Mathlib/Topology/Defs/Basic.html#closure">closure</a> M</code>,
+which is a special case of <code><a href="../../.././Mathlib/Topology/Neighborhoods.html#mem_closure_of_tendsto">mem_closure_of_tendsto</a></code> from <code>Topology/Basic</code>.</p></div><div class="decl" id="Filter.tendsto_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L31-L33">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_def"><span class="name">Filter</span>.<span class="name">tendsto_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">l₂</span>, <span class="fn">f</span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">l₁</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_iff_eventually"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L35-L37">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_iff_eventually"><span class="name">Filter</span>.<span class="name">tendsto_iff_eventually</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ ⦃<span class="fn">p</span> : <span class="fn"><span class="fn">β</span> → <a href="../../.././foundational_types.html">Prop</a></span>⦄, <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">y</span> : <span class="fn">β</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">l₂</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">p</span> <span class="fn">y</span></span>)</span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">l₁</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">p</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span></span></span></div></div></div></div><div class="decl" id="Filter.tendsto_iff_forall_eventually_mem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L39-L41">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_iff_forall_eventually_mem"><span class="name">Filter</span>.<span class="name">tendsto_iff_forall_eventually_mem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">l₂</span>, <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">l₁</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.eventually_mem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L43-L45">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.eventually_mem"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">eventually_mem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">l₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">l₁</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.eventually"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L47-L49">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.eventually"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">eventually</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">β</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">y</span> : <span class="fn">β</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">l₂</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">p</span> <span class="fn">y</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">l₁</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">p</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span></div></div></div></div><div class="decl" id="Filter.not_tendsto_iff_exists_frequently_notMem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L51-L53">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.not_tendsto_iff_exists_frequently_notMem"><span class="name">Filter</span>.<span class="name">not_tendsto_iff_exists_frequently_notMem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ <span class="fn">s</span> ∈ <span class="fn">l₂</span>, <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">l₁</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> ∉ <span class="fn">s</span></span></span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.frequently"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L55-L57">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.frequently"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">frequently</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">β</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">l₁</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><span class="fn">p</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">y</span> : <span class="fn">β</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">l₂</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><span class="fn">p</span> <span class="fn">y</span></span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.frequently_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L59-L62">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.frequently_map"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">frequently_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">q</span> : <span class="fn"><span class="fn">β</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><span class="fn"><span class="fn">p</span> <span class="fn">x</span></span> → <span class="fn"><span class="fn">q</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">l₁</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><span class="fn">p</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">y</span> : <span class="fn">β</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">l₂</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><span class="fn">q</span> <span class="fn">y</span></span></span></div></div></div></div><div class="decl" id="Filter.tendsto_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L64-L65">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_bot"><span class="name">Filter</span>.<span class="name">tendsto_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> <span class="fn">l</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.of_neBot_imp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L67-L71">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.of_neBot_imp"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">of_neBot_imp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">la</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">lb</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">la</span>.<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.NeBot">NeBot</a></span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">la</span> <span class="fn">lb</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">la</span> <span class="fn">lb</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_top"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L73-L73">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_top"><span class="name">Filter</span>.<span class="name">tendsto_top</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l</span> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></span></div></div></div></div><div class="decl" id="Filter.le_map_of_right_inverse"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L75-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.le_map_of_right_inverse"><span class="name">Filter</span>.<span class="name">le_map_of_right_inverse</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mab</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mba</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">mab</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">mba</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn">g</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <a href="../../.././Init/Prelude.html#id">id</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">mba</span> <span class="fn">g</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">g</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">map</a> <span class="fn">mab</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_of_isEmpty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L80-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_of_isEmpty"><span class="name">Filter</span>.<span class="name">tendsto_of_isEmpty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">la</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">lb</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">la</span> <span class="fn">lb</span></span></div></div></div></div><div class="decl" id="Filter.eventuallyEq_of_left_inv_of_right_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L83-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.eventuallyEq_of_left_inv_of_right_inv"><span class="name">Filter</span>.<span class="name">eventuallyEq_of_left_inv_of_right_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁ </span><span class="fn">g₂</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fa</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fb</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hleft</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">fa</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">g₁</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hright</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">y</span> : <span class="fn">β</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">fb</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g₂</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htendsto</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">g₂</span> <span class="fn">fb</span> <span class="fn">fa</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">g₁</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn">fb</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">g₂</span></div></div></div></div><div class="decl" id="Filter.tendsto_iff_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L88-L90">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_iff_comap"><span class="name">Filter</span>.<span class="name">tendsto_iff_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">l₁</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.comap">comap</a> <span class="fn">f</span> <span class="fn">l₂</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.le_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L92-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.le_comap"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">le_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span> → <span class="fn">l₁</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.comap">comap</a> <span class="fn">f</span> <span class="fn">l₂</span></span></span></div></div><p><strong>Alias</strong> of the forward direction of <code><a href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_iff_comap">Filter.tendsto_iff_comap</a></code>.</p></div></div><div class="decl" id="Filter.Tendsto.disjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L94-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.disjoint"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">disjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">la₁ </span><span class="fn">la₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">lb₁ </span><span class="fn">lb₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">la₁</span> <span class="fn">lb₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn"><a href="../../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">lb₁</span> <span class="fn">lb₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">la₂</span> <span class="fn">lb₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">la₁</span> <span class="fn">la₂</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_congr'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L98-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_congr'"><span class="name">Filter</span>.<span class="name">tendsto_congr'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hl</span> : <span class="fn">f₁</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn">l₁</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">f₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f₁</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f₂</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.congr'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L101-L103">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.congr'"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">congr'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hl</span> : <span class="fn">f₁</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn">l₁</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">f₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f₁</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f₂</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_congr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L105-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_congr"><span class="name">Filter</span>.<span class="name">tendsto_congr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f₁</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f₂</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f₁</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f₂</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.congr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L109-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.congr"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">congr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f₁</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f₂</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f₁</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f₂</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span></span></div></div></div></div><div class="decl" id="Filter.tendsto_id'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L113-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_id'"><span class="name">Filter</span>.<span class="name">tendsto_id'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <a href="../../.././Init/Prelude.html#id">id</a> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span></div></div></div></div><div class="decl" id="Filter.tendsto_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L116-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_id"><span class="name">Filter</span>.<span class="name">tendsto_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <a href="../../.././Init/Prelude.html#id">id</a> <span class="fn">x</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L119-L120">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.comp"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">z</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">g</span> <span class="fn">y</span> <span class="fn">z</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>) <span class="fn">x</span> <span class="fn">z</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.iterate"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L122-L125">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.iterate"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">iterate</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l</span> <span class="fn">l</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">l</span> <span class="fn">l</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.mono_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L127-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.mono_left"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">mono_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">z</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">y</span> <span class="fn">z</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.mono_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L131-L133">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.mono_right"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">mono_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y </span><span class="fn">z</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.neBot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L135-L137">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.neBot"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">neBot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">y</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hx</span> : <span class="fn"><span class="fn">x</span>.<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.NeBot">NeBot</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">y</span>.<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.NeBot">NeBot</a></span></div></div></div></div><div class="decl" id="Filter.tendsto_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L139-L140">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_map"><span class="name">Filter</span>.<span class="name">tendsto_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">map</a> <span class="fn">f</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_map'_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L142-L145">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_map'_iff"><span class="name">Filter</span>.<span class="name">tendsto_map'_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">map</a> <span class="fn">g</span> <span class="fn">x</span>)</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>) <span class="fn">x</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_map'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L147-L147">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_map'"><span class="name">Filter</span>.<span class="name">tendsto_map'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>) <span class="fn">x</span> <span class="fn">y</span></span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">map</a> <span class="fn">g</span> <span class="fn">x</span>)</span> <span class="fn">y</span></span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_map'_iff">Filter.tendsto_map'_iff</a></code>.</p></div></div><div class="decl" id="Filter.tendsto_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L149-L150">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_comap"><span class="name">Filter</span>.<span class="name">tendsto_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.comap">comap</a> <span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_comap_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L152-L155">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_comap_iff"><span class="name">Filter</span>.<span class="name">tendsto_comap_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.comap">comap</a> <span class="fn">g</span> <span class="fn">c</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>) <span class="fn">a</span> <span class="fn">c</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_comap'_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L157-L160">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_comap'_iff"><span class="name">Filter</span>.<span class="name">tendsto_comap'_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">f</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> (<span class="fn">m</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">i</span>) <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.comap">comap</a> <span class="fn">i</span> <span class="fn">f</span>)</span> <span class="fn">g</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">m</span> <span class="fn">f</span> <span class="fn">g</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.of_tendsto_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L162-L167">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.of_tendsto_comp"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">of_tendsto_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hfg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>) <span class="fn">a</span> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.comap">comap</a> <span class="fn">g</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="Filter.comap_eq_of_inverse"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L169-L172">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.comap_eq_of_inverse"><span class="name">Filter</span>.<span class="name">comap_eq_of_inverse</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq</span> : <span class="fn">ψ</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">φ</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#id">id</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">φ</span> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">ψ</span> <span class="fn">g</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.comap">comap</a> <span class="fn">φ</span> <span class="fn">g</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="Filter.map_eq_of_inverse"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L174-L177">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.map_eq_of_inverse"><span class="name">Filter</span>.<span class="name">map_eq_of_inverse</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq</span> : <span class="fn">φ</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">ψ</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#id">id</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">φ</span> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">ψ</span> <span class="fn">g</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">map</a> <span class="fn">φ</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="Filter.tendsto_inf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L179-L181">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_inf"><span class="name">Filter</span>.<span class="name">tendsto_inf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y₁ </span><span class="fn">y₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">(<span class="fn">y₁</span> ⊓ <span class="fn">y₂</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">y₁</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">y₂</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_inf_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L183-L185">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_inf_left"><span class="name">Filter</span>.<span class="name">tendsto_inf_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x₁</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">x₁</span> ⊓ <span class="fn">x₂</span>)</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_inf_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L187-L189">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_inf_right"><span class="name">Filter</span>.<span class="name">tendsto_inf_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x₂</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">x₁</span> ⊓ <span class="fn">x₂</span>)</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.inf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L191-L193">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.inf"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">inf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y₁ </span><span class="fn">y₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x₁</span> <span class="fn">y₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x₂</span> <span class="fn">y₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">x₁</span> ⊓ <span class="fn">x₂</span>)</span> <span class="fn">(<span class="fn">y₁</span> ⊓ <span class="fn">y₂</span>)</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_iInf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L195-L198">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_iInf"><span class="name">Filter</span>.<span class="name">tendsto_iInf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">(⨅ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">y</span> <span class="fn">i</span></span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">(<span class="fn">y</span> <span class="fn">i</span>)</span></span></span></div></div></div></div><div class="decl" id="Filter.tendsto_iInf'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L200-L202">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_iInf'"><span class="name">Filter</span>.<span class="name">tendsto_iInf'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(⨅ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">x</span> <span class="fn">i</span></span>)</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_iInf_iInf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L204-L206">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_iInf_iInf"><span class="name">Filter</span>.<span class="name">tendsto_iInf_iInf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">y</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/SetNotation.html#iInf">iInf</a> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/SetNotation.html#iInf">iInf</a> <span class="fn">y</span>)</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_sup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L208-L211">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_sup"><span class="name">Filter</span>.<span class="name">tendsto_sup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">x₁</span> ⊔ <span class="fn">x₂</span>)</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x₁</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x₂</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.sup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L213-L214">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.sup"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">sup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x₁</span> <span class="fn">y</span></span> → <span class="fn"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x₂</span> <span class="fn">y</span></span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">x₁</span> ⊔ <span class="fn">x₂</span>)</span> <span class="fn">y</span></span></span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.sup_sup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L216-L218">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.sup_sup"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">sup_sup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y₁ </span><span class="fn">y₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x₁</span> <span class="fn">y₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">x₂</span> <span class="fn">y₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">x₁</span> ⊔ <span class="fn">x₂</span>)</span> <span class="fn">(<span class="fn">y₁</span> ⊔ <span class="fn">y₂</span>)</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_iSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L220-L222">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_iSup"><span class="name">Filter</span>.<span class="name">tendsto_iSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(⨆ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">x</span> <span class="fn">i</span></span>)</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span> <span class="fn">y</span></span></span></div></div></div></div><div class="decl" id="Filter.tendsto_iSup_iSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L224-L226">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_iSup_iSup"><span class="name">Filter</span>.<span class="name">tendsto_iSup_iSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">y</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/SetNotation.html#iSup">iSup</a> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/SetNotation.html#iSup">iSup</a> <span class="fn">y</span>)</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_principal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L228-L230">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_principal"><span class="name">Filter</span>.<span class="name">tendsto_principal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l</span> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> <span class="fn">s</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">a</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">l</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_principal_principal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L232-L234">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_principal_principal"><span class="name">Filter</span>.<span class="name">tendsto_principal_principal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> <span class="fn">s</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> <span class="fn">t</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_pure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L236-L238">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_pure"><span class="name">Filter</span>.<span class="name">tendsto_pure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">β</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Pure.pure">pure</a> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">a</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_pure_pure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L240-L241">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_pure_pure"><span class="name">Filter</span>.<span class="name">tendsto_pure_pure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Pure.pure">pure</a> <span class="fn">a</span>)</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Pure.pure">pure</a> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span>)</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_const_pure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L243-L244">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_const_pure"><span class="name">Filter</span>.<span class="name">tendsto_const_pure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">β</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">b</span>)</span> <span class="fn">a</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Pure.pure">pure</a> <span class="fn">b</span>)</span></span></div></div></div></div><div class="decl" id="Filter.pure_le_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L246-L247">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.pure_le_iff"><span class="name">Filter</span>.<span class="name">pure_le_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Pure.pure">pure</a> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">l</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">l</span>, <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="Filter.tendsto_pure_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L249-L251">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.tendsto_pure_left"><span class="name">Filter</span>.<span class="name">tendsto_pure_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Pure.pure">pure</a> <span class="fn">a</span>)</span> <span class="fn">l</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">l</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="Filter.map_inf_principal_preimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L253-L256">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.map_inf_principal_preimage"><span class="name">Filter</span>.<span class="name">map_inf_principal_preimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">map</a> <span class="fn">f</span> <span class="fn">(<span class="fn">l</span> ⊓ <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> (<span class="fn">f</span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">s</span>)</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">map</a> <span class="fn">f</span> <span class="fn">l</span></span> ⊓ <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> <span class="fn">s</span></span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.not_tendsto"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L258-L262">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.not_tendsto"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">not_tendsto</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b₁ </span><span class="fn">b₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b₁</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">a</span>.<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.NeBot">NeBot</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><a href="../../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">b₁</span> <span class="fn">b₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b₂</span></span></div></div><p>If two filters are disjoint, then a function cannot tend to both of them along a non-trivial
+filter.</p></div></div><div class="decl" id="Filter.Tendsto.if"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L264-L273">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.if"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">if</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>) → <span class="fn"><a href="../../.././Init/Prelude.html#Decidable">Decidable</a> <span class="fn">(<span class="fn">p</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">l₁</span> ⊓ <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">α</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">p</span> <span class="fn">x</span></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span>)</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">g</span> <span class="fn">(<span class="fn">l₁</span> ⊓ <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">α</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn">p</span> <span class="fn">x</span></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span>)</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <a href="../../.././Init/Prelude.html#ite">if</a> <span class="fn"><span class="fn">p</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#ite">then</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#ite">else</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span>)</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.if'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L275-L278">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.if'"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">if'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidablePred">DecidablePred</a> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">g</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">(fun (<span class="fn">a</span> : <span class="fn">α</span>) =&gt; <a href="../../.././Init/Prelude.html#ite">if</a> <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#ite">then</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#ite">else</a> <span class="fn"><span class="fn">g</span> <span class="fn">a</span></span>)</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.piecewise"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L280-L283">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.piecewise"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">piecewise</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l₂</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>) → <span class="fn"><a href="../../.././Init/Prelude.html#Decidable">Decidable</a> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">f</span> <span class="fn">(<span class="fn">l₁</span> ⊓ <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> <span class="fn">s</span></span>)</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">g</span> <span class="fn">(<span class="fn">l₁</span> ⊓ <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> <span class="fn">s</span><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a></span>)</span> <span class="fn">l₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Logic/Function/Basic.html#Set.piecewise">piecewise</a></span> <span class="fn">f</span> <span class="fn">g</span>)</span> <span class="fn">l₁</span> <span class="fn">l₂</span></span></div></div></div></div><div class="decl" id="Set.MapsTo.tendsto"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L287-L289">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Set.MapsTo.tendsto"><span class="name">Set</span>.<span class="name">MapsTo</span>.<span class="name">tendsto</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">MapsTo</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">Filter.principal</a> <span class="fn">s</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">Filter.principal</a> <span class="fn">t</span>)</span></span></div></div></div></div><div class="decl" id="Filter.EventuallyEq.comp_tendsto"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L291-L294">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.EventuallyEq.comp_tendsto"><span class="name">Filter</span>.<span class="name">EventuallyEq</span>.<span class="name">comp_tendsto</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn">l</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">f'</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">lc</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">g</span> <span class="fn">lc</span> <span class="fn">l</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn">lc</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">f'</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="Filter.map_mapsTo_Iic_iff_tendsto"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L298-L300">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.map_mapsTo_Iic_iff_tendsto"><span class="name">Filter</span>.<span class="name">map_mapsTo_Iic_iff_tendsto</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">map</a> <span class="fn">m</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">F</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">G</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">m</span> <span class="fn">F</span> <span class="fn">G</span></span></div></div></div></div><div class="decl" id="Filter.Tendsto.map_mapsTo_Iic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L302-L302">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.Tendsto.map_mapsTo_Iic"><span class="name">Filter</span>.<span class="name">Tendsto</span>.<span class="name">map_mapsTo_Iic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Tendsto</a> <span class="fn">m</span> <span class="fn">F</span> <span class="fn">G</span></span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">map</a> <span class="fn">m</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">F</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">G</span>)</span></span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.map_mapsTo_Iic_iff_tendsto">Filter.map_mapsTo_Iic_iff_tendsto</a></code>.</p></div></div><div class="decl" id="Filter.map_mapsTo_Iic_iff_mapsTo"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L304-L306">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.map_mapsTo_Iic_iff_mapsTo"><span class="name">Filter</span>.<span class="name">map_mapsTo_Iic_iff_mapsTo</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">map</a> <span class="fn">m</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> <span class="fn">s</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">principal</a> <span class="fn">t</span>)</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">m</span> <span class="fn">s</span> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="Set.MapsTo.filter_map_Iic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Filter/Tendsto.lean#L308-L308">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Order/Filter/Tendsto.html#Set.MapsTo.filter_map_Iic"><span class="name">Set</span>.<span class="name">MapsTo</span>.<span class="name">filter_map_Iic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">MapsTo</a> <span class="fn">m</span> <span class="fn">s</span> <span class="fn">t</span></span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">MapsTo</a> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.map">Filter.map</a> <span class="fn">m</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Iic</a> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">Filter.principal</a> <span class="fn">s</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Iic</a> <span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">Filter.principal</a> <span class="fn">t</span>)</span>)</span></span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../../.././Mathlib/Order/Filter/Tendsto.html#Filter.map_mapsTo_Iic_iff_mapsTo">Filter.map_mapsTo_Iic_iff_mapsTo</a></code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

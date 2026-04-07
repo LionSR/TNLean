@@ -1,0 +1,996 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.Comma.StructuredArrow.CommaMap</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.Comma.StructuredArrow.CommaMap";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">Comma</span>.<span class="name">StructuredArrow</span>.<span class="name">CommaMap</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html">Mathlib.CategoryTheory.Comma.StructuredArrow.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.Comma.StructuredArrow.CommaMap" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_map_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor_map_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_map_left"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor_map_left</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_obj_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor_obj_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_obj_hom"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor_obj_hom</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_obj_left"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor_obj_left</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceInverse"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceInverse</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceInverse_obj"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceInverse_obj</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceInverse_map"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceInverse_map</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceUnitIso</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_inv_app_right_left"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceUnitIso_inv_app_right_left</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_inv_app_right_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceUnitIso_inv_app_right_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_hom_app_right_left"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceUnitIso_hom_app_right_left</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_hom_app_right_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceUnitIso_hom_app_right_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceCounitIso</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_inv_app_left_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceCounitIso_inv_app_left_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_inv_app_right_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceCounitIso_inv_app_right_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_hom_app_left_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceCounitIso_hom_app_left_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_hom_app_right_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceCounitIso_hom_app_right_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.StructuredArrow.commaMapEquivalence"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalence</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Structured-arrow-categories-on-Comma-map" class="markdown-heading">Structured arrow categories on <code>Comma.map</code> <a class="hover-link" href="#Structured-arrow-categories-on-Comma-map">#</a></h1><p>We characterize structured arrow categories on arbitrary instances of <code>Comma.map</code> as a
+comma category itself.</p></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L34-L50">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">(<span class="fn"><span class="fn">L'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>)</span>)</span> <span class="fn">α</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.inv">inv</a> <span class="fn">β</span>)</span>)</span>)</span></span></div></div><p>The functor establishing the equivalence <code><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalence">StructuredArrow.commaMapEquivalence</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_map_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L35-L35">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_map_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor_map_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y </span><span class="fn">Z</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">Y</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor">commaMapEquivalenceFunctor</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">f</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.homMk">homMk</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_map_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L35-L35">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_map_left"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor_map_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y </span><span class="fn">Z</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">Y</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor">commaMapEquivalenceFunctor</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">f</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.left">left</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.homMk">homMk</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.left">left</a></span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_obj_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L35-L35">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_obj_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor_obj_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Y</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor">commaMapEquivalenceFunctor</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.mk">mk</a> <span class="fn"><span class="fn"><span class="fn">Y</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_obj_hom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L35-L35">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_obj_hom"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor_obj_hom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Y</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor">commaMapEquivalenceFunctor</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.homMk">homMk</a> <span class="fn"><span class="fn"><span class="fn">Y</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_obj_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L35-L35">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor_obj_left"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceFunctor_obj_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Y</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor">commaMapEquivalenceFunctor</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.mk">mk</a> <span class="fn"><span class="fn"><span class="fn">Y</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.left">left</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceInverse"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L53-L68">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceInverse"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceInverse</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">(<span class="fn"><span class="fn">L'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>)</span>)</span> <span class="fn">α</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.inv">inv</a> <span class="fn">β</span>)</span>)</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span>)</span></span></div></div><p>The inverse functor establishing the equivalence <code><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalence">StructuredArrow.commaMapEquivalence</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.StructuredArrow.commaMapEquivalenceInverse" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceInverse_obj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L54-L54">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceInverse_obj"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceInverse_obj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Y</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">(<span class="fn"><span class="fn">L'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>)</span>)</span> <span class="fn">α</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.inv">inv</a> <span class="fn">β</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceInverse">commaMapEquivalenceInverse</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.mk">mk</a> <a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.mk">{</a> <span class="fn">left</span> := <span class="fn"><span class="fn"><span class="fn">Y</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span>, <span class="fn">right</span> := <span class="fn"><span class="fn"><span class="fn">Y</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span>, <span class="fn">w</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.mk">}</a></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceInverse_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L54-L54">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceInverse_map"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceInverse_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y </span><span class="fn">Z</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">(<span class="fn"><span class="fn">L'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>)</span>)</span> <span class="fn">α</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.inv">inv</a> <span class="fn">β</span>)</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">Y</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceInverse">commaMapEquivalenceInverse</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.homMk">homMk</a> <a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.mk">{</a> <span class="fn">left</span> := <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.left">left</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>, <span class="fn">right</span> := <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>, <span class="fn">w</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.mk">}</a> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L70-L75">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceUnitIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.id">Functor.id</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span>)</span></span> <a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a>   <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor">commaMapEquivalenceFunctor</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceInverse">commaMapEquivalenceInverse</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span></span></div></div><p>The unit establishing the equivalence <code><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalence">StructuredArrow.commaMapEquivalence</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_inv_app_right_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L71-L71">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_inv_app_right_left"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceUnitIso_inv_app_right_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X✝</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso">commaMapEquivalenceUnitIso</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X✝</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.left">left</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn"><span class="fn"><span class="fn">X✝</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_inv_app_right_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L71-L71">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_inv_app_right_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceUnitIso_inv_app_right_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X✝</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso">commaMapEquivalenceUnitIso</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X✝</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn"><span class="fn"><span class="fn">X✝</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_hom_app_right_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L71-L71">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_hom_app_right_left"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceUnitIso_hom_app_right_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X✝</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso">commaMapEquivalenceUnitIso</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X✝</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.left">left</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn"><span class="fn"><span class="fn">X✝</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_hom_app_right_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L71-L71">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso_hom_app_right_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceUnitIso_hom_app_right_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X✝</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso">commaMapEquivalenceUnitIso</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X✝</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn"><span class="fn"><span class="fn">X✝</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L77-L82">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceCounitIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceInverse">commaMapEquivalenceInverse</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor">commaMapEquivalenceFunctor</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span></span> <a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a>   <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.id">Functor.id</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">(<span class="fn"><span class="fn">L'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>)</span>)</span> <span class="fn">α</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.inv">inv</a> <span class="fn">β</span>)</span>)</span>)</span></span></div></div><p>The counit functor establishing the equivalence <code><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalence">StructuredArrow.commaMapEquivalence</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_inv_app_left_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L78-L78">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_inv_app_left_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceCounitIso_inv_app_left_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X✝</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">(<span class="fn"><span class="fn">L'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>)</span>)</span> <span class="fn">α</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.inv">inv</a> <span class="fn">β</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso">commaMapEquivalenceCounitIso</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X✝</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.left">left</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn"><span class="fn"><span class="fn">X✝</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_inv_app_right_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L78-L78">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_inv_app_right_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceCounitIso_inv_app_right_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X✝</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">(<span class="fn"><span class="fn">L'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>)</span>)</span> <span class="fn">α</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.inv">inv</a> <span class="fn">β</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso">commaMapEquivalenceCounitIso</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X✝</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn"><span class="fn"><span class="fn">X✝</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_hom_app_left_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L78-L78">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_hom_app_left_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceCounitIso_hom_app_left_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X✝</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">(<span class="fn"><span class="fn">L'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>)</span>)</span> <span class="fn">α</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.inv">inv</a> <span class="fn">β</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso">commaMapEquivalenceCounitIso</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X✝</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.left">left</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn"><span class="fn"><span class="fn">X✝</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_hom_app_right_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L78-L78">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso_hom_app_right_right"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalenceCounitIso_hom_app_right_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X✝</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">(<span class="fn"><span class="fn">L'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>)</span>)</span> <span class="fn">α</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.inv">inv</a> <span class="fn">β</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso">commaMapEquivalenceCounitIso</a> <span class="fn">α</span> <span class="fn">β</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X✝</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn"><span class="fn"><span class="fn">X✝</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.StructuredArrow.commaMapEquivalence"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.lean#L84-L91">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/CommaMap.html#CategoryTheory.StructuredArrow.commaMapEquivalence"><span class="name">CategoryTheory</span>.<span class="name">StructuredArrow</span>.<span class="name">commaMapEquivalence</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">T</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C'</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <a href="../../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../../../.././foundational_types.html">Type</a> u₆}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₆, u₆}</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D'</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">C'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">D'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">T</span> <span class="fn">T'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><span class="fn"><span class="fn">F₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">L'</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">L'</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow">StructuredArrow</a> <span class="fn">X</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.map">Comma.map</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span> <a href="../../../.././Mathlib/CategoryTheory/Equivalence.html#CategoryTheory.Equivalence">≌</a> <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma">Comma</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">(<span class="fn"><span class="fn">L'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.left">left</a></span>)</span>)</span> <span class="fn">α</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Comma/StructuredArrow/Basic.html#CategoryTheory.StructuredArrow.map₂">map₂</a> <span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.inv">inv</a> <span class="fn">β</span>)</span>)</span></span></div></div><p>The structured arrow category on the functor <code>Comma.map α β</code>, with <code>β</code> a natural isomorphism,
+is equivalent to a comma category on two instances of <code>StructuredArrow.map₂</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.StructuredArrow.commaMapEquivalence" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

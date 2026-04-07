@@ -1,0 +1,753 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.GradedAlgebra.Homogeneous.Maps</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.GradedAlgebra.Homogeneous.Maps";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">GradedAlgebra</span>.<span class="name">Homogeneous</span>.<span class="name">Maps</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html">Mathlib.RingTheory.GradedAlgebra.RingHom</a></li><li><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html">Mathlib.RingTheory.GradedAlgebra.Homogeneous.Ideal</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.GradedAlgebra.Homogeneous.Maps" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.map"><span class="name">HomogeneousIdeal</span>.<span class="name">map</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.comap"><span class="name">HomogeneousIdeal</span>.<span class="name">comap</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.map_le_iff_le_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">map_le_iff_le_comap</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.le_comap_of_map_le"><span class="name">HomogeneousIdeal</span>.<span class="name">le_comap_of_map_le</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.map_le_of_le_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">map_le_of_le_comap</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.gc_map_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">gc_map_comap</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.map_mono"><span class="name">HomogeneousIdeal</span>.<span class="name">map_mono</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.comap_mono"><span class="name">HomogeneousIdeal</span>.<span class="name">comap_mono</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.toIdeal_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">toIdeal_comap</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.coe_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">coe_comap</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.toIdeal_map"><span class="name">HomogeneousIdeal</span>.<span class="name">toIdeal_map</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.isPrime_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">isPrime_comap</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.map_id"><span class="name">HomogeneousIdeal</span>.<span class="name">map_id</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.map_map"><span class="name">HomogeneousIdeal</span>.<span class="name">map_map</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.map_comp"><span class="name">HomogeneousIdeal</span>.<span class="name">map_comp</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.comap_id"><span class="name">HomogeneousIdeal</span>.<span class="name">comap_id</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.comap_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">comap_comap</span></a></div><div class="nav_link"><a class="break_within" href="#HomogeneousIdeal.irrelevant_le_map_comp"><span class="name">HomogeneousIdeal</span>.<span class="name">irrelevant_le_map_comp</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Maps-on-homogeneous-ideals" class="markdown-heading">Maps on homogeneous ideals <a class="hover-link" href="#Maps-on-homogeneous-ideals">#</a></h1><p>In this file we define <code><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">HomogeneousIdeal.map</a></code> and <code><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">HomogeneousIdeal.comap</a></code>.</p></div><div class="decl" id="HomogeneousIdeal.map"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L32-L47">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map"><span class="name">HomogeneousIdeal</span>.<span class="name">map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒜</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">ℬ</span></span></div></div><p>Map a homogeneous ideal along a graded ring homomorphism. The underlying ideal is
+(definitionally) equal to <code><a href="../../../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.map">Ideal.map</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">HomogeneousIdeal.map</a> <span class="fn">f</span> <span class="fn">I</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Submodule.html#HomogeneousSubmodule.mk">{</a> <span class="fn">toSubmodule</span> := <span class="fn"><a href="../../../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.map">Ideal.map</a> <span class="fn">f</span> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.toIdeal">toIdeal</a></span></span>, <span class="fn">is_homogeneous'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Submodule.html#HomogeneousSubmodule.mk">}</a></li></ul></details><details id="instances-for-list-HomogeneousIdeal.map" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="HomogeneousIdeal.comap"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L49-L56">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap"><span class="name">HomogeneousIdeal</span>.<span class="name">comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">ℬ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒜</span></span></div></div><p>Pull back a homogeneous ideal along a graded ring homomorphism.
+The underlying ideal is (definitionally) equal to <code><a href="../../../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.comap">Ideal.comap</a></code>, whose underlying set is
+definitionally equal to the preimage.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">HomogeneousIdeal.comap</a> <span class="fn">f</span> <span class="fn">I</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Submodule.html#HomogeneousSubmodule.mk">{</a> <span class="fn">toSubmodule</span> := <span class="fn"><a href="../../../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.comap">Ideal.comap</a> <span class="fn">f</span> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.toIdeal">toIdeal</a></span></span>, <span class="fn">is_homogeneous'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Submodule.html#HomogeneousSubmodule.mk">}</a></li></ul></details><details id="instances-for-list-HomogeneousIdeal.comap" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="HomogeneousIdeal.map_le_iff_le_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L61-L61">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map_le_iff_le_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">map_le_iff_le_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">ℬ</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">f</span> <span class="fn">I</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">J</span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">I</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">f</span> <span class="fn">J</span></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.le_comap_of_map_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L63-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.le_comap_of_map_le"><span class="name">HomogeneousIdeal</span>.<span class="name">le_comap_of_map_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">ℬ</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">f</span> <span class="fn">I</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">J</span> → <span class="fn">I</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">f</span> <span class="fn">J</span></span></span></div></div><p><strong>Alias</strong> of the forward direction of <code><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map_le_iff_le_comap">HomogeneousIdeal.map_le_iff_le_comap</a></code>.</p></div></div><div class="decl" id="HomogeneousIdeal.map_le_of_le_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L63-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map_le_of_le_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">map_le_of_le_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">ℬ</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">I</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">f</span> <span class="fn">J</span></span> → <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">f</span> <span class="fn">I</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">J</span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map_le_iff_le_comap">HomogeneousIdeal.map_le_iff_le_comap</a></code>.</p></div></div><div class="decl" id="HomogeneousIdeal.gc_map_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L65-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.gc_map_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">gc_map_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Order/GaloisConnection/Defs.html#GaloisConnection">GaloisConnection</a> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">f</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.map_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L68-L68">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map_mono"><span class="name">HomogeneousIdeal</span>.<span class="name">map_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.comap_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L70-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap_mono"><span class="name">HomogeneousIdeal</span>.<span class="name">comap_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.toIdeal_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L72-L72">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.toIdeal_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">toIdeal_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">ℬ</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">f</span> <span class="fn">J</span>)</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.toIdeal">toIdeal</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.comap">Ideal.comap</a> <span class="fn">f</span> <span class="fn"><span class="fn">J</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.toIdeal">toIdeal</a></span></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.coe_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L74-L74">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.coe_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">coe_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">ℬ</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">f</span> <span class="fn">J</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span> <a href="../../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">↑<span class="fn">J</span></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.toIdeal_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L76-L76">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.toIdeal_map"><span class="name">HomogeneousIdeal</span>.<span class="name">toIdeal_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">f</span> <span class="fn">I</span>)</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.toIdeal">toIdeal</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.map">Ideal.map</a> <span class="fn">f</span> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.toIdeal">toIdeal</a></span></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.isPrime_comap"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L78-L79">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.isPrime_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">isPrime_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">ℬ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">J</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.toIdeal">toIdeal</a></span>.<a href="../../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">f</span> <span class="fn">J</span>)</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.toIdeal">toIdeal</a></span>.<a href="../../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.map_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L81-L81">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map_id"><span class="name">HomogeneousIdeal</span>.<span class="name">map_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom.id">GradedRingHom.id</a> <span class="fn">𝒜</span>)</span> <span class="fn">I</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">I</span></div></div></div></div><div class="decl" id="HomogeneousIdeal.map_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L83-L83">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map_map"><span class="name">HomogeneousIdeal</span>.<span class="name">map_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ω</span> : <a href="../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">ω</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">ω</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒞</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒞</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">ℬ</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">𝒞</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">g</span> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">f</span> <span class="fn">I</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom.comp">comp</a></span> <span class="fn">f</span>)</span> <span class="fn">I</span></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.map_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L85-L85">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map_comp"><span class="name">HomogeneousIdeal</span>.<span class="name">map_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ω</span> : <a href="../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">ω</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">ω</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒞</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒞</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">ℬ</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">𝒞</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom.comp">comp</a></span> <span class="fn">f</span>)</span> <span class="fn">I</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">g</span> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">f</span> <span class="fn">I</span>)</span></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.comap_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L87-L87">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap_id"><span class="name">HomogeneousIdeal</span>.<span class="name">comap_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom.id">GradedRingHom.id</a> <span class="fn">𝒜</span>)</span> <span class="fn">I</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">I</span></div></div></div></div><div class="decl" id="HomogeneousIdeal.comap_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L89-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap_comap"><span class="name">HomogeneousIdeal</span>.<span class="name">comap_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ω</span> : <a href="../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">ω</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">ω</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒞</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒞</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">ℬ</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">𝒞</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal">HomogeneousIdeal</a> <span class="fn">𝒞</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">f</span> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">g</span> <span class="fn">K</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.comap">comap</a> <span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom.comp">comp</a></span> <span class="fn">f</span>)</span> <span class="fn">K</span></span></div></div></div></div><div class="decl" id="HomogeneousIdeal.irrelevant_le_map_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.lean#L104-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.irrelevant_le_map_comp"><span class="name">HomogeneousIdeal</span>.<span class="name">irrelevant_le_map_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ω</span> : <a href="../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">ω</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">τ</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">ω</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒜</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℬ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝒞</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">ω</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">ℬ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒞</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">𝒜</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">ℬ</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">ℬ</span> <a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom">→+*ᵍ</a> <span class="fn">𝒞</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.irrelevant">irrelevant</a> <span class="fn">ℬ</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">f</span> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.irrelevant">irrelevant</a> <span class="fn">𝒜</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.irrelevant">irrelevant</a> <span class="fn">𝒞</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">g</span> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.irrelevant">irrelevant</a> <span class="fn">ℬ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.irrelevant">irrelevant</a> <span class="fn">𝒞</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Maps.html#HomogeneousIdeal.map">map</a> <span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/RingHom.html#GradedRingHom.comp">comp</a></span> <span class="fn">f</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/RingTheory/GradedAlgebra/Homogeneous/Ideal.html#HomogeneousIdeal.irrelevant">irrelevant</a> <span class="fn">𝒜</span>)</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

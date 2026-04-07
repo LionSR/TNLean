@@ -1,0 +1,166 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Tactic.FunProp</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Tactic.FunProp";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">FunProp</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/FunProp.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Tactic/FunProp/Attr.html">Mathlib.Tactic.FunProp.Attr</a></li><li><a href="../.././Mathlib/Tactic/FunProp/Core.html">Mathlib.Tactic.FunProp.Core</a></li><li><a href="../.././Mathlib/Tactic/FunProp/Decl.html">Mathlib.Tactic.FunProp.Decl</a></li><li><a href="../.././Mathlib/Tactic/FunProp/Elab.html">Mathlib.Tactic.FunProp.Elab</a></li><li><a href="../.././Mathlib/Tactic/FunProp/FunctionData.html">Mathlib.Tactic.FunProp.FunctionData</a></li><li><a href="../.././Mathlib/Tactic/FunProp/Mor.html">Mathlib.Tactic.FunProp.Mor</a></li><li><a href="../.././Mathlib/Tactic/FunProp/Theorems.html">Mathlib.Tactic.FunProp.Theorems</a></li><li><a href="../.././Mathlib/Tactic/FunProp/ToBatteries.html">Mathlib.Tactic.FunProp.ToBatteries</a></li><li><a href="../.././Mathlib/Tactic/FunProp/Types.html">Mathlib.Tactic.FunProp.Types</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Tactic.FunProp" class="imported-by-list"></ul></details></div></nav><main>
+<div class="mod_doc"><h1 id="Tactic-fun-prop-for-proving-function-properties-like-Continuous-f-Differentiable-ℝ-f" class="markdown-heading">Tactic <code>fun_prop</code> for proving function properties like <code><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f</code>, <code><a href="../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#Differentiable">Differentiable</a> ℝ f</code>, ... <a class="hover-link" href="#Tactic-fun-prop-for-proving-function-properties-like-Continuous-f-Differentiable-ℝ-f">#</a></h1><p><strong>Basic use:</strong>
+Using the <code>fun_prop</code> tactic should be as simple as:</p><pre><code class="language-lean">example : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x : ℝ ↦ x * sin x) := by fun_prop
+</code></pre><p>Mathlib sets up <code>fun_prop</code> for many different properties like <code><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a></code>, <code><a href="../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#Measurable">Measurable</a></code>,
+<code><a href="../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#Differentiable">Differentiable</a></code>, <code><a href="../.././Mathlib/Analysis/Calculus/ContDiff/Defs.html#ContDiff">ContDiff</a></code>, etc., so <code>fun_prop</code> should work for such goals. The basic idea behind
+<code>fun_prop</code> is that it decomposes the function into a composition of elementary functions and then
+checks if every single elementary function is, e.g., <code><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a></code>.</p><p>For <code>ContinuousAt/On/Within</code> variants, one has to specify a tactic to solve potential side goals
+with <code>disch := &lt;tactic&gt;</code>. For example:</p><pre><code class="language-lean">example (y : ℝ) (hy : y ≠ 0) : <a href="../.././Mathlib/Topology/Defs/Filter.html#ContinuousAt">ContinuousAt</a> (fun x : ℝ ↦ 1/x) y := by fun_prop (disch := assumption)
+</code></pre><p><strong>Basic debugging:</strong>
+The most common issue is that a function is missing the appropriate theorem. For example:</p><pre><code class="language-lean">import <a href="../.././Mathlib/Analysis/Complex/Trigonometric.html">Mathlib.Analysis.Complex.Trigonometric</a>
+example : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x : ℝ ↦ x * <a href="../.././Mathlib/Analysis/Complex/Trigonometric.html#Real.sin">Real.sin</a> x) := by fun_prop
+</code></pre><p>Fails with the error:</p><pre><code class="language-lean">`fun_prop` was unable to prove `Continuous fun x ↦ x * x.sin`
+
+Issues:
+  No theorems found for `Real.sin` in order to prove `Continuous fun x ↦ x.sin`
+</code></pre><p>This can be easily fixed by importing <code><a href="../.././Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.html">Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.lean</a></code>
+where the theorem <code><a href="../.././Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.html#Real.continuous_sin">Real.continuous_sin</a></code> is marked with the <code>fun_prop</code> attribute.</p><p>When the issue is not simply a few missing theorems, you can turn on the option:</p><pre><code class="language-lean">set_option trace.Meta.Tactic.fun_prop true
+</code></pre><p>This will display the trace of how <code>fun_prop</code> steps through the whole expression.</p><p><strong>Basic setup for a new function property:</strong></p><p>To set up <code>fun_prop</code> for a new function property, you have to:</p><ol><li>Mark the function property with the <code>fun_prop</code> attribute when defining it:</li></ol><pre><code class="language-lean">@[fun_prop]
+def <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (f : X → Y) := ...
+</code></pre><p>or later on with:</p><pre><code class="language-lean">attribute [fun_prop] <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a>
+</code></pre><ol start="2"><li>Mark basic lambda calculus theorems. The bare minimum is the identity, constant, and composition
+theorems:</li></ol><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Continuous.html#continuous_id">continuous_id</a> : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ x) := ...
+
+@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Continuous.html#continuous_const">continuous_const</a> (y : Y) : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ y) := ...
+
+@[fun_prop]
+theorem continuous_comp (f : Y → Z) (g : X → Y) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) (hg : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> g) :
+  <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ f (g x)) := ...
+</code></pre><p>The constant theorem is not absolutely necessary as, for example, <code><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#IsLinearMap">IsLinearMap</a> ℝ (fun x ↦ y)</code> does
+not hold, but we almost certainly want to mark it if it is available.</p><p>You should also provide theorems for <code><a href="../.././Init/Prelude.html#Prod.mk">Prod.mk</a></code>, <code><a href="../.././Init/Prelude.html#Prod.fst">Prod.fst</a></code>, and <code><a href="../.././Init/Prelude.html#Prod.snd">Prod.snd</a></code>:</p><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Constructions/SumProd.html#continuous_fst">continuous_fst</a> (f : X → Y × Z) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ (f x).fst) := ...
+@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Constructions/SumProd.html#continuous_snd">continuous_snd</a> (f : X → Y × Z) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ (f x).snd) := ...
+@[fun_prop]
+theorem continuous_prod_mk (f : X → Y) (g : X → Z) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) (hg : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> g) :
+    <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ <a href="../.././Init/Prelude.html#Prod.mk">Prod.mk</a> (f x) (g x)) := ...
+</code></pre><ol start="3"><li>Mark function theorems. They can be stated simply as:</li></ol><pre><code class="language-lean">@[fun_prop]
+theorem continuous_neg : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ - x) := ...
+
+@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#continuous_add">continuous_add</a> : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x : X × X ↦ x.1 + x.2) := ...
+</code></pre><p>where functions of multiple arguments have to be appropriately uncurried. Alternatively, they can
+be stated in compositional form as:</p><pre><code class="language-lean">@[fun_prop]
+theorem continuous_neg (f : X → Y) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ - f x) := ...
+
+@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#continuous_add">continuous_add</a> (f g : X → Y) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) (hg : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> g) :
+  <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ f x + g x) := ...
+</code></pre><p>It is enough to provide function theorems in either form. It is mainly a matter of convenience.</p><p>With such a basic setup, you should be able to prove the continuity of basic algebraic expressions.</p><p>When marking theorems, it is a good idea to check that a theorem has been registered correctly.
+You can do this by turning on the <code>Meta.Tactic.fun_prop.attr</code> option. For example:
+(note that the notation <code>f x + g x</code> is just syntactic sugar for <code>@HAdd.hAdd X Y Y _ (f x) (g x)</code>)</p><pre><code class="language-lean">set_option trace.Meta.Tactic.fun_prop.attr true
+@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#continuous_add">continuous_add</a> (f g : X → Y) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) (hg : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> g) :
+  <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ @HAdd.hAdd X Y Y _ (f x) (g x)) := ...
+</code></pre><p>displays:</p><pre><code class="language-lean">[Meta.Tactic.fun_prop.attr] function theorem: <a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#continuous_add">continuous_add</a>
+    function property: <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a>
+    function name: <a href="../.././Init/Prelude.html#HAdd.hAdd">HAdd.hAdd</a>
+    main arguments: [4, 5]
+    applied arguments: 6
+    form: compositional form
+</code></pre><p>This indicates that the theorem <code><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#continuous_add">continuous_add</a></code> states the continuity of <code><a href="../.././Init/Prelude.html#HAdd.hAdd">HAdd.hAdd</a></code> in the 4th and
+5th arguments and the theorem is in compositional form.</p><h3 id="Advanced" class="markdown-heading">Advanced <a class="hover-link" href="#Advanced">#</a></h3><h3 id="Type-of-Theorems" class="markdown-heading">Type of Theorems <a class="hover-link" href="#Type-of-Theorems">#</a></h3><p>There are four types of theorems that are used a bit differently.</p><ul><li><p>Lambda Theorems:
+These theorems are about basic lambda calculus terms like identity, constant, composition, etc.
+They are used when a bigger expression is decomposed into a sequence of function compositions.
+They are also used when, for example, we know that a function is continuous in the <code>x</code> and <code>y</code>
+variables, but we want continuity only in <code>x</code>.</p><p>There are five of them, and they should be formulated in the following way:</p><ul><li>Identity Theorem</li></ul><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Continuous.html#continuous_id">continuous_id</a> : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun (x : X) ↦ x) := ..
+</code></pre><ul><li>Constant Theorem</li></ul><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Continuous.html#continuous_const">continuous_const</a> (y : Y) : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun (x : X) ↦ y) := ..
+</code></pre><ul><li>Composition Theorem</li></ul><pre><code class="language-lean">@[fun_prop]
+theorem continuous_comp (f : Y → Z) (g : X → Y) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) (hg : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> g) :
+  <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun (x : X) ↦ f (g x)) := ..
+</code></pre><ul><li>Apply Theorem
+It can be either non-dependent version</li></ul><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Constructions.html#continuous_apply">continuous_apply</a> (a : α) : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun f : (α → X) ↦ f a) := ..
+</code></pre><pre><code>or dependent version
+</code></pre><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Constructions.html#continuous_apply">continuous_apply</a> (a : α) : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun f : ((a' : α) → E a') ↦ f a) := ..
+</code></pre><ul><li>Pi Theorem</li></ul><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Constructions.html#continuous_pi">continuous_pi</a> (f : X → α → Y) (hf : ∀ a, <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (f x a)) :
+   <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x a ↦ f x a) := ..
+</code></pre><p>Not all of these theorems have to be provided, but at least the identity and composition
+theorems should be.</p><p>You should also add theorems for <code><a href="../.././Init/Prelude.html#Prod.mk">Prod.mk</a></code>, <code><a href="../.././Init/Prelude.html#Prod.fst">Prod.fst</a></code>, and <code><a href="../.././Init/Prelude.html#Prod.snd">Prod.snd</a></code>. Technically speaking,
+they fall under the <em>function theorems</em> category, but without them, <code>fun_prop</code> can't function
+properly. We are mentioning them as they are used together with <em>lambda theorems</em> to break
+complicated expressions into a composition of simpler functions.</p><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Constructions/SumProd.html#continuous_fst">continuous_fst</a> (f : X → Y × Z) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) :
+    <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ (f x).fst) := ...
+@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Constructions/SumProd.html#continuous_snd">continuous_snd</a> (f : X → Y × Z) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) :
+    <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ (f x).snd) := ...
+@[fun_prop]
+theorem continuous_prod_mk (f : X → Y) (g : X → Z) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) (hg : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> g) :
+    <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ (f x, g x)) := ...
+</code></pre></li><li><p>Function Theorems:
+When <code>fun_prop</code> breaks complicated expression apart using <em>lambda theorems</em> it then uses
+<em>function theorems</em> to prove that each piece is, for example, continuous.</p><p>The function theorem for <code><a href="../.././Init/Prelude.html#Neg.neg">Neg.neg</a></code> and <code><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a></code> can be stated as:</p><pre><code class="language-lean">@[fun_prop]
+theorem continuous_neg : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ - x) := ...
+</code></pre><p>or as:</p><pre><code class="language-lean">@[fun_prop]
+theorem continuous_neg (f : X → Y) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ - f x) := ...
+</code></pre><p>The first form is called <em>uncurried form</em> and the second form is called <em>compositional form</em>.
+You can provide either form; it is mainly a matter of convenience. You can check if the form of
+a theorem has been correctly detected by turning on the option:</p><pre><code class="language-lean">set_option Meta.Tactic.fun_prop.attr true
+</code></pre><p>If you really care that the resulting proof term is as short as possible, it is a good idea to
+provide both versions.</p><p>One exception to this rule is the theorem for <code><a href="../.././Init/Prelude.html#Prod.mk">Prod.mk</a></code>, which has to be stated in compositional
+form. This because this theorem together with <em>lambda theorems</em> is used to break expression to
+smaller pieces and <code>fun_prop</code>  assumes it is written in compositional form.</p><p>The reason the first form is called <em>uncurried</em> is because if we have a function of multiple
+arguments, we have to uncurry the function:</p><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#continuous_add">continuous_add</a> : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun (x : X × X) ↦ x.1 + x.2) := ...
+</code></pre><p>and the <em>compositional form</em> of this theorem is:</p><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#continuous_add">continuous_add</a> (f g : X → Y) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) (hg : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> g) :
+    <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> (fun x ↦ f x + g x) := ...
+</code></pre><p>When dealing with functions with multiple arguments, you need to state, e.g., continuity only
+in the maximal set of arguments. Once we state that addition is jointly continuous in both
+arguments, we do not need to add new theorems that addition is also continuous only in the first
+or only in the second argument. This is automatically inferred using lambda theorems.</p></li><li><p>Morphism Theorems:
+The <code>fun_prop</code> tactic can also deal with bundled morphisms. For example, we can state that every
+continuous linear function is indeed continuous:</p><pre><code class="language-lean">@[fun_prop]
+theorem continuous_clm_eval (f : X →L[𝕜] Y) : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> 𝕜 (fun x ↦ f x) := ...
+</code></pre><p>In this case, the head of the function body <code>f x</code> is <code><a href="../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a></code>. This function is
+treated differently and its theorems are tracked separately.</p><p><code><a href="../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a></code> has two arguments: the morphism <code>f</code> and the argument <code>x</code>. One difference is that
+theorems talking about the argument <code>f</code> have to be stated in the compositional form:</p><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Analysis/Normed/Module/FiniteDimension.html#continuous_clm_apply">continuous_clm_apply</a> (f : X → Y →L[𝕜] Z) (hf : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f) (y : Y) :
+   <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> 𝕜 (fun x ↦ f x y) := ...
+</code></pre><p>Note that without notation and coercion, the function looks like
+<code>fun x ↦ <a href="../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a> (f x) y</code>.</p><p>In fact, not only <code><a href="../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a></code> but any function coercion is treated this way. Such function
+coercion has to be registered with <code><a href="../.././Lean/Meta/CoeAttr.html#Lean.Meta.registerCoercion">Lean.Meta.registerCoercion</a></code> with coercion type <code>.coeFun</code>.
+Here is an example of custom structure <code>MyFunLike</code> that should be considered as bundled
+morphism by <code>fun_prop</code>:</p><pre><code class="language-lean">structure MyFunLike (α β : Type) where
+  toFun : α → β
+
+instance {α β} : <a href="../.././Init/Coe.html#CoeFun">CoeFun</a> (MyFunLike α β) (fun _ ↦ α → β) := ⟨MyFunLike.toFun⟩
+
+#eval <a href="../.././Lean/Elab/Command.html#Lean.Elab.Command.liftTermElabM">Lean.Elab.Command.liftTermElabM</a> do
+  <a href="../.././Lean/Meta/CoeAttr.html#Lean.Meta.registerCoercion">Lean.Meta.registerCoercion</a> ``MyFunLike.toFun
+    (.some { numArgs := 3, coercee := 2, type := .coeFun })
+</code></pre></li><li><p>Transition Theorems:
+Transition theorems allow <code>fun_prop</code> to infer one function property from another.
+For example, a theorem like:</p><pre><code class="language-lean">@[fun_prop]
+theorem differentiable_continuous (f : X → Y) (hf : <a href="../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#Differentiable">Differentiable</a> 𝕜 f) :
+    <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f := ...
+</code></pre><p>There are two features of these theorems: they mix different function properties and the
+conclusion is about a free variable <code>f</code>.</p><p>Transition theorems are the most dangerous theorems as they considerably increase the search
+space since they do not simplify the function in question. For this reason, <code>fun_prop</code> only
+applies transition theorems to functions that can't be written as a non-trivial composition of
+two functions (<code>f = f ∘ <a href="../.././Init/Prelude.html#id">id</a></code>, <code>f = <a href="../.././Init/Prelude.html#id">id</a> ∘ f</code> is considered to be a trivial composition).</p><p>For this reason, it is recommended to state <em>function theorems</em> for every property. For example,
+if you have a theorem:</p><pre><code class="language-lean">@[fun_prop]
+theorem <a href="../.././Mathlib/Analysis/Calculus/Deriv/Add.html#differentiable_neg">differentiable_neg</a> : <a href="../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#Differentiable">Differentiable</a> ℝ (fun x ↦ -x) := ...
+</code></pre><p>you should also state the continuous theorem:</p><pre><code class="language-lean">@[fun_prop]
+theorem continuous_neg : <a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> ℝ (fun x ↦ -x) := ...
+</code></pre><p>even though <code>fun_prop</code> can already prove <code>continuous_neg</code> from <code>differentiable_continuous</code> and
+<code><a href="../.././Mathlib/Analysis/Calculus/Deriv/Add.html#differentiable_neg">differentiable_neg</a></code>. Doing this will have a considerable impact on <code>fun_prop</code> speed.</p><p>By default, <code>fun_prop</code> will not apply more than one transition theorem consecutively. For
+example, it won't prove <code><a href="../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#AEMeasurable">AEMeasurable</a> f</code> from <code><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> f</code> by using transition theorems
+<code><a href="../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#Measurable.aemeasurable">Measurable.aemeasurable</a></code> and <code><a href="../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#Continuous.measurable">Continuous.measurable</a></code>. You can enable this by running
+<code>fun_prop (maxTransitionDepth :=2)</code>.
+Ideally <code>fun_prop</code> theorems should be transitively closed i.e. if <code><a href="../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#Measurable.aemeasurable">Measurable.aemeasurable</a></code> and
+<code><a href="../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#Continuous.measurable">Continuous.measurable</a></code> are <code>fun_prop</code> theorems then <code><a href="../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#Continuous.aemeasurable">Continuous.aemeasurable</a></code> should be too.</p><p>Transition theorems do not have to be between two completely different properties. They can be
+between the same property differing by a parameter. Consider this example:</p><pre><code class="language-lean">example (f : X → Y) (hf : <a href="../.././Mathlib/Analysis/Calculus/ContDiff/Defs.html#ContDiff">ContDiff</a> ℝ ∞ f) : <a href="../.././Mathlib/Analysis/Calculus/ContDiff/Defs.html#ContDiff">ContDiff</a> ℝ 2 (fun x ↦ f x + f x) := by
+  fun_prop (disch := aesop)
+</code></pre><p>which is first reduced to <code><a href="../.././Mathlib/Analysis/Calculus/ContDiff/Defs.html#ContDiff">ContDiff</a> ℝ 2 f</code> using lambda theorems and then the transition
+theorem:</p><pre><code class="language-lean">@[fun_prop]
+theorem contdiff_le (f : <a href="../.././Mathlib/Analysis/Calculus/ContDiff/Defs.html#ContDiff">ContDiff</a> 𝕜 n f) (h : m ≤ n) : <a href="../.././Mathlib/Analysis/Calculus/ContDiff/Defs.html#ContDiff">ContDiff</a> 𝕜 m f := ...
+</code></pre><p>is used together with <code>aesop</code> to discharge the <code>2 ≤ ∞</code> subgoal.</p></li></ul></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

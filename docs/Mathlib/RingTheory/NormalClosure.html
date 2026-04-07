@@ -1,0 +1,523 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.NormalClosure</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.NormalClosure";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">NormalClosure</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/RingTheory/DedekindDomain/IntegralClosure.html">Mathlib.RingTheory.DedekindDomain.IntegralClosure</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.NormalClosure" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Ring.instAlgebraFractionRing"><span class="name">Ring</span>.<span class="name">instAlgebraFractionRing</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instAlgebraSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instAlgebraSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsScalarTowerFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsScalarTowerFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.NormalClosure"><span class="name">Ring</span>.<span class="name">NormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instCommRingNormalClosure"><span class="name">Ring</span>.<span class="name">instCommRingNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsDomainNormalClosure"><span class="name">Ring</span>.<span class="name">instIsDomainNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instNontrivialNormalClosure"><span class="name">Ring</span>.<span class="name">instNontrivialNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instAlgebraNormalClosure"><span class="name">Ring</span>.<span class="name">instAlgebraNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instAlgebraNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instAlgebraNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instAlgebraNormalClosure_1"><span class="name">Ring</span>.<span class="name">instAlgebraNormalClosure_1</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsScalarTowerNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsScalarTowerNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsIntegralClosureNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsIntegralClosureNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsScalarTowerNormalClosure"><span class="name">Ring</span>.<span class="name">instIsScalarTowerNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsScalarTowerFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure_1"><span class="name">Ring</span>.<span class="name">instIsScalarTowerFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure_1</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsScalarTowerSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsScalarTowerSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsScalarTowerNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure_1"><span class="name">Ring</span>.<span class="name">instIsScalarTowerNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure_1</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instFaithfulSMulSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instFaithfulSMulSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsTorsionFreeNormalClosure"><span class="name">Ring</span>.<span class="name">instIsTorsionFreeNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instFaithfulSMulNormalClosure"><span class="name">Ring</span>.<span class="name">instFaithfulSMulNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instFiniteDimensionalFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instFiniteDimensionalFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsFractionRingNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsFractionRingNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsIntegrallyClosedNormalClosure"><span class="name">Ring</span>.<span class="name">instIsIntegrallyClosedNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsSeparableFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsSeparableFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsGaloisFractionRingNormalClosure"><span class="name">Ring</span>.<span class="name">instIsGaloisFractionRingNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instFiniteNormalClosure"><span class="name">Ring</span>.<span class="name">instFiniteNormalClosure</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instFiniteNormalClosure_1"><span class="name">Ring</span>.<span class="name">instFiniteNormalClosure_1</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.instIsDedekindDomainNormalClosure"><span class="name">Ring</span>.<span class="name">instIsDedekindDomainNormalClosure</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Normal-closure-of-an-extension-of-domains" class="markdown-heading">Normal closure of an extension of domains <a class="hover-link" href="#Normal-closure-of-an-extension-of-domains">#</a></h1><p>We define the normal closure of an extension of domains <code>R ⊆ S</code> as a domain <code>T</code> such that
+<code>R ⊆ S ⊆ T</code> and the extension <code>Frac T / Frac R</code> is Galois, and prove several instances about it.</p><p>Under the hood, <code>T</code> is defined as the <code><a href="../.././Mathlib/RingTheory/IntegralClosure/Algebra/Basic.html#integralClosure">integralClosure</a></code> of <code>S</code> inside the
+<code><a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a></code> of the extension <code>Frac S / Frac R</code> inside the <code><a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a></code>
+of <code>Frac S</code>. In particular, if <code>S</code> is a Dedekind domain, then <code>T</code> is also a Dedekind domain.</p><h2 id="Technical-notes" class="markdown-heading">Technical notes <a class="hover-link" href="#Technical-notes">#</a></h2><ul><li>Many instances are proved about the <code><a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a></code> of the extension
+<code>Frac S / Frac R</code> inside the <code><a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a></code> of <code>Frac S</code>. However these are only needed for the
+construction of <code>T</code> and to prove some results about it. Therefore, these instances are local.</li><li><code><a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">Ring.NormalClosure</a></code> is defined as a type rather than a <code><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Basic.html#Subalgebra">Subalgebra</a></code> for performance reasons
+(and thus we need to provide explicit instances for it). Although defining it as a <code><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Basic.html#Subalgebra">Subalgebra</a></code>
+does not cause timeouts in this file, it does slow down considerably its compilation and
+does trigger timeouts in applications.</li></ul></div><div class="decl" id="Ring.instAlgebraFractionRing"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L40-L45">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instAlgebraFractionRing"><span class="name">Ring</span>.<span class="name">instAlgebraFractionRing</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span></span></div></div><p>We register this specific instance as a local instance rather than making
+<code><a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing.liftAlgebra">FractionRing.liftAlgebra</a></code> a local instance because the latter causes timeouts since
+it is too general.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instAlgebraFractionRing">Ring.instAlgebraFractionRing</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing.liftAlgebra">FractionRing.liftAlgebra</a> <span class="fn">R</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span></span></li></ul></details><details id="instances-for-list-Ring.instAlgebraFractionRing" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Ring.instAlgebraSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L53-L56">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instAlgebraSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instAlgebraSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div><p>This is a local instance since it is only used in this file to construct <code><a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">Ring.NormalClosure</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Ring.instAlgebraSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Ring.instIsScalarTowerFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L58-L58">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsScalarTowerFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsScalarTowerFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">S</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>
+  <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Ring.NormalClosure"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L60-L63">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure"><span class="name">Ring</span>.<span class="name">NormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Type</a> u_2</div></div><p>The normal closure of an extension of domains <code>R ⊆ S</code>. It is defined as a domain <code>T</code> such that
+<code>R ⊆ S ⊆ T</code> and <code>Frac T / Frac R</code> is Galois.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">Ring.NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/RingTheory/IntegralClosure/Algebra/Basic.html#integralClosure">integralClosure</a> <span class="fn">S</span>
+      <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span>)</span></span></li></ul></details><details id="instances-for-list-Ring.NormalClosure" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Ring.instCommRingNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L67-L67">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instCommRingNormalClosure"><span class="name">Ring</span>.<span class="name">instCommRingNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="Ring.instIsDomainNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L69-L69">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsDomainNormalClosure"><span class="name">Ring</span>.<span class="name">instIsDomainNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Ring.instNontrivialNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L71-L71">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instNontrivialNormalClosure"><span class="name">Ring</span>.<span class="name">instNontrivialNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Ring.instAlgebraNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L73-L73">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instAlgebraNormalClosure"><span class="name">Ring</span>.<span class="name">instAlgebraNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instAlgebraNormalClosure">Ring.instAlgebraNormalClosure</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra.mk">{</a> <span class="fn">smul</span> := <span class="fn"><a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instAlgebraNormalClosure">Ring.instAlgebraNormalClosure._aux_1</a> <span class="fn">R</span> <span class="fn">S</span></span>, <span class="fn">algebraMap</span> := <span class="fn"><a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instAlgebraNormalClosure">Ring.instAlgebraNormalClosure._aux_3</a> <span class="fn">R</span> <span class="fn">S</span></span>,
+    <span class="fn">commutes'</span> := <span class="fn">⋯</span>, <span class="fn">smul_def'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra.mk">}</a></li></ul></details></div></div><div class="decl" id="Ring.instAlgebraNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L75-L78">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instAlgebraNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instAlgebraNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span>
+  <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div><p>This is a local instance since it is only used in this file to construct <code><a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">Ring.NormalClosure</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Ring.instAlgebraNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Ring.instAlgebraNormalClosure_1"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L80-L80">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instAlgebraNormalClosure_1"><span class="name">Ring</span>.<span class="name">instAlgebraNormalClosure_1</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instAlgebraNormalClosure_1">Ring.instAlgebraNormalClosure_1</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">S</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">Ring.NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span>)</span>.<a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">S</span>)</span>)</span>.<a href="../.././Mathlib/Algebra/Algebra/Defs.html#RingHom.toAlgebra">toAlgebra</a></span></li></ul></details></div></div><div class="decl" id="Ring.instIsScalarTowerNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L82-L83">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsScalarTowerNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsScalarTowerNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">S</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span>
+  <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Ring.instIsIntegralClosureNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L85-L85">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsIntegralClosureNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsIntegralClosureNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/IntegralClosure/IsIntegralClosure/Defs.html#IsIntegralClosure">IsIntegralClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span> <span class="fn">S</span>
+  <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Ring.instIsScalarTowerNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L87-L87">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsScalarTowerNormalClosure"><span class="name">Ring</span>.<span class="name">instIsScalarTowerNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Ring.instIsScalarTowerFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure_1"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L89-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsScalarTowerFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure_1"><span class="name">Ring</span>.<span class="name">instIsScalarTowerFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure_1</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>
+  <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Ring.instIsScalarTowerSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L91-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsScalarTowerSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsScalarTowerSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span>
+  <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Ring.instIsScalarTowerNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure_1"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L93-L93">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsScalarTowerNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure_1"><span class="name">Ring</span>.<span class="name">instIsScalarTowerNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure_1</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span>
+  <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Ring.instFaithfulSMulSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L95-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instFaithfulSMulSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instFaithfulSMulSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">S</span> <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Ring.instIsTorsionFreeNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L98-L98">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsTorsionFreeNormalClosure"><span class="name">Ring</span>.<span class="name">instIsTorsionFreeNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">S</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Ring.instFaithfulSMulNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L100-L102">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instFaithfulSMulNormalClosure"><span class="name">Ring</span>.<span class="name">instFaithfulSMulNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">R</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Ring.instFiniteDimensionalFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L106-L106">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instFiniteDimensionalFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instFiniteDimensionalFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>
+  <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Ring.instIsFractionRingNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L108-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsFractionRingNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsFractionRingNormalClosureSubtypeAlgebraicClosureFractionRingMemIntermediateFieldNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#IsFractionRing">IsFractionRing</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span>
+  <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Ring.instIsIntegrallyClosedNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L111-L112">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsIntegrallyClosedNormalClosure"><span class="name">Ring</span>.<span class="name">instIsIntegrallyClosedNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/IntegralClosure/IntegrallyClosed.html#IsIntegrallyClosed">IsIntegrallyClosed</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Ring.instIsSeparableFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L116-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsSeparableFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure"><span class="name">Ring</span>.<span class="name">instIsSeparableFractionRingSubtypeAlgebraicClosureMemIntermediateFieldNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/Perfect.html#PerfectField">PerfectField</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/FieldTheory/Separable.html#Algebra.IsSeparable">Algebra.IsSeparable</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>
+  <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Normal/Closure.html#IntermediateField.normalClosure">IntermediateField.normalClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/IsAlgClosed/AlgebraicClosure.html#AlgebraicClosure">AlgebraicClosure</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">S</span>)</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Ring.instIsGaloisFractionRingNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L119-L125">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsGaloisFractionRingNormalClosure"><span class="name">Ring</span>.<span class="name">instIsGaloisFractionRingNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/Perfect.html#PerfectField">PerfectField</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/FieldTheory/Galois/Basic.html#IsGalois">IsGalois</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span>)</span></span></div></div></div></div><div class="decl" id="Ring.instFiniteNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L129-L130">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instFiniteNormalClosure"><span class="name">Ring</span>.<span class="name">instFiniteNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/Perfect.html#PerfectField">PerfectField</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">S</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Ring.instFiniteNormalClosure_1"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L132-L133">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instFiniteNormalClosure_1"><span class="name">Ring</span>.<span class="name">instFiniteNormalClosure_1</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/Perfect.html#PerfectField">PerfectField</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Ring.instIsDedekindDomainNormalClosure"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/NormalClosure.lean#L135-L136">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.instIsDedekindDomainNormalClosure"><span class="name">Ring</span>.<span class="name">instIsDedekindDomainNormalClosure</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/Perfect.html#PerfectField">PerfectField</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/FractionRing.html#FractionRing">FractionRing</a> <span class="fn">R</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/NormalClosure.html#Ring.NormalClosure">NormalClosure</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,979 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.NumberTheory.Cyclotomic.PrimitiveRoots</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.NumberTheory.Cyclotomic.PrimitiveRoots";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">NumberTheory</span>.<span class="name">Cyclotomic</span>.<span class="name">PrimitiveRoots</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Data/PNat/Prime.html">Mathlib.Data.PNat.Prime</a></li><li><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html">Mathlib.NumberTheory.Cyclotomic.Basic</a></li><li><a href="../../.././Mathlib/RingTheory/Adjoin/PowerBasis.html">Mathlib.RingTheory.Adjoin.PowerBasis</a></li><li><a href="../../.././Mathlib/RingTheory/Norm/Transitivity.html">Mathlib.RingTheory.Norm.Transitivity</a></li><li><a href="../../.././Mathlib/RingTheory/SimpleModule/Basic.html">Mathlib.RingTheory.SimpleModule.Basic</a></li><li><a href="../../.././Mathlib/Data/Nat/Factorization/LCM.html">Mathlib.Data.Nat.Factorization.LCM</a></li><li><a href="../../.././Mathlib/Data/Nat/Factorization/PrimePow.html">Mathlib.Data.Nat.Factorization.PrimePow</a></li><li><a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Eval.html">Mathlib.RingTheory.Polynomial.Cyclotomic.Eval</a></li><li><a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Expand.html">Mathlib.RingTheory.Polynomial.Cyclotomic.Expand</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.NumberTheory.Cyclotomic.PrimitiveRoots" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.zeta"><span class="name">IsCyclotomicExtension</span>.<span class="name">zeta</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.zeta_spec"><span class="name">IsCyclotomicExtension</span>.<span class="name">zeta_spec</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.aeval_zeta"><span class="name">IsCyclotomicExtension</span>.<span class="name">aeval_zeta</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.zeta_isRoot"><span class="name">IsCyclotomicExtension</span>.<span class="name">zeta_isRoot</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.zeta_pow"><span class="name">IsCyclotomicExtension</span>.<span class="name">zeta_pow</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.powerBasis"><span class="name">IsPrimitiveRoot</span>.<span class="name">powerBasis</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.powerBasis_gen"><span class="name">IsPrimitiveRoot</span>.<span class="name">powerBasis_gen</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.powerBasis_dim"><span class="name">IsPrimitiveRoot</span>.<span class="name">powerBasis_dim</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.powerBasis_gen_mem_adjoin_zeta_sub_one"><span class="name">IsPrimitiveRoot</span>.<span class="name">powerBasis_gen_mem_adjoin_zeta_sub_one</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.subOnePowerBasis"><span class="name">IsPrimitiveRoot</span>.<span class="name">subOnePowerBasis</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.subOnePowerBasis_dim"><span class="name">IsPrimitiveRoot</span>.<span class="name">subOnePowerBasis_dim</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.subOnePowerBasis_gen"><span class="name">IsPrimitiveRoot</span>.<span class="name">subOnePowerBasis_gen</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.embeddingsEquivPrimitiveRoots"><span class="name">IsPrimitiveRoot</span>.<span class="name">embeddingsEquivPrimitiveRoots</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.embeddingsEquivPrimitiveRoots_apply_coe"><span class="name">IsPrimitiveRoot</span>.<span class="name">embeddingsEquivPrimitiveRoots_apply_coe</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.finrank"><span class="name">IsCyclotomicExtension</span>.<span class="name">finrank</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.lcm_totient_le_finrank"><span class="name">IsPrimitiveRoot</span>.<span class="name">lcm_totient_le_finrank</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.dvd_of_isCyclotomicExtension"><span class="name">IsPrimitiveRoot</span>.<span class="name">dvd_of_isCyclotomicExtension</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.exists_neg_pow_of_isOfFinOrder"><span class="name">IsPrimitiveRoot</span>.<span class="name">exists_neg_pow_of_isOfFinOrder</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.exists_pow_or_neg_mul_pow_of_isOfFinOrder"><span class="name">IsPrimitiveRoot</span>.<span class="name">exists_pow_or_neg_mul_pow_of_isOfFinOrder</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_eq_neg_one_pow"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_eq_neg_one_pow</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_eq_one"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_eq_one</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_eq_one_of_linearly_ordered"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_eq_one_of_linearly_ordered</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_of_cyclotomic_irreducible"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_of_cyclotomic_irreducible</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.sub_one_norm_eq_eval_cyclotomic"><span class="name">IsPrimitiveRoot</span>.<span class="name">sub_one_norm_eq_eval_cyclotomic</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.sub_one_norm_isPrimePow"><span class="name">IsPrimitiveRoot</span>.<span class="name">sub_one_norm_isPrimePow</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.minpoly_sub_one_eq_cyclotomic_comp"><span class="name">IsPrimitiveRoot</span>.<span class="name">minpoly_sub_one_eq_cyclotomic_comp</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_pow_sub_one_of_prime_pow_ne_two"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_pow_sub_one_of_prime_pow_ne_two</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_pow_sub_one_of_prime_ne_two"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_pow_sub_one_of_prime_ne_two</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_sub_one_of_prime_ne_two"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_sub_one_of_prime_ne_two</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_sub_one_of_prime_ne_two'"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_sub_one_of_prime_ne_two'</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_pow_sub_one_two"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_pow_sub_one_two</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_sub_one_two"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_sub_one_two</span></a></div><div class="nav_link"><a class="break_within" href="#IsPrimitiveRoot.norm_pow_sub_one_eq_prime_pow_of_ne_zero"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_pow_sub_one_eq_prime_pow_of_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.norm_zeta_eq_one"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_eq_one</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.norm_zeta_sub_one_of_isPrimePow"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_sub_one_of_isPrimePow</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.norm_zeta_pow_sub_one_of_prime_pow_ne_two"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_pow_sub_one_of_prime_pow_ne_two</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.norm_zeta_pow_sub_one_of_prime_ne_two"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_pow_sub_one_of_prime_ne_two</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.norm_zeta_sub_one_of_prime_ne_two"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_sub_one_of_prime_ne_two</span></a></div><div class="nav_link"><a class="break_within" href="#IsCyclotomicExtension.norm_zeta_pow_sub_one_two"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_pow_sub_one_two</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Primitive-roots-in-cyclotomic-fields" class="markdown-heading">Primitive roots in cyclotomic fields <a class="hover-link" href="#Primitive-roots-in-cyclotomic-fields">#</a></h1><p>If <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> {n} A B</code>, we define an element <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> n A B : B</code> that is a primitive
+<code>n</code>th-root of unity in <code>B</code> and we study its properties. We also prove related theorems under the
+more general assumption of just being a primitive root, for reasons described in the implementation
+details section.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">IsCyclotomicExtension.zeta</a> n A B</code>: if <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> {n} A B</code>, then <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> n A B</code>
+is a primitive <code>n</code>-th root of unity in <code>B</code>.</li><li><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.powerBasis">IsPrimitiveRoot.powerBasis</a></code>: if <code>K</code> and <code>L</code> are fields such that
+<code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> {n} K L</code>, then <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.powerBasis">IsPrimitiveRoot.powerBasis</a></code>
+gives a <code>K</code>-power basis for <code>L</code> given a primitive root <code>ζ</code>.</li><li><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.embeddingsEquivPrimitiveRoots">IsPrimitiveRoot.embeddingsEquivPrimitiveRoots</a></code>: the equivalence between <code>L →ₐ[K] A</code>
+and <code><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#primitiveRoots">primitiveRoots</a> n A</code> given by the choice of <code>ζ</code>.</li></ul><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta_spec">IsCyclotomicExtension.zeta_spec</a></code>: <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> n A B</code> is a primitive <code>n</code>-th root of unity.</li><li><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.finrank">IsCyclotomicExtension.finrank</a></code>: if <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic n K)</code> (in particular for
+<code>K = ℚ</code>), then the <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.finrank">finrank</a></code> of a cyclotomic extension is <code>n.totient</code>.</li><li><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_eq_one">IsPrimitiveRoot.norm_eq_one</a></code>: if <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic n K)</code> (in particular for <code>K = ℚ</code>),
+the norm of a primitive root is <code>1</code> if <code>n ≠ 2</code>.</li><li><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.sub_one_norm_eq_eval_cyclotomic">IsPrimitiveRoot.sub_one_norm_eq_eval_cyclotomic</a></code>: if <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic n K)</code>
+(in particular for <code>K = ℚ</code>), then the norm of <code>ζ - 1</code> is <code>eval 1 (cyclotomic n ℤ)</code>, for a
+primitive root <code>ζ</code>. We also prove the analogous of this result for <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a></code>.</li><li><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_pow_sub_one_of_prime_pow_ne_two">IsPrimitiveRoot.norm_pow_sub_one_of_prime_pow_ne_two</a></code> : if
+<code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (p ^ (k + 1)) K)</code> (in particular for <code>K = ℚ</code>) and <code>p</code> is a prime,
+then the norm of <code>ζ ^ (p ^ s) - 1</code> is <code>p ^ (p ^ s)</code> <code>p ^ (k - s + 1) ≠ 2</code>. See the following
+lemmas for similar results. We also prove the analogous of this result for <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a></code>.</li><li><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_sub_one_of_prime_ne_two">IsPrimitiveRoot.norm_sub_one_of_prime_ne_two</a></code> : if <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (p ^ (k + 1)) K)</code>
+(in particular for <code>K = ℚ</code>) and <code>p</code> is an odd prime, then the norm of <code>ζ - 1</code> is <code>p</code>. We also
+prove the analogous of this result for <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a></code>.</li><li><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.embeddingsEquivPrimitiveRoots">IsPrimitiveRoot.embeddingsEquivPrimitiveRoots</a></code>: the equivalence between <code>L →ₐ[K] A</code>
+and <code><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#primitiveRoots">primitiveRoots</a> n A</code> given by the choice of <code>ζ</code>.</li></ul><h2 id="Implementation-details" class="markdown-heading">Implementation details <a class="hover-link" href="#Implementation-details">#</a></h2><p><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> n A B</code> is defined as any primitive root of unity in <code>B</code>, - this must exist, by definition of
+<code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a></code>. It is not true in general that it is a root of <code>cyclotomic n B</code>,
+but this holds if <code>isDomain B</code> and <code><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> (n : B)</code>.</p><p><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> n A B</code> is defined using <code><a href="../../.././Init/Classical.html#Exists.choose">Exists.choose</a></code>, which means we cannot control it.
+For example, in normal mathematics, we can demand that <code>(zeta p ℤ ℤ[ζₚ] : ℚ(ζₚ))</code> is equal to
+<code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> p ℚ ℚ(ζₚ)</code>, as we are just choosing &quot;an arbitrary primitive root&quot; and we can internally
+specify that our choices agree. This is not the case here, and it is indeed impossible to prove that
+these two are equal. Therefore, whenever possible, we prove our results for any primitive root,
+and only at the &quot;final step&quot;, when we need to provide an &quot;explicit&quot; primitive root, we use <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a></code>.</p></div><div class="decl" id="IsCyclotomicExtension.zeta"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L84-L88">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta"><span class="name">IsCyclotomicExtension</span>.<span class="name">zeta</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> w)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> z)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">B</span></div></div><p>If <code>B</code> is an <code>n</code>-th cyclotomic extension of <code>A</code>, then <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> n A B</code> is a primitive root of
+unity in <code>B</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">IsCyclotomicExtension.zeta</a> <span class="fn">n</span> <span class="fn">A</span> <span class="fn">B</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">⋯</span>.<a href="../../.././Init/Classical.html#Exists.choose">choose</a></span></li></ul></details><details id="instances-for-list-IsCyclotomicExtension.zeta" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="IsCyclotomicExtension.zeta_spec"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L90-L94">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta_spec"><span class="name">IsCyclotomicExtension</span>.<span class="name">zeta_spec</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> w)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> z)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">(<a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> <span class="fn">n</span> <span class="fn">A</span> <span class="fn">B</span>)</span> <span class="fn">n</span></span></div></div><p><code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> n A B</code> is a primitive <code>n</code>-th root of unity.</p></div></div><div class="decl" id="IsCyclotomicExtension.aeval_zeta"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L96-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.aeval_zeta"><span class="name">IsCyclotomicExtension</span>.<span class="name">aeval_zeta</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> w)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> z)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">↑<span class="fn">n</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Polynomial/AlgebraMap.html#Polynomial.aeval">Polynomial.aeval</a> <span class="fn">(<a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> <span class="fn">n</span> <span class="fn">A</span> <span class="fn">B</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">A</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="IsCyclotomicExtension.zeta_isRoot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L101-L103">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta_isRoot"><span class="name">IsCyclotomicExtension</span>.<span class="name">zeta_isRoot</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> w)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> z)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">↑<span class="fn">n</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">B</span>)</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Eval/Defs.html#Polynomial.IsRoot">IsRoot</a></span> <span class="fn">(<a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> <span class="fn">n</span> <span class="fn">A</span> <span class="fn">B</span>)</span></span></div></div></div></div><div class="decl" id="IsCyclotomicExtension.zeta_pow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L105-L106">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta_pow"><span class="name">IsCyclotomicExtension</span>.<span class="name">zeta_pow</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> w)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> z)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> <span class="fn">n</span> <span class="fn">A</span> <span class="fn">B</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="IsPrimitiveRoot.powerBasis"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L121-L127">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.powerBasis"><span class="name">IsPrimitiveRoot</span>.<span class="name">powerBasis</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/PowerBasis.html#PowerBasis">PowerBasis</a> <span class="fn">K</span> <span class="fn">L</span></span></div></div><p>The <code><a href="../../.././Mathlib/RingTheory/PowerBasis.html#PowerBasis">PowerBasis</a></code> given by a primitive root <code>η</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.powerBasis">IsPrimitiveRoot.powerBasis</a> <span class="fn">K</span> <span class="fn">hζ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Adjoin/PowerBasis.html#Algebra.adjoin.powerBasis">Algebra.adjoin.powerBasis</a> <span class="fn">⋯</span>)</span>.<a href="../../.././Mathlib/RingTheory/PowerBasis.html#PowerBasis.map">map</a></span> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">K</span>[<span class="fn">ζ</span>]</span>.<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Basic.html#Subalgebra.equivOfEq">equivOfEq</a></span> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <span class="fn">⋯</span>)</span>.<a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv.trans">trans</a></span> <a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Subalgebra.topEquiv">Subalgebra.topEquiv</a>)</span></span></li></ul></details><details id="instances-for-list-IsPrimitiveRoot.powerBasis" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="IsPrimitiveRoot.powerBasis_gen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L122-L122">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.powerBasis_gen"><span class="name">IsPrimitiveRoot</span>.<span class="name">powerBasis_gen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.powerBasis">IsPrimitiveRoot.powerBasis</a> <span class="fn">K</span> <span class="fn">hζ</span>)</span>.<a href="../../.././Mathlib/RingTheory/PowerBasis.html#PowerBasis.gen">gen</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">ζ</span></div></div></div></div><div class="decl" id="IsPrimitiveRoot.powerBasis_dim"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L122-L122">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.powerBasis_dim"><span class="name">IsPrimitiveRoot</span>.<span class="name">powerBasis_dim</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.powerBasis">IsPrimitiveRoot.powerBasis</a> <span class="fn">K</span> <span class="fn">hζ</span>)</span>.<a href="../../.././Mathlib/RingTheory/PowerBasis.html#PowerBasis.dim">dim</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/FieldTheory/Minpoly/Basic.html#minpoly">minpoly</a> <span class="fn">K</span> <span class="fn">ζ</span>)</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Degree/Defs.html#Polynomial.natDegree">natDegree</a></span></div></div></div></div><div class="decl" id="IsPrimitiveRoot.powerBasis_gen_mem_adjoin_zeta_sub_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L129-L132">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.powerBasis_gen_mem_adjoin_zeta_sub_one"><span class="name">IsPrimitiveRoot</span>.<span class="name">powerBasis_gen_mem_adjoin_zeta_sub_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.powerBasis">IsPrimitiveRoot.powerBasis</a> <span class="fn">K</span> <span class="fn">hζ</span>)</span>.<a href="../../.././Mathlib/RingTheory/PowerBasis.html#PowerBasis.gen">gen</a></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">K</span>[<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>]</span></div></div></div></div><div class="decl" id="IsPrimitiveRoot.subOnePowerBasis"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L134-L138">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.subOnePowerBasis"><span class="name">IsPrimitiveRoot</span>.<span class="name">subOnePowerBasis</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/PowerBasis.html#PowerBasis">PowerBasis</a> <span class="fn">K</span> <span class="fn">L</span></span></div></div><p>The <code><a href="../../.././Mathlib/RingTheory/PowerBasis.html#PowerBasis">PowerBasis</a></code> given by <code>η - 1</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.subOnePowerBasis">IsPrimitiveRoot.subOnePowerBasis</a> <span class="fn">K</span> <span class="fn">hζ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Adjoin/PowerBasis.html#PowerBasis.ofAdjoinEqTop">PowerBasis.ofAdjoinEqTop</a> <span class="fn">⋯</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-IsPrimitiveRoot.subOnePowerBasis" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="IsPrimitiveRoot.subOnePowerBasis_dim"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L135-L135">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.subOnePowerBasis_dim"><span class="name">IsPrimitiveRoot</span>.<span class="name">subOnePowerBasis_dim</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.subOnePowerBasis">subOnePowerBasis</a> <span class="fn">K</span> <span class="fn">hζ</span>)</span>.<a href="../../.././Mathlib/RingTheory/PowerBasis.html#PowerBasis.dim">dim</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/FieldTheory/Minpoly/Basic.html#minpoly">minpoly</a> <span class="fn">K</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>))</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Degree/Defs.html#Polynomial.natDegree">natDegree</a></span></div></div></div></div><div class="decl" id="IsPrimitiveRoot.subOnePowerBasis_gen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L135-L135">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.subOnePowerBasis_gen"><span class="name">IsPrimitiveRoot</span>.<span class="name">subOnePowerBasis_gen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.subOnePowerBasis">subOnePowerBasis</a> <span class="fn">K</span> <span class="fn">hζ</span>)</span>.<a href="../../.././Mathlib/RingTheory/PowerBasis.html#PowerBasis.gen">gen</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="IsPrimitiveRoot.embeddingsEquivPrimitiveRoots"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L143-L162">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.embeddingsEquivPrimitiveRoots"><span class="name">IsPrimitiveRoot</span>.<span class="name">embeddingsEquivPrimitiveRoots</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">L</span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">K</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">C</span>) <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#primitiveRoots">primitiveRoots</a> <span class="fn">n</span> <span class="fn">C</span>)</span></span></div></div><p>The equivalence between <code>L →ₐ[K] C</code> and <code><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#primitiveRoots">primitiveRoots</a> n C</code> given by a primitive root <code>ζ</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-IsPrimitiveRoot.embeddingsEquivPrimitiveRoots" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="IsPrimitiveRoot.embeddingsEquivPrimitiveRoots_apply_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L165-L169">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.embeddingsEquivPrimitiveRoots_apply_coe"><span class="name">IsPrimitiveRoot</span>.<span class="name">embeddingsEquivPrimitiveRoots_apply_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ'</span> : <span class="fn">L</span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">K</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">C</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<span class="fn">(<span class="fn"><span class="fn">hζ</span>.<a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.embeddingsEquivPrimitiveRoots">embeddingsEquivPrimitiveRoots</a></span> <span class="fn">C</span> <span class="fn">hirr</span>)</span> <span class="fn">φ'</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">φ'</span> <span class="fn">ζ</span></span></div></div></div></div><div class="decl" id="IsCyclotomicExtension.finrank"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L177-L182">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.finrank"><span class="name">IsCyclotomicExtension</span>.<span class="name">finrank</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">K</span> <span class="fn">L</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Mathlib/Data/Nat/Totient.html#Nat.totient">totient</a></span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic n K)</code> (in particular for <code>K = ℚ</code>), then the <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.finrank">finrank</a></code> of a
+cyclotomic extension is <code>n.totient</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.lcm_totient_le_finrank"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L185-L202">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.lcm_totient_le_finrank"><span class="name">IsPrimitiveRoot</span>.<span class="name">lcm_totient_le_finrank</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">x</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">y</span> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">(<span class="fn"><span class="fn">p</span>.<a href="../../.././Init/Data/Nat/Lcm.html#Nat.lcm">lcm</a></span> <span class="fn">q</span>)</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">p</span>.<a href="../../.././Init/Data/Nat/Lcm.html#Nat.lcm">lcm</a></span> <span class="fn">q</span>)</span>.<a href="../../.././Mathlib/Data/Nat/Totient.html#Nat.totient">totient</a></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">K</span> <span class="fn">L</span></span></div></div><p>If <code>L</code> contains both a primitive <code>p</code>-th root of unity and <code>q</code>-th root of unity, and
+<code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (lcm p q) K)</code> (in particular for <code>K = ℚ</code>), then the <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.finrank">finrank</a> K L</code> is at
+least <code>(lcm p q).totient</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.dvd_of_isCyclotomicExtension"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L217-L239">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.dvd_of_isCyclotomicExtension"><span class="name">IsPrimitiveRoot</span>.<span class="name">dvd_of_isCyclotomicExtension</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/NumberField/Basic.html#NumberField">NumberField</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <a href="../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">K</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">l</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hl</span> : <span class="fn">l</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">l</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">n</span></div></div><p>If an <code>n</code>-th cyclotomic extension of <code>ℚ</code> contains a primitive <code>l</code>-th root of unity, then
+<code>l ∣ 2 * n</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.exists_neg_pow_of_isOfFinOrder"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L241-L260">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.exists_neg_pow_of_isOfFinOrder"><span class="name">IsPrimitiveRoot</span>.<span class="name">exists_neg_pow_of_isOfFinOrder</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/NumberField/Basic.html#NumberField">NumberField</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <a href="../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hno</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Parity.html#Odd">Odd</a> <span class="fn">n</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ </span><span class="fn">x</span> : <span class="fn">K</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#IsOfFinOrder">IsOfFinOrder</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">r</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> (<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">ζ</span>) <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">r</span></span></div></div><p>If <code>x</code> is a root of unity (spelled as <code><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#IsOfFinOrder">IsOfFinOrder</a> x</code>) in an <code>n</code>-th cyclotomic extension of
+<code>ℚ</code>, where <code>n</code> is odd, and <code>ζ</code> is a primitive <code>n</code>-th root of unity, then there exist <code>r</code>
+such that <code>x = (-ζ)^r</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.exists_pow_or_neg_mul_pow_of_isOfFinOrder"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L262-L271">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.exists_pow_or_neg_mul_pow_of_isOfFinOrder"><span class="name">IsPrimitiveRoot</span>.<span class="name">exists_pow_or_neg_mul_pow_of_isOfFinOrder</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/NumberField/Basic.html#NumberField">NumberField</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <a href="../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hno</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Parity.html#Odd">Odd</a> <span class="fn">n</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ </span><span class="fn">x</span> : <span class="fn">K</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#IsOfFinOrder">IsOfFinOrder</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">r</span> &lt; <span class="fn">n</span>, <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">r</span></span></div></div><p>If <code>x</code> is a root of unity (spelled as <code><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#IsOfFinOrder">IsOfFinOrder</a> x</code>) in an <code>n</code>-th cyclotomic extension of
+<code>ℚ</code>, where <code>n</code> is odd, and <code>ζ</code> is a primitive <code>n</code>-th root of unity, then there exists <code>r &lt; n</code>
+such that <code>x = ζ^r</code> or <code>x = -ζ^r</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.norm_eq_neg_one_pow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L280-L283">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_eq_neg_one_pow"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_eq_neg_one_pow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">2</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> <span class="fn">ζ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(-<span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">K</span> <span class="fn">L</span></span></div></div><p>This mathematically trivial result is complementary to <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_eq_one">norm_eq_one</a></code> below.</p></div></div><div class="decl" id="IsPrimitiveRoot.norm_eq_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L288-L300">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_eq_one"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_eq_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">n</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> <span class="fn">ζ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic n K)</code> (in particular for <code>K = ℚ</code>), the norm of a primitive root is
+<code>1</code> if <code>n ≠ 2</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.norm_eq_one_of_linearly_ordered"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L303-L309">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_eq_one_of_linearly_ordered"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_eq_one_of_linearly_ordered</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hodd</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Parity.html#Odd">Odd</a> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> <span class="fn">ζ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div><p>If <code>K</code> is linearly ordered, the norm of a primitive root is <code>1</code> if <code>n</code> is odd.</p></div></div><div class="decl" id="IsPrimitiveRoot.norm_of_cyclotomic_irreducible"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L311-L317">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_of_cyclotomic_irreducible"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_of_cyclotomic_irreducible</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> <span class="fn">ζ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#ite">if</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#ite">then</a> <span class="fn">-<span class="fn">1</span></span> <a href="../../.././Init/Prelude.html#ite">else</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="IsPrimitiveRoot.sub_one_norm_eq_eval_cyclotomic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L330-L355">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.sub_one_norm_eq_eval_cyclotomic"><span class="name">IsPrimitiveRoot</span>.<span class="name">sub_one_norm_eq_eval_cyclotomic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">2</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/Polynomial/Eval/Defs.html#Polynomial.eval">Polynomial.eval</a> <span class="fn">1</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span>)</span></span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic n K)</code> (in particular for <code>K = ℚ</code>), then the norm of
+<code>ζ - 1</code> is <code>eval 1 (cyclotomic n ℤ)</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.sub_one_norm_isPrimePow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L357-L370">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.sub_one_norm_isPrimePow"><span class="name">IsPrimitiveRoot</span>.<span class="name">sub_one_norm_isPrimePow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/IsPrimePow.html#IsPrimePow">IsPrimePow</a> <span class="fn">n</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">n</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn"><span class="fn">n</span>.<a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.minFac">minFac</a></span></span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/IsPrimePow.html#IsPrimePow">IsPrimePow</a> n</code>, <code>n ≠ 2</code> and <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic n K)</code> (in particular for
+<code>K = ℚ</code>), then the norm of <code>ζ - 1</code> is <code>n.minFac</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.minpoly_sub_one_eq_cyclotomic_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L376-L384">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.minpoly_sub_one_eq_cyclotomic_comp"><span class="name">IsPrimitiveRoot</span>.<span class="name">minpoly_sub_one_eq_cyclotomic_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">A</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/FieldTheory/Minpoly/Basic.html#minpoly">minpoly</a> <span class="fn">K</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span>.<a href="../../.././Mathlib/Algebra/Polynomial/Eval/Defs.html#Polynomial.comp">comp</a></span> (<a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></div></div></div></div><div class="decl" id="IsPrimitiveRoot.norm_pow_sub_one_of_prime_pow_ne_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L388-L441">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_pow_sub_one_of_prime_pow_ne_two"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_pow_sub_one_of_prime_pow_ne_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k </span><span class="fn">s</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>))</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hpri</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)<a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)) <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">k</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htwo</span> : <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>) <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">s</span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (p ^ (k + 1)) K)</code> (in particular for <code>K = ℚ</code>) and <code>p</code> is a prime,
+then the norm of <code>ζ ^ (p ^ s) - 1</code> is <code>p ^ (p ^ s)</code> if <code>p ^ (k - s + 1) ≠ 2</code>. See the next lemmas
+for similar results.</p></div></div><div class="decl" id="IsPrimitiveRoot.norm_pow_sub_one_of_prime_ne_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L443-L453">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_pow_sub_one_of_prime_ne_two"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_pow_sub_one_of_prime_ne_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>))</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hpri</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)<a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)) <span class="fn">K</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">k</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hodd</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">s</span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (p ^ (k + 1)) K)</code> (in particular for <code>K = ℚ</code>) and <code>p</code> is a prime,
+then the norm of <code>ζ ^ (p ^ s) - 1</code> is <code>p ^ (p ^ s)</code> if <code>p ≠ 2</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.norm_sub_one_of_prime_ne_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L455-L460">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_sub_one_of_prime_ne_two"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_sub_one_of_prime_ne_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>))</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hpri</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)<a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)) <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">p</span></span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (p ^ (k + 1)) K)</code> (in particular for <code>K = ℚ</code>) and <code>p</code> is an odd
+prime, then the norm of <code>ζ - 1</code> is <code>p</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.norm_sub_one_of_prime_ne_two'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L462-L470">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_sub_one_of_prime_ne_two'"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_sub_one_of_prime_ne_two'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hpri</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hcyc</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">p</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">p</span></span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic p K)</code> (in particular for <code>K = ℚ</code>) and <code>p</code> is an odd prime,
+then the norm of <code>ζ - 1</code> is <code>p</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.norm_pow_sub_one_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L472-L488">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_pow_sub_one_two"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_pow_sub_one_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> (<span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>))</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)<a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> (<span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)) <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(-<span class="fn">2</span>)</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (2 ^ (k + 1)) K)</code> (in particular for <code>K = ℚ</code>), then the norm of
+<code>ζ ^ (2 ^ k) - 1</code> is <code>(-2) ^ (2 ^ k)</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.norm_sub_one_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L490-L501">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_sub_one_two"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_sub_one_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> (<span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hk</span> : <span class="fn">2</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">k</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> (<span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span>) <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">2</span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (2 ^ k) K)</code> (in particular for <code>K = ℚ</code>) and <code>k</code> is at least <code>2</code>,
+then the norm of <code>ζ - 1</code> is <code>2</code>.</p></div></div><div class="decl" id="IsPrimitiveRoot.norm_pow_sub_one_eq_prime_pow_of_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L503-L524">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsPrimitiveRoot.norm_pow_sub_one_eq_prime_pow_of_ne_zero"><span class="name">IsPrimitiveRoot</span>.<span class="name">norm_pow_sub_one_eq_prime_pow_of_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k </span><span class="fn">s</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hζ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">ζ</span> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>))</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hpri</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hcycl</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)<a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)) <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">k</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hk</span> : <span class="fn">k</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn">ζ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">s</span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (p ^ (k + 1)) K)</code> (in particular for <code>K = ℚ</code>) and <code>p</code> is a prime,
+then the norm of <code>ζ ^ (p ^ s) - 1</code> is <code>p ^ (p ^ s)</code> if <code>k ≠ 0</code> and <code>s ≤ k</code>.</p></div></div><div class="decl" id="IsCyclotomicExtension.norm_zeta_eq_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L536-L540">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.norm_zeta_eq_one"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_eq_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">n</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> <span class="fn">(<a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> <span class="fn">n</span> <span class="fn">K</span> <span class="fn">L</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic n K)</code> (in particular for <code>K = ℚ</code>), the norm of <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> n K L</code> is <code>1</code>
+if <code>n</code> is odd.</p></div></div><div class="decl" id="IsCyclotomicExtension.norm_zeta_sub_one_of_isPrimePow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L542-L547">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.norm_zeta_sub_one_of_isPrimePow"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_sub_one_of_isPrimePow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/IsPrimePow.html#IsPrimePow">IsPrimePow</a> <span class="fn">n</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">n</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">n</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">n</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> <span class="fn">n</span> <span class="fn">K</span> <span class="fn">L</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn"><span class="fn">n</span>.<a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.minFac">minFac</a></span></span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/IsPrimePow.html#IsPrimePow">IsPrimePow</a> n</code>, <code>n ≠ 2</code> and <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic n K)</code> (in particular for <code>K = ℚ</code>),
+then the norm of <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> n K L - 1</code> is <code>n.minFac</code>.</p></div></div><div class="decl" id="IsCyclotomicExtension.norm_zeta_pow_sub_one_of_prime_pow_ne_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L549-L557">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.norm_zeta_pow_sub_one_of_prime_pow_ne_two"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_pow_sub_one_of_prime_pow_ne_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)<a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)) <span class="fn">K</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">k</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htwo</span> : <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>) <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)) <span class="fn">K</span> <span class="fn">L</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">s</span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (p ^ (k + 1)) K)</code> (in particular for <code>K = ℚ</code>) and <code>p</code> is a prime,
+then the norm of <code>(zeta (p ^ (k + 1)) K L) ^ (p ^ s) - 1</code> is <code>p ^ (p ^ s)</code>
+if <code>p ^ (k - s + 1) ≠ 2</code>.</p></div></div><div class="decl" id="IsCyclotomicExtension.norm_zeta_pow_sub_one_of_prime_ne_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L559-L565">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.norm_zeta_pow_sub_one_of_prime_ne_two"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_pow_sub_one_of_prime_ne_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)<a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)) <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)) <span class="fn">K</span> <span class="fn">L</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">p</span></span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (p ^ (k + 1)) K)</code> (in particular for <code>K = ℚ</code>) and <code>p</code> is an odd
+prime, then the norm of <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> (p ^ (k + 1)) K L - 1</code> is <code>p</code>.</p></div></div><div class="decl" id="IsCyclotomicExtension.norm_zeta_sub_one_of_prime_ne_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L567-L572">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.norm_zeta_sub_one_of_prime_ne_two"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_sub_one_of_prime_ne_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> <span class="fn">p</span> <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> <span class="fn">p</span> <span class="fn">K</span> <span class="fn">L</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">p</span></span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic p K)</code> (in particular for <code>K = ℚ</code>) and <code>p</code> is an odd prime,
+then the norm of <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> p K L - 1</code> is <code>p</code>.</p></div></div><div class="decl" id="IsCyclotomicExtension.norm_zeta_pow_sub_one_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.lean#L574-L579">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.norm_zeta_pow_sub_one_two"><span class="name">IsCyclotomicExtension</span>.<span class="name">norm_zeta_pow_sub_one_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hk</span> : <span class="fn">2</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">k</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/Basic.html#IsCyclotomicExtension">IsCyclotomicExtension</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hirr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html#Polynomial.cyclotomic">Polynomial.cyclotomic</a> (<span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span>) <span class="fn">K</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Norm/Defs.html#Algebra.norm">Algebra.norm</a> <span class="fn">K</span>)</span> (<span class="fn"><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> (<span class="fn">2</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">k</span>) <span class="fn">K</span> <span class="fn">L</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">2</span></div></div><p>If <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> (cyclotomic (2 ^ k) K)</code> (in particular for <code>K = ℚ</code>) and <code>k</code> is at least <code>2</code>,
+then the norm of <code><a href="../../.././Mathlib/NumberTheory/Cyclotomic/PrimitiveRoots.html#IsCyclotomicExtension.zeta">zeta</a> (2 ^ k) K L - 1</code> is <code>2</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,264 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.Invariant.Profinite</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.Invariant.Profinite";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">Invariant</span>.<span class="name">Profinite</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Invariant/Profinite.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/CategoryTheory/CofilteredSystem.html">Mathlib.CategoryTheory.CofilteredSystem</a></li><li><a href="../../.././Mathlib/RingTheory/Invariant/Basic.html">Mathlib.RingTheory.Invariant.Basic</a></li><li><a href="../../.././Mathlib/Topology/Algebra/ClopenNhdofOne.html">Mathlib.Topology.Algebra.ClopenNhdofOne</a></li><li><a href="../../.././Mathlib/Topology/Algebra/Category/ProfiniteGrp/Limits.html">Mathlib.Topology.Algebra.Category.ProfiniteGrp.Limits</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.Invariant.Profinite" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Algebra.IsInvariant.isIntegral_of_profinite"><span class="name">Algebra</span>.<span class="name">IsInvariant</span>.<span class="name">isIntegral_of_profinite</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.IsInvariant.exists_smul_of_under_eq_of_profinite"><span class="name">Algebra</span>.<span class="name">IsInvariant</span>.<span class="name">exists_smul_of_under_eq_of_profinite</span></a></div><div class="nav_link"><a class="break_within" href="#Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor_aux"><span class="name">Ideal</span>.<span class="name">Quotient</span>.<span class="name">stabilizerHomSurjectiveAuxFunctor_aux</span></a></div><div class="nav_link"><a class="break_within" href="#Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor"><span class="name">Ideal</span>.<span class="name">Quotient</span>.<span class="name">stabilizerHomSurjectiveAuxFunctor</span></a></div><div class="nav_link"><a class="break_within" href="#instFiniteObjOpenNormalSubgroupStabilizerHomSurjectiveAuxFunctor"><span class="name">instFiniteObjOpenNormalSubgroupStabilizerHomSurjectiveAuxFunctor</span></a></div><div class="nav_link"><a class="break_within" href="#instNonemptyObjOpenNormalSubgroupStabilizerHomSurjectiveAuxFunctor"><span class="name">instNonemptyObjOpenNormalSubgroupStabilizerHomSurjectiveAuxFunctor</span></a></div><div class="nav_link"><a class="break_within" href="#Ideal.Quotient.stabilizerHom_surjective_of_profinite"><span class="name">Ideal</span>.<span class="name">Quotient</span>.<span class="name">stabilizerHom_surjective_of_profinite</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Invariant-Extensions-of-Rings" class="markdown-heading">Invariant Extensions of Rings <a class="hover-link" href="#Invariant-Extensions-of-Rings">#</a></h1><p>In this file we generalize the results in <code><a href="../../.././Mathlib/RingTheory/Invariant/Basic.html">Mathlib/RingTheory/Invariant/Basic.lean</a></code> to profinite
+groups.</p><h2 id="Main-statements" class="markdown-heading">Main statements <a class="hover-link" href="#Main-statements">#</a></h2><p>Let <code>G</code> be a profinite group acting continuously on a
+commutative ring <code>B</code> (with the discrete topology) satisfying <code><a href="../../.././Mathlib/RingTheory/Invariant/Defs.html#Algebra.IsInvariant">Algebra.IsInvariant</a> A B G</code>.</p><ul><li><code><a href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#Algebra.IsInvariant.isIntegral_of_profinite">Algebra.IsInvariant.isIntegral_of_profinite</a></code>: <code>B/A</code> is an integral extension.</li><li><code><a href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#Algebra.IsInvariant.exists_smul_of_under_eq_of_profinite">Algebra.IsInvariant.exists_smul_of_under_eq_of_profinite</a></code>:
+<code>G</code> acts transitivity on the prime ideals of <code>B</code> lying above a given prime ideal of <code>A</code>.</li><li><code><a href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#Ideal.Quotient.stabilizerHom_surjective_of_profinite">Ideal.Quotient.stabilizerHom_surjective_of_profinite</a></code>: if <code>Q</code> is a prime ideal of <code>B</code> lying over
+a prime ideal <code>P</code> of <code>A</code>, then the stabilizer subgroup of <code>Q</code> surjects onto <code>Aut((B/Q)/(A/P))</code>.</li></ul></div><div class="decl" id="Algebra.IsInvariant.isIntegral_of_profinite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Invariant/Profinite.lean#L47-L55">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#Algebra.IsInvariant.isIntegral_of_profinite"><span class="name">Algebra</span>.<span class="name">IsInvariant</span>.<span class="name">isIntegral_of_profinite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Connected/TotallyDisconnected.html#TotallyDisconnectedSpace">TotallyDisconnectedSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">G</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Invariant/Defs.html#Algebra.IsInvariant">IsInvariant</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/IntegralClosure/Algebra/Defs.html#Algebra.IsIntegral">Algebra.IsIntegral</a> <span class="fn">A</span> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="Algebra.IsInvariant.exists_smul_of_under_eq_of_profinite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Invariant/Profinite.lean#L58-L98">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#Algebra.IsInvariant.exists_smul_of_under_eq_of_profinite"><span class="name">Algebra</span>.<span class="name">IsInvariant</span>.<span class="name">exists_smul_of_under_eq_of_profinite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Connected/TotallyDisconnected.html#TotallyDisconnectedSpace">TotallyDisconnectedSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">G</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Invariant/Defs.html#Algebra.IsInvariant">IsInvariant</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P </span><span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hPQ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.under">Ideal.under</a> <span class="fn">A</span> <span class="fn">P</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.under">Ideal.under</a> <span class="fn">A</span> <span class="fn">Q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">g</span> : <span class="fn">G</span>), <span class="fn">Q</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">P</span></span></div></div><p><code>G</code> acts transitively on the prime ideals of <code>B</code> above a given prime ideal of <code>A</code>.</p></div></div><div class="decl" id="Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor_aux"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Invariant/Profinite.lean#L109-L122">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor_aux"><span class="name">Ideal</span>.<span class="name">Quotient</span>.<span class="name">stabilizerHomSurjectiveAuxFunctor_aux</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N </span><span class="fn">N'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup">OpenNormalSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">N</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">N'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">↑<span class="fn"><span class="fn">N</span>.<a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup.toOpenSubgroup">toOpenSubgroup</a></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#MulAction.stabilizer">MulAction.stabilizer</a> (<span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">↑<span class="fn"><span class="fn">N</span>.<a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup.toOpenSubgroup">toOpenSubgroup</a></span></span>) <span class="fn">(<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.under">under</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Operations.html#FixedPoints.subalgebra">FixedPoints.subalgebra</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn">↥<span class="fn">↑<span class="fn"><span class="fn">N</span>.<a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup.toOpenSubgroup">toOpenSubgroup</a></span></span></span>)</span>)</span> <span class="fn">Q</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/GroupTheory/QuotientGroup/Defs.html#QuotientGroup.map">QuotientGroup.map</a> <span class="fn">(↑<span class="fn"><span class="fn">N</span>.<a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup.toOpenSubgroup">toOpenSubgroup</a></span>)</span> <span class="fn"><span class="fn"><span class="fn">N'</span>.<a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup.toOpenSubgroup">toOpenSubgroup</a></span>.1</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom.id">MonoidHom.id</a> <span class="fn">G</span>)</span> <span class="fn">e</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a>   <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#MulAction.stabilizer">MulAction.stabilizer</a> (<span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">↑<span class="fn"><span class="fn">N'</span>.<a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup.toOpenSubgroup">toOpenSubgroup</a></span></span>) <span class="fn">(<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.under">under</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Operations.html#FixedPoints.subalgebra">FixedPoints.subalgebra</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn">↥<span class="fn">↑<span class="fn"><span class="fn">N'</span>.<a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup.toOpenSubgroup">toOpenSubgroup</a></span></span></span>)</span>)</span> <span class="fn">Q</span>)</span></span></div></div></div></div><div class="decl" id="Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Invariant/Profinite.lean#L124-L147">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor"><span class="name">Ideal</span>.<span class="name">Quotient</span>.<span class="name">stabilizerHomSurjectiveAuxFunctor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.LiesOver">LiesOver</a></span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : (<span class="fn">B</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Q</span>) <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">≃ₐ[</a><span class="fn">A</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">P</span><a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">]</a> <span class="fn">B</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Q</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">CategoryTheory.Functor</a> <span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup">OpenNormalSubgroup</a> <span class="fn">G</span>)</span> <a href="../../.././foundational_types.html">(Type</a> u_3)</span></div></div><p>(Implementation)
+The functor taking an open normal subgroup <code>N ≤ G</code> to the set of lifts of <code>σ</code> in <code>G ⧸ N</code>.
+We will show that its inverse limit is nonempty to conclude that there exists a lift in <code>G</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="instFiniteObjOpenNormalSubgroupStabilizerHomSurjectiveAuxFunctor"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Invariant/Profinite.lean#L150-L154">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#instFiniteObjOpenNormalSubgroupStabilizerHomSurjectiveAuxFunctor"><span class="name">instFiniteObjOpenNormalSubgroupStabilizerHomSurjectiveAuxFunctor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.LiesOver">LiesOver</a></span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : (<span class="fn">B</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Q</span>) <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">≃ₐ[</a><span class="fn">A</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">P</span><a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">]</a> <span class="fn">B</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Q</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">N</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup">OpenNormalSubgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor">Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor</a> <span class="fn">P</span> <span class="fn">Q</span> <span class="fn">σ</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">N</span>)</span></span></div></div></div></div><div class="decl" id="instNonemptyObjOpenNormalSubgroupStabilizerHomSurjectiveAuxFunctor"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Invariant/Profinite.lean#L157-L170">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#instNonemptyObjOpenNormalSubgroupStabilizerHomSurjectiveAuxFunctor"><span class="name">instNonemptyObjOpenNormalSubgroupStabilizerHomSurjectiveAuxFunctor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.LiesOver">LiesOver</a></span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Invariant/Defs.html#Algebra.IsInvariant">Algebra.IsInvariant</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : (<span class="fn">B</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Q</span>) <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">≃ₐ[</a><span class="fn">A</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">P</span><a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">]</a> <span class="fn">B</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Q</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">N</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/OpenSubgroup.html#OpenNormalSubgroup">OpenNormalSubgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor">Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor</a> <span class="fn">P</span> <span class="fn">Q</span> <span class="fn">σ</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">N</span>)</span></span></div></div></div></div><div class="decl" id="Ideal.Quotient.stabilizerHom_surjective_of_profinite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Invariant/Profinite.lean#L172-L207">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Invariant/Profinite.html#Ideal.Quotient.stabilizerHom_surjective_of_profinite"><span class="name">Ideal</span>.<span class="name">Quotient</span>.<span class="name">stabilizerHom_surjective_of_profinite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Connected/TotallyDisconnected.html#TotallyDisconnectedSpace">TotallyDisconnectedSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">G</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.LiesOver">LiesOver</a></span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Invariant/Defs.html#Algebra.IsInvariant">Algebra.IsInvariant</a> <span class="fn">A</span> <span class="fn">B</span> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.Quotient.stabilizerHom">stabilizerHom</a> <span class="fn">Q</span> <span class="fn">P</span> <span class="fn">G</span>)</span></span></span></div></div><p>The stabilizer subgroup of <code>Q</code> surjects onto <code>Aut((B/Q)/(A/P))</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,252 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RepresentationTheory.Irreducible</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.RepresentationTheory.Irreducible";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RepresentationTheory</span>.<span class="name">Irreducible</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/RepresentationTheory/Intertwining.html">Mathlib.RepresentationTheory.Intertwining</a></li><li><a href="../.././Mathlib/RepresentationTheory/Subrepresentation.html">Mathlib.RepresentationTheory.Subrepresentation</a></li><li><a href="../.././Mathlib/RepresentationTheory/AlgebraRepresentation/Basic.html">Mathlib.RepresentationTheory.AlgebraRepresentation.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RepresentationTheory.Irreducible" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Representation.IsIrreducible"><span class="name">Representation</span>.<span class="name">IsIrreducible</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.irreducible_iff_isSimpleModule_asModule"><span class="name">Representation</span>.<span class="name">irreducible_iff_isSimpleModule_asModule</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.isSimpleModule_iff_irreducible_ofModule"><span class="name">Representation</span>.<span class="name">isSimpleModule_iff_irreducible_ofModule</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.is_simple_module_iff_irreducible_ofModule"><span class="name">Representation</span>.<span class="name">is_simple_module_iff_irreducible_ofModule</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.IsIrreducible.instIsSimpleModuleMonoidAlgebraAsModule"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">instIsSimpleModuleMonoidAlgebraAsModule</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.IsIrreducible.injective_or_eq_zero"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">injective_or_eq_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.IsIrreducible.bijective_or_eq_zero"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">bijective_or_eq_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.IsIrreducible.instSubsingletonIntertwiningMapOfIsEmptyEquiv"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">instSubsingletonIntertwiningMapOfIsEmptyEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.IsIrreducible.algebraMap_intertwiningMap_bijective_of_isAlgClosed"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">algebraMap_intertwiningMap_bijective_of_isAlgClosed</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.IsIrreducible.finrank_intertwiningMap_self"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">finrank_intertwiningMap_self</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.IsIrreducible.finrank_eq_one_of_isMulCommutative"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">finrank_eq_one_of_isMulCommutative</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Irreducible-representations" class="markdown-heading">Irreducible representations <a class="hover-link" href="#Irreducible-representations">#</a></h1><p>This file defines irreducible monoid representations.</p></div><div class="decl" id="Representation.IsIrreducible"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L28-L31">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible"><span class="name">Representation</span>.<span class="name">IsIrreducible</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A representation <code>ρ</code> is irreducible if it is non-trivial and has no proper non-trivial
+subrepresentations.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Order/Atoms.html#IsSimpleOrder">IsSimpleOrder</a> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Subrepresentation.html#Subrepresentation">Subrepresentation</a> <span class="fn">ρ</span>)</span></span></li></ul></details><details id="instances-for-list-Representation.IsIrreducible" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.irreducible_iff_isSimpleModule_asModule"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L34-L37">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.irreducible_iff_isSimpleModule_asModule"><span class="name">Representation</span>.<span class="name">irreducible_iff_isSimpleModule_asModule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/RingTheory/SimpleModule/Basic.html#IsSimpleModule">IsSimpleModule</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#MonoidAlgebra">MonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.asModule">asModule</a></span></span></div></div></div></div><div class="decl" id="Representation.isSimpleModule_iff_irreducible_ofModule"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L40-L43">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.isSimpleModule_iff_irreducible_ofModule"><span class="name">Representation</span>.<span class="name">isSimpleModule_iff_irreducible_ofModule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_5)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#MonoidAlgebra">MonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/SimpleModule/Basic.html#IsSimpleModule">IsSimpleModule</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#MonoidAlgebra">MonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.ofModule">ofModule</a> <span class="fn">M</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span></div></div></div></div><div class="decl" id="Representation.is_simple_module_iff_irreducible_ofModule"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L45-L46">source</a></div><div class="attributes">@[deprecated Representation.isSimpleModule_iff_irreducible_ofModule (since := &quot;2026-02-09&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.is_simple_module_iff_irreducible_ofModule"><span class="name">Representation</span>.<span class="name">is_simple_module_iff_irreducible_ofModule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_5)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#MonoidAlgebra">MonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/SimpleModule/Basic.html#IsSimpleModule">IsSimpleModule</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#MonoidAlgebra">MonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.ofModule">ofModule</a> <span class="fn">M</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.isSimpleModule_iff_irreducible_ofModule">Representation.isSimpleModule_iff_irreducible_ofModule</a></code>.</p></div></div><div class="decl" id="Representation.IsIrreducible.instIsSimpleModuleMonoidAlgebraAsModule"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L53-L54">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible.instIsSimpleModuleMonoidAlgebraAsModule"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">instIsSimpleModuleMonoidAlgebraAsModule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/SimpleModule/Basic.html#IsSimpleModule">IsSimpleModule</a> <span class="fn">(<a href="../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#MonoidAlgebra">MonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.asModule">asModule</a></span></span></div></div></div></div><div class="decl" id="Representation.IsIrreducible.injective_or_eq_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L59-L61">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible.injective_or_eq_zero"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">injective_or_eq_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">f</span></span></span> <a href="../.././Init/Prelude.html#Or">∨</a> <span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="Representation.IsIrreducible.bijective_or_eq_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L64-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible.bijective_or_eq_zero"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">bijective_or_eq_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">⇑<span class="fn">f</span></span></span> <a href="../.././Init/Prelude.html#Or">∨</a> <span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="Representation.IsIrreducible.instSubsingletonIntertwiningMapOfIsEmptyEquiv"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L68-L70">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible.instSubsingletonIntertwiningMapOfIsEmptyEquiv"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">instSubsingletonIntertwiningMapOfIsEmptyEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn">(<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv">Equiv</a></span> <span class="fn">σ</span>)</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">(<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">σ</span>)</span></span></div></div></div></div><div class="decl" id="Representation.IsIrreducible.algebraMap_intertwiningMap_bijective_of_isAlgClosed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L75-L79">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible.algebraMap_intertwiningMap_bijective_of_isAlgClosed"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">algebraMap_intertwiningMap_bijective_of_isAlgClosed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/IsAlgClosed/Basic.html#IsAlgClosed">IsAlgClosed</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">⇑<span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">k</span> <span class="fn">(<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">ρ</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Representation.IsIrreducible.finrank_intertwiningMap_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L82-L85">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible.finrank_intertwiningMap_self"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">finrank_intertwiningMap_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/IsAlgClosed/Basic.html#IsAlgClosed">IsAlgClosed</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">k</span> <span class="fn">(<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">ρ</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Representation.IsIrreducible.finrank_eq_one_of_isMulCommutative"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Irreducible.lean#L90-L93">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible.finrank_eq_one_of_isMulCommutative"><span class="name">Representation</span>.<span class="name">IsIrreducible</span>.<span class="name">finrank_eq_one_of_isMulCommutative</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Irreducible.html#Representation.IsIrreducible">IsIrreducible</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/IsAlgClosed/Basic.html#IsAlgClosed">IsAlgClosed</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#IsMulCommutative">IsMulCommutative</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">k</span> <span class="fn">V</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

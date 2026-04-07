@@ -1,0 +1,300 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.SurjectiveOnStalks</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.SurjectiveOnStalks";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">SurjectiveOnStalks</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/RingTheory/TensorProduct/Maps.html">Mathlib.RingTheory.TensorProduct.Maps</a></li><li><a href="../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html">Mathlib.RingTheory.Localization.AtPrime.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.SurjectiveOnStalks" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#RingHom.SurjectiveOnStalks"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.surjective_localRingHom_iff"><span class="name">RingHom</span>.<span class="name">surjective_localRingHom_iff</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.surjectiveOnStalks_iff_forall_ideal"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_iff_forall_ideal</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.surjectiveOnStalks_iff_forall_maximal"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_iff_forall_maximal</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.surjectiveOnStalks_iff_forall_maximal'"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_iff_forall_maximal'</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.surjectiveOnStalks_of_exists_div"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_of_exists_div</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.surjectiveOnStalks_of_surjective"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_of_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#RingEquiv.surjectiveOnStalks"><span class="name">RingEquiv</span>.<span class="name">surjectiveOnStalks</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.SurjectiveOnStalks.comp"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.SurjectiveOnStalks.of_comp"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">of_comp</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.SurjectiveOnStalks.localRingHom_surjective"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">localRingHom_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.SurjectiveOnStalks.exists_mul_eq_tmul"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">exists_mul_eq_tmul</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.surjectiveOnStalks_of_isLocalization"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_of_isLocalization</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.SurjectiveOnStalks.baseChange"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">baseChange</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.SurjectiveOnStalks.baseChange'"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">baseChange'</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.SurjectiveOnStalks.tensorProductMap"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">tensorProductMap</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.surjectiveOnStalks_iff_of_isLocalHom"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_iff_of_isLocalHom</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Ring-Homomorphisms-surjective-on-stalks" class="markdown-heading">Ring Homomorphisms surjective on stalks <a class="hover-link" href="#Ring-Homomorphisms-surjective-on-stalks">#</a></h1><p>In this file, we prove some results on ring homomorphisms surjective on stalks, to be used in
+the development of immersions in algebraic geometry.</p><p>A ring homomorphism <code>R →+* S</code> is surjective on stalks if <code>R_p →+* S_q</code> is surjective for all pairs
+of primes <code>p = f⁻¹(q)</code>. We show that this property is stable under composition and base change, and
+that surjections and localizations satisfy this.</p></div><div class="decl" id="RingHom.SurjectiveOnStalks"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L31-L36">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A ring homomorphism <code>R →+* S</code> is surjective on stalks if <code>R_p →+* S_q</code> is surjective for all pairs
+of primes <code>p = f⁻¹(q)</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn">∀ (<span class="fn">P</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>) (<span class="fn">x</span> : <span class="fn"><span class="fn">P</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>), <span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html#Localization.localRingHom">Localization.localRingHom</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.comap">Ideal.comap</a> <span class="fn">f</span> <span class="fn">P</span>)</span> <span class="fn">P</span> <span class="fn">f</span> <span class="fn">⋯</span>)</span></span></span></span></li></ul></details><details id="instances-for-list-RingHom.SurjectiveOnStalks" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="RingHom.surjective_localRingHom_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L38-L65">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.surjective_localRingHom_iff"><span class="name">RingHom</span>.<span class="name">surjective_localRingHom_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html#Localization.localRingHom">Localization.localRingHom</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.comap">Ideal.comap</a> <span class="fn">f</span> <span class="fn">P</span>)</span> <span class="fn">P</span> <span class="fn">f</span> <span class="fn">⋯</span>)</span></span></span> <a href="../.././Init/Core.html#Iff">↔</a>   <span class="fn">∀ (<span class="fn">s</span> : <span class="fn">S</span>), <span class="fn">∃ (<span class="fn">x</span> : <span class="fn">R</span>) (<span class="fn">r</span> : <span class="fn">R</span>), <span class="fn">∃ <span class="fn">c</span> ∉ <span class="fn">P</span>, <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">r</span></span> ∉ <span class="fn">P</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">c</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">r</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span></span></span></div></div><p><code>R_p →+* S_q</code> is surjective if and only if
+every <code>x : S</code> is of the form <code>f x / f r</code> for some <code>f r ∉ q</code>.
+This is useful when proving <code><a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></code>.</p></div></div><div class="decl" id="RingHom.surjectiveOnStalks_iff_forall_ideal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L67-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.surjectiveOnStalks_iff_forall_ideal"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_iff_forall_ideal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>), <span class="fn"><span class="fn">I</span> <a href="../.././Init/Core.html#Ne">≠</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a> → <span class="fn">∀ (<span class="fn">s</span> : <span class="fn">S</span>), <span class="fn">∃ (<span class="fn">x</span> : <span class="fn">R</span>) (<span class="fn">r</span> : <span class="fn">R</span>), <span class="fn">∃ <span class="fn">c</span> ∉ <span class="fn">I</span>, <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">r</span></span> ∉ <span class="fn">I</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">c</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">r</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span></span></span></span></span></div></div></div></div><div class="decl" id="RingHom.surjectiveOnStalks_iff_forall_maximal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L76-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.surjectiveOnStalks_iff_forall_maximal"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_iff_forall_maximal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span> <a href="../.././Init/Core.html#Iff">↔</a>   <span class="fn">∀ (<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>) (<span class="fn">x</span> : <span class="fn"><span class="fn">I</span>.<a href="../.././Mathlib/RingTheory/Ideal/Maximal.html#Ideal.IsMaximal">IsMaximal</a></span>), <span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html#Localization.localRingHom">Localization.localRingHom</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.comap">Ideal.comap</a> <span class="fn">f</span> <span class="fn">I</span>)</span> <span class="fn">I</span> <span class="fn">f</span> <span class="fn">⋯</span>)</span></span></span></span></div></div></div></div><div class="decl" id="RingHom.surjectiveOnStalks_iff_forall_maximal'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L86-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.surjectiveOnStalks_iff_forall_maximal'"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_iff_forall_maximal'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span> <a href="../.././Init/Core.html#Iff">↔</a>   <span class="fn">∀ (<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>), <span class="fn"><span class="fn"><span class="fn">I</span>.<a href="../.././Mathlib/RingTheory/Ideal/Maximal.html#Ideal.IsMaximal">IsMaximal</a></span> → <span class="fn">∀ (<span class="fn">s</span> : <span class="fn">S</span>), <span class="fn">∃ (<span class="fn">x</span> : <span class="fn">R</span>) (<span class="fn">r</span> : <span class="fn">R</span>), <span class="fn">∃ <span class="fn">c</span> ∉ <span class="fn">I</span>, <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">r</span></span> ∉ <span class="fn">I</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">c</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">r</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span></span></span></span></span></div></div></div></div><div class="decl" id="RingHom.surjectiveOnStalks_of_exists_div"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L91-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.surjectiveOnStalks_of_exists_div"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_of_exists_div</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">S</span>), <span class="fn">∃ (<span class="fn">r</span> : <span class="fn">R</span>) (<span class="fn">s</span> : <span class="fn">R</span>), <span class="fn"><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span>)</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">r</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span></div></div></div></div><div class="decl" id="RingHom.surjectiveOnStalks_of_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L97-L101">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.surjectiveOnStalks_of_surjective"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_of_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span></div></div></div></div><div class="decl" id="RingEquiv.surjectiveOnStalks"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L103-L105">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingEquiv.surjectiveOnStalks"><span class="name">RingEquiv</span>.<span class="name">surjectiveOnStalks</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Equiv.html#RingEquiv">≃+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">e</span>.<a href="../.././Mathlib/Algebra/Ring/Equiv.html#RingEquiv.toRingHom">toRingHom</a></span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span></div></div></div></div><div class="decl" id="RingHom.SurjectiveOnStalks.comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L107-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks.comp"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">S</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">T</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn">f</span>)</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span></div></div></div></div><div class="decl" id="RingHom.SurjectiveOnStalks.of_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L113-L119">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks.of_comp"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">of_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">S</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">T</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn">f</span>)</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span></div></div></div></div><div class="decl" id="RingHom.SurjectiveOnStalks.localRingHom_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L121-L124">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks.localRingHom_surjective"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">localRingHom_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Q</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">P</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.comap">Ideal.comap</a> <span class="fn">f</span> <span class="fn">Q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">(<a href="../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html#Localization.localRingHom">Localization.localRingHom</a> <span class="fn">P</span> <span class="fn">Q</span> <span class="fn">f</span> <span class="fn">e</span>)</span></span></span></div></div></div></div><div class="decl" id="RingHom.SurjectiveOnStalks.exists_mul_eq_tmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L129-L159">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks.exists_mul_eq_tmul"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">exists_mul_eq_tmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf₂</span> : <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">T</span>)</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">J</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hJ</span> : <span class="fn"><span class="fn">J</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">t</span> : <span class="fn">T</span>) (<span class="fn">r</span> : <span class="fn">R</span>) (<span class="fn">a</span> : <span class="fn">S</span>), <span class="fn"><span class="fn">r</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span> ∉ <span class="fn">J</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">1</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">R</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> (<span class="fn">r</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span>) <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">R</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">t</span></span></div></div><p>If <code>R → T</code> is surjective on stalks, and <code>J</code> is some prime of <code>T</code>,
+then every element <code>x</code> in <code>S ⊗[R] T</code> satisfies <code>(1 ⊗ r • t) * x = a ⊗ t</code> for some
+<code>r : R</code>, <code>a : S</code>, and <code>t : T</code> such that <code>r • t ∉ J</code>.</p></div></div><div class="decl" id="RingHom.surjectiveOnStalks_of_isLocalization"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L162-L167">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.surjectiveOnStalks_of_isLocalization"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_of_isLocalization</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid">Submonoid</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Localization/Defs.html#IsLocalization">IsLocalization</a> <span class="fn">M</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">S</span>)</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span></div></div></div></div><div class="decl" id="RingHom.SurjectiveOnStalks.baseChange"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L169-L187">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks.baseChange"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">baseChange</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">T</span>)</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">S</span> <span class="fn">(<a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span>)</span>)</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span></div></div></div></div><div class="decl" id="RingHom.SurjectiveOnStalks.baseChange'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L189-L193">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks.baseChange'"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">baseChange'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">S</span>)</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/TensorProduct/Basic.html#Algebra.TensorProduct.includeRight">Algebra.TensorProduct.includeRight</a>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span></div></div></div></div><div class="decl" id="RingHom.SurjectiveOnStalks.tensorProductMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L209-L221">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks.tensorProductMap"><span class="name">RingHom</span>.<span class="name">SurjectiveOnStalks</span>.<span class="name">tensorProductMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S'</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T'</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">S</span> <a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">S'</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Hf</span> : <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">T</span> <a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">T'</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Hg</span> : <span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RingTheory/TensorProduct/Maps.html#Algebra.TensorProduct.map">Algebra.TensorProduct.map</a> <span class="fn">f</span> <span class="fn">g</span>)</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span></div></div></div></div><div class="decl" id="RingHom.surjectiveOnStalks_iff_of_isLocalHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/SurjectiveOnStalks.lean#L223-L232">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.surjectiveOnStalks_iff_of_isLocalHom"><span class="name">RingHom</span>.<span class="name">surjectiveOnStalks_iff_of_isLocalHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/LocalRing/Defs.html#IsLocalRing">IsLocalRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Units/Hom.html#IsLocalHom">IsLocalHom</a> <span class="fn">f</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

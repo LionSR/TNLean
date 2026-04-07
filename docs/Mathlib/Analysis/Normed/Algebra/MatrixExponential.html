@@ -1,0 +1,371 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.Normed.Algebra.MatrixExponential</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.Normed.Algebra.MatrixExponential";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">Normed</span>.<span class="name">Algebra</span>.<span class="name">MatrixExponential</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Analysis/Matrix/Normed.html">Mathlib.Analysis.Matrix.Normed</a></li><li><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html">Mathlib.LinearAlgebra.Matrix.Hermitian</a></li><li><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Symmetric.html">Mathlib.LinearAlgebra.Matrix.Symmetric</a></li><li><a href="../../../.././Mathlib/LinearAlgebra/Matrix/ZPow.html">Mathlib.LinearAlgebra.Matrix.ZPow</a></li><li><a href="../../../.././Mathlib/Topology/UniformSpace/Matrix.html">Mathlib.Topology.UniformSpace.Matrix</a></li><li><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html">Mathlib.Analysis.Normed.Algebra.Exponential</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.Normed.Algebra.MatrixExponential" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_diagonal"><span class="name">Matrix</span>.<span class="name">exp_diagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_blockDiagonal"><span class="name">Matrix</span>.<span class="name">exp_blockDiagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_blockDiagonal'"><span class="name">Matrix</span>.<span class="name">exp_blockDiagonal'</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_conjTranspose"><span class="name">Matrix</span>.<span class="name">exp_conjTranspose</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsHermitian.exp"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">exp</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_transpose"><span class="name">Matrix</span>.<span class="name">exp_transpose</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.IsSymm.exp"><span class="name">Matrix</span>.<span class="name">IsSymm</span>.<span class="name">exp</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_add_of_commute"><span class="name">Matrix</span>.<span class="name">exp_add_of_commute</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_sum_of_commute"><span class="name">Matrix</span>.<span class="name">exp_sum_of_commute</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_nsmul"><span class="name">Matrix</span>.<span class="name">exp_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.isUnit_exp"><span class="name">Matrix</span>.<span class="name">isUnit_exp</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_units_conj"><span class="name">Matrix</span>.<span class="name">exp_units_conj</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_units_conj'"><span class="name">Matrix</span>.<span class="name">exp_units_conj'</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_neg"><span class="name">Matrix</span>.<span class="name">exp_neg</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_zsmul"><span class="name">Matrix</span>.<span class="name">exp_zsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_conj"><span class="name">Matrix</span>.<span class="name">exp_conj</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.exp_conj'"><span class="name">Matrix</span>.<span class="name">exp_conj'</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Lemmas-about-the-matrix-exponential" class="markdown-heading">Lemmas about the matrix exponential <a class="hover-link" href="#Lemmas-about-the-matrix-exponential">#</a></h1><p>In this file, we provide results about <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a></code> on <code><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a></code>s
+over a topological or normed algebra.
+Note that generic results over all topological spaces such as <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp_zero">NormedSpace.exp_zero</a></code>
+can be used on matrices without issue, so are not repeated here.
+The topological results specific to matrices are:</p><ul><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_transpose">Matrix.exp_transpose</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_conjTranspose">Matrix.exp_conjTranspose</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_diagonal">Matrix.exp_diagonal</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_blockDiagonal">Matrix.exp_blockDiagonal</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_blockDiagonal'">Matrix.exp_blockDiagonal'</a></code></li></ul><p>Lemmas like <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp_add_of_commute">NormedSpace.exp_add_of_commute</a></code> require a canonical norm on the type;
+while there are multiple sensible choices for the norm of a <code><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a></code> (<code><a href="../../../.././Mathlib/Analysis/Matrix/Normed.html#Matrix.normedAddCommGroup">Matrix.normedAddCommGroup</a></code>,
+<code><a href="../../../.././Mathlib/Analysis/Matrix/Normed.html#Matrix.frobeniusNormedAddCommGroup">Matrix.frobeniusNormedAddCommGroup</a></code>, <code><a href="../../../.././Mathlib/Analysis/Matrix/Normed.html#Matrix.linftyOpNormedAddCommGroup">Matrix.linftyOpNormedAddCommGroup</a></code>), none of them
+are canonical. In an application where a particular norm is chosen using
+<code>attribute [local instance]</code>, then the usual lemmas about <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a></code> are fine.
+When choosing a norm is undesirable, the results in this file can be used.</p><p>In this file, we copy across the lemmas about <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a></code>,
+but hide the requirement for a norm inside the proof.</p><ul><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_add_of_commute">Matrix.exp_add_of_commute</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_sum_of_commute">Matrix.exp_sum_of_commute</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_nsmul">Matrix.exp_nsmul</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.isUnit_exp">Matrix.isUnit_exp</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_units_conj">Matrix.exp_units_conj</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_units_conj'">Matrix.exp_units_conj'</a></code></li></ul><p>Additionally, we prove some results about <code>matrix.has_inv</code> and <code>matrix.div_inv_monoid</code>, as the
+results for general rings are instead stated about <code><a href="../../../.././Mathlib/Algebra/GroupWithZero/Units/Basic.html#Ring.inverse">Ring.inverse</a></code>:</p><ul><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_neg">Matrix.exp_neg</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_zsmul">Matrix.exp_zsmul</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_conj">Matrix.exp_conj</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_conj'">Matrix.exp_conj'</a></code></li></ul><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li>Show that <code><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Determinant/Basic.html#Matrix.det">Matrix.det</a> (NormedSpace.<a href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.IsHermitian.exp">exp</a> A) = <a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (Matrix.trace A)</code></li></ul><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li><a href="https://en.wikipedia.org/wiki/Matrix_exponential">https://en.wikipedia.org/wiki/Matrix_exponential</a></li></ul></div><div class="decl" id="Matrix.exp_diagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L82-L83">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_diagonal"><span class="name">Matrix</span>.<span class="name">exp_diagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><span class="fn">m</span> → <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">v</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">v</span>)</span></span></div></div></div></div><div class="decl" id="Matrix.exp_blockDiagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L85-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_blockDiagonal"><span class="name">Matrix</span>.<span class="name">exp_blockDiagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><span class="fn">m</span> → <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">𝔸</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.blockDiagonal">blockDiagonal</a> <span class="fn">v</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.blockDiagonal">blockDiagonal</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">v</span>)</span></span></div></div></div></div><div class="decl" id="Matrix.exp_blockDiagonal'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L89-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_blockDiagonal'"><span class="name">Matrix</span>.<span class="name">exp_blockDiagonal'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n'</span> : <span class="fn"><span class="fn">m</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">m</span>) → <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">(<span class="fn">n'</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">m</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">(<span class="fn">n'</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">(<span class="fn">i</span> : <span class="fn">m</span>) → <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">(<span class="fn">n'</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">n'</span> <span class="fn">i</span>)</span> <span class="fn">𝔸</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.blockDiagonal'">blockDiagonal'</a> <span class="fn">v</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.blockDiagonal'">blockDiagonal'</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">v</span>)</span></span></div></div></div></div><div class="decl" id="Matrix.exp_conjTranspose"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L93-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_conjTranspose"><span class="name">Matrix</span>.<span class="name">exp_conjTranspose</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Star.html#ContinuousStar">ContinuousStar</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn"><span class="fn">A</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/ConjTranspose.html#Matrix.conjTranspose">conjTranspose</a></span></div></div></div></div><div class="decl" id="Matrix.IsHermitian.exp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L97-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.IsHermitian.exp"><span class="name">Matrix</span>.<span class="name">IsHermitian</span>.<span class="name">exp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Star.html#ContinuousStar">ContinuousStar</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Hermitian.html#Matrix.IsHermitian">IsHermitian</a></span></div></div></div></div><div class="decl" id="Matrix.exp_transpose"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L108-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_transpose"><span class="name">Matrix</span>.<span class="name">exp_transpose</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn"><span class="fn">A</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.transpose">transpose</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.transpose">transpose</a></span></div></div></div></div><div class="decl" id="Matrix.IsSymm.exp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L111-L112">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.IsSymm.exp"><span class="name">Matrix</span>.<span class="name">IsSymm</span>.<span class="name">exp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">A</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Symmetric.html#Matrix.IsSymm">IsSymm</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Symmetric.html#Matrix.IsSymm">IsSymm</a></span></div></div></div></div><div class="decl" id="Matrix.exp_add_of_commute"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L123-L125">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_add_of_commute"><span class="name">Matrix</span>.<span class="name">exp_add_of_commute</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Commute/Defs.html#Commute">Commute</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">A</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">B</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="Matrix.exp_sum_of_commute"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L129-L133">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_sum_of_commute"><span class="name">Matrix</span>.<span class="name">exp_sum_of_commute</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">s</span>)</span>.<a href="../../../.././Mathlib/Logic/Pairwise.html#Set.Pairwise">Pairwise</a></span> <span class="fn">(<a href="../../../.././Mathlib/Logic/Function/Defs.html#Function.onFun">Function.onFun</a> <a href="../../../.././Mathlib/Algebra/Group/Commute/Defs.html#Commute">Commute</a> <span class="fn">f</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Data/Finset/NoncommProd.html#Finset.noncommProd">noncommProd</a></span> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="Matrix.exp_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L136-L137">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_nsmul"><span class="name">Matrix</span>.<span class="name">exp_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">A</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div></div></div><div class="decl" id="Matrix.isUnit_exp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L140-L141">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.isUnit_exp"><span class="name">Matrix</span>.<span class="name">isUnit_exp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span>)</span></span></div></div></div></div><div class="decl" id="Matrix.exp_units_conj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L149-L151">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_units_conj"><span class="name">Matrix</span>.<span class="name">exp_units_conj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span>)</span><a href="../../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">↑<span class="fn">U</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">U</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">U</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">U</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span></div></div></div></div><div class="decl" id="Matrix.exp_units_conj'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L158-L160">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_units_conj'"><span class="name">Matrix</span>.<span class="name">exp_units_conj'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span>)</span><a href="../../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">↑<span class="fn">U</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">U</span></span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">U</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">U</span></span></div></div></div></div><div class="decl" id="Matrix.exp_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L170-L172">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_neg"><span class="name">Matrix</span>.<span class="name">exp_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<a href="../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">A</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span>)</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div></div></div><div class="decl" id="Matrix.exp_zsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L174-L178">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_zsmul"><span class="name">Matrix</span>.<span class="name">exp_zsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">z</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">z</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">A</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">z</span></div></div></div></div><div class="decl" id="Matrix.exp_conj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L180-L183">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_conj"><span class="name">Matrix</span>.<span class="name">exp_conj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">U </span><span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">U</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">U</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">U</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">U</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div></div></div><div class="decl" id="Matrix.exp_conj'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean#L185-L188">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/MatrixExponential.html#Matrix.exp_conj'"><span class="name">Matrix</span>.<span class="name">exp_conj'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">U </span><span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">𝔸</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">U</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">U</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">U</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">A</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">U</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

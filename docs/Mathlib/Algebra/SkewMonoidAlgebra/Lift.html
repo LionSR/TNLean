@@ -1,0 +1,710 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.SkewMonoidAlgebra.Lift</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.SkewMonoidAlgebra.Lift";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">SkewMonoidAlgebra</span>.<span class="name">Lift</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/Algebra/Equiv.html">Mathlib.Algebra.Algebra.Equiv</a></li><li><a href="../../.././Mathlib/Algebra/Module/BigOperators.html">Mathlib.Algebra.Module.BigOperators</a></li><li><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html">Mathlib.Algebra.SkewMonoidAlgebra.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.SkewMonoidAlgebra.Lift" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.liftNCAlgHom"><span class="name">SkewMonoidAlgebra</span>.<span class="name">liftNCAlgHom</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.lift"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.lift_apply'"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_apply'</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.lift_apply"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_apply</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.lift_def"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_def</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.lift_symm_apply"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.lift_of"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_of</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.lift_single"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_single</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.lift_unique'"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_unique'</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.lift_unique"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_unique</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.mapDomainAlgHom"><span class="name">SkewMonoidAlgebra</span>.<span class="name">mapDomainAlgHom</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.mapDomainAlgHom_apply"><span class="name">SkewMonoidAlgebra</span>.<span class="name">mapDomainAlgHom_apply</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.equivMapDomain"><span class="name">SkewMonoidAlgebra</span>.<span class="name">equivMapDomain</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.coeff_equivMapDomain"><span class="name">SkewMonoidAlgebra</span>.<span class="name">coeff_equivMapDomain</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.toFinsupp_equivMapDomain"><span class="name">SkewMonoidAlgebra</span>.<span class="name">toFinsupp_equivMapDomain</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.equivMapDomain_eq_mapDomain"><span class="name">SkewMonoidAlgebra</span>.<span class="name">equivMapDomain_eq_mapDomain</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.equivMapDomain_trans"><span class="name">SkewMonoidAlgebra</span>.<span class="name">equivMapDomain_trans</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.equivMapDomain_refl"><span class="name">SkewMonoidAlgebra</span>.<span class="name">equivMapDomain_refl</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.equivMapDomain_single"><span class="name">SkewMonoidAlgebra</span>.<span class="name">equivMapDomain_single</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.domCongr"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.domCongr_apply"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr_apply</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.domLCongr"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domLCongr</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.domCongrAlg"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongrAlg</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.domCongrAlg_toAlgHom"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongrAlg_toAlgHom</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.domCongrAlg_apply"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongrAlg_apply</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.domCongr_support"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr_support</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.domCongr_single"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr_single</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.domCongr_refl"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr_refl</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.domCongr_symm"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr_symm</span></a></div><div class="nav_link"><a class="break_within" href="#SkewMonoidAlgebra.submoduleOfSmulMem"><span class="name">SkewMonoidAlgebra</span>.<span class="name">submoduleOfSmulMem</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Lemmas-about-different-kinds-of-lifts-to-SkewMonoidAlgebra" class="markdown-heading">Lemmas about different kinds of &quot;lifts&quot; to <code><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a></code>. <a class="hover-link" href="#Lemmas-about-different-kinds-of-lifts-to-SkewMonoidAlgebra">#</a></h1></div><div class="decl" id="SkewMonoidAlgebra.liftNCAlgHom"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L29-L34">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.liftNCAlgHom"><span class="name">SkewMonoidAlgebra</span>.<span class="name">liftNCAlgHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">A</span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">k</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h_comm</span> : <span class="fn">∀ {<span class="fn">x</span> : <span class="fn">A</span>} {<span class="fn">y</span> : <span class="fn">G</span>}, <span class="fn"><span class="fn">f</span> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">g</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">G</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">k</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">B</span></div></div><p><code>liftNCRingHom</code> as an <code><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">AlgHom</a></code>, for when <code>f</code> is an <code><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">AlgHom</a></code></p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.liftNCAlgHom">SkewMonoidAlgebra.liftNCAlgHom</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h_comm</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.mk">{</a> <span class="fn">toRingHom</span> := <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.liftNCRingHom">SkewMonoidAlgebra.liftNCRingHom</a> <span class="fn">(↑<span class="fn">f</span>)</span> <span class="fn">g</span> <span class="fn">⋯</span></span>, <span class="fn">commutes'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.mk">}</a></li></ul></details><details id="instances-for-list-SkewMonoidAlgebra.liftNCAlgHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SkewMonoidAlgebra.lift"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L41-L55">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type">(<span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">A</span>) <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> (<span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">k</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">A</span>)</div></div><p>Any monoid homomorphism <code>G →* A</code> can be lifted to an algebra homomorphism
+<code><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> k G →ₐ[k] A</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-SkewMonoidAlgebra.lift" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SkewMonoidAlgebra.lift_apply'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L59-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift_apply'"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_apply'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift">lift</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span>)</span> <span class="fn">F</span>)</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.sum">sum</a></span> <span class="fn">fun (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">b</span> : <span class="fn">k</span>) =&gt; <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">k</span> <span class="fn">A</span>)</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">F</span> <span class="fn">a</span></span></span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.lift_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L62-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift_apply"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift">lift</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span>)</span> <span class="fn">F</span>)</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.sum">sum</a></span> <span class="fn">fun (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">b</span> : <span class="fn">k</span>) =&gt; <span class="fn">b</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">F</span> <span class="fn">a</span></span></span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.lift_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L65-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift_def"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift">lift</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span>)</span> <span class="fn">F</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.liftNC">liftNC</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">k</span> <span class="fn">A</span>)</span></span> <span class="fn">⇑<span class="fn">F</span></span>)</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.lift_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L68-L70">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift_symm_apply"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">k</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift">lift</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">F</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">F</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.single">single</a> <span class="fn">x</span> <span class="fn">1</span>)</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.lift_of"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L72-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift_of"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_of</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift">lift</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span>)</span> <span class="fn">F</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.of">of</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">F</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.lift_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L75-L77">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift_single"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift">lift</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span>)</span> <span class="fn">F</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.single">single</a> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">F</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.lift_unique'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L79-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift_unique'"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_unique'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">k</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">F</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift">lift</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span>)</span> <span class="fn">(<span class="fn"><span class="fn">(↑<span class="fn">F</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.of">of</a> <span class="fn">k</span> <span class="fn">G</span>)</span>)</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.lift_unique"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L83-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.lift_unique"><span class="name">SkewMonoidAlgebra</span>.<span class="name">lift_unique</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">k</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">F</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.sum">sum</a></span> <span class="fn">fun (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">b</span> : <span class="fn">k</span>) =&gt; <span class="fn">b</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">F</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.single">single</a> <span class="fn">a</span> <span class="fn">1</span>)</span></span></span></span></div></div><p>Decomposition of a <code>k</code>-algebra homomorphism from <code><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> k G</code> by
+its values on <code>F (single a 1)</code>.</p></div></div><div class="decl" id="SkewMonoidAlgebra.mapDomainAlgHom"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L91-L100">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.mapDomainAlgHom"><span class="name">SkewMonoidAlgebra</span>.<span class="name">mapDomainAlgHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_7)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_9}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">G</span> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHomClass">MonoidHomClass</a> <span class="fn">F</span> <span class="fn">G</span> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">H</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">H</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">x</span> : <span class="fn">A</span>), <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">G</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">k</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">H</span></span></div></div><p>If <code>f : G → H</code> is a multiplicative homomorphism between two monoids, then
+<code>mapDomain f</code> is an algebra homomorphism between their monoid algebras.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.mapDomainAlgHom">SkewMonoidAlgebra.mapDomainAlgHom</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">hf</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.mk">{</a> <span class="fn">toRingHom</span> := <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.mapDomainRingHom">SkewMonoidAlgebra.mapDomainRingHom</a> <span class="fn">hf</span></span>, <span class="fn">commutes'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.mk">}</a></li></ul></details><details id="instances-for-list-SkewMonoidAlgebra.mapDomainAlgHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SkewMonoidAlgebra.mapDomainAlgHom_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L93-L93">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.mapDomainAlgHom_apply"><span class="name">SkewMonoidAlgebra</span>.<span class="name">mapDomainAlgHom_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_7)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_9}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">G</span> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHomClass">MonoidHomClass</a> <span class="fn">F</span> <span class="fn">G</span> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">H</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">H</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">x</span> : <span class="fn">A</span>), <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a✝</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.mapDomainAlgHom">mapDomainAlgHom</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">hf</span>)</span> <span class="fn">a✝</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">a✝</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.sum">sum</a></span> <span class="fn">fun (<span class="fn">a</span> : <span class="fn">G</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.single">single</a> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span></span></span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.equivMapDomain"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L108-L112">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain"><span class="name">SkewMonoidAlgebra</span>.<span class="name">equivMapDomain</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">H</span></span></div></div><p>Given <code>f : G ≃ H</code>, we can map <code>l : <a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> k G</code> to
+<code><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">equivMapDomain</a> f l : <a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> k H</code> (computably) by mapping the support forwards
+and the function backwards.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">SkewMonoidAlgebra.equivMapDomain</a> <span class="fn">f</span> <span class="fn">l</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.ofFinsupp">{</a>     <span class="fn">toFinsupp</span> :=
+      <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.mk">{</a> <span class="fn">support</span> := <span class="fn"><a href="../../.././Mathlib/Data/Finset/Image.html#Finset.map">Finset.map</a> <span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Logic/Embedding/Basic.html#Equiv.toEmbedding">toEmbedding</a></span> <span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.support">support</a></span></span>, <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">a</span> : <span class="fn">H</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.coeff">coeff</a></span> <span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">a</span>)</span></span></span>,
+        <span class="fn">mem_support_toFun</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.mk">}</a> <a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.ofFinsupp">}</a></li></ul></details><details id="instances-for-list-SkewMonoidAlgebra.equivMapDomain" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SkewMonoidAlgebra.coeff_equivMapDomain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L114-L117">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.coeff_equivMapDomain"><span class="name">SkewMonoidAlgebra</span>.<span class="name">coeff_equivMapDomain</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">equivMapDomain</a> <span class="fn">f</span> <span class="fn">l</span>)</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.coeff">coeff</a></span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.coeff">coeff</a></span> <span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">b</span>)</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.toFinsupp_equivMapDomain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L119-L120">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.toFinsupp_equivMapDomain"><span class="name">SkewMonoidAlgebra</span>.<span class="name">toFinsupp_equivMapDomain</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">equivMapDomain</a> <span class="fn">f</span> <span class="fn">l</span>)</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.toFinsupp">toFinsupp</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.equivMapDomain">Finsupp.equivMapDomain</a> <span class="fn">f</span> <span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.toFinsupp">toFinsupp</a></span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.equivMapDomain_eq_mapDomain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L122-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain_eq_mapDomain"><span class="name">SkewMonoidAlgebra</span>.<span class="name">equivMapDomain_eq_mapDomain</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">equivMapDomain</a> <span class="fn">f</span> <span class="fn">l</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.mapDomain">mapDomain</a> <span class="fn">⇑<span class="fn">f</span></span>)</span> <span class="fn">l</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.equivMapDomain_trans"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L129-L132">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain_trans"><span class="name">SkewMonoidAlgebra</span>.<span class="name">equivMapDomain_trans</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G''</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">G'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G'</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">G''</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">equivMapDomain</a> <span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.trans">trans</a></span> <span class="fn">g</span>)</span> <span class="fn">l</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">equivMapDomain</a> <span class="fn">g</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">equivMapDomain</a> <span class="fn">f</span> <span class="fn">l</span>)</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.equivMapDomain_refl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L134-L136">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain_refl"><span class="name">SkewMonoidAlgebra</span>.<span class="name">equivMapDomain_refl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">equivMapDomain</a> <span class="fn">(<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.refl">Equiv.refl</a> <span class="fn">G</span>)</span> <span class="fn">l</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">l</span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.equivMapDomain_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L138-L143">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain_single"><span class="name">SkewMonoidAlgebra</span>.<span class="name">equivMapDomain_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">equivMapDomain</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.single">single</a> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.single">single</a> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.domCongr"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L152-L160">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">G</span></span> <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv">≃+</a> <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">H</span></span></div></div><p>Given <code><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> A</code> and <code>e : G ≃ H</code>, <code><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr">domCongr</a> e</code> is the corresponding <code><a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">Equiv</a></code> between
+<code><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> A G</code> and <code><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> A H</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr">SkewMonoidAlgebra.domCongr</a> <span class="fn">e</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv.mk">{</a> <span class="fn">toFun</span> := <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">SkewMonoidAlgebra.equivMapDomain</a> <span class="fn">e</span></span>, <span class="fn">invFun</span> := <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">SkewMonoidAlgebra.equivMapDomain</a> <span class="fn"><span class="fn">e</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span></span>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>,
+    <span class="fn">right_inv</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv.mk">}</a></li></ul></details><details id="instances-for-list-SkewMonoidAlgebra.domCongr" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SkewMonoidAlgebra.domCongr_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L154-L154">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr_apply"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr">domCongr</a> <span class="fn">e</span>)</span> <span class="fn">l</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.equivMapDomain">equivMapDomain</a> <span class="fn">e</span> <span class="fn">l</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.domLCongr"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L162-L170">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domLCongr"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domLCongr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">G</span></span> <a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">k</span><a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">H</span></span></div></div><p>An equivalence of domains induces a linear equivalence of finitely supported functions.</p><p>This is <code><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr">domCongr</a></code> as a <code><a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">LinearEquiv</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domLCongr">SkewMonoidAlgebra.domLCongr</a> <span class="fn">e</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr">SkewMonoidAlgebra.domCongr</a> <span class="fn">e</span>)</span>.<a href="../../.././Mathlib/Algebra/Module/Equiv/Basic.html#AddEquiv.toLinearEquiv">toLinearEquiv</a></span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-SkewMonoidAlgebra.domLCongr" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SkewMonoidAlgebra.domCongrAlg"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L177-L186">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongrAlg</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">H</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">H</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv">≃*</a> <span class="fn">H</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">x</span> : <span class="fn">A</span>), <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">e</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">G</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">≃ₐ[</a><span class="fn">k</span><a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">]</a> <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">H</span></span></div></div><p>If <code>e : G ≃* H</code> is a multiplicative equivalence between two monoids and
+<code> ∀ (a : G) (x : A), a • x = (e a) • x</code>, then <code><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr">SkewMonoidAlgebra.domCongr</a> e</code> is an
+algebra equivalence between their skew monoid algebras.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg">SkewMonoidAlgebra.domCongrAlg</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">he</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv.ofLinearEquiv">AlgEquiv.ofLinearEquiv</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domLCongr">SkewMonoidAlgebra.domLCongr</a> <span class="fn">↑<span class="fn">e</span></span>)</span> <span class="fn">⋯</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-SkewMonoidAlgebra.domCongrAlg" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SkewMonoidAlgebra.domCongrAlg_toAlgHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L188-L190">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg_toAlgHom"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongrAlg_toAlgHom</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">H</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">H</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv">≃*</a> <span class="fn">H</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">x</span> : <span class="fn">A</span>), <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">e</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg">domCongrAlg</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">he</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.mapDomainAlgHom">mapDomainAlgHom</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">he</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.domCongrAlg_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L192-L194">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg_apply"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongrAlg_apply</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">H</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">H</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv">≃*</a> <span class="fn">H</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">x</span> : <span class="fn">A</span>), <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">e</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg">domCongrAlg</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">he</span>)</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.coeff">coeff</a></span> <span class="fn">h</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.coeff">coeff</a></span> <span class="fn">(<span class="fn"><span class="fn">e</span>.<a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv.symm">symm</a></span> <span class="fn">h</span>)</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.domCongr_support"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L196-L198">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr_support"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr_support</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">H</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">H</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv">≃*</a> <span class="fn">H</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">x</span> : <span class="fn">A</span>), <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">e</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg">domCongrAlg</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">he</span>)</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.support">support</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Finset/Image.html#Finset.map">Finset.map</a> <span class="fn"><span class="fn">(↑<span class="fn">e</span>)</span>.<a href="../../.././Mathlib/Logic/Embedding/Basic.html#Equiv.toEmbedding">toEmbedding</a></span> <span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.support">support</a></span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.domCongr_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L200-L202">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr_single"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr_single</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">H</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">H</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv">≃*</a> <span class="fn">H</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">x</span> : <span class="fn">A</span>), <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">e</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg">domCongrAlg</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">he</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.single">single</a> <span class="fn">g</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.single">single</a> <span class="fn">(<span class="fn">e</span> <span class="fn">g</span>)</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.domCongr_refl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L204-L207">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr_refl"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr_refl</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg">domCongrAlg</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">⋯</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv.refl">AlgEquiv.refl</a></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.domCongr_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L209-L212">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongr_symm"><span class="name">SkewMonoidAlgebra</span>.<span class="name">domCongr_symm</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">H</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">G</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">H</span> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn">G</span> <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv">≃*</a> <span class="fn">H</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">G</span>) (<span class="fn">x</span> : <span class="fn">A</span>), <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">e</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg">domCongrAlg</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">he</span>)</span>.<a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv.symm">symm</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.domCongrAlg">domCongrAlg</a> <span class="fn">k</span> <span class="fn">A</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="SkewMonoidAlgebra.submoduleOfSmulMem"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/SkewMonoidAlgebra/Lift.lean#L224-L235">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.submoduleOfSmulMem"><span class="name">SkewMonoidAlgebra</span>.<span class="name">submoduleOfSmulMem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">k</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">W</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">k</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">g</span> : <span class="fn">G</span>), <span class="fn">∀ <span class="fn">v</span> ∈ <span class="fn">W</span>, <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra.of">of</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">g</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">v</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">W</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">V</span></span></div></div><p>A submodule over <code>k</code> which is stable under scalar multiplication by elements of <code>G</code> is a
+submodule over <code><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Basic.html#SkewMonoidAlgebra">SkewMonoidAlgebra</a> k G</code></p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/SkewMonoidAlgebra/Lift.html#SkewMonoidAlgebra.submoduleOfSmulMem">SkewMonoidAlgebra.submoduleOfSmulMem</a> <span class="fn">W</span> <span class="fn">h</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">{</a> <span class="fn">carrier</span> := <span class="fn">↑<span class="fn">W</span></span>, <span class="fn">add_mem'</span> := <span class="fn">⋯</span>, <span class="fn">zero_mem'</span> := <span class="fn">⋯</span>, <span class="fn">smul_mem'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">}</a></li></ul></details><details id="instances-for-list-SkewMonoidAlgebra.submoduleOfSmulMem" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

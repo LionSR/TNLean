@@ -1,0 +1,195 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Geometry.Euclidean.Congruence</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Geometry.Euclidean.Congruence";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Geometry</span>.<span class="name">Euclidean</span>.<span class="name">Congruence</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Congruence.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Analysis/InnerProductSpace/Basic.html">Mathlib.Analysis.InnerProductSpace.Basic</a></li><li><a href="../../.././Mathlib/Geometry/Euclidean/Triangle.html">Mathlib.Geometry.Euclidean.Triangle</a></li><li><a href="../../.././Mathlib/Topology/MetricSpace/Congruence.html">Mathlib.Topology.MetricSpace.Congruence</a></li><li><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html">Mathlib.Analysis.Normed.Group.AddTorsor</a></li><li><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html">Mathlib.Geometry.Euclidean.Angle.Unoriented.Affine</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Geometry.Euclidean.Congruence" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.triangle_congruent_iff_dist_eq"><span class="name">EuclideanGeometry</span>.<span class="name">triangle_congruent_iff_dist_eq</span></a></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.side_side_side"><span class="name">EuclideanGeometry</span>.<span class="name">side_side_side</span></a></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.side_angle_side"><span class="name">EuclideanGeometry</span>.<span class="name">side_angle_side</span></a></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.angle_side_angle"><span class="name">EuclideanGeometry</span>.<span class="name">angle_side_angle</span></a></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.angle_angle_side"><span class="name">EuclideanGeometry</span>.<span class="name">angle_angle_side</span></a></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.angle_eq_of_congruent"><span class="name">EuclideanGeometry</span>.<span class="name">angle_eq_of_congruent</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Triangle-congruence" class="markdown-heading">Triangle congruence <a class="hover-link" href="#Triangle-congruence">#</a></h1><p>This file proves the classical triangle congruence criteria for (possibly degenerate) triangles
+in real inner product spaces and Euclidean affine spaces.
+We prove SSS, SAS, ASA, and AAS congruence.</p><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>Side–Side–Side (SSS) congruence is proved using the definition of <code><a href="../../.././Mathlib/Topology/MetricSpace/Congruence.html#Congruent">Congruent</a></code>.
+Side–Angle–Side (SAS) congruence is proved via the law of cosines.
+Angle–Side–Angle (ASA) congruence is reduced to SAS using the law of sines.
+Angle–Angle–Side (AAS) congruence uses the fact that the sum of the angles in a triangle equals π,
+then reduces to ASA.</p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>https://en.wikipedia.org/wiki/Congruence_(geometry)</li></ul></div><div class="decl" id="EuclideanGeometry.triangle_congruent_iff_dist_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Congruence.lean#L49-L50">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Congruence.html#EuclideanGeometry.triangle_congruent_iff_dist_eq"><span class="name">EuclideanGeometry</span>.<span class="name">triangle_congruent_iff_dist_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t₁</span> : <span class="fn"><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">3</span></span> → <span class="fn">P₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t₂</span> : <span class="fn"><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">3</span></span> → <span class="fn">P₂</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Congruence.html#Congruent">Congruent</a> <span class="fn">t₁</span> <span class="fn">t₂</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">i </span><span class="fn">j</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">3</span></span>), <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">t₁</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">t₁</span> <span class="fn">j</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">t₂</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">t₂</span> <span class="fn">j</span>)</span></span></span></div></div></div></div><div class="decl" id="EuclideanGeometry.side_side_side"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Congruence.lean#L52-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Congruence.html#EuclideanGeometry.side_side_side"><span class="name">EuclideanGeometry</span>.<span class="name">side_side_side</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b </span><span class="fn">c</span> : <span class="fn">P₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a' </span><span class="fn">b' </span><span class="fn">c'</span> : <span class="fn">P₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hd₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">a'</span> <span class="fn">b'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">b</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">b'</span> <span class="fn">c'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd₃</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">c</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">c'</span> <span class="fn">a'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Congruence.html#Congruent">Congruent</a> <a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">a</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">b</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">c</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a> <a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">a'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">b'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">c'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a></span></div></div><p><strong>Side–Side–Side (SSS) congruence</strong>
+If all three corresponding sides of two triangles are equal, then the triangles are congruent.
+This holds even if the triangles are degenerate.</p></div></div><div class="decl" id="EuclideanGeometry.side_angle_side"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Congruence.lean#L62-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Congruence.html#EuclideanGeometry.side_angle_side"><span class="name">EuclideanGeometry</span>.<span class="name">side_angle_side</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V₁</span> <span class="fn">P₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V₂</span> <span class="fn">P₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b </span><span class="fn">c</span> : <span class="fn">P₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a' </span><span class="fn">b' </span><span class="fn">c'</span> : <span class="fn">P₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">a'</span> <span class="fn">b'</span> <span class="fn">c'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">a'</span> <span class="fn">b'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">b</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">b'</span> <span class="fn">c'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Congruence.html#Congruent">Congruent</a> <a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">a</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">b</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">c</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a> <a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">a'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">b'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">c'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a></span></div></div><p><strong>Side–Angle–Side (SAS) congruence</strong>
+If two triangles have two sides and the included angle equal, then the triangles are congruent.
+This holds even if the triangles are degenerate.</p></div></div><div class="decl" id="EuclideanGeometry.angle_side_angle"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Congruence.lean#L72-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Congruence.html#EuclideanGeometry.angle_side_angle"><span class="name">EuclideanGeometry</span>.<span class="name">angle_side_angle</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V₁</span> <span class="fn">P₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V₂</span> <span class="fn">P₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b </span><span class="fn">c</span> : <span class="fn">P₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a' </span><span class="fn">b' </span><span class="fn">c'</span> : <span class="fn">P₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/FiniteDimensional.html#Collinear">Collinear</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <a href="../../.././Init/Core.html#Insert.insert">{</a><span class="fn">a</span><a href="../../.././Init/Core.html#Insert.insert">,</a> <span class="fn">b</span><a href="../../.././Init/Core.html#Insert.insert">,</a> <span class="fn">c</span><a href="../../.././Init/Core.html#Insert.insert">}</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha₁</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">a'</span> <span class="fn">b'</span> <span class="fn">c'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">b</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">b'</span> <span class="fn">c'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha₂</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">b</span> <span class="fn">c</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">b'</span> <span class="fn">c'</span> <span class="fn">a'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Congruence.html#Congruent">Congruent</a> <a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">a</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">b</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">c</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a> <a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">a'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">b'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">c'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a></span></div></div><p><strong>Angle–Side–Angle (ASA) congruence</strong>
+If two triangles have two equal angles and the included side equal, then the triangles are
+congruent. We require that one of the triangles is non-degenerate, the non-collinearity of the
+other is then implied by the given equalities.</p></div></div><div class="decl" id="EuclideanGeometry.angle_angle_side"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Congruence.lean#L93-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Congruence.html#EuclideanGeometry.angle_angle_side"><span class="name">EuclideanGeometry</span>.<span class="name">angle_angle_side</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V₁</span> <span class="fn">P₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V₂</span> <span class="fn">P₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b </span><span class="fn">c</span> : <span class="fn">P₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a' </span><span class="fn">b' </span><span class="fn">c'</span> : <span class="fn">P₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/FiniteDimensional.html#Collinear">Collinear</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <a href="../../.././Init/Core.html#Insert.insert">{</a><span class="fn">a</span><a href="../../.././Init/Core.html#Insert.insert">,</a> <span class="fn">b</span><a href="../../.././Init/Core.html#Insert.insert">,</a> <span class="fn">c</span><a href="../../.././Init/Core.html#Insert.insert">}</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha₁</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">a'</span> <span class="fn">b'</span> <span class="fn">c'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha₂</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">b</span> <span class="fn">c</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">b'</span> <span class="fn">c'</span> <span class="fn">a'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">c</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">c'</span> <span class="fn">a'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Congruence.html#Congruent">Congruent</a> <a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">a</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">b</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">c</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a> <a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">a'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">b'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn">c'</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a></span></div></div><p><strong>Angle–Angle–Side (AAS) congruence</strong>
+If two triangles have two equal angles and a non-included side equal, then the triangles are
+congruent. We require that one of the triangles is non-degenerate, the non-collinearity of the
+other is then implied by the given equalities.</p></div></div><div class="decl" id="EuclideanGeometry.angle_eq_of_congruent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Congruence.lean#L111-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Congruence.html#EuclideanGeometry.angle_eq_of_congruent"><span class="name">EuclideanGeometry</span>.<span class="name">angle_eq_of_congruent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V₁</span> <span class="fn">P₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V₂</span> <span class="fn">P₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v₁</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v₂</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P₂</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Congruence.html#Congruent">Congruent</a> <span class="fn">v₁</span> <span class="fn">v₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i </span><span class="fn">j </span><span class="fn">k</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">(<span class="fn">v₁</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">v₁</span> <span class="fn">j</span>)</span> <span class="fn">(<span class="fn">v₁</span> <span class="fn">k</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.html#EuclideanGeometry.angle">angle</a> <span class="fn">(<span class="fn">v₂</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">v₂</span> <span class="fn">j</span>)</span> <span class="fn">(<span class="fn">v₂</span> <span class="fn">k</span>)</span></span></div></div><p>Corresponding angles are equal for congruent triangles.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,131 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.FiberBundle.IsHomeomorphicTrivialBundle</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.FiberBundle.IsHomeomorphicTrivialBundle";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">FiberBundle</span>.<span class="name">IsHomeomorphicTrivialBundle</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Topology/Constructions/SumProd.html">Mathlib.Topology.Constructions.SumProd</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.FiberBundle.IsHomeomorphicTrivialBundle" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsHomeomorphicTrivialFiberBundle"><span class="name">IsHomeomorphicTrivialFiberBundle</span></a></div><div class="nav_link"><a class="break_within" href="#IsHomeomorphicTrivialFiberBundle.proj_eq"><span class="name">IsHomeomorphicTrivialFiberBundle</span>.<span class="name">proj_eq</span></a></div><div class="nav_link"><a class="break_within" href="#IsHomeomorphicTrivialFiberBundle.surjective_proj"><span class="name">IsHomeomorphicTrivialFiberBundle</span>.<span class="name">surjective_proj</span></a></div><div class="nav_link"><a class="break_within" href="#IsHomeomorphicTrivialFiberBundle.continuous_proj"><span class="name">IsHomeomorphicTrivialFiberBundle</span>.<span class="name">continuous_proj</span></a></div><div class="nav_link"><a class="break_within" href="#IsHomeomorphicTrivialFiberBundle.isOpenMap_proj"><span class="name">IsHomeomorphicTrivialFiberBundle</span>.<span class="name">isOpenMap_proj</span></a></div><div class="nav_link"><a class="break_within" href="#IsHomeomorphicTrivialFiberBundle.isQuotientMap_proj"><span class="name">IsHomeomorphicTrivialFiberBundle</span>.<span class="name">isQuotientMap_proj</span></a></div><div class="nav_link"><a class="break_within" href="#isHomeomorphicTrivialFiberBundle_fst"><span class="name">isHomeomorphicTrivialFiberBundle_fst</span></a></div><div class="nav_link"><a class="break_within" href="#isHomeomorphicTrivialFiberBundle_snd"><span class="name">isHomeomorphicTrivialFiberBundle_snd</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Maps-equivariantly-homeomorphic-to-projection-in-a-product" class="markdown-heading">Maps equivariantly-homeomorphic to projection in a product <a class="hover-link" href="#Maps-equivariantly-homeomorphic-to-projection-in-a-product">#</a></h1><p>This file contains the definition <code><a href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle">IsHomeomorphicTrivialFiberBundle</a> F p</code>, a Prop saying that a
+map <code>p : Z → B</code> between topological spaces is a &quot;trivial fiber bundle&quot; in the sense that there
+exists a homeomorphism <code>h : Z ≃ₜ B × F</code> such that <code>proj x = (h x).1</code>.  This is an abstraction which
+is occasionally convenient in showing that a map is open, a quotient map, etc.</p><p>This material was formerly linked to the main definition of fiber bundles, but after a series of
+refactors, there is no longer a direct connection.</p></div><div class="decl" id="IsHomeomorphicTrivialFiberBundle"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.lean#L29-L33">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle"><span class="name">IsHomeomorphicTrivialFiberBundle</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Z</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">proj</span> : <span class="fn"><span class="fn">Z</span> → <span class="fn">B</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A trivial fiber bundle with fiber <code>F</code> over a base <code>B</code> is a space <code>Z</code>
+projecting on <code>B</code> for which there exists a homeomorphism to <code>B × F</code> that sends <code>proj</code>
+to <code><a href="../../.././Init/Prelude.html#Prod.fst">Prod.fst</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle">IsHomeomorphicTrivialFiberBundle</a> <span class="fn">F</span> <span class="fn">proj</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∃ (<span class="fn">e</span> : <span class="fn">Z</span> <a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph">≃ₜ</a> <span class="fn">B</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>), <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">Z</span>), <span class="fn"><span class="fn">(<span class="fn">e</span> <span class="fn">x</span>)</span>.1</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">proj</span> <span class="fn">x</span></span></span></span></li></ul></details><details id="instances-for-list-IsHomeomorphicTrivialFiberBundle" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="IsHomeomorphicTrivialFiberBundle.proj_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.lean#L39-L41">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle.proj_eq"><span class="name">IsHomeomorphicTrivialFiberBundle</span>.<span class="name">proj_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Z</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">proj</span> : <span class="fn"><span class="fn">Z</span> → <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle">IsHomeomorphicTrivialFiberBundle</a> <span class="fn">F</span> <span class="fn">proj</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">e</span> : <span class="fn">Z</span> <a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph">≃ₜ</a> <span class="fn">B</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>), <span class="fn">proj</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Prod.fst">Prod.fst</a> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">e</span></span></span></div></div></div></div><div class="decl" id="IsHomeomorphicTrivialFiberBundle.surjective_proj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.lean#L43-L47">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle.surjective_proj"><span class="name">IsHomeomorphicTrivialFiberBundle</span>.<span class="name">surjective_proj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Z</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">proj</span> : <span class="fn"><span class="fn">Z</span> → <span class="fn">B</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle">IsHomeomorphicTrivialFiberBundle</a> <span class="fn">F</span> <span class="fn">proj</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">proj</span></span></div></div><p>The projection from a trivial fiber bundle to its base is surjective.</p></div></div><div class="decl" id="IsHomeomorphicTrivialFiberBundle.continuous_proj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.lean#L49-L52">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle.continuous_proj"><span class="name">IsHomeomorphicTrivialFiberBundle</span>.<span class="name">continuous_proj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Z</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">proj</span> : <span class="fn"><span class="fn">Z</span> → <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle">IsHomeomorphicTrivialFiberBundle</a> <span class="fn">F</span> <span class="fn">proj</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">proj</span></span></div></div><p>The projection from a trivial fiber bundle to its base is continuous.</p></div></div><div class="decl" id="IsHomeomorphicTrivialFiberBundle.isOpenMap_proj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.lean#L54-L57">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle.isOpenMap_proj"><span class="name">IsHomeomorphicTrivialFiberBundle</span>.<span class="name">isOpenMap_proj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Z</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">proj</span> : <span class="fn"><span class="fn">Z</span> → <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle">IsHomeomorphicTrivialFiberBundle</a> <span class="fn">F</span> <span class="fn">proj</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsOpenMap">IsOpenMap</a> <span class="fn">proj</span></span></div></div><p>The projection from a trivial fiber bundle to its base is open.</p></div></div><div class="decl" id="IsHomeomorphicTrivialFiberBundle.isQuotientMap_proj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.lean#L59-L62">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle.isQuotientMap_proj"><span class="name">IsHomeomorphicTrivialFiberBundle</span>.<span class="name">isQuotientMap_proj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Z</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">proj</span> : <span class="fn"><span class="fn">Z</span> → <span class="fn">B</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle">IsHomeomorphicTrivialFiberBundle</a> <span class="fn">F</span> <span class="fn">proj</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsQuotientMap">Topology.IsQuotientMap</a> <span class="fn">proj</span></span></div></div><p>The projection from a trivial fiber bundle to its base is open.</p></div></div><div class="decl" id="isHomeomorphicTrivialFiberBundle_fst"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.lean#L66-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#isHomeomorphicTrivialFiberBundle_fst"><span class="name">isHomeomorphicTrivialFiberBundle_fst</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle">IsHomeomorphicTrivialFiberBundle</a> <span class="fn">F</span> <a href="../../.././Init/Prelude.html#Prod.fst">Prod.fst</a></span></div></div><p>The first projection in a product is a trivial fiber bundle.</p></div></div><div class="decl" id="isHomeomorphicTrivialFiberBundle_snd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.lean#L71-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#isHomeomorphicTrivialFiberBundle_snd"><span class="name">isHomeomorphicTrivialFiberBundle_snd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/IsHomeomorphicTrivialBundle.html#IsHomeomorphicTrivialFiberBundle">IsHomeomorphicTrivialFiberBundle</a> <span class="fn">F</span> <a href="../../.././Init/Prelude.html#Prod.snd">Prod.snd</a></span></div></div><p>The second projection in a product is a trivial fiber bundle.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

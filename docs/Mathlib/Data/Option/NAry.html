@@ -1,0 +1,638 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Data.Option.NAry</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Data.Option.NAry";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Data</span>.<span class="name">Option</span>.<span class="name">NAry</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Init.html">Mathlib.Init</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Data.Option.NAry" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Option.map₂"><span class="name">Option</span>.<span class="name">map₂</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_def"><span class="name">Option</span>.<span class="name">map₂_def</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_some_some"><span class="name">Option</span>.<span class="name">map₂_some_some</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_coe_coe"><span class="name">Option</span>.<span class="name">map₂_coe_coe</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_none_left"><span class="name">Option</span>.<span class="name">map₂_none_left</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_none_right"><span class="name">Option</span>.<span class="name">map₂_none_right</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_coe_left"><span class="name">Option</span>.<span class="name">map₂_coe_left</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_coe_right"><span class="name">Option</span>.<span class="name">map₂_coe_right</span></a></div><div class="nav_link"><a class="break_within" href="#Option.mem_map₂_iff"><span class="name">Option</span>.<span class="name">mem_map₂_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_eq_some_iff"><span class="name">Option</span>.<span class="name">map₂_eq_some_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_eq_none_iff"><span class="name">Option</span>.<span class="name">map₂_eq_none_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_swap"><span class="name">Option</span>.<span class="name">map₂_swap</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map_map₂"><span class="name">Option</span>.<span class="name">map_map₂</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_map_left"><span class="name">Option</span>.<span class="name">map₂_map_left</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_map_right"><span class="name">Option</span>.<span class="name">map₂_map_right</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_curry"><span class="name">Option</span>.<span class="name">map₂_curry</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map_uncurry"><span class="name">Option</span>.<span class="name">map_uncurry</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_assoc"><span class="name">Option</span>.<span class="name">map₂_assoc</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_comm"><span class="name">Option</span>.<span class="name">map₂_comm</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_left_comm"><span class="name">Option</span>.<span class="name">map₂_left_comm</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_right_comm"><span class="name">Option</span>.<span class="name">map₂_right_comm</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map_map₂_distrib"><span class="name">Option</span>.<span class="name">map_map₂_distrib</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map_map₂_distrib_left"><span class="name">Option</span>.<span class="name">map_map₂_distrib_left</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map_map₂_distrib_right"><span class="name">Option</span>.<span class="name">map_map₂_distrib_right</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_map_left_comm"><span class="name">Option</span>.<span class="name">map₂_map_left_comm</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map_map₂_right_comm"><span class="name">Option</span>.<span class="name">map_map₂_right_comm</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map_map₂_antidistrib"><span class="name">Option</span>.<span class="name">map_map₂_antidistrib</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map_map₂_antidistrib_left"><span class="name">Option</span>.<span class="name">map_map₂_antidistrib_left</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map_map₂_antidistrib_right"><span class="name">Option</span>.<span class="name">map_map₂_antidistrib_right</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_map_left_anticomm"><span class="name">Option</span>.<span class="name">map₂_map_left_anticomm</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map_map₂_right_anticomm"><span class="name">Option</span>.<span class="name">map_map₂_right_anticomm</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_left_identity"><span class="name">Option</span>.<span class="name">map₂_left_identity</span></a></div><div class="nav_link"><a class="break_within" href="#Option.map₂_right_identity"><span class="name">Option</span>.<span class="name">map₂_right_identity</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Binary-map-of-options" class="markdown-heading">Binary map of options <a class="hover-link" href="#Binary-map-of-options">#</a></h1><p>This file defines the binary map of <code><a href="../../.././Init/Prelude.html#Option">Option</a></code>. This is mostly useful to define pointwise operations
+on intervals.</p><h2 id="Main-declarations" class="markdown-heading">Main declarations <a class="hover-link" href="#Main-declarations">#</a></h2><ul><li><code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">Option.map₂</a></code>: Binary map of options.</li></ul><h2 id="Notes" class="markdown-heading">Notes <a class="hover-link" href="#Notes">#</a></h2><p>This file is very similar to the n-ary section of <code><a href="../../.././Mathlib/Data/Set/Basic.html">Mathlib/Data/Set/Basic.lean</a></code>, to
+<code><a href="../../.././Mathlib/Data/Finset/NAry.html">Mathlib/Data/Finset/NAry.lean</a></code> and to <code><a href="../../.././Mathlib/Order/Filter/NAry.html">Mathlib/Order/Filter/NAry.lean</a></code>. Please keep them in sync.</p><p>We do not define <code>Option.map₃</code> as its only purpose so far would be to prove properties of
+<code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">Option.map₂</a></code> and casing already fulfills this task.</p></div><div class="decl" id="Option.map₂"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L42-L45">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂"><span class="name">Option</span>.<span class="name">map₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">γ</span></span></div></div><p>The image of a binary function <code>f : α → β → γ</code> as a function <code><a href="../../.././Init/Prelude.html#Option">Option</a> α → <a href="../../.././Init/Prelude.html#Option">Option</a> β → <a href="../../.././Init/Prelude.html#Option">Option</a> γ</code>.
+Mathematically this should be thought of as the image of the corresponding function <code>α × β → γ</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">Option.map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">a</span>.<a href="../../.././Init/Data/Option/Basic.html#Option.bind">bind</a></span> <span class="fn">fun (<span class="fn">a</span> : <span class="fn">α</span>) =&gt; <span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span></span></span></li></ul></details><details id="instances-for-list-Option.map₂" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Option.map₂_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L47-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_def"><span class="name">Option</span>.<span class="name">map₂_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α </span><span class="fn">β </span><span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <a href="../../.././Init/Prelude.html#Functor.map">&lt;$&gt;</a> <span class="fn">a</span> &lt;*&gt; <span class="fn">b</span></span></div></div><p><code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">Option.map₂</a></code> in terms of monadic operations. Note that this can't be taken as the definition
+because of the lack of universe polymorphism.</p></div></div><div class="decl" id="Option.map₂_some_some"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L53-L54">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_some_some"><span class="name">Option</span>.<span class="name">map₂_some_some</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">a</span>)</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span></div></div></div></div><div class="decl" id="Option.map₂_coe_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L56-L56">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_coe_coe"><span class="name">Option</span>.<span class="name">map₂_coe_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">a</span>)</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span></div></div></div></div><div class="decl" id="Option.map₂_none_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L58-L59">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_none_left"><span class="name">Option</span>.<span class="name">map₂_none_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <a href="../../.././Init/Prelude.html#Option.none">none</a> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Option.none">none</a></div></div></div></div><div class="decl" id="Option.map₂_none_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L61-L62">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_none_right"><span class="name">Option</span>.<span class="name">map₂_none_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Option.none">none</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Option.none">none</a></div></div></div></div><div class="decl" id="Option.map₂_coe_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L64-L66">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_coe_left"><span class="name">Option</span>.<span class="name">map₂_coe_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">a</span>)</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">(fun (<span class="fn">b</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span>)</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="Option.map₂_coe_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L68-L70">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_coe_right"><span class="name">Option</span>.<span class="name">map₂_coe_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">(fun (<span class="fn">a</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span>)</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="Option.mem_map₂_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L72-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.mem_map₂_iff"><span class="name">Option</span>.<span class="name">mem_map₂_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn">γ</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">c</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <a href="../../.././Init/Core.html#Exists">∃</a> <a href="../../.././Init/Core.html#Exists">(</a><span class="fn">a'</span> <a href="../../.././Init/Core.html#Exists">:</a> <span class="fn">α</span><a href="../../.././Init/Core.html#Exists">)</a><a href="../../.././Init/Core.html#Exists">,</a> <a href="../../.././Init/Core.html#Exists">∃</a> <a href="../../.././Init/Core.html#Exists">(</a><span class="fn">b'</span> <a href="../../.././Init/Core.html#Exists">:</a> <span class="fn">β</span><a href="../../.././Init/Core.html#Exists">)</a><a href="../../.././Init/Core.html#Exists">,</a> <span class="fn">a'</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">b'</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">a'</span> <span class="fn">b'</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span></div></div></div></div><div class="decl" id="Option.map₂_eq_some_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L75-L79">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_eq_some_iff"><span class="name">Option</span>.<span class="name">map₂_eq_some_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn">γ</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">c</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <a href="../../.././Init/Core.html#Exists">∃</a> <a href="../../.././Init/Core.html#Exists">(</a><span class="fn">a'</span> <a href="../../.././Init/Core.html#Exists">:</a> <span class="fn">α</span><a href="../../.././Init/Core.html#Exists">)</a><a href="../../.././Init/Core.html#Exists">,</a> <a href="../../.././Init/Core.html#Exists">∃</a> <a href="../../.././Init/Core.html#Exists">(</a><span class="fn">b'</span> <a href="../../.././Init/Core.html#Exists">:</a> <span class="fn">β</span><a href="../../.././Init/Core.html#Exists">)</a><a href="../../.././Init/Core.html#Exists">,</a> <span class="fn">a'</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">b'</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">a'</span> <span class="fn">b'</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span></div></div><p><code>simp</code>-normal form of <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.mem_map₂_iff">mem_map₂_iff</a></code>.</p></div></div><div class="decl" id="Option.map₂_eq_none_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L81-L83">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_eq_none_iff"><span class="name">Option</span>.<span class="name">map₂_eq_none_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Option.none">none</a> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Option.none">none</a> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Option.none">none</a></div></div></div></div><div class="decl" id="Option.map₂_swap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L85-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_swap"><span class="name">Option</span>.<span class="name">map₂_swap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">(fun (<span class="fn">a</span> : <span class="fn">β</span>) (<span class="fn">b</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">b</span> <span class="fn">a</span></span>)</span> <span class="fn">b</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="Option.map_map₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L88-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂"><span class="name">Option</span>.<span class="name">map_map₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">δ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">(fun (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span>)</span> <span class="fn">a</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="Option.map₂_map_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L91-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_map_left"><span class="name">Option</span>.<span class="name">map₂_map_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">δ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">(fun (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span>)</span> <span class="fn">a</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="Option.map₂_map_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L94-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_map_right"><span class="name">Option</span>.<span class="name">map₂_map_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn">δ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">(fun (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<span class="fn">g</span> <span class="fn">b</span>)</span></span>)</span> <span class="fn">a</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="Option.map₂_curry"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L97-L99">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_curry"><span class="name">Option</span>.<span class="name">map₂_curry</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">(<a href="../../.././Init/Data/Function.html#Function.curry">Function.curry</a> <span class="fn">f</span>)</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <a href="../../.././Init/Prelude.html#Prod.mk">Prod.mk</a> <span class="fn">a</span> <span class="fn">b</span>)</span></span></div></div></div></div><div class="decl" id="Option.map_uncurry"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L101-L103">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map_uncurry"><span class="name">Option</span>.<span class="name">map_uncurry</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> (<span class="fn">α</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">(<a href="../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">f</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <a href="../../.././Init/Prelude.html#Prod.fst">Prod.fst</a> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <a href="../../.././Init/Prelude.html#Prod.snd">Prod.snd</a> <span class="fn">x</span>)</span></span></div></div></div></div><div class="mod_doc"><h3 id="Algebraic-replacement-rules" class="markdown-heading">Algebraic replacement rules <a class="hover-link" href="#Algebraic-replacement-rules">#</a></h3><p>A collection of lemmas to transfer associativity, commutativity, distributivity, ... of operations
+to the associativity, commutativity, distributivity, ... of <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">Option.map₂</a></code> of those operations.
+The proof pattern is <code>map₂_lemma operation_lemma</code>. For example, <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_comm">map₂_comm</a> <a href="../../.././Mathlib/Algebra/Group/Defs.html#mul_comm">mul_comm</a></code> proves that
+<code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> (*) a b = <a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> (*) g f</code> in a <code><a href="../../.././Mathlib/Algebra/Group/Defs.html#CommSemigroup">CommSemigroup</a></code>.</p></div><div class="decl" id="Option.map₂_assoc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L116-L118">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_assoc"><span class="name">Option</span>.<span class="name">map₂_assoc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε'</span> : <a href="../../.././foundational_types.html">Type</a> u_9}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">δ</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn">ε</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">ε'</span> → <span class="fn">ε</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn">ε'</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_assoc</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) (<span class="fn">c</span> : <span class="fn">γ</span>), <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">a</span> <span class="fn">b</span>)</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">a</span> <span class="fn">(<span class="fn">g'</span> <span class="fn">b</span> <span class="fn">c</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">g</span> <span class="fn">a</span> <span class="fn">b</span>)</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">a</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">g'</span> <span class="fn">b</span> <span class="fn">c</span>)</span></span></div></div></div></div><div class="decl" id="Option.map₂_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L120-L121">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_comm"><span class="name">Option</span>.<span class="name">map₂_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_comm</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">b</span> <span class="fn">a</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">g</span> <span class="fn">b</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="Option.map₂_left_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L123-L125">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_left_comm"><span class="name">Option</span>.<span class="name">map₂_left_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ'</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">δ</span> → <span class="fn">ε</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn">δ'</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">δ'</span> → <span class="fn">ε</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_left_comm</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) (<span class="fn">c</span> : <span class="fn">γ</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<span class="fn">g</span> <span class="fn">b</span> <span class="fn">c</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g'</span> <span class="fn">b</span> <span class="fn">(<span class="fn">f'</span> <span class="fn">a</span> <span class="fn">c</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">g</span> <span class="fn">b</span> <span class="fn">c</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">g'</span> <span class="fn">b</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">a</span> <span class="fn">c</span>)</span></span></div></div></div></div><div class="decl" id="Option.map₂_right_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L127-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_right_comm"><span class="name">Option</span>.<span class="name">map₂_right_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ'</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">δ</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn">ε</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn">δ'</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">δ'</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">ε</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_right_comm</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) (<span class="fn">c</span> : <span class="fn">γ</span>), <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">a</span> <span class="fn">b</span>)</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g'</span> <span class="fn">(<span class="fn">f'</span> <span class="fn">a</span> <span class="fn">c</span>)</span> <span class="fn">b</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">g</span> <span class="fn">a</span> <span class="fn">b</span>)</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">g'</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">a</span> <span class="fn">c</span>)</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="Option.map_map₂_distrib"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L131-L133">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_distrib"><span class="name">Option</span>.<span class="name">map_map₂_distrib</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α'</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β'</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">δ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">α'</span> → <span class="fn"><span class="fn">β'</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₂</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">β'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_distrib</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">(<span class="fn">g₁</span> <span class="fn">a</span>)</span> <span class="fn">(<span class="fn">g₂</span> <span class="fn">b</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g₁</span> <span class="fn">a</span>)</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g₂</span> <span class="fn">b</span>)</span></span></div></div></div></div><div class="mod_doc"><p>The following symmetric restatement are needed because unification has a hard time figuring all the
+functions if you symmetrize on the spot. This is also how the other n-ary APIs do it.</p></div><div class="decl" id="Option.map_map₂_distrib_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L140-L143">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_distrib_left"><span class="name">Option</span>.<span class="name">map_map₂_distrib_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α'</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">δ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">α'</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_distrib</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">(<span class="fn">g'</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g'</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span></div></div><p>Symmetric statement to <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_map_left_comm">Option.map₂_map_left_comm</a></code>.</p></div></div><div class="decl" id="Option.map_map₂_distrib_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L145-L148">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_distrib_right"><span class="name">Option</span>.<span class="name">map_map₂_distrib_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β'</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">δ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β'</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">β'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_distrib</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">a</span> <span class="fn">(<span class="fn">g'</span> <span class="fn">b</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">a</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g'</span> <span class="fn">b</span>)</span></span></div></div><p>Symmetric statement to <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_right_comm">Option.map_map₂_right_comm</a></code>.</p></div></div><div class="decl" id="Option.map₂_map_left_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L150-L153">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_map_left_comm"><span class="name">Option</span>.<span class="name">map₂_map_left_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α'</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α'</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">δ</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_left_comm</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g'</span> <span class="fn">(<span class="fn">f'</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g'</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span></div></div><p>Symmetric statement to <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_distrib_left">Option.map_map₂_distrib_left</a></code>.</p></div></div><div class="decl" id="Option.map_map₂_right_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L155-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_right_comm"><span class="name">Option</span>.<span class="name">map_map₂_right_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β'</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β'</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">β'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">δ</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_right_comm</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<span class="fn">g</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g'</span> <span class="fn">(<span class="fn">f'</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g'</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span></div></div><p>Symmetric statement to <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_distrib_right">Option.map_map₂_distrib_right</a></code>.</p></div></div><div class="decl" id="Option.map_map₂_antidistrib"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L160-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_antidistrib"><span class="name">Option</span>.<span class="name">map_map₂_antidistrib</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α'</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β'</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">δ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">β'</span> → <span class="fn"><span class="fn">α'</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">β'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_antidistrib</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">(<span class="fn">g₁</span> <span class="fn">b</span>)</span> <span class="fn">(<span class="fn">g₂</span> <span class="fn">a</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g₁</span> <span class="fn">b</span>)</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g₂</span> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="Option.map_map₂_antidistrib_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L164-L167">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_antidistrib_left"><span class="name">Option</span>.<span class="name">map_map₂_antidistrib_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β'</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">δ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">β'</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">β'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_antidistrib</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">(<span class="fn">g'</span> <span class="fn">b</span>)</span> <span class="fn">a</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g'</span> <span class="fn">b</span>)</span> <span class="fn">a</span></span></div></div><p>Symmetric statement to <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_map_left_anticomm">Option.map₂_map_left_anticomm</a></code>.</p></div></div><div class="decl" id="Option.map_map₂_antidistrib_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L169-L172">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_antidistrib_right"><span class="name">Option</span>.<span class="name">map_map₂_antidistrib_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α'</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">δ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">α'</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_antidistrib</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">b</span> <span class="fn">(<span class="fn">g'</span> <span class="fn">a</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">b</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g'</span> <span class="fn">a</span>)</span></span></div></div><p>Symmetric statement to <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_right_anticomm">Option.map_map₂_right_anticomm</a></code>.</p></div></div><div class="decl" id="Option.map₂_map_left_anticomm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L174-L177">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_map_left_anticomm"><span class="name">Option</span>.<span class="name">map₂_map_left_anticomm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α'</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α'</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">δ</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_left_anticomm</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g'</span> <span class="fn">(<span class="fn">f'</span> <span class="fn">b</span> <span class="fn">a</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g'</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">b</span> <span class="fn">a</span>)</span></span></div></div><p>Symmetric statement to <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_antidistrib_left">Option.map_map₂_antidistrib_left</a></code>.</p></div></div><div class="decl" id="Option.map_map₂_right_anticomm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L179-L182">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_right_anticomm"><span class="name">Option</span>.<span class="name">map_map₂_right_anticomm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β'</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β'</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">β'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">δ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">δ</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h_right_anticomm</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<span class="fn">g</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g'</span> <span class="fn">(<span class="fn">f'</span> <span class="fn">b</span> <span class="fn">a</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">a</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Option.map">Option.map</a> <span class="fn">g'</span> <span class="fn">(<a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f'</span> <span class="fn">b</span> <span class="fn">a</span>)</span></span></div></div><p>Symmetric statement to <code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map_map₂_antidistrib_right">Option.map_map₂_antidistrib_right</a></code>.</p></div></div><div class="decl" id="Option.map₂_left_identity"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L184-L187">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_left_identity"><span class="name">Option</span>.<span class="name">map₂_left_identity</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">o</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">a</span>)</span> <span class="fn">o</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">o</span></div></div><p>If <code>a</code> is a left identity for a binary operation <code>f</code>, then <code>some a</code> is a left identity for
+<code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">Option.map₂</a> f</code>.</p></div></div><div class="decl" id="Option.map₂_right_identity"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Option/NAry.lean#L189-L192">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂_right_identity"><span class="name">Option</span>.<span class="name">map₂_right_identity</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">β</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">o</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">map₂</a> <span class="fn">f</span> <span class="fn">o</span> <span class="fn">(<a href="../../.././Init/Prelude.html#Option.some">some</a> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">o</span></div></div><p>If <code>b</code> is a right identity for a binary operation <code>f</code>, then <code>some b</code> is a right identity for
+<code><a href="../../.././Mathlib/Data/Option/NAry.html#Option.map₂">Option.map₂</a> f</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

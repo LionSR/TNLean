@@ -1,0 +1,527 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.AddTorsor.Basic</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.AddTorsor.Basic";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">AddTorsor</span>.<span class="name">Basic</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html">Mathlib.Algebra.AddTorsor.Defs</a></li><li><a href="../../.././Mathlib/Algebra/Group/End.html">Mathlib.Algebra.Group.End</a></li><li><a href="../../.././Mathlib/Algebra/Group/Action/Basic.html">Mathlib.Algebra.Group.Action.Basic</a></li><li><a href="../../.././Mathlib/Algebra/Group/Action/Pi.html">Mathlib.Algebra.Group.Action.Pi</a></li><li><a href="../../.././Mathlib/Algebra/Group/Pointwise/Set/Scalar.html">Mathlib.Algebra.Group.Pointwise.Set.Scalar</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.AddTorsor.Basic" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Set.singleton_vsub_self"><span class="name">Set</span>.<span class="name">singleton_vsub_self</span></a></div><div class="nav_link"><a class="break_within" href="#vsub_left_cancel"><span class="name">vsub_left_cancel</span></a></div><div class="nav_link"><a class="break_within" href="#vsub_left_cancel_iff"><span class="name">vsub_left_cancel_iff</span></a></div><div class="nav_link"><a class="break_within" href="#vsub_left_injective"><span class="name">vsub_left_injective</span></a></div><div class="nav_link"><a class="break_within" href="#vsub_right_cancel"><span class="name">vsub_right_cancel</span></a></div><div class="nav_link"><a class="break_within" href="#vsub_right_cancel_iff"><span class="name">vsub_right_cancel_iff</span></a></div><div class="nav_link"><a class="break_within" href="#vsub_right_injective"><span class="name">vsub_right_injective</span></a></div><div class="nav_link"><a class="break_within" href="#vsub_sub_vsub_cancel_left"><span class="name">vsub_sub_vsub_cancel_left</span></a></div><div class="nav_link"><a class="break_within" href="#vadd_vsub_vadd_cancel_left"><span class="name">vadd_vsub_vadd_cancel_left</span></a></div><div class="nav_link"><a class="break_within" href="#vadd_vsub_vadd_comm"><span class="name">vadd_vsub_vadd_comm</span></a></div><div class="nav_link"><a class="break_within" href="#sub_add_vsub_comm"><span class="name">sub_add_vsub_comm</span></a></div><div class="nav_link"><a class="break_within" href="#vsub_vadd_comm"><span class="name">vsub_vadd_comm</span></a></div><div class="nav_link"><a class="break_within" href="#vadd_eq_vadd_iff_sub_eq_vsub"><span class="name">vadd_eq_vadd_iff_sub_eq_vsub</span></a></div><div class="nav_link"><a class="break_within" href="#vsub_sub_vsub_comm"><span class="name">vsub_sub_vsub_comm</span></a></div><div class="nav_link"><a class="break_within" href="#Set.vadd_set_vsub_vadd_set"><span class="name">Set</span>.<span class="name">vadd_set_vsub_vadd_set</span></a></div><div class="nav_link"><a class="break_within" href="#Prod.instAddTorsor"><span class="name">Prod</span>.<span class="name">instAddTorsor</span></a></div><div class="nav_link"><a class="break_within" href="#Prod.fst_vadd"><span class="name">Prod</span>.<span class="name">fst_vadd</span></a></div><div class="nav_link"><a class="break_within" href="#Prod.snd_vadd"><span class="name">Prod</span>.<span class="name">snd_vadd</span></a></div><div class="nav_link"><a class="break_within" href="#Prod.mk_vadd_mk"><span class="name">Prod</span>.<span class="name">mk_vadd_mk</span></a></div><div class="nav_link"><a class="break_within" href="#Prod.fst_vsub"><span class="name">Prod</span>.<span class="name">fst_vsub</span></a></div><div class="nav_link"><a class="break_within" href="#Prod.snd_vsub"><span class="name">Prod</span>.<span class="name">snd_vsub</span></a></div><div class="nav_link"><a class="break_within" href="#Prod.mk_vsub_mk"><span class="name">Prod</span>.<span class="name">mk_vsub_mk</span></a></div><div class="nav_link"><a class="break_within" href="#Pi.instAddTorsor"><span class="name">Pi</span>.<span class="name">instAddTorsor</span></a></div><div class="nav_link"><a class="break_within" href="#Pi.vsub_apply"><span class="name">Pi</span>.<span class="name">vsub_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Pi.vsub_def"><span class="name">Pi</span>.<span class="name">vsub_def</span></a></div><div class="nav_link"><a class="break_within" href="#Equiv.constVAdd_zero"><span class="name">Equiv</span>.<span class="name">constVAdd_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Equiv.constVAdd_add"><span class="name">Equiv</span>.<span class="name">constVAdd_add</span></a></div><div class="nav_link"><a class="break_within" href="#Equiv.constVAddHom"><span class="name">Equiv</span>.<span class="name">constVAddHom</span></a></div><div class="nav_link"><a class="break_within" href="#Equiv.left_vsub_pointReflection"><span class="name">Equiv</span>.<span class="name">left_vsub_pointReflection</span></a></div><div class="nav_link"><a class="break_within" href="#Equiv.right_vsub_pointReflection"><span class="name">Equiv</span>.<span class="name">right_vsub_pointReflection</span></a></div><div class="nav_link"><a class="break_within" href="#Equiv.pointReflection_fixed_iff_of_injective_two_nsmul"><span class="name">Equiv</span>.<span class="name">pointReflection_fixed_iff_of_injective_two_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Equiv.injective_pointReflection_left_of_injective_two_nsmul"><span class="name">Equiv</span>.<span class="name">injective_pointReflection_left_of_injective_two_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Equiv.pointReflection_eq_subLeft"><span class="name">Equiv</span>.<span class="name">pointReflection_eq_subLeft</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Injective.addTorsor"><span class="name">Function</span>.<span class="name">Injective</span>.<span class="name">addTorsor</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Surjective.addTorsor"><span class="name">Function</span>.<span class="name">Surjective</span>.<span class="name">addTorsor</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Torsors-of-additive-group-actions" class="markdown-heading">Torsors of additive group actions <a class="hover-link" href="#Torsors-of-additive-group-actions">#</a></h1><p>Further results for torsors, that are not in <code><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html">Mathlib/Algebra/AddTorsor/Defs.lean</a></code> to avoid
+increasing imports there.</p></div><div class="decl" id="Set.singleton_vsub_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L32-L33">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Set.singleton_vsub_self"><span class="name">Set</span>.<span class="name">singleton_vsub_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">0</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a></div></div></div></div><div class="decl" id="vsub_left_cancel"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L37-L40">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vsub_left_cancel"><span class="name">vsub_left_cancel</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p₁ </span><span class="fn">p₂ </span><span class="fn">p</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₂</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₂</span></div></div><p>If the same point subtracted from two points produces equal
+results, those points are equal.</p></div></div><div class="decl" id="vsub_left_cancel_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L42-L46">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vsub_left_cancel_iff"><span class="name">vsub_left_cancel_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p₁ </span><span class="fn">p₂ </span><span class="fn">p</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₂</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₂</span></div></div><p>The same point subtracted from two points produces equal results
+if and only if those points are equal.</p></div></div><div class="decl" id="vsub_left_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L48-L50">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vsub_left_injective"><span class="name">vsub_left_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">P</span>) =&gt; <span class="fn">x</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p</span></span></span></div></div><p>Subtracting the point <code>p</code> is an injective function.</p></div></div><div class="decl" id="vsub_right_cancel"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L52-L56">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vsub_right_cancel"><span class="name">vsub_right_cancel</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p₁ </span><span class="fn">p₂ </span><span class="fn">p</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">p</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₂</span></div></div><p>If subtracting two points from the same point produces equal
+results, those points are equal.</p></div></div><div class="decl" id="vsub_right_cancel_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L58-L62">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vsub_right_cancel_iff"><span class="name">vsub_right_cancel_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p₁ </span><span class="fn">p₂ </span><span class="fn">p</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₂</span></div></div><p>Subtracting two points from the same point produces equal results
+if and only if those points are equal.</p></div></div><div class="decl" id="vsub_right_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L64-L67">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vsub_right_injective"><span class="name">vsub_right_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">P</span>) =&gt; <span class="fn">p</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">x</span></span></span></div></div><p>Subtracting a point from the point <code>p</code> is an injective
+function.</p></div></div><div class="decl" id="vsub_sub_vsub_cancel_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L75-L78">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vsub_sub_vsub_cancel_left"><span class="name">vsub_sub_vsub_cancel_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂ </span><span class="fn">p₃</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p₃</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> (<span class="fn">p₃</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₁</span>) <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span></div></div><p>Cancellation subtracting the results of two subtractions.</p></div></div><div class="decl" id="vadd_vsub_vadd_cancel_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L80-L82">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vadd_vsub_vadd_cancel_left"><span class="name">vadd_vsub_vadd_cancel_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">v</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₁</span>) <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> (<span class="fn">v</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₂</span>) <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span></div></div></div></div><div class="decl" id="vadd_vsub_vadd_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L84-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vadd_vsub_vadd_comm"><span class="name">vadd_vsub_vadd_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v₁ </span><span class="fn">v₂</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">v₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₁</span>) <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> (<span class="fn">v₂</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₂</span>) <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">v₁</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">v₂</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> (<span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>)</div></div></div></div><div class="decl" id="sub_add_vsub_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L88-L90">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#sub_add_vsub_comm"><span class="name">sub_add_vsub_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v₁ </span><span class="fn">v₂</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">v₁</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">v₂</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> (<span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>) <a href="../../.././Init/Prelude.html#Eq">=</a> (<span class="fn">v₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₁</span>) <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> (<span class="fn">v₂</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₂</span>)</div></div></div></div><div class="decl" id="vsub_vadd_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L92-L94">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vsub_vadd_comm"><span class="name">vsub_vadd_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂ </span><span class="fn">p₃</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>) <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₃</span> <a href="../../.././Init/Prelude.html#Eq">=</a> (<span class="fn">p₃</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>) <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₁</span></div></div></div></div><div class="decl" id="vadd_eq_vadd_iff_sub_eq_vsub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L96-L98">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vadd_eq_vadd_iff_sub_eq_vsub"><span class="name">vadd_eq_vadd_iff_sub_eq_vsub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v₁ </span><span class="fn">v₂</span> : <span class="fn">G</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p₁ </span><span class="fn">p₂</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">v₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">v₂</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₂</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">v₂</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">v₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span></div></div></div></div><div class="decl" id="vsub_sub_vsub_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L100-L101">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#vsub_sub_vsub_comm"><span class="name">vsub_sub_vsub_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂ </span><span class="fn">p₃ </span><span class="fn">p₄</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> (<span class="fn">p₃</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₄</span>) <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₃</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> (<span class="fn">p₂</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₄</span>)</div></div></div></div><div class="decl" id="Set.vadd_set_vsub_vadd_set"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L105-L106">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Set.vadd_set_vsub_vadd_set"><span class="name">Set</span>.<span class="name">vadd_set_vsub_vadd_set</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">v</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">s</span>) <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> (<span class="fn">v</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">t</span>) <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">s</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">t</span></div></div></div></div><div class="decl" id="Prod.instAddTorsor"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L116-L122">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Prod.instAddTorsor"><span class="name">Prod</span>.<span class="name">instAddTorsor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G'</span> <span class="fn">P'</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> (<span class="fn">G</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">G'</span>) (<span class="fn">P</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">P'</span>)</span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="Prod.fst_vadd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L124-L126">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Prod.fst_vadd"><span class="name">Prod</span>.<span class="name">fst_vadd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G'</span> <span class="fn">P'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">G</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">G'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">P</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">P'</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">v</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p</span>).1</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">v</span>.1</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn">p</span>.1</span></div></div></div></div><div class="decl" id="Prod.snd_vadd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L128-L130">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Prod.snd_vadd"><span class="name">Prod</span>.<span class="name">snd_vadd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G'</span> <span class="fn">P'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">G</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">G'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">P</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">P'</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">v</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p</span>).2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">v</span>.2</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn">p</span>.2</span></div></div></div></div><div class="decl" id="Prod.mk_vadd_mk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L132-L134">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Prod.mk_vadd_mk"><span class="name">Prod</span>.<span class="name">mk_vadd_mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G'</span> <span class="fn">P'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v'</span> : <span class="fn">G'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p'</span> : <span class="fn">P'</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">v</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">v'</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">p</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">p'</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">v</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">v'</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p'</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></div></div></div></div><div class="decl" id="Prod.fst_vsub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L136-L138">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Prod.fst_vsub"><span class="name">Prod</span>.<span class="name">fst_vsub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G'</span> <span class="fn">P'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂</span> : <span class="fn">P</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">P'</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>).1</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">p₁</span>.1</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">p₂</span>.1</span></div></div></div></div><div class="decl" id="Prod.snd_vsub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L140-L142">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Prod.snd_vsub"><span class="name">Prod</span>.<span class="name">snd_vsub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G'</span> <span class="fn">P'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂</span> : <span class="fn">P</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">P'</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>).2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">p₁</span>.2</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">p₂</span>.2</span></div></div></div></div><div class="decl" id="Prod.mk_vsub_mk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L144-L147">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Prod.mk_vsub_mk"><span class="name">Prod</span>.<span class="name">mk_vsub_mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G'</span> <span class="fn">P'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p₁' </span><span class="fn">p₂'</span> : <span class="fn">P'</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">p₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">p₁'</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">p₂</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">p₂'</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">p₁'</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂'</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></div></div></div></div><div class="decl" id="Pi.instAddTorsor"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L160-L164">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Pi.instAddTorsor"><span class="name">Pi</span>.<span class="name">instAddTorsor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fg</span> : <span class="fn"><span class="fn">I</span> → <a href="../../.././foundational_types.html">Type</a> v</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">(<span class="fn">fg</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fp</span> : <span class="fn"><span class="fn">I</span> → <a href="../../.././foundational_types.html">Type</a> w</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">(<span class="fn">fg</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">fp</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">((<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><span class="fn">fg</span> <span class="fn">i</span></span>)</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><span class="fn">fp</span> <span class="fn">i</span></span>)</span></span></div></div><p>A product of <code><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a></code>s is an <code><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Pi.instAddTorsor">Pi.instAddTorsor</a> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor.mk">{</a> <span class="fn">toAddAction</span> := <a href="../../.././Mathlib/Algebra/Group/Action/Pi.html#Pi.addAction'">Pi.addAction'</a>, <span class="fn">vsub</span> := <span class="fn">fun (<span class="fn">p₁</span> <span class="fn">p₂</span> : <span class="fn">(<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><span class="fn">fp</span> <span class="fn">i</span></span></span>) (<span class="fn">i</span> : <span class="fn">I</span>) =&gt; <span class="fn"><span class="fn">p₁</span> <span class="fn">i</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">p₂</span> <span class="fn">i</span></span></span>, <span class="fn">nonempty</span> := <span class="fn">⋯</span>,
+    <span class="fn">vsub_vadd'</span> := <span class="fn">⋯</span>, <span class="fn">vadd_vsub'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor.mk">}</a></li></ul></details></div></div><div class="decl" id="Pi.vsub_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L166-L168">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Pi.vsub_apply"><span class="name">Pi</span>.<span class="name">vsub_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fg</span> : <span class="fn"><span class="fn">I</span> → <a href="../../.././foundational_types.html">Type</a> v</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">(<span class="fn">fg</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fp</span> : <span class="fn"><span class="fn">I</span> → <a href="../../.././foundational_types.html">Type</a> w</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">(<span class="fn">fg</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">fp</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p </span><span class="fn">q</span> : <span class="fn">(<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><span class="fn">fp</span> <span class="fn">i</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">I</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">p</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">q</span>) <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">p</span> <span class="fn">i</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">q</span> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="Pi.vsub_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L170-L172">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Pi.vsub_def"><span class="name">Pi</span>.<span class="name">vsub_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fg</span> : <span class="fn"><span class="fn">I</span> → <a href="../../.././foundational_types.html">Type</a> v</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">(<span class="fn">fg</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fp</span> : <span class="fn"><span class="fn">I</span> → <a href="../../.././foundational_types.html">Type</a> w</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">(<span class="fn">fg</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">fp</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p </span><span class="fn">q</span> : <span class="fn">(<span class="fn">i</span> : <span class="fn">I</span>) → <span class="fn"><span class="fn">fp</span> <span class="fn">i</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">q</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">I</span>) =&gt; <span class="fn"><span class="fn">p</span> <span class="fn">i</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">q</span> <span class="fn">i</span></span></span></div></div></div></div><div class="decl" id="Equiv.constVAdd_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L180-L182">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Equiv.constVAdd_zero"><span class="name">Equiv</span>.<span class="name">constVAdd_zero</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.constVAdd">constVAdd</a> <span class="fn">P</span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Equiv.constVAdd_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L186-L188">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Equiv.constVAdd_add"><span class="name">Equiv</span>.<span class="name">constVAdd_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v₁ </span><span class="fn">v₂</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.constVAdd">constVAdd</a> <span class="fn">P</span> (<span class="fn">v₁</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">v₂</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.constVAdd">constVAdd</a> <span class="fn">P</span> <span class="fn">v₁</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.constVAdd">constVAdd</a> <span class="fn">P</span> <span class="fn">v₂</span></span></div></div></div></div><div class="decl" id="Equiv.constVAddHom"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L190-L194">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Equiv.constVAddHom"><span class="name">Equiv</span>.<span class="name">constVAddHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/TypeTags/Basic.html#Multiplicative">Multiplicative</a> <span class="fn">G</span></span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn"><a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.Perm">Perm</a> <span class="fn">P</span></span></div></div><p><code><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.constVAdd">Equiv.constVAdd</a></code> as a homomorphism from <code><a href="../../.././Mathlib/Algebra/Group/TypeTags/Basic.html#Multiplicative">Multiplicative</a> G</code> to <code>Equiv.perm P</code></p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Equiv.constVAddHom">Equiv.constVAddHom</a> <span class="fn">P</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/TypeTags/Basic.html#Multiplicative">Multiplicative</a> <span class="fn">G</span></span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.constVAdd">Equiv.constVAdd</a> <span class="fn">P</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Group/TypeTags/Basic.html#Multiplicative.toAdd">Multiplicative.toAdd</a> <span class="fn">v</span>)</span></span></span>, <span class="fn">map_one'</span> := <span class="fn">⋯</span>, <span class="fn">map_mul'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom.mk">}</a></li></ul></details><details id="instances-for-list-Equiv.constVAddHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Equiv.left_vsub_pointReflection"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L200-L202">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Equiv.left_vsub_pointReflection"><span class="name">Equiv</span>.<span class="name">left_vsub_pointReflection</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.pointReflection">pointReflection</a> <span class="fn">x</span>)</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="Equiv.right_vsub_pointReflection"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L204-L206">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Equiv.right_vsub_pointReflection"><span class="name">Equiv</span>.<span class="name">right_vsub_pointReflection</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">y</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.pointReflection">pointReflection</a> <span class="fn">x</span>)</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> (<span class="fn">y</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">x</span>)</div></div></div></div><div class="decl" id="Equiv.pointReflection_fixed_iff_of_injective_two_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L208-L213">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Equiv.pointReflection_fixed_iff_of_injective_two_nsmul"><span class="name">Equiv</span>.<span class="name">pointReflection_fixed_iff_of_injective_two_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">G</span>) =&gt; <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.pointReflection">pointReflection</a> <span class="fn">x</span>)</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">x</span></div></div><p><code>x</code> is the only fixed point of <code>pointReflection x</code>. This lemma requires
+<code>x + x = y + y ↔ x = y</code>. There is no typeclass to use here, so we add it as an explicit argument.</p></div></div><div class="decl" id="Equiv.injective_pointReflection_left_of_injective_two_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L215-L221">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Equiv.injective_pointReflection_left_of_injective_two_nsmul"><span class="name">Equiv</span>.<span class="name">injective_pointReflection_left_of_injective_two_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">G</span>) =&gt; <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">P</span>) =&gt; <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.pointReflection">pointReflection</a> <span class="fn">x</span>)</span> <span class="fn">y</span></span></span></span></div></div></div></div><div class="decl" id="Equiv.pointReflection_eq_subLeft"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L223-L227">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Equiv.pointReflection_eq_subLeft"><span class="name">Equiv</span>.<span class="name">pointReflection_eq_subLeft</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.pointReflection">pointReflection</a> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Equiv.html#Equiv.subLeft">Equiv.subLeft</a> (<span class="fn">2</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span></div></div><p>In the special case of additive commutative groups (as opposed to just additive torsors),
+<code><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#Equiv.pointReflection">Equiv.pointReflection</a> x</code> coincides with <code><a href="../../.././Mathlib/Algebra/Group/Units/Equiv.html#Equiv.subLeft">Equiv.subLeft</a> (2 • x)</code>.</p></div></div><div class="decl" id="Function.Injective.addTorsor"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L231-L239">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Function.Injective.addTorsor"><span class="name">Function</span>.<span class="name">Injective</span>.<span class="name">addTorsor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">Q</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub">VSub</a> <span class="fn">G</span> <span class="fn">Q</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">Q</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">Q</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">vadd</span> : <span class="fn">∀ (<span class="fn">c</span> : <span class="fn">G</span>) (<span class="fn">x</span> : <span class="fn">Q</span>), <span class="fn"><span class="fn">f</span> (<span class="fn">c</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">vsub</span> : <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">Q</span>), <span class="fn">x</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">Q</span></span></div></div><p>Pullback of an add torsor along an injective map.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Function.Injective.addTorsor">Function.Injective.addTorsor</a> <span class="fn">f</span> <span class="fn">hf</span> <span class="fn">vadd</span> <span class="fn">vsub</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor.mk">{</a> <span class="fn">toAddAction</span> := <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#Function.Injective.addAction">Function.Injective.addAction</a> <span class="fn">f</span> <span class="fn">hf</span> <span class="fn">vadd</span></span>, <span class="fn">toVSub</span> := <span class="fn">inst✝¹</span>, <span class="fn">nonempty</span> := <span class="fn">inst✝</span>, <span class="fn">vsub_vadd'</span> := <span class="fn">⋯</span>,
+    <span class="fn">vadd_vsub'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor.mk">}</a></li></ul></details><details id="instances-for-list-Function.Injective.addTorsor" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Function.Surjective.addTorsor"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/AddTorsor/Basic.lean#L241-L250">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Function.Surjective.addTorsor"><span class="name">Function</span>.<span class="name">Surjective</span>.<span class="name">addTorsor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">Q</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub">VSub</a> <span class="fn">G</span> <span class="fn">Q</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">P</span> → <span class="fn">Q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Surjective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">vadd</span> : <span class="fn">∀ (<span class="fn">c</span> : <span class="fn">G</span>) (<span class="fn">x</span> : <span class="fn">P</span>), <span class="fn"><span class="fn">f</span> (<span class="fn">c</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">vsub</span> : <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">P</span>), <span class="fn">x</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">G</span> <span class="fn">Q</span></span></div></div><p>Pushforward of an add torsor along a surjective map.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Basic.html#Function.Surjective.addTorsor">Function.Surjective.addTorsor</a> <span class="fn">f</span> <span class="fn">hf</span> <span class="fn">vadd</span> <span class="fn">vsub</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor.mk">{</a> <span class="fn">toAddAction</span> := <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#Function.Surjective.addAction">Function.Surjective.addAction</a> <span class="fn">f</span> <span class="fn">hf</span> <span class="fn">vadd</span></span>, <span class="fn">toVSub</span> := <span class="fn">inst✝</span>, <span class="fn">nonempty</span> := <span class="fn">⋯</span>, <span class="fn">vsub_vadd'</span> := <span class="fn">⋯</span>,
+    <span class="fn">vadd_vsub'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor.mk">}</a></li></ul></details><details id="instances-for-list-Function.Surjective.addTorsor" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

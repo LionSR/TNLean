@@ -1,0 +1,340 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.HahnSeries.HEval</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.HahnSeries.HEval";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">HahnSeries</span>.<span class="name">HEval</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html">Mathlib.RingTheory.HahnSeries.Summable</a></li><li><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html">Mathlib.RingTheory.PowerSeries.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.HahnSeries.HEval" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#HahnSeries.SummableFamily.powerSeriesFamily"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily</span></a></div><div class="nav_link"><a class="break_within" href="#HahnSeries.SummableFamily.powerSeriesFamily_of_not_orderTop_pos"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily_of_not_orderTop_pos</span></a></div><div class="nav_link"><a class="break_within" href="#HahnSeries.SummableFamily.powerSeriesFamily_of_orderTop_pos"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily_of_orderTop_pos</span></a></div><div class="nav_link"><a class="break_within" href="#HahnSeries.SummableFamily.powerSeriesFamily_hsum_zero"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily_hsum_zero</span></a></div><div class="nav_link"><a class="break_within" href="#HahnSeries.SummableFamily.powerSeriesFamily_add"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily_add</span></a></div><div class="nav_link"><a class="break_within" href="#HahnSeries.SummableFamily.powerSeriesFamily_smul"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily_smul</span></a></div><div class="nav_link"><a class="break_within" href="#HahnSeries.SummableFamily.support_powerSeriesFamily_subset"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">support_powerSeriesFamily_subset</span></a></div><div class="nav_link"><a class="break_within" href="#HahnSeries.SummableFamily.hsum_powerSeriesFamily_mul"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">hsum_powerSeriesFamily_mul</span></a></div><div class="nav_link"><a class="break_within" href="#PowerSeries.heval"><span class="name">PowerSeries</span>.<span class="name">heval</span></a></div><div class="nav_link"><a class="break_within" href="#PowerSeries.heval_apply"><span class="name">PowerSeries</span>.<span class="name">heval_apply</span></a></div><div class="nav_link"><a class="break_within" href="#PowerSeries.heval_mul"><span class="name">PowerSeries</span>.<span class="name">heval_mul</span></a></div><div class="nav_link"><a class="break_within" href="#PowerSeries.heval_C"><span class="name">PowerSeries</span>.<span class="name">heval_C</span></a></div><div class="nav_link"><a class="break_within" href="#PowerSeries.heval_X"><span class="name">PowerSeries</span>.<span class="name">heval_X</span></a></div><div class="nav_link"><a class="break_within" href="#PowerSeries.heval_unit"><span class="name">PowerSeries</span>.<span class="name">heval_unit</span></a></div><div class="nav_link"><a class="break_within" href="#PowerSeries.coeff_heval"><span class="name">PowerSeries</span>.<span class="name">coeff_heval</span></a></div><div class="nav_link"><a class="break_within" href="#PowerSeries.coeff_heval_zero"><span class="name">PowerSeries</span>.<span class="name">coeff_heval_zero</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Evaluation-of-power-series-in-Hahn-Series" class="markdown-heading">Evaluation of power series in Hahn Series <a class="hover-link" href="#Evaluation-of-power-series-in-Hahn-Series">#</a></h1><p>We describe a class of ring homomorphisms from formal power series to Hahn series,
+given by substitution of the generating variable to an element of strictly positive order.</p><h2 id="Main-Definitions" class="markdown-heading">Main Definitions <a class="hover-link" href="#Main-Definitions">#</a></h2><ul><li><code><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">HahnSeries.SummableFamily.powerSeriesFamily</a></code>: A summable family of Hahn series whose elements
+are non-negative powers of a fixed positive-order Hahn series multiplied by the coefficients of a
+formal power series.</li><li><code><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">PowerSeries.heval</a></code>: The <code>R</code>-algebra homomorphism from <code><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> σ R</code> to <code>R⟦Γ⟧</code> that
+takes <code>X</code> to a fixed positive-order Hahn Series and extends to formal infinite sums.</li></ul><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li><code>MvPowerSeries.<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">heval</a></code>: An <code>R</code>-algebra homomorphism from <code><a href="../../.././Mathlib/RingTheory/MvPowerSeries/Basic.html#MvPowerSeries">MvPowerSeries</a> σ R</code> to <code>R⟦Γ⟧</code>
+(for finite σ) taking each <code>X i</code> to a positive order Hahn Series.</li></ul></div><div class="decl" id="HahnSeries.SummableFamily.powerSeriesFamily"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L48-L52">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily">SummableFamily</a> <span class="fn">Γ</span> <span class="fn">V</span> <a href="../../.././Init/Prelude.html#Nat">ℕ</a></span></div></div><p>A summable family given by scalar multiples of powers of a positive order Hahn series.</p><p>The scalar multiples are given by the coefficients of a power series.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">HahnSeries.SummableFamily.powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.smulFamily">HahnSeries.SummableFamily.smulFamily</a> <span class="fn">(fun (<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries.coeff">PowerSeries.coeff</a> <span class="fn">n</span>)</span> <span class="fn">f</span></span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.powers">HahnSeries.SummableFamily.powers</a> <span class="fn">x</span>)</span></span></li></ul></details><details id="instances-for-list-HahnSeries.SummableFamily.powerSeriesFamily" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="HahnSeries.SummableFamily.powerSeriesFamily_of_not_orderTop_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L54-L58">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily_of_not_orderTop_pos"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily_of_not_orderTop_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">x</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries.orderTop">orderTop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">0</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="HahnSeries.SummableFamily.powerSeriesFamily_of_orderTop_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L60-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily_of_orderTop_pos"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily_of_orderTop_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">x</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries.orderTop">orderTop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">f</span>)</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries.coeff">PowerSeries.coeff</a> <span class="fn">n</span>)</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div></div></div><div class="decl" id="HahnSeries.SummableFamily.powerSeriesFamily_hsum_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L65-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily_hsum_zero"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily_hsum_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">0</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.hsum">hsum</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries.constantCoeff">PowerSeries.constantCoeff</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="HahnSeries.SummableFamily.powerSeriesFamily_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L76-L79">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily_add"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">g</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">g</span></span></div></div></div></div><div class="decl" id="HahnSeries.SummableFamily.powerSeriesFamily_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L81-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily_smul"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">powerSeriesFamily_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> (<span class="fn">r</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries.single">HahnSeries.single</a> <span class="fn">0</span>)</span> <span class="fn">r</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="HahnSeries.SummableFamily.support_powerSeriesFamily_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L86-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.support_powerSeriesFamily_subset"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">support_powerSeriesFamily_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">Γ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span>))</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.coeff">coeff</a></span> <span class="fn">g</span>)</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a>   <span class="fn"><a href="../../.././Mathlib/Data/Finset/Image.html#Finset.image">Finset.image</a> <span class="fn">(fun (<span class="fn">i</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a> <a href="../../.././Init/Prelude.html#Prod">×</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">i</span>.1</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">i</span>.2</span>)</span> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">a</span>)</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.mul">mul</a></span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">b</span>)</span>)</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.coeff">coeff</a></span> <span class="fn">g</span>)</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span></span></div></div></div></div><div class="decl" id="HahnSeries.SummableFamily.hsum_powerSeriesFamily_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L116-L148">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.hsum_powerSeriesFamily_mul"><span class="name">HahnSeries</span>.<span class="name">SummableFamily</span>.<span class="name">hsum_powerSeriesFamily_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">V</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span>))</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.hsum">hsum</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">a</span>)</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.mul">mul</a></span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">b</span>)</span>)</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.hsum">hsum</a></span></div></div></div></div><div class="decl" id="PowerSeries.heval"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L163-L186">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval"><span class="name">PowerSeries</span>.<span class="name">heval</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">R</span></span></div></div><p>The <code>R</code>-algebra homomorphism from <code>R⟦X⟧</code> to <code>R⟦Γ⟧</code> given by sending the power series
+variable <code>X</code> to a positive order element <code>x</code> and extending to infinite sums.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">PowerSeries.heval</a> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>) =&gt; <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">HahnSeries.SummableFamily.powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.hsum">hsum</a></span></span>, <span class="fn">map_one'</span> := <span class="fn">⋯</span>,
+    <span class="fn">map_mul'</span> := <span class="fn">⋯</span>, <span class="fn">map_zero'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">commutes'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.mk">}</a></li></ul></details><details id="instances-for-list-PowerSeries.heval" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="PowerSeries.heval_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L165-L165">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval_apply"><span class="name">PowerSeries</span>.<span class="name">heval_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">heval</a> <span class="fn">x</span>)</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">HahnSeries.SummableFamily.powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.hsum">hsum</a></span></div></div></div></div><div class="decl" id="PowerSeries.heval_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L188-L189">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval_mul"><span class="name">PowerSeries</span>.<span class="name">heval_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">heval</a> <span class="fn">x</span>)</span> (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">heval</a> <span class="fn">x</span>)</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">heval</a> <span class="fn">x</span>)</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="PowerSeries.heval_C"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L191-L196">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval_C"><span class="name">PowerSeries</span>.<span class="name">heval_C</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">heval</a> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries.C">C</a> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="PowerSeries.heval_X"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L198-L203">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval_X"><span class="name">PowerSeries</span>.<span class="name">heval_X</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">x</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries.orderTop">orderTop</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">heval</a> <span class="fn">x</span>)</span> <a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries.X">X</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="PowerSeries.heval_unit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L205-L208">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval_unit"><span class="name">PowerSeries</span>.<span class="name">heval_unit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">u</span> : <span class="fn">(<a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span>)</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">heval</a> <span class="fn">x</span>)</span> <span class="fn">↑<span class="fn">u</span></span>)</span></span></div></div></div></div><div class="decl" id="PowerSeries.coeff_heval"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L210-L213">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.coeff_heval"><span class="name">PowerSeries</span>.<span class="name">coeff_heval</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">Γ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">heval</a> <span class="fn">x</span>)</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries.coeff">coeff</a></span> <span class="fn">g</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/BigOperators/Finprod.html#finsum">∑ᶠ</a> (<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)<a href="../../.././Mathlib/Algebra/BigOperators/Finprod.html#finsum">,</a> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#HahnSeries.SummableFamily.powerSeriesFamily">HahnSeries.SummableFamily.powerSeriesFamily</a> <span class="fn">x</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Summable.html#HahnSeries.SummableFamily.coeff">coeff</a></span> <span class="fn">g</span>)</span> <span class="fn">n</span></span></span></div></div></div></div><div class="decl" id="PowerSeries.coeff_heval_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/HahnSeries/HEval.lean#L215-L226">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.coeff_heval_zero"><span class="name">PowerSeries</span>.<span class="name">coeff_heval_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">Γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries">HahnSeries</a> <span class="fn">Γ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries">PowerSeries</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/RingTheory/HahnSeries/HEval.html#PowerSeries.heval">heval</a> <span class="fn">x</span>)</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/RingTheory/HahnSeries/Basic.html#HahnSeries.coeff">coeff</a></span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/PowerSeries/Basic.html#PowerSeries.constantCoeff">constantCoeff</a> <span class="fn">f</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

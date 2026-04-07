@@ -1,0 +1,485 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.SeparatedMap</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Topology.SeparatedMap";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">SeparatedMap</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Topology/Connected/Basic.html">Mathlib.Topology.Connected.Basic</a></li><li><a href="../.././Mathlib/Topology/Connected/Clopen.html">Mathlib.Topology.Connected.Clopen</a></li><li><a href="../.././Mathlib/Topology/Separation/Hausdorff.html">Mathlib.Topology.Separation.Hausdorff</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.SeparatedMap" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Topology.IsEmbedding.toPullbackDiag"><span class="name">Topology</span>.<span class="name">IsEmbedding</span>.<span class="name">toPullbackDiag</span></a></div><div class="nav_link"><a class="break_within" href="#Continuous.mapPullback"><span class="name">Continuous</span>.<span class="name">mapPullback</span></a></div><div class="nav_link"><a class="break_within" href="#IsSeparatedMap"><span class="name">IsSeparatedMap</span></a></div><div class="nav_link"><a class="break_within" href="#t2space_iff_isSeparatedMap"><span class="name">t2space_iff_isSeparatedMap</span></a></div><div class="nav_link"><a class="break_within" href="#T2Space.isSeparatedMap"><span class="name">T2Space</span>.<span class="name">isSeparatedMap</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Injective.isSeparatedMap"><span class="name">Function</span>.<span class="name">Injective</span>.<span class="name">isSeparatedMap</span></a></div><div class="nav_link"><a class="break_within" href="#isSeparatedMap_iff_disjoint_nhds"><span class="name">isSeparatedMap_iff_disjoint_nhds</span></a></div><div class="nav_link"><a class="break_within" href="#isSeparatedMap_iff_nhds"><span class="name">isSeparatedMap_iff_nhds</span></a></div><div class="nav_link"><a class="break_within" href="#isSeparatedMap_iff_isClosed_diagonal"><span class="name">isSeparatedMap_iff_isClosed_diagonal</span></a></div><div class="nav_link"><a class="break_within" href="#isSeparatedMap_iff_isClosedEmbedding"><span class="name">isSeparatedMap_iff_isClosedEmbedding</span></a></div><div class="nav_link"><a class="break_within" href="#isSeparatedMap_iff_isClosedMap"><span class="name">isSeparatedMap_iff_isClosedMap</span></a></div><div class="nav_link"><a class="break_within" href="#IsSeparatedMap.pullback"><span class="name">IsSeparatedMap</span>.<span class="name">pullback</span></a></div><div class="nav_link"><a class="break_within" href="#IsSeparatedMap.comp_left"><span class="name">IsSeparatedMap</span>.<span class="name">comp_left</span></a></div><div class="nav_link"><a class="break_within" href="#IsSeparatedMap.comp_right"><span class="name">IsSeparatedMap</span>.<span class="name">comp_right</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocallyInjective"><span class="name">IsLocallyInjective</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Injective.IsLocallyInjective"><span class="name">Function</span>.<span class="name">Injective</span>.<span class="name">IsLocallyInjective</span></a></div><div class="nav_link"><a class="break_within" href="#isLocallyInjective_iff_nhds"><span class="name">isLocallyInjective_iff_nhds</span></a></div><div class="nav_link"><a class="break_within" href="#isLocallyInjective_iff_isOpen_diagonal"><span class="name">isLocallyInjective_iff_isOpen_diagonal</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocallyInjective_iff_isOpenEmbedding"><span class="name">IsLocallyInjective_iff_isOpenEmbedding</span></a></div><div class="nav_link"><a class="break_within" href="#isLocallyInjective_iff_isOpenMap"><span class="name">isLocallyInjective_iff_isOpenMap</span></a></div><div class="nav_link"><a class="break_within" href="#discreteTopology_iff_locallyInjective"><span class="name">discreteTopology_iff_locallyInjective</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocallyInjective.comp_left"><span class="name">IsLocallyInjective</span>.<span class="name">comp_left</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocallyInjective.comp_right"><span class="name">IsLocallyInjective</span>.<span class="name">comp_right</span></a></div><div class="nav_link"><a class="break_within" href="#IsSeparatedMap.isClosed_eqLocus"><span class="name">IsSeparatedMap</span>.<span class="name">isClosed_eqLocus</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocallyInjective.isOpen_eqLocus"><span class="name">IsLocallyInjective</span>.<span class="name">isOpen_eqLocus</span></a></div><div class="nav_link"><a class="break_within" href="#IsSeparatedMap.eq_of_comp_eq"><span class="name">IsSeparatedMap</span>.<span class="name">eq_of_comp_eq</span></a></div><div class="nav_link"><a class="break_within" href="#IsSeparatedMap.eqOn_of_comp_eqOn"><span class="name">IsSeparatedMap</span>.<span class="name">eqOn_of_comp_eqOn</span></a></div><div class="nav_link"><a class="break_within" href="#IsSeparatedMap.const_of_comp"><span class="name">IsSeparatedMap</span>.<span class="name">const_of_comp</span></a></div><div class="nav_link"><a class="break_within" href="#IsSeparatedMap.constOn_of_comp"><span class="name">IsSeparatedMap</span>.<span class="name">constOn_of_comp</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Separated-maps-and-locally-injective-maps-out-of-a-topological-space" class="markdown-heading">Separated maps and locally injective maps out of a topological space. <a class="hover-link" href="#Separated-maps-and-locally-injective-maps-out-of-a-topological-space">#</a></h1><p>This module introduces a pair of dual notions <code><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a></code> and <code><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a></code>.</p><p>A function from a topological space <code>X</code> to a type <code>Y</code> is a separated map if any two distinct
+points in <code>X</code> with the same image in <code>Y</code> can be separated by open neighborhoods.
+A constant function is a separated map if and only if <code>X</code> is a <code><a href="../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a></code>.</p><p>A function from a topological space <code>X</code> is locally injective if every point of <code>X</code>
+has a neighborhood on which <code>f</code> is injective.
+A constant function is locally injective if and only if <code>X</code> is discrete.</p><p>Given <code>f : X → Y</code> we can form the pullback $X \times_Y X$; the diagonal map
+$\Delta: X \to X \times_Y X$ is always an embedding. It is a closed embedding
+iff <code>f</code> is a separated map, iff the equal locus of any two continuous maps
+coequalized by <code>f</code> is closed. It is an open embedding iff <code>f</code> is locally injective,
+iff any such equal locus is open. Therefore, if <code>f</code> is a locally injective separated map,
+the equal locus of two continuous maps coequalized by <code>f</code> is clopen, so if the two maps
+agree on a point, then they agree on the whole connected component.</p><p>The analogue of separated maps and locally injective maps in algebraic geometry are
+separated morphisms and unramified morphisms, respectively.</p><h2 id="Reference" class="markdown-heading">Reference <a class="hover-link" href="#Reference">#</a></h2><p><a href="https://stacks.math.columbia.edu/tag/0CY0">https://stacks.math.columbia.edu/tag/0CY0</a></p></div><div class="decl" id="Topology.IsEmbedding.toPullbackDiag"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L46-L49">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#Topology.IsEmbedding.toPullbackDiag"><span class="name">Topology</span>.<span class="name">IsEmbedding</span>.<span class="name">toPullbackDiag</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Induced.html#Topology.IsEmbedding">IsEmbedding</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Prod.html#toPullbackDiag">toPullbackDiag</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="Continuous.mapPullback"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L51-L59">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#Continuous.mapPullback"><span class="name">Continuous</span>.<span class="name">mapPullback</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X₁</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X₂</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y₁</span> : <a href="../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y₂</span> : <a href="../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z₁</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z₂</span> : <a href="../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Z₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Z₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁</span> : <span class="fn"><span class="fn">X₁</span> → <span class="fn">Y₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁</span> : <span class="fn"><span class="fn">Z₁</span> → <span class="fn">Y₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₂</span> : <span class="fn"><span class="fn">X₂</span> → <span class="fn">Y₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₂</span> : <span class="fn"><span class="fn">Z₂</span> → <span class="fn">Y₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mapX</span> : <span class="fn"><span class="fn">X₁</span> → <span class="fn">X₂</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">contX</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">mapX</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mapY</span> : <span class="fn"><span class="fn">Y₁</span> → <span class="fn">Y₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">mapZ</span> : <span class="fn"><span class="fn">Z₁</span> → <span class="fn">Z₂</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">contZ</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">mapZ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">commX</span> : <span class="fn">f₂</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">mapX</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">mapY</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">commZ</span> : <span class="fn">g₂</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">mapZ</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">mapY</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g₁</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Prod.html#Function.mapPullback">Function.mapPullback</a> <span class="fn">mapX</span> <span class="fn">mapY</span> <span class="fn">mapZ</span> <span class="fn">commX</span> <span class="fn">commZ</span>)</span></span></div></div></div></div><div class="decl" id="IsSeparatedMap"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L61-L64">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap"><span class="name">IsSeparatedMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A function from a topological space <code>X</code> to a type <code>Y</code> is a separated map if any two distinct
+points in <code>X</code> with the same image in <code>Y</code> can be separated by open neighborhoods.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn">∀ (<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn">X</span>),
+    <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">x₁</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">x₂</span></span> → <span class="fn"><span class="fn">x₁</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">x₂</span> → <span class="fn">∃ (<span class="fn">s₁</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>) (<span class="fn">s₂</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>), <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s₁</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s₂</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">x₁</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s₁</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">x₂</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s₂</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">s₁</span> <span class="fn">s₂</span></span></span></span></span></span></li></ul></details><details id="instances-for-list-IsSeparatedMap" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="t2space_iff_isSeparatedMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L66-L67">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#t2space_iff_isSeparatedMap"><span class="name">t2space_iff_isSeparatedMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn">Y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">X</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn">y</span></span></span></div></div></div></div><div class="decl" id="T2Space.isSeparatedMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L69-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#T2Space.isSeparatedMap"><span class="name">T2Space</span>.<span class="name">isSeparatedMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Function.Injective.isSeparatedMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L71-L72">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#Function.Injective.isSeparatedMap"><span class="name">Function</span>.<span class="name">Injective</span>.<span class="name">isSeparatedMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">inj</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="isSeparatedMap_iff_disjoint_nhds"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L74-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#isSeparatedMap_iff_disjoint_nhds"><span class="name">isSeparatedMap_iff_disjoint_nhds</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn">X</span>), <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">x₁</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">x₂</span></span> → <span class="fn"><span class="fn">x₁</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">x₂</span> → <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<a href="../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x₁</span>)</span> <span class="fn">(<a href="../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x₂</span>)</span></span></span></span></span></div></div></div></div><div class="decl" id="isSeparatedMap_iff_nhds"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L79-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#isSeparatedMap_iff_nhds"><span class="name">isSeparatedMap_iff_nhds</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn">X</span>), <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">x₁</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">x₂</span></span> → <span class="fn"><span class="fn">x₁</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">x₂</span> → <span class="fn">∃ <span class="fn">s₁</span> ∈ <span class="fn"><a href="../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x₁</span></span>, <span class="fn">∃ <span class="fn">s₂</span> ∈ <span class="fn"><a href="../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x₂</span></span>, <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">s₁</span> <span class="fn">s₂</span></span></span></span></span></span></span></div></div></div></div><div class="decl" id="isSeparatedMap_iff_isClosed_diagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L84-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#isSeparatedMap_iff_isClosed_diagonal"><span class="name">isSeparatedMap_iff_isClosed_diagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Prod.html#Function.pullbackDiagonal">Function.pullbackDiagonal</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="isSeparatedMap_iff_isClosedEmbedding"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L94-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#isSeparatedMap_iff_isClosedEmbedding"><span class="name">isSeparatedMap_iff_isClosedEmbedding</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Induced.html#Topology.IsClosedEmbedding">Topology.IsClosedEmbedding</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Prod.html#toPullbackDiag">toPullbackDiag</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="isSeparatedMap_iff_isClosedMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L99-L103">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#isSeparatedMap_iff_isClosedMap"><span class="name">isSeparatedMap_iff_isClosedMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClosedMap">IsClosedMap</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Prod.html#toPullbackDiag">toPullbackDiag</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="IsSeparatedMap.pullback"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L106-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap.pullback"><span class="name">IsSeparatedMap</span>.<span class="name">pullback</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sep</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <a href="../.././Mathlib/Data/Set/Prod.html#Function.Pullback.snd">Function.Pullback.snd</a></span></div></div></div></div><div class="decl" id="IsSeparatedMap.comp_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L113-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap.comp_left"><span class="name">IsSeparatedMap</span>.<span class="name">comp_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sep</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">inj</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> (<span class="fn">g</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="IsSeparatedMap.comp_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L116-L120">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap.comp_right"><span class="name">IsSeparatedMap</span>.<span class="name">comp_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sep</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cont</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inj</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> (<span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>)</span></div></div></div></div><div class="decl" id="IsLocallyInjective"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L122-L124">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective"><span class="name">IsLocallyInjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A function from a topological space <code>X</code> is locally injective if every point of <code>X</code>
+has a neighborhood on which <code>f</code> is injective.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">X</span>), <span class="fn">∃ (<span class="fn">U</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>), <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">U</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">U</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.InjOn">Set.InjOn</a> <span class="fn">f</span> <span class="fn">U</span></span></span></span></li></ul></details><details id="instances-for-list-IsLocallyInjective" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Function.Injective.IsLocallyInjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L126-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#Function.Injective.IsLocallyInjective"><span class="name">Function</span>.<span class="name">Injective</span>.<span class="name">IsLocallyInjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">inj</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">_root_.IsLocallyInjective</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="isLocallyInjective_iff_nhds"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L129-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#isLocallyInjective_iff_nhds"><span class="name">isLocallyInjective_iff_nhds</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">X</span>), <span class="fn">∃ <span class="fn">U</span> ∈ <span class="fn"><a href="../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span>, <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.InjOn">Set.InjOn</a> <span class="fn">f</span> <span class="fn">U</span></span></span></span></div></div></div></div><div class="decl" id="isLocallyInjective_iff_isOpen_diagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L136-L147">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#isLocallyInjective_iff_isOpen_diagonal"><span class="name">isLocallyInjective_iff_isOpen_diagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Prod.html#Function.pullbackDiagonal">Function.pullbackDiagonal</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="IsLocallyInjective_iff_isOpenEmbedding"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L149-L152">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective_iff_isOpenEmbedding"><span class="name">IsLocallyInjective_iff_isOpenEmbedding</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Induced.html#Topology.IsOpenEmbedding">Topology.IsOpenEmbedding</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Prod.html#toPullbackDiag">toPullbackDiag</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="isLocallyInjective_iff_isOpenMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L154-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#isLocallyInjective_iff_isOpenMap"><span class="name">isLocallyInjective_iff_isOpenMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpenMap">IsOpenMap</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Prod.html#toPullbackDiag">toPullbackDiag</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="discreteTopology_iff_locallyInjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L160-L165">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#discreteTopology_iff_locallyInjective"><span class="name">discreteTopology_iff_locallyInjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn">Y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">X</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn">y</span></span></span></div></div></div></div><div class="decl" id="IsLocallyInjective.comp_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L167-L169">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective.comp_left"><span class="name">IsLocallyInjective</span>.<span class="name">comp_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> (<span class="fn">g</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="IsLocallyInjective.comp_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L171-L175">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective.comp_right"><span class="name">IsLocallyInjective</span>.<span class="name">comp_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cont</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> (<span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>)</span></div></div></div></div><div class="decl" id="IsSeparatedMap.isClosed_eqLocus"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L182-L185">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap.isClosed_eqLocus"><span class="name">IsSeparatedMap</span>.<span class="name">isClosed_eqLocus</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁ </span><span class="fn">g₂</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">g₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">g₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sep</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g₁</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">a</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">A</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">g₁</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g₂</span> <span class="fn">a</span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="IsLocallyInjective.isOpen_eqLocus"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L187-L190">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective.isOpen_eqLocus"><span class="name">IsLocallyInjective</span>.<span class="name">isOpen_eqLocus</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁ </span><span class="fn">g₂</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">g₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">g₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inj</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g₁</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">a</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">A</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">g₁</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g₂</span> <span class="fn">a</span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="IsSeparatedMap.eq_of_comp_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L201-L207">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap.eq_of_comp_eq"><span class="name">IsSeparatedMap</span>.<span class="name">eq_of_comp_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁ </span><span class="fn">g₂</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sep</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inj</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">p</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Connected/Basic.html#PreconnectedSpace">PreconnectedSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">g₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">g₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">p</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g₁</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">g₁</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g₂</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">g₁</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g₂</span></div></div><p>If <code>p</code> is a locally injective separated map, and <code>A</code> is a connected space,
+then two lifts <code>g₁, g₂ : A → E</code> of a map <code>f : A → X</code> are equal if they agree at one point.</p></div></div><div class="decl" id="IsSeparatedMap.eqOn_of_comp_eqOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L209-L214">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap.eqOn_of_comp_eqOn"><span class="name">IsSeparatedMap</span>.<span class="name">eqOn_of_comp_eqOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁ </span><span class="fn">g₂</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sep</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inj</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Connected/Basic.html#IsPreconnected">IsPreconnected</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">g₁</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">g₂</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> (<span class="fn">p</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g₁</span>) (<span class="fn">p</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g₂</span>) <span class="fn">s</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">has</span> : <span class="fn">a</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">g₁</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g₂</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> <span class="fn">g₁</span> <span class="fn">g₂</span> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="IsSeparatedMap.const_of_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L216-L218">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap.const_of_comp"><span class="name">IsSeparatedMap</span>.<span class="name">const_of_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sep</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inj</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">p</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Connected/Basic.html#PreconnectedSpace">PreconnectedSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cont</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">∀ (<span class="fn">a </span><span class="fn">a'</span> : <span class="fn">A</span>), <span class="fn"><span class="fn">p</span> <span class="fn">(<span class="fn">g</span> <span class="fn">a</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">p</span> <span class="fn">(<span class="fn">g</span> <span class="fn">a'</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">a'</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">g</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">a'</span></span></div></div></div></div><div class="decl" id="IsSeparatedMap.constOn_of_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/SeparatedMap.lean#L220-L224">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap.constOn_of_comp"><span class="name">IsSeparatedMap</span>.<span class="name">constOn_of_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sep</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsSeparatedMap">IsSeparatedMap</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inj</span> : <span class="fn"><a href="../.././Mathlib/Topology/SeparatedMap.html#IsLocallyInjective">IsLocallyInjective</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Topology/Connected/Basic.html#IsPreconnected">IsPreconnected</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">cont</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">g</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn">∀ <span class="fn">a'</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">p</span> <span class="fn">(<span class="fn">g</span> <span class="fn">a</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">p</span> <span class="fn">(<span class="fn">g</span> <span class="fn">a'</span>)</span></span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">a'</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha'</span> : <span class="fn">a'</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">g</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">a'</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

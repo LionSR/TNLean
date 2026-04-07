@@ -1,0 +1,417 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.Adjunction.Lifting.Left</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.Adjunction.Lifting.Left";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">Adjunction</span>.<span class="name">Lifting</span>.<span class="name">Left</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/CategoryTheory/Monad/Adjunction.html">Mathlib.CategoryTheory.Monad.Adjunction</a></li><li><a href="../../../.././Mathlib/CategoryTheory/Monad/Coequalizer.html">Mathlib.CategoryTheory.Monad.Coequalizer</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.Adjunction.Lifting.Left" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LiftLeftAdjoint.counitCoequalises"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">counitCoequalises</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LiftLeftAdjoint.otherMap"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">otherMap</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LiftLeftAdjoint.instIsReflexivePairMapAppCounitOtherMap"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">instIsReflexivePairMapAppCounitOtherMap</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointObj"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">constructLeftAdjointObj</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">constructLeftAdjointEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv_apply"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">constructLeftAdjointEquiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv_symm_apply"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">constructLeftAdjointEquiv_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LiftLeftAdjoint.constructLeftAdjoint"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">constructLeftAdjoint</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.isRightAdjoint_triangle_lift"><span class="name">CategoryTheory</span>.<span class="name">isRightAdjoint_triangle_lift</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.isRightAdjoint_triangle_lift_monadic"><span class="name">CategoryTheory</span>.<span class="name">isRightAdjoint_triangle_lift_monadic</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.isRightAdjoint_square_lift"><span class="name">CategoryTheory</span>.<span class="name">isRightAdjoint_square_lift</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.isRightAdjoint_square_lift_monadic"><span class="name">CategoryTheory</span>.<span class="name">isRightAdjoint_square_lift_monadic</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Adjoint-lifting" class="markdown-heading">Adjoint lifting <a class="hover-link" href="#Adjoint-lifting">#</a></h1><p>This file gives two constructions for building left adjoints: the adjoint triangle theorem and the
+adjoint lifting theorem.</p><p>The adjoint triangle theorem concerns a functor <code>U : B ⥤ C</code> with a left adjoint <code>F</code> such
+that <code>ε_X : FUX ⟶ X</code> is a regular epi. Then for any category <code>A</code> with coequalizers of reflexive
+pairs, a functor <code>R : A ⥤ B</code> has a left adjoint if (and only if) the composite <code>R ⋙ U</code> does.
+Note that the condition on <code>U</code> regarding <code>ε_X</code> is automatically satisfied in the case when <code>U</code> is
+a monadic functor, giving the corollary: <code><a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.isRightAdjoint_triangle_lift_monadic">isRightAdjoint_triangle_lift_monadic</a></code>, i.e. if <code>U</code> is
+monadic, <code>A</code> has reflexive coequalizers then <code>R : A ⥤ B</code> has a left adjoint provided <code>R ⋙ U</code> does.</p><p>The adjoint lifting theorem says that given a commutative square of functors (up to isomorphism):</p><pre><code>      Q
+    A → B
+  U ↓   ↓ V
+    C → D
+      R
+</code></pre><p>where <code>V</code> is monadic, <code>U</code> has a left adjoint, and <code>A</code> has reflexive coequalizers, then if <code>R</code> has a
+left adjoint then <code>Q</code> has a left adjoint.</p><h2 id="Implementation" class="markdown-heading">Implementation <a class="hover-link" href="#Implementation">#</a></h2><p>It is more convenient to prove this theorem by assuming we are given the explicit adjunction rather
+than just a functor known to be a right adjoint. In docstrings, we write <code>(η, ε)</code> for the unit
+and counit of the adjunction <code>adj₁ : F ⊣ U</code> and <code>(ι, δ)</code> for the unit and counit of the adjunction
+<code>adj₂ : F' ⊣ R ⋙ U</code>.</p><p>This file has been adapted to <code><a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Right.html">Mathlib/CategoryTheory/Adjunction/Lifting/Right.lean</a></code>.
+Please try to keep them in sync.</p><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li>Dualise to lift right adjoints through monads (by reversing 2-cells).</li><li>Investigate whether it is possible to give a more explicit description of the lifted adjoint,
+especially in the case when the isomorphism <code><a href="../../../.././Mathlib/Order/Defs/Unbundled.html#comm">comm</a></code> is <code>Iso.<a href="../../../.././Mathlib/Order/Defs/Unbundled.html#refl">refl</a> _</code></li></ul><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>https://ncatlab.org/nlab/show/adjoint+triangle+theorem</li><li>https://ncatlab.org/nlab/show/adjoint+lifting+theorem</li><li>Adjoint Lifting Theorems for Categories of Algebras (PT Johnstone, 1975)</li><li>A unified approach to the lifting of adjoints (AJ Power, 1988)</li></ul></div><div class="decl" id="CategoryTheory.LiftLeftAdjoint.counitCoequalises"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L79-L96">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.counitCoequalises"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">counitCoequalises</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">adj₁</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/RegularMono.html#CategoryTheory.RegularEpi">RegularEpi</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/IsLimit.html#CategoryTheory.Limits.IsColimit">Limits.IsColimit</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Equalizers.html#CategoryTheory.Limits.Cofork.ofπ">Limits.Cofork.ofπ</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span> <span class="fn">⋯</span>)</span></span></div></div><p>To show that <code>ε_X</code> is a coequalizer for <code>(FUε_X, ε_FUX)</code>, it suffices to assume it's always a
+coequalizer of something (i.e. a regular epi).</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.LiftLeftAdjoint.counitCoequalises" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.LiftLeftAdjoint.otherMap"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L98-L108">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.otherMap"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">otherMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₁</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₂</span> : <span class="fn">F'</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">F'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">(<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">(<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X</span>)</span>)</span>)</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">F'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">(<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X</span>)</span></span></div></div><p>(Implementation)
+To construct the left adjoint, we use the coequalizer of <code>F' U ε_Y</code> with the composite</p><p><code>F' U F U X ⟶ F' U F U R F' U X ⟶ F' U R F' U X ⟶ F' U X</code></p><p>where the first morphism is <code>F' U F ι_UX</code>, the second is <code>F' U ε_RF'UX</code>, and the third is <code>δ_F'UX</code>.
+We will show that this coequalizer exists and that it forms the object map for a left adjoint to
+<code>R</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.LiftLeftAdjoint.otherMap" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.LiftLeftAdjoint.instIsReflexivePairMapAppCounitOtherMap"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L111-L123">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.instIsReflexivePairMapAppCounitOtherMap"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">instIsReflexivePairMapAppCounitOtherMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₁</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₂</span> : <span class="fn">F'</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Reflexive.html#CategoryTheory.IsReflexivePair">IsReflexivePair</a> <span class="fn">(<span class="fn"><span class="fn">F'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">(<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span>)</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.otherMap">otherMap</a> <span class="fn">R</span> <span class="fn">F'</span> <span class="fn">adj₁</span> <span class="fn">adj₂</span> <span class="fn">X</span>)</span></span></div></div><p><code>(F'Uε_X, <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.otherMap">otherMap</a> X)</code> is a reflexive pair: in particular if <code>A</code> has reflexive coequalizers then
+this pair has a coequalizer.</p></div></div><div class="decl" id="CategoryTheory.LiftLeftAdjoint.constructLeftAdjointObj"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L127-L131">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointObj"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">constructLeftAdjointObj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₁</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₂</span> : <span class="fn">F'</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">U</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Reflexive.html#CategoryTheory.Limits.HasReflexiveCoequalizers">Limits.HasReflexiveCoequalizers</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Y</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">A</span></div></div><p>Construct the object part of the desired left adjoint as the coequalizer of <code>F'Uε_Y</code> with
+<code><a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.otherMap">otherMap</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.LiftLeftAdjoint.constructLeftAdjointObj" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L134-L160">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">constructLeftAdjointEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₁</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₂</span> : <span class="fn">F'</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">U</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Reflexive.html#CategoryTheory.Limits.HasReflexiveCoequalizers">Limits.HasReflexiveCoequalizers</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/RegularMono.html#CategoryTheory.RegularEpi">RegularEpi</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Y</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointObj">constructLeftAdjointObj</a> <span class="fn">R</span> <span class="fn">F'</span> <span class="fn">adj₁</span> <span class="fn">adj₂</span> <span class="fn">X</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>) <a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> (<span class="fn">X</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span></span>)</div></div><p>The homset equivalence which helps show that <code>R</code> is a right adjoint.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L135-L135">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv_apply"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">constructLeftAdjointEquiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₁</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₂</span> : <span class="fn">F'</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">U</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Reflexive.html#CategoryTheory.Limits.HasReflexiveCoequalizers">Limits.HasReflexiveCoequalizers</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/RegularMono.html#CategoryTheory.RegularEpi">RegularEpi</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Y</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a✝</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointObj">constructLeftAdjointObj</a> <span class="fn">R</span> <span class="fn">F'</span> <span class="fn">adj₁</span> <span class="fn">adj₂</span> <span class="fn">X</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv">constructLeftAdjointEquiv</a> <span class="fn">R</span> <span class="fn">F'</span> <span class="fn">adj₁</span> <span class="fn">adj₂</span> <span class="fn">h</span> <span class="fn">Y</span> <span class="fn">X</span>)</span> <span class="fn">a✝</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Equalizers.html#CategoryTheory.Limits.Cofork.IsColimit.homIso">Limits.Cofork.IsColimit.homIso</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.counitCoequalises">counitCoequalises</a> <span class="fn">adj₁</span> <span class="fn">h</span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span>)</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span>
+    <a href="../../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.homEquiv">homEquiv</a></span> <span class="fn">(<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span>)</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span>
+        <span class="fn">(<span class="fn">(<span class="fn"><span class="fn">adj₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.homEquiv">homEquiv</a></span> <span class="fn">(<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X</span>)</span> <span class="fn">Y</span>)</span>
+          <span class="fn">↑<span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Equalizers.html#CategoryTheory.Limits.Cofork.IsColimit.homIso">Limits.Cofork.IsColimit.homIso</a>
+                <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Limits/HasLimits.html#CategoryTheory.Limits.colimit.isColimit">Limits.colimit.isColimit</a>
+                  <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Equalizers.html#CategoryTheory.Limits.parallelPair">Limits.parallelPair</a> <span class="fn">(<span class="fn"><span class="fn">F'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">(<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span>)</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.otherMap">otherMap</a> <span class="fn">R</span> <span class="fn">F'</span> <span class="fn">adj₁</span> <span class="fn">adj₂</span> <span class="fn">X</span>)</span>)</span>)</span>
+                <span class="fn">Y</span>)</span>
+              <span class="fn">a✝</span>)</span></span>)</span></span>,
+      <span class="fn">⋯</span><a href="../../../.././Init/Prelude.html#Subtype.mk">⟩</a></span></div></div></div></div><div class="decl" id="CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L135-L135">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv_symm_apply"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">constructLeftAdjointEquiv_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₁</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₂</span> : <span class="fn">F'</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">U</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Reflexive.html#CategoryTheory.Limits.HasReflexiveCoequalizers">Limits.HasReflexiveCoequalizers</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/RegularMono.html#CategoryTheory.RegularEpi">RegularEpi</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Y</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a✝</span> : <span class="fn">X</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointEquiv">constructLeftAdjointEquiv</a> <span class="fn">R</span> <span class="fn">F'</span> <span class="fn">adj₁</span> <span class="fn">adj₂</span> <span class="fn">h</span> <span class="fn">Y</span> <span class="fn">X</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">a✝</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Equalizers.html#CategoryTheory.Limits.Cofork.IsColimit.homIso">Limits.Cofork.IsColimit.homIso</a>
+        <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Limits/HasLimits.html#CategoryTheory.Limits.colimit.isColimit">Limits.colimit.isColimit</a>
+          <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Equalizers.html#CategoryTheory.Limits.parallelPair">Limits.parallelPair</a> <span class="fn">(<span class="fn"><span class="fn">F'</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">(<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span>)</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.otherMap">otherMap</a> <span class="fn">R</span> <span class="fn">F'</span> <span class="fn">adj₁</span> <span class="fn">adj₂</span> <span class="fn">X</span>)</span>)</span>)</span>
+        <span class="fn">Y</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span>
+    <a href="../../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">adj₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.homEquiv">homEquiv</a></span> <span class="fn">(<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X</span>)</span> <span class="fn">Y</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span>
+        <span class="fn">(<span class="fn">(<span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.homEquiv">homEquiv</a></span> <span class="fn">(<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span>)</span>)</span>
+          <span class="fn">↑<span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Equalizers.html#CategoryTheory.Limits.Cofork.IsColimit.homIso">Limits.Cofork.IsColimit.homIso</a> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.counitCoequalises">counitCoequalises</a> <span class="fn">adj₁</span> <span class="fn">h</span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span>)</span>)</span> <span class="fn">a✝</span>)</span></span>)</span></span>,
+      <span class="fn">⋯</span><a href="../../../.././Init/Prelude.html#Subtype.mk">⟩</a></span></div></div></div></div><div class="decl" id="CategoryTheory.LiftLeftAdjoint.constructLeftAdjoint"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L165-L177">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.constructLeftAdjoint"><span class="name">CategoryTheory</span>.<span class="name">LiftLeftAdjoint</span>.<span class="name">constructLeftAdjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₁</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₂</span> : <span class="fn">F'</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">U</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Reflexive.html#CategoryTheory.Limits.HasReflexiveCoequalizers">Limits.HasReflexiveCoequalizers</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/RegularMono.html#CategoryTheory.RegularEpi">RegularEpi</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">A</span></span></div></div><p>Construct the left adjoint to <code>R</code>, with object map <code><a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.LiftLeftAdjoint.constructLeftAdjointObj">constructLeftAdjointObj</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.LiftLeftAdjoint.constructLeftAdjoint" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.isRightAdjoint_triangle_lift"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L181-L193">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.isRightAdjoint_triangle_lift"><span class="name">CategoryTheory</span>.<span class="name">isRightAdjoint_triangle_lift</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">adj₁</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/RegularMono.html#CategoryTheory.RegularEpi">RegularEpi</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">adj₁</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Reflexive.html#CategoryTheory.Limits.HasReflexiveCoequalizers">Limits.HasReflexiveCoequalizers</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">(<span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">U</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span></div></div><p>The adjoint triangle theorem: Suppose <code>U : B ⥤ C</code> has a left adjoint <code>F</code> such that each counit
+<code>ε_X : FUX ⟶ X</code> is a regular epimorphism. Then if a category <code>A</code> has coequalizers of reflexive
+pairs, then a functor <code>R : A ⥤ B</code> has a left adjoint if the composite <code>R ⋙ U</code> does.</p><p>Note the converse is true (with weaker assumptions), by <code>Adjunction.comp</code>.
+See https://ncatlab.org/nlab/show/adjoint+triangle+theorem</p></div></div><div class="decl" id="CategoryTheory.isRightAdjoint_triangle_lift_monadic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L195-L215">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.isRightAdjoint_triangle_lift_monadic"><span class="name">CategoryTheory</span>.<span class="name">isRightAdjoint_triangle_lift_monadic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">C</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Monad/Adjunction.html#CategoryTheory.MonadicRightAdjoint">MonadicRightAdjoint</a> <span class="fn">U</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Reflexive.html#CategoryTheory.Limits.HasReflexiveCoequalizers">Limits.HasReflexiveCoequalizers</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">(<span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">U</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span></div></div><p>If <code>R ⋙ U</code> has a left adjoint, the domain of <code>R</code> has reflexive coequalizers and <code>U</code> is a monadic
+functor, then <code>R</code> has a left adjoint.
+This is a special case of <code><a href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.isRightAdjoint_triangle_lift">isRightAdjoint_triangle_lift</a></code> which is often more useful in practice.</p></div></div><div class="decl" id="CategoryTheory.isRightAdjoint_square_lift"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L220-L242">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.isRightAdjoint_square_lift"><span class="name">CategoryTheory</span>.<span class="name">isRightAdjoint_square_lift</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">comm</span> : <span class="fn"><span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R</span></span> <a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">V</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">V</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">(<span class="fn">X</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/RegularMono.html#CategoryTheory.RegularEpi">RegularEpi</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.ofIsRightAdjoint">Adjunction.ofIsRightAdjoint</a> <span class="fn">V</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.counit">counit</a></span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Reflexive.html#CategoryTheory.Limits.HasReflexiveCoequalizers">Limits.HasReflexiveCoequalizers</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">Q</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span></div></div><p>Suppose we have a commutative square of functors</p><pre><code>      Q
+    A → B
+  U ↓   ↓ V
+    C → D
+      R
+</code></pre><p>where <code>U</code> has a left adjoint, <code>A</code> has reflexive coequalizers and <code>V</code> has a left adjoint such that
+each component of the counit is a regular epi.
+Then <code>Q</code> has a left adjoint if <code>R</code> has a left adjoint.</p><p>See https://ncatlab.org/nlab/show/adjoint+lifting+theorem</p></div></div><div class="decl" id="CategoryTheory.isRightAdjoint_square_lift_monadic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adjunction/Lifting/Left.lean#L244-L263">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Adjunction/Lifting/Left.html#CategoryTheory.isRightAdjoint_square_lift_monadic"><span class="name">CategoryTheory</span>.<span class="name">isRightAdjoint_square_lift_monadic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">B</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">A</span> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">comm</span> : <span class="fn"><span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">R</span></span> <a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">V</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">U</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Monad/Adjunction.html#CategoryTheory.MonadicRightAdjoint">MonadicRightAdjoint</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">R</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Reflexive.html#CategoryTheory.Limits.HasReflexiveCoequalizers">Limits.HasReflexiveCoequalizers</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">Q</span>.<a href="../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span></div></div><p>Suppose we have a commutative square of functors</p><pre><code>      Q
+    A → B
+  U ↓   ↓ V
+    C → D
+      R
+</code></pre><p>where <code>U</code> has a left adjoint, <code>A</code> has reflexive coequalizers and <code>V</code> is monadic.
+Then <code>Q</code> has a left adjoint if <code>R</code> has a left adjoint.</p><p>See https://ncatlab.org/nlab/show/adjoint+lifting+theorem</p></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

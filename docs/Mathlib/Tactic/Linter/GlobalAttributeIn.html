@@ -1,0 +1,50 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Tactic.Linter.GlobalAttributeIn</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Tactic.Linter.GlobalAttributeIn";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">Linter</span>.<span class="name">GlobalAttributeIn</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/Linter/GlobalAttributeIn.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Lean/Message.html">Lean.Message</a></li><li><a href="../../.././Lean/Elab/Command.html">Lean.Elab.Command</a></li><li><a href="../../.././Mathlib/Tactic/Linter/Header.html">Mathlib.Tactic.Linter.Header</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Tactic.Linter.GlobalAttributeIn" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Mathlib.Linter.linter.globalAttributeIn"><span class="name">Mathlib</span>.<span class="name">Linter</span>.<span class="name">linter</span>.<span class="name">globalAttributeIn</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Linter-for-attribute-in-declarations" class="markdown-heading">Linter for <code>attribute [...] in</code> declarations <a class="hover-link" href="#Linter-for-attribute-in-declarations">#</a></h1><p>Linter for global attributes created via <code>attribute [...] in</code> declarations.</p><p>The syntax <code>attribute [instance] instName in</code> can be used to accidentally create a global instance.
+This is <strong>not</strong> obvious from reading the code, and in fact happened twice during the port,
+hence, we lint against it.</p><p><em>Example</em>: before this was discovered, <code><a href="../../.././Mathlib/Topology/Category/TopCat/Basic.html">Mathlib/Topology/Category/TopCat/Basic.lean</a></code>
+contained the following code:</p><pre><code>attribute [instance] HasForget.instFunLike in
+instance (X Y : TopCat.{u}) : <a href="../../.././Init/Coe.html#CoeFun">CoeFun</a> (X ⟶ Y) fun _ =&gt; X → Y where
+  coe f := f
+</code></pre><p>Despite the <code>in</code>, this makes <code>HasForget.instFunLike</code> a global instance.</p><p>This seems to apply to all attributes. For example:</p><pre><code class="language-lean">theorem what : <a href="../../.././Init/Prelude.html#False">False</a> := sorry
+
+attribute [simp] what in
+#guard true
+
+-- the `simp` attribute persists
+example : <a href="../../.././Init/Prelude.html#False">False</a> := by simp  -- `simp` finds `what`
+
+theorem who {x y : Nat} : x = y := sorry
+
+attribute [ext] who in
+#guard true
+
+-- the `ext` attribute persists
+example {x y : Nat} : x = y := by ext
+</code></pre><p>Therefore, we lint against this pattern on all instances.</p><p>For <em>removing</em> attributes, the <code>in</code> works as expected.</p><pre><code class="language-lean">/--
+error: failed to synthesize
+  <a href="../../.././Init/Prelude.html#Add">Add</a> <a href="../../.././Init/Prelude.html#Nat">Nat</a>
+-/
+#guard_msgs in
+attribute [-instance] <a href="../../.././Init/Prelude.html#instAddNat">instAddNat</a> in
+#synth <a href="../../.././Init/Prelude.html#Add">Add</a> <a href="../../.././Init/Prelude.html#Nat">Nat</a>
+
+-- the `instance` persists
+/-- info: <a href="../../.././Init/Prelude.html#instAddNat">instAddNat</a> -/
+#guard_msgs in
+#synth <a href="../../.././Init/Prelude.html#Add">Add</a> <a href="../../.././Init/Prelude.html#Nat">Nat</a>
+
+@[simp]
+theorem what : <a href="../../.././Init/Prelude.html#False">False</a> := sorry
+
+/-- error: simp made no progress -/
+#guard_msgs in
+attribute [-simp] what in
+example : <a href="../../.././Init/Prelude.html#False">False</a> := by simp
+
+-- the `simp` attribute persists
+#guard_msgs in
+example : <a href="../../.././Init/Prelude.html#False">False</a> := by simp
+</code></pre></div><div class="decl" id="Mathlib.Linter.linter.globalAttributeIn"><div class="opaque"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/Linter/GlobalAttributeIn.lean#L87-L92">source</a></div><div class="decl_header"><span class="decl_kind">opaque</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Tactic/Linter/GlobalAttributeIn.html#Mathlib.Linter.linter.globalAttributeIn"><span class="name">Mathlib</span>.<span class="name">Linter</span>.<span class="name">linter</span>.<span class="name">globalAttributeIn</span></a></span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Lean/Data/Options.html#Lean.Option">Lean.Option</a> <a href="../../.././Init/Prelude.html#Bool">Bool</a></span></div></div><p>Lint on any occurrence of <code>attribute [...] name in</code> which is not <code>local</code> or <code>scoped</code>:
+these are a footgun, as the attribute is applied <em>globally</em> (despite the <code>in</code>).</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

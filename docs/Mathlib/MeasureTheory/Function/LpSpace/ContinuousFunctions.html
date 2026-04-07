@@ -1,0 +1,769 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.MeasureTheory.Function.LpSpace.ContinuousFunctions</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.MeasureTheory.Function.LpSpace.ContinuousFunctions";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">MeasureTheory</span>.<span class="name">Function</span>.<span class="name">LpSpace</span>.<span class="name">ContinuousFunctions</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/MeasureTheory/Measure/OpenPos.html">Mathlib.MeasureTheory.Measure.OpenPos</a></li><li><a href="../../../.././Mathlib/Topology/ContinuousMap/Compact.html">Mathlib.Topology.ContinuousMap.Compact</a></li><li><a href="../../../.././Mathlib/Analysis/Normed/Operator/NormedSpace.html">Mathlib.Analysis.Normed.Operator.NormedSpace</a></li><li><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html">Mathlib.MeasureTheory.Function.LpSpace.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.MeasureTheory.Function.LpSpace.ContinuousFunctions" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.Lp.boundedContinuousFunction"><span class="name">MeasureTheory</span>.<span class="name">Lp</span>.<span class="name">boundedContinuousFunction</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.Lp.mem_boundedContinuousFunction_iff"><span class="name">MeasureTheory</span>.<span class="name">Lp</span>.<span class="name">mem_boundedContinuousFunction_iff</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.memLp_top"><span class="name">BoundedContinuousFunction</span>.<span class="name">memLp_top</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.mem_Lp"><span class="name">BoundedContinuousFunction</span>.<span class="name">mem_Lp</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.Lp_nnnorm_le"><span class="name">BoundedContinuousFunction</span>.<span class="name">Lp_nnnorm_le</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.Lp_norm_le"><span class="name">BoundedContinuousFunction</span>.<span class="name">Lp_norm_le</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.toLpHom"><span class="name">BoundedContinuousFunction</span>.<span class="name">toLpHom</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.range_toLpHom"><span class="name">BoundedContinuousFunction</span>.<span class="name">range_toLpHom</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.toLp"><span class="name">BoundedContinuousFunction</span>.<span class="name">toLp</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.coeFn_toLp"><span class="name">BoundedContinuousFunction</span>.<span class="name">coeFn_toLp</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.range_toLp"><span class="name">BoundedContinuousFunction</span>.<span class="name">range_toLp</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.toLp_norm_le"><span class="name">BoundedContinuousFunction</span>.<span class="name">toLp_norm_le</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.toLp_inj"><span class="name">BoundedContinuousFunction</span>.<span class="name">toLp_inj</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedContinuousFunction.toLp_injective"><span class="name">BoundedContinuousFunction</span>.<span class="name">toLp_injective</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.toLp"><span class="name">ContinuousMap</span>.<span class="name">toLp</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.range_toLp"><span class="name">ContinuousMap</span>.<span class="name">range_toLp</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.coeFn_toLp"><span class="name">ContinuousMap</span>.<span class="name">coeFn_toLp</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.toLp_def"><span class="name">ContinuousMap</span>.<span class="name">toLp_def</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.toLp_comp_toContinuousMap"><span class="name">ContinuousMap</span>.<span class="name">toLp_comp_toContinuousMap</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.coe_toLp"><span class="name">ContinuousMap</span>.<span class="name">coe_toLp</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.toLp_injective"><span class="name">ContinuousMap</span>.<span class="name">toLp_injective</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.toLp_inj"><span class="name">ContinuousMap</span>.<span class="name">toLp_inj</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.hasSum_of_hasSum_Lp"><span class="name">ContinuousMap</span>.<span class="name">hasSum_of_hasSum_Lp</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.toLp_norm_eq_toLp_norm_coe"><span class="name">ContinuousMap</span>.<span class="name">toLp_norm_eq_toLp_norm_coe</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMap.toLp_norm_le"><span class="name">ContinuousMap</span>.<span class="name">toLp_norm_le</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Continuous-functions-in-Lp-space" class="markdown-heading">Continuous functions in Lp space <a class="hover-link" href="#Continuous-functions-in-Lp-space">#</a></h1><p>When <code>α</code> is a topological space equipped with a finite Borel measure, there is a bounded linear map
+from the normed space of bounded continuous functions (<code>α →ᵇ E</code>) to <code>Lp E p μ</code>.  We construct this
+as <code><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">BoundedContinuousFunction.toLp</a></code>.</p></div><div class="decl" id="MeasureTheory.Lp.boundedContinuousFunction"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L31-L35">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#MeasureTheory.Lp.boundedContinuousFunction"><span class="name">MeasureTheory</span>.<span class="name">Lp</span>.<span class="name">boundedContinuousFunction</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div><p>An additive subgroup of <code>Lp E p μ</code>, consisting of the equivalence classes which contain a
+bounded continuous representative.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-MeasureTheory.Lp.boundedContinuousFunction" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MeasureTheory.Lp.mem_boundedContinuousFunction_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L37-L42">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#MeasureTheory.Lp.mem_boundedContinuousFunction_iff"><span class="name">MeasureTheory</span>.<span class="name">Lp</span>.<span class="name">mem_boundedContinuousFunction_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#MeasureTheory.Lp.boundedContinuousFunction">boundedContinuousFunction</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a>   <span class="fn">∃ (<span class="fn">f₀</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction">BoundedContinuousFunction</a> <span class="fn">α</span> <span class="fn">E</span></span>), <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/AEEqFun.html#ContinuousMap.toAEEqFun">ContinuousMap.toAEEqFun</a> <span class="fn">μ</span> <span class="fn"><span class="fn">f₀</span>.<a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction.toContinuousMap">toContinuousMap</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">f</span></span></span></div></div><p>By definition, the elements of <code><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#MeasureTheory.Lp.boundedContinuousFunction">Lp.boundedContinuousFunction</a> E p μ</code> are the elements of
+<code>Lp E p μ</code> which contain a bounded continuous representative.</p></div></div><div class="decl" id="BoundedContinuousFunction.memLp_top"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L46-L48">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.memLp_top"><span class="name">BoundedContinuousFunction</span>.<span class="name">memLp_top</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction">BoundedContinuousFunction</a> <span class="fn">α</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MeasureTheory.MemLp</a> <span class="fn">⇑<span class="fn">f</span></span> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <span class="fn">μ</span></span></div></div><p>A bounded continuous function is in <code>L∞</code>.</p></div></div><div class="decl" id="BoundedContinuousFunction.mem_Lp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L52-L56">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.mem_Lp"><span class="name">BoundedContinuousFunction</span>.<span class="name">mem_Lp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction">BoundedContinuousFunction</a> <span class="fn">α</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/AEEqFun.html#ContinuousMap.toAEEqFun">ContinuousMap.toAEEqFun</a> <span class="fn">μ</span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction.toContinuousMap">toContinuousMap</a></span></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span></span></div></div><p>A bounded continuous function on a finite-measure space is in <code>Lp</code>.</p></div></div><div class="decl" id="BoundedContinuousFunction.Lp_nnnorm_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L58-L67">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.Lp_nnnorm_le"><span class="name">BoundedContinuousFunction</span>.<span class="name">Lp_nnnorm_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction">BoundedContinuousFunction</a> <span class="fn">α</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><a href="../../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/AEEqFun.html#ContinuousMap.toAEEqFun">ContinuousMap.toAEEqFun</a> <span class="fn">μ</span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction.toContinuousMap">toContinuousMap</a></span></span>, <span class="fn">⋯</span><a href="../../../.././Init/Prelude.html#Subtype.mk">⟩</a><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.measureUnivNNReal">MeasureTheory.measureUnivNNReal</a> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><span class="fn">p</span>.<a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.toReal">toReal</a></span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">f</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a></div></div><p>The <code>Lp</code>-norm of a bounded continuous function is at most a constant (depending on the measure
+of the whole space) times its sup-norm.</p></div></div><div class="decl" id="BoundedContinuousFunction.Lp_norm_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L69-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.Lp_norm_le"><span class="name">BoundedContinuousFunction</span>.<span class="name">Lp_norm_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction">BoundedContinuousFunction</a> <span class="fn">α</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><a href="../../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/AEEqFun.html#ContinuousMap.toAEEqFun">ContinuousMap.toAEEqFun</a> <span class="fn">μ</span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction.toContinuousMap">toContinuousMap</a></span></span>, <span class="fn">⋯</span><a href="../../../.././Init/Prelude.html#Subtype.mk">⟩</a><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.measureUnivNNReal">MeasureTheory.measureUnivNNReal</a> <span class="fn">μ</span>)</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><span class="fn">p</span>.<a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.toReal">toReal</a></span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">f</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div><p>The <code>Lp</code>-norm of a bounded continuous function is at most a constant (depending on the measure
+of the whole space) times its sup-norm.</p></div></div><div class="decl" id="BoundedContinuousFunction.toLpHom"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L78-L83">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLpHom"><span class="name">BoundedContinuousFunction</span>.<span class="name">toLpHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Hom.html#NormedAddGroupHom">NormedAddGroupHom</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction">BoundedContinuousFunction</a> <span class="fn">α</span> <span class="fn">E</span>)</span> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></span></div></div><p>The normed group homomorphism of considering a bounded continuous function on a finite-measure
+space as an element of <code>Lp</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-BoundedContinuousFunction.toLpHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="BoundedContinuousFunction.range_toLpHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L85-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.range_toLpHom"><span class="name">BoundedContinuousFunction</span>.<span class="name">range_toLpHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLpHom">toLpHom</a> <span class="fn">p</span> <span class="fn">μ</span>)</span>.<a href="../../../.././Mathlib/Analysis/Normed/Group/Hom.html#NormedAddGroupHom.range">range</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#MeasureTheory.Lp.boundedContinuousFunction">MeasureTheory.Lp.boundedContinuousFunction</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="BoundedContinuousFunction.toLp"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L95-L101">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp"><span class="name">BoundedContinuousFunction</span>.<span class="name">toLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction">BoundedContinuousFunction</a> <span class="fn">α</span> <span class="fn">E</span></span> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></div></div><p>The bounded linear map of considering a bounded continuous function on a finite-measure space
+as an element of <code>Lp</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-BoundedContinuousFunction.toLp" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="BoundedContinuousFunction.coeFn_toLp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L103-L105">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.coeFn_toLp"><span class="name">BoundedContinuousFunction</span>.<span class="name">coeFn_toLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction">BoundedContinuousFunction</a> <span class="fn">α</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">↑<span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">f</span>)</span></span></span> <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᵐ[</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">⇑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="BoundedContinuousFunction.range_toLp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L109-L112">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.range_toLp"><span class="name">BoundedContinuousFunction</span>.<span class="name">range_toLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span>)</span>.<a href="../../../.././Mathlib/Algebra/Module/Submodule/Range.html#LinearMap.range">range</a></span>.<a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.toAddSubgroup">toAddSubgroup</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#MeasureTheory.Lp.boundedContinuousFunction">MeasureTheory.Lp.boundedContinuousFunction</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="BoundedContinuousFunction.toLp_norm_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L116-L118">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp_norm_le"><span class="name">BoundedContinuousFunction</span>.<span class="name">toLp_norm_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.measureUnivNNReal">MeasureTheory.measureUnivNNReal</a> <span class="fn">μ</span>)</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><span class="fn">p</span>.<a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.toReal">toReal</a></span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div></div></div><div class="decl" id="BoundedContinuousFunction.toLp_inj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L120-L125">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp_inj"><span class="name">BoundedContinuousFunction</span>.<span class="name">toLp_inj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction">BoundedContinuousFunction</a> <span class="fn">α</span> <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/OpenPos.html#MeasureTheory.Measure.IsOpenPosMeasure">IsOpenPosMeasure</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">g</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="BoundedContinuousFunction.toLp_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L127-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp_injective"><span class="name">BoundedContinuousFunction</span>.<span class="name">toLp_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/OpenPos.html#MeasureTheory.Measure.IsOpenPosMeasure">IsOpenPosMeasure</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span></span></span></div></div></div></div><div class="decl" id="ContinuousMap.toLp"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L139-L145">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp"><span class="name">ContinuousMap</span>.<span class="name">toLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">α</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">E</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a> <a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">↥<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/Basic.html#MeasureTheory.Lp">MeasureTheory.Lp</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span>)</span></span></div></div><p>The bounded linear map of considering a continuous function on a compact finite-measure
+space <code>α</code> as an element of <code>Lp</code>.  By definition, the norm on <code>C(α, E)</code> is the sup-norm, transferred
+from the space <code>α →ᵇ E</code> of bounded continuous functions, so this construction is just a matter of
+transferring the structure from <code><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">BoundedContinuousFunction.toLp</a></code> along the isometry.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">ContinuousMap.toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">BoundedContinuousFunction.toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span>.<a href="../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.comp">comp</a></span>
+    <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/ContinuousMap/Compact.html#ContinuousMap.linearIsometryBoundedOfCompact">ContinuousMap.linearIsometryBoundedOfCompact</a> <span class="fn">α</span> <span class="fn">E</span> <span class="fn">𝕜</span>)</span>.<a href="../../../.././Mathlib/Analysis/Normed/Operator/LinearIsometry.html#LinearIsometryEquiv.toLinearIsometry">toLinearIsometry</a></span>.<a href="../../../.././Mathlib/Analysis/Normed/Operator/LinearIsometry.html#LinearIsometry.toContinuousLinearMap">toContinuousLinearMap</a></span></span></li></ul></details><details id="instances-for-list-ContinuousMap.toLp" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousMap.range_toLp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L149-L156">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.range_toLp"><span class="name">ContinuousMap</span>.<span class="name">range_toLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span>)</span>.<a href="../../../.././Mathlib/Algebra/Module/Submodule/Range.html#LinearMap.range">range</a></span>.<a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.toAddSubgroup">toAddSubgroup</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#MeasureTheory.Lp.boundedContinuousFunction">MeasureTheory.Lp.boundedContinuousFunction</a> <span class="fn">E</span> <span class="fn">p</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="ContinuousMap.coeFn_toLp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L160-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.coeFn_toLp"><span class="name">ContinuousMap</span>.<span class="name">coeFn_toLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">α</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">E</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">↑<span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">f</span>)</span></span></span> <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᵐ[</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">⇑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="ContinuousMap.toLp_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L164-L167">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp_def"><span class="name">ContinuousMap</span>.<span class="name">toLp_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">α</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">E</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">BoundedContinuousFunction.toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/Topology/ContinuousMap/Compact.html#ContinuousMap.linearIsometryBoundedOfCompact">linearIsometryBoundedOfCompact</a> <span class="fn">α</span> <span class="fn">E</span> <span class="fn">𝕜</span>)</span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="ContinuousMap.toLp_comp_toContinuousMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L169-L172">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp_comp_toContinuousMap"><span class="name">ContinuousMap</span>.<span class="name">toLp_comp_toContinuousMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction">BoundedContinuousFunction</a> <span class="fn">α</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/ContinuousMap/Bounded/Basic.html#BoundedContinuousFunction.toContinuousMap">toContinuousMap</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">BoundedContinuousFunction.toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="ContinuousMap.coe_toLp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L174-L177">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.coe_toLp"><span class="name">ContinuousMap</span>.<span class="name">coe_toLp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">α</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">E</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">f</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/AEEqFun.html#ContinuousMap.toAEEqFun">toAEEqFun</a> <span class="fn">μ</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="ContinuousMap.toLp_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L179-L181">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp_injective"><span class="name">ContinuousMap</span>.<span class="name">toLp_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/OpenPos.html#MeasureTheory.Measure.IsOpenPosMeasure">IsOpenPosMeasure</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span></span></span></div></div></div></div><div class="decl" id="ContinuousMap.toLp_inj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L183-L185">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp_inj"><span class="name">ContinuousMap</span>.<span class="name">toLp_inj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">α</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">E</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/OpenPos.html#MeasureTheory.Measure.IsOpenPosMeasure">IsOpenPosMeasure</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">g</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="ContinuousMap.hasSum_of_hasSum_Lp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L189-L195">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.hasSum_of_hasSum_Lp"><span class="name">ContinuousMap</span>.<span class="name">hasSum_of_hasSum_Lp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/OpenPos.html#MeasureTheory.Measure.IsOpenPosMeasure">IsOpenPosMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">α</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">E</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">α</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">E</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#Summable">Summable</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg2</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasSum">HasSum</a> (<span class="fn">⇑<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span></span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>) <span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span>)</span> <span class="fn">f</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasSum">HasSum</a> <span class="fn">g</span> <span class="fn">f</span></span></div></div><p>If a sum of continuous functions <code>g n</code> is convergent, and the same sum converges in <code>Lᵖ</code> to <code>h</code>,
+then in fact <code>g n</code> converges uniformly to <code>h</code>.</p></div></div><div class="decl" id="ContinuousMap.toLp_norm_eq_toLp_norm_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L199-L202">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp_norm_eq_toLp_norm_coe"><span class="name">ContinuousMap</span>.<span class="name">toLp_norm_eq_toLp_norm_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#BoundedContinuousFunction.toLp">BoundedContinuousFunction.toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="ContinuousMap.toLp_norm_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.lean#L204-L208">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp_norm_le"><span class="name">ContinuousMap</span>.<span class="name">toLp_norm_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">α</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">MeasureTheory.IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Fact">Fact</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">p</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">toLp</a> <span class="fn">p</span> <span class="fn">μ</span> <span class="fn">𝕜</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.measureUnivNNReal">MeasureTheory.measureUnivNNReal</a> <span class="fn">μ</span>)</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><span class="fn">p</span>.<a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.toReal">toReal</a></span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div><p>Bound for the operator norm of <code><a href="../../../.././Mathlib/MeasureTheory/Function/LpSpace/ContinuousFunctions.html#ContinuousMap.toLp">ContinuousMap.toLp</a></code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

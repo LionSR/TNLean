@@ -1,0 +1,559 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Module.GradedModule</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Module.GradedModule";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Module</span>.<span class="name">GradedModule</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/GradedMulAction.html">Mathlib.Algebra.GradedMulAction</a></li><li><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html">Mathlib.Algebra.DirectSum.Decomposition</a></li><li><a href="../../.././Mathlib/Algebra/Module/BigOperators.html">Mathlib.Algebra.Module.BigOperators</a></li><li><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html">Mathlib.RingTheory.GradedAlgebra.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Module.GradedModule" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#DirectSum.GdistribMulAction"><span class="name">DirectSum</span>.<span class="name">GdistribMulAction</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Gmodule"><span class="name">DirectSum</span>.<span class="name">Gmodule</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.GSemiring.toGmodule"><span class="name">DirectSum</span>.<span class="name">GSemiring</span>.<span class="name">toGmodule</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.gsmulHom"><span class="name">DirectSum</span>.<span class="name">gsmulHom</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.gsmulHom_apply_apply"><span class="name">DirectSum</span>.<span class="name">gsmulHom_apply_apply</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Gmodule.smulAddMonoidHom"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">smulAddMonoidHom</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Gmodule.instSMulOfDecidableEq"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">instSMulOfDecidableEq</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Gmodule.smul_def"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">smul_def</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Gmodule.smulAddMonoidHom_apply_of_of"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">smulAddMonoidHom_apply_of_of</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Gmodule.of_smul_of"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">of_smul_of</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Gmodule.module"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">module</span></a></div><div class="nav_link"><a class="break_within" href="#SetLike.gmulAction"><span class="name">SetLike</span>.<span class="name">gmulAction</span></a></div><div class="nav_link"><a class="break_within" href="#SetLike.gdistribMulAction"><span class="name">SetLike</span>.<span class="name">gdistribMulAction</span></a></div><div class="nav_link"><a class="break_within" href="#SetLike.gmodule"><span class="name">SetLike</span>.<span class="name">gmodule</span></a></div><div class="nav_link"><a class="break_within" href="#GradedModule.isModule"><span class="name">GradedModule</span>.<span class="name">isModule</span></a></div><div class="nav_link"><a class="break_within" href="#GradedModule.linearEquiv"><span class="name">GradedModule</span>.<span class="name">linearEquiv</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Graded-Module" class="markdown-heading">Graded Module <a class="hover-link" href="#Graded-Module">#</a></h1><p>Given an <code>R</code>-algebra <code>A</code> graded by <code>𝓐</code>, a graded <code>A</code>-module <code>M</code> is expressed as
+<code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">DirectSum.Decomposition</a> 𝓜</code> and <code><a href="../../.././Mathlib/Algebra/GradedMulAction.html#SetLike.GradedSMul">SetLike.GradedSMul</a> 𝓐 𝓜</code>.
+Then <code>⨁ i, 𝓜 i</code> is an <code>A</code>-module and is isomorphic to <code>M</code>.</p><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>graded module</p></div><div class="decl" id="DirectSum.GdistribMulAction"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L38-L42">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.GdistribMulAction"><span class="name">DirectSum</span>.<span class="name">GdistribMulAction</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιB</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><span class="fn">ιB</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">ιA</span> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid.GMonoid">GradedMonoid.GMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιB</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="DirectSum.GdistribMulAction.toGMulAction"><span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GMulAction">GradedMonoid.GMulAction</a> <span class="fn">A</span> <span class="fn">M</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Type</a> (max (max (max u_1 u_2) u_3) u_4)</div></div><p>A graded version of <code><a href="../../.././Mathlib/Algebra/GroupWithZero/Action/Defs.html#DistribMulAction">DistribMulAction</a></code>.</p><ul class="structure_fields" id="DirectSum.GdistribMulAction.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">smul</a><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span> : <span class="fn"><span class="fn"><span class="fn">A</span> <span class="fn">i</span></span> → <span class="fn"><span class="fn"><span class="fn">M</span> <span class="fn">j</span></span> → <span class="fn"><span class="fn">M</span> (<span class="fn">i</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">j</span>)</span></span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GMulAction.one_smul">one_smul</a><span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid">GradedMonoid</a> <span class="fn">M</span></span>)</span></span>
+ : <span class="fn">1</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GMulAction.mul_smul">mul_smul</a><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">a'</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid">GradedMonoid</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid">GradedMonoid</a> <span class="fn">M</span></span>)</span></span>
+ : (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a'</span>) <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a'</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span></div></li><li id="DirectSum.GdistribMulAction.smul_add" class="structure_field"><div class="structure_field_info">smul_add<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b </span><span class="fn">c</span> : <span class="fn"><span class="fn">M</span> <span class="fn">j</span></span>)</span></span>
+ : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> (<span class="fn">b</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">c</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> <span class="fn">c</span></span></div></li><li id="DirectSum.GdistribMulAction.smul_zero" class="structure_field"><div class="structure_field_info">smul_zero<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span>)</span></span>
+ : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-DirectSum.GdistribMulAction" class="instances-list"></ul></details></div></div><div class="decl" id="DirectSum.Gmodule"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L44-L48">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule"><span class="name">DirectSum</span>.<span class="name">Gmodule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιB</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><span class="fn">ιB</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">ιA</span> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιA</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">(<span class="fn">A</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιB</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid.GMonoid">GradedMonoid.GMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="DirectSum.Gmodule.toGdistribMulAction"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.GdistribMulAction">DirectSum.GdistribMulAction</a> <span class="fn">A</span> <span class="fn">M</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Type</a> (max (max (max u_1 u_2) u_3) u_4)</div></div><p>A graded version of <code><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a></code>.</p><ul class="structure_fields" id="DirectSum.Gmodule.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">smul</a><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span> : <span class="fn"><span class="fn"><span class="fn">A</span> <span class="fn">i</span></span> → <span class="fn"><span class="fn"><span class="fn">M</span> <span class="fn">j</span></span> → <span class="fn"><span class="fn">M</span> (<span class="fn">i</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">j</span>)</span></span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GMulAction.one_smul">one_smul</a><span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid">GradedMonoid</a> <span class="fn">M</span></span>)</span></span>
+ : <span class="fn">1</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GMulAction.mul_smul">mul_smul</a><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">a'</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid">GradedMonoid</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid">GradedMonoid</a> <span class="fn">M</span></span>)</span></span>
+ : (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a'</span>) <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a'</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.GdistribMulAction.smul_add">smul_add</a><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b </span><span class="fn">c</span> : <span class="fn"><span class="fn">M</span> <span class="fn">j</span></span>)</span></span>
+ : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> (<span class="fn">b</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">c</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> <span class="fn">c</span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.GdistribMulAction.smul_zero">smul_zero</a><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span>)</span></span>
+ : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></li><li id="DirectSum.Gmodule.add_smul" class="structure_field"><div class="structure_field_info">add_smul<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">a'</span> : <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><span class="fn">M</span> <span class="fn">j</span></span>)</span></span>
+ : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> (<span class="fn">a</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a'</span>) <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a'</span> <span class="fn">b</span></span></div></li><li id="DirectSum.Gmodule.zero_smul" class="structure_field"><div class="structure_field_info">zero_smul<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><span class="fn">M</span> <span class="fn">j</span></span>)</span></span>
+ : <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">0</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-DirectSum.Gmodule" class="instances-list"></ul></details></div></div><div class="decl" id="DirectSum.GSemiring.toGmodule"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L50-L57">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.GSemiring.toGmodule"><span class="name">DirectSum</span>.<span class="name">GSemiring</span>.<span class="name">toGmodule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιA</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">A</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Ring.html#DirectSum.GSemiring">GSemiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule">Gmodule</a> <span class="fn">A</span> <span class="fn">A</span></span></div></div><p>A graded version of <code><a href="../../.././Mathlib/Algebra/Module/Defs.html#Semiring.toModule">Semiring.toModule</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.GSemiring.toGmodule">DirectSum.GSemiring.toGmodule</a> <span class="fn">A</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.mk">{</a> <span class="fn">toGMulAction</span> := <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GMonoid.toGMulAction">GradedMonoid.GMonoid.toGMulAction</a> <span class="fn">A</span></span>, <span class="fn">smul_add</span> := <span class="fn">⋯</span>, <span class="fn">smul_zero</span> := <span class="fn">⋯</span>, <span class="fn">add_smul</span> := <span class="fn">⋯</span>, <span class="fn">zero_smul</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.mk">}</a></li></ul></details></div></div><div class="decl" id="DirectSum.gsmulHom"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L61-L69">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.gsmulHom"><span class="name">DirectSum</span>.<span class="name">gsmulHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιB</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><span class="fn">ιB</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">ιA</span> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιA</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">A</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιB</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid.GMonoid">GradedMonoid.GMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule">Gmodule</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span> <span class="fn">i</span></span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom">→+</a> <span class="fn"><span class="fn">M</span> <span class="fn">j</span></span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom">→+</a> <span class="fn"><span class="fn">M</span> (<span class="fn">i</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">j</span>)</span></div></div><p>The piecewise multiplication from the <code><a href="../../.././Init/Prelude.html#Mul">Mul</a></code> instance, as a bundled homomorphism.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.gsmulHom">DirectSum.gsmulHom</a> <span class="fn">A</span> <span class="fn">M</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">a</span> : <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span>) =&gt; <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">b</span> : <span class="fn"><span class="fn">M</span> <span class="fn">j</span></span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> <span class="fn">b</span></span></span>, <span class="fn">map_zero'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom.mk">}</a></span>,
+    <span class="fn">map_zero'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom.mk">}</a></li></ul></details><details id="instances-for-list-DirectSum.gsmulHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="DirectSum.gsmulHom_apply_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L62-L62">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.gsmulHom_apply_apply"><span class="name">DirectSum</span>.<span class="name">gsmulHom_apply_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιB</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><span class="fn">ιB</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">ιA</span> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιA</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">A</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιB</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid.GMonoid">GradedMonoid.GMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule">Gmodule</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><span class="fn">M</span> <span class="fn">j</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.gsmulHom">gsmulHom</a> <span class="fn">A</span> <span class="fn">M</span>)</span> <span class="fn">a</span>)</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">a</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="DirectSum.Gmodule.smulAddMonoidHom"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L73-L79">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.smulAddMonoidHom"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">smulAddMonoidHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιB</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><span class="fn">ιB</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">ιA</span> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιA</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">A</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιB</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid.GMonoid">GradedMonoid.GMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule">Gmodule</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιA</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιA</span>) =&gt; <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span></span>)</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom">→+</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιB</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιB</span>) =&gt; <span class="fn"><span class="fn">M</span> <span class="fn">i</span></span></span>)</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom">→+</a> <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιB</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιB</span>) =&gt; <span class="fn"><span class="fn">M</span> <span class="fn">i</span></span></span></span></div></div><p>For graded monoid <code>A</code> and a graded module <code>M</code> over <code>A</code>. <code><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.smulAddMonoidHom">Gmodule.smulAddMonoidHom</a></code> is the
+<code>⨁ᵢ Aᵢ</code>-scalar multiplication on <code>⨁ᵢ Mᵢ</code> induced by <code>gsmul_hom</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-DirectSum.Gmodule.smulAddMonoidHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="DirectSum.Gmodule.instSMulOfDecidableEq"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L85-L87">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.instSMulOfDecidableEq"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">instSMulOfDecidableEq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιB</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><span class="fn">ιB</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">ιA</span> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιA</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">A</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιB</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid.GMonoid">GradedMonoid.GMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule">Gmodule</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιA</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιA</span>) =&gt; <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span></span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιB</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιB</span>) =&gt; <span class="fn"><span class="fn">M</span> <span class="fn">i</span></span></span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="DirectSum.Gmodule.smul_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L89-L92">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.smul_def"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">smul_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιB</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><span class="fn">ιB</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">ιA</span> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιA</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">A</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιB</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid.GMonoid">GradedMonoid.GMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule">Gmodule</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιA</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιA</span>) =&gt; <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιB</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιB</span>) =&gt; <span class="fn"><span class="fn">M</span> <span class="fn">i</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.smulAddMonoidHom">smulAddMonoidHom</a> <span class="fn">A</span> <span class="fn">M</span>)</span> <span class="fn">x</span>)</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="DirectSum.Gmodule.smulAddMonoidHom_apply_of_of"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L94-L98">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.smulAddMonoidHom_apply_of_of"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">smulAddMonoidHom_apply_of_of</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιB</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><span class="fn">ιB</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">ιA</span> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιA</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">A</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιB</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid.GMonoid">GradedMonoid.GMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule">Gmodule</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn"><span class="fn">M</span> <span class="fn">j</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.smulAddMonoidHom">smulAddMonoidHom</a> <span class="fn">A</span> <span class="fn">M</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.of">of</a> <span class="fn">A</span> <span class="fn">i</span>)</span> <span class="fn">x</span>)</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.of">of</a> <span class="fn">M</span> <span class="fn">j</span>)</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.of">of</a> <span class="fn">M</span> (<span class="fn">i</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">j</span>))</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">x</span> <span class="fn">y</span>)</span></span></div></div></div></div><div class="decl" id="DirectSum.Gmodule.of_smul_of"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L100-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.of_smul_of"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">of_smul_of</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιB</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><span class="fn">ιB</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">ιA</span> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιA</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">A</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιB</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid.GMonoid">GradedMonoid.GMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule">Gmodule</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ιA</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j</span> : <span class="fn">ιB</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn"><span class="fn">M</span> <span class="fn">j</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.of">of</a> <span class="fn">A</span> <span class="fn">i</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.of">of</a> <span class="fn">M</span> <span class="fn">j</span>)</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.of">of</a> <span class="fn">M</span> (<span class="fn">i</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">j</span>))</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GSMul.smul">GradedMonoid.GSMul.smul</a> <span class="fn">x</span> <span class="fn">y</span>)</span></span></div></div></div></div><div class="decl" id="DirectSum.Gmodule.module"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L141-L149">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.module"><span class="name">DirectSum</span>.<span class="name">Gmodule</span>.<span class="name">module</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιB</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><span class="fn">ιA</span> → <a href="../../.././foundational_types.html">Type</a> u_3</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><span class="fn">ιB</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">ιA</span> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιA</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">A</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ιB</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιB</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Ring.html#DirectSum.GSemiring">GSemiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule">Gmodule</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιA</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιA</span>) =&gt; <span class="fn"><span class="fn">A</span> <span class="fn">i</span></span></span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιB</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιB</span>) =&gt; <span class="fn"><span class="fn">M</span> <span class="fn">i</span></span></span>)</span></span></div></div><p>The <code><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a></code> derived from <code><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#SetLike.gmodule">gmodule</a> A M</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.module">DirectSum.Gmodule.module</a> <span class="fn">A</span> <span class="fn">M</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Module/Defs.html#Module.mk">{</a> <span class="fn">toSMul</span> := <span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.instSMulOfDecidableEq">DirectSum.Gmodule.instSMulOfDecidableEq</a> <span class="fn">A</span> <span class="fn">M</span></span>, <span class="fn">mul_smul</span> := <span class="fn">⋯</span>, <span class="fn">one_smul</span> := <span class="fn">⋯</span>, <span class="fn">smul_zero</span> := <span class="fn">⋯</span>, <span class="fn">smul_add</span> := <span class="fn">⋯</span>,
+    <span class="fn">add_smul</span> := <span class="fn">⋯</span>, <span class="fn">zero_smul</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/Defs.html#Module.mk">}</a></li></ul></details></div></div><div class="decl" id="SetLike.gmulAction"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L168-L173">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#SetLike.gmulAction"><span class="name">SetLike</span>.<span class="name">gmulAction</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιM</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ'</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">ιA</span> <span class="fn">ιM</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓐</span> : <span class="fn"><span class="fn">ιA</span> → <span class="fn">σ'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ'</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓜</span> : <span class="fn"><span class="fn">ιM</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Action/Defs.html#DistribMulAction">DistribMulAction</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#SetLike.GradedMonoid">GradedMonoid</a> <span class="fn">𝓐</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#SetLike.GradedSMul">GradedSMul</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GMulAction">GradedMonoid.GMulAction</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ιA</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">𝓐</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιM</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">𝓜</span> <span class="fn">i</span>)</span></span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#SetLike.gmulAction">SetLike.gmulAction</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GMulAction.mk">{</a> <span class="fn">toGSMul</span> := <span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#SetLike.toGSMul">SetLike.toGSMul</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span>, <span class="fn">one_smul</span> := <span class="fn">⋯</span>, <span class="fn">mul_smul</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/GradedMulAction.html#GradedMonoid.GMulAction.mk">}</a></li></ul></details></div></div><div class="decl" id="SetLike.gdistribMulAction"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L175-L180">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#SetLike.gdistribMulAction"><span class="name">SetLike</span>.<span class="name">gdistribMulAction</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιM</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ'</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">ιA</span> <span class="fn">ιM</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓐</span> : <span class="fn"><span class="fn">ιA</span> → <span class="fn">σ'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ'</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓜</span> : <span class="fn"><span class="fn">ιM</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Action/Defs.html#DistribMulAction">DistribMulAction</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#SetLike.GradedMonoid">GradedMonoid</a> <span class="fn">𝓐</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#SetLike.GradedSMul">GradedSMul</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.GdistribMulAction">DirectSum.GdistribMulAction</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ιA</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">𝓐</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιM</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">𝓜</span> <span class="fn">i</span>)</span></span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#SetLike.gdistribMulAction">SetLike.gdistribMulAction</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.GdistribMulAction.mk">{</a> <span class="fn">toGMulAction</span> := <span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#SetLike.gmulAction">SetLike.gmulAction</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span>, <span class="fn">smul_add</span> := <span class="fn">⋯</span>, <span class="fn">smul_zero</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.GdistribMulAction.mk">}</a></li></ul></details></div></div><div class="decl" id="SetLike.gmodule"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L185-L191">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#SetLike.gmodule"><span class="name">SetLike</span>.<span class="name">gmodule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιM</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ'</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">ιA</span> <span class="fn">ιM</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓐</span> : <span class="fn"><span class="fn">ιA</span> → <span class="fn">σ'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ'</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓜</span> : <span class="fn"><span class="fn">ιM</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ'</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#SetLike.GradedMonoid">GradedMonoid</a> <span class="fn">𝓐</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#SetLike.GradedSMul">GradedSMul</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule">DirectSum.Gmodule</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ιA</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">𝓐</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιM</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">𝓜</span> <span class="fn">i</span>)</span></span></span></span></div></div><p><code>[SetLike.<a href="../../.././Mathlib/Algebra/GradedMonoid.html#GradedMonoid">GradedMonoid</a> 𝓐] [SetLike.GradedSMul 𝓐 𝓜]</code> is the internal version of graded
+module, the internal version can be translated into the external version <code><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#SetLike.gmodule">gmodule</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#SetLike.gmodule">SetLike.gmodule</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.mk">{</a> <span class="fn">smul</span> := <span class="fn">fun {<span class="fn">i</span> : <span class="fn">ιA</span>} {<span class="fn">j</span> : <span class="fn">ιM</span>} (<span class="fn">x</span> : <span class="fn">↥<span class="fn">(<span class="fn">𝓐</span> <span class="fn">i</span>)</span></span>) (<span class="fn">y</span> : <span class="fn">↥<span class="fn">(<span class="fn">𝓜</span> <span class="fn">j</span>)</span></span>) =&gt; <a href="../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn">↑<span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">↑<span class="fn">y</span></span>, <span class="fn">⋯</span><a href="../../.././Init/Prelude.html#Subtype.mk">⟩</a></span>, <span class="fn">one_smul</span> := <span class="fn">⋯</span>, <span class="fn">mul_smul</span> := <span class="fn">⋯</span>,
+    <span class="fn">smul_add</span> := <span class="fn">⋯</span>, <span class="fn">smul_zero</span> := <span class="fn">⋯</span>, <span class="fn">add_smul</span> := <span class="fn">⋯</span>, <span class="fn">zero_smul</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/GradedModule.html#DirectSum.Gmodule.mk">}</a></li></ul></details></div></div><div class="decl" id="GradedModule.isModule"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L200-L206">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#GradedModule.isModule"><span class="name">GradedModule</span>.<span class="name">isModule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιM</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ'</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">ιA</span> <span class="fn">ιM</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓐</span> : <span class="fn"><span class="fn">ιA</span> → <span class="fn">σ'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ'</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓜</span> : <span class="fn"><span class="fn">ιM</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ'</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#SetLike.GradedMonoid">SetLike.GradedMonoid</a> <span class="fn">𝓐</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#SetLike.GradedSMul">SetLike.GradedSMul</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιM</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝓐</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">A</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιM</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιM</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">𝓜</span> <span class="fn">i</span>)</span></span></span>)</span></span></div></div><p>The smul multiplication of <code>A</code> on <code>⨁ i, 𝓜 i</code> from <code>(⨁ i, 𝓐 i) →+ (⨁ i, 𝓜 i) →+ ⨁ i, 𝓜 i</code>
+turns <code>⨁ i, 𝓜 i</code> into an <code>A</code>-module</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-GradedModule.isModule" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="GradedModule.linearEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Module/GradedModule.lean#L208-L231">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Module/GradedModule.html#GradedModule.linearEquiv"><span class="name">GradedModule</span>.<span class="name">linearEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιA</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ιM</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ'</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">ιA</span> <span class="fn">ιM</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓐</span> : <span class="fn"><span class="fn">ιA</span> → <span class="fn">σ'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ'</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝓜</span> : <span class="fn"><span class="fn">ιM</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">A</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ'</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMonoid.html#SetLike.GradedMonoid">SetLike.GradedMonoid</a> <span class="fn">𝓐</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GradedMulAction.html#SetLike.GradedSMul">SetLike.GradedSMul</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιA</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ιM</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝓐</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">DirectSum.Decomposition</a> <span class="fn">𝓜</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">M</span> <a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">A</span><a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ιM</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ιM</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">𝓜</span> <span class="fn">i</span>)</span></span></span></span></div></div><p><code>⨁ i, 𝓜 i</code> and <code>M</code> are isomorphic as <code>A</code>-modules.
+&quot;The internal version&quot; and &quot;the external version&quot; are isomorphism as <code>A</code>-modules.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/GradedModule.html#GradedModule.linearEquiv">GradedModule.linearEquiv</a> <span class="fn">𝓐</span> <span class="fn">𝓜</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.mk">{</a> <span class="fn">toAddHom</span> := <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeAddEquiv">DirectSum.decomposeAddEquiv</a> <span class="fn">𝓜</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv.toAddHom">toAddHom</a></span>, <span class="fn">map_smul'</span> := <span class="fn">⋯</span>,
+    <span class="fn">invFun</span> := <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeAddEquiv">DirectSum.decomposeAddEquiv</a> <span class="fn">𝓜</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv.symm">symm</a></span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.toFun">toFun</a></span>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>, <span class="fn">right_inv</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.mk">}</a></li></ul></details><details id="instances-for-list-GradedModule.linearEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

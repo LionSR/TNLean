@@ -1,0 +1,120 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.MeasureTheory.Measure.ContinuousPreimage</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.MeasureTheory.Measure.ContinuousPreimage";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">MeasureTheory</span>.<span class="name">Measure</span>.<span class="name">ContinuousPreimage</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/ContinuousPreimage.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Topology/CompactOpen.html">Mathlib.Topology.CompactOpen</a></li><li><a href="../../.././Mathlib/Dynamics/Ergodic/MeasurePreserving.html">Mathlib.Dynamics.Ergodic.MeasurePreserving</a></li><li><a href="../../.././Mathlib/MeasureTheory/Measure/Regular.html">Mathlib.MeasureTheory.Measure.Regular</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.MeasureTheory.Measure.ContinuousPreimage" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.tendsto_measure_symmDiff_preimage_nhds_zero"><span class="name">MeasureTheory</span>.<span class="name">tendsto_measure_symmDiff_preimage_nhds_zero</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.isClosed_setOf_preimage_ae_eq"><span class="name">MeasureTheory</span>.<span class="name">isClosed_setOf_preimage_ae_eq</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Continuity-of-the-preimage-of-a-set-under-a-measure-preserving-continuous-function" class="markdown-heading">Continuity of the preimage of a set under a measure-preserving continuous function <a class="hover-link" href="#Continuity-of-the-preimage-of-a-set-under-a-measure-preserving-continuous-function">#</a></h1><p>In this file we prove that the preimage of a null measurable set <code>s : <a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> Y</code>
+under a measure-preserving continuous function <code>f : C(X, Y)</code> is continuous in <code>f</code>
+in the sense that <code>μ ((f a ⁻¹' s) ∆ (g ⁻¹' s))</code> tends to zero as <code>f a</code> tends to <code>g</code>.</p><p>As a corollary, we show that
+for a continuous family of continuous maps <code>f z : C(X, Y)</code>,
+a null measurable set <code>s</code>, and a null measurable set <code>t</code> of finite measure,
+the set of parameters <code>z</code> such that <code>f z ⁻¹' t</code> is a.e. equal to <code>s</code> is a closed set.</p></div><div class="decl" id="MeasureTheory.tendsto_measure_symmDiff_preimage_nhds_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/ContinuousPreimage.lean#L38-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Measure/ContinuousPreimage.html#MeasureTheory.tendsto_measure_symmDiff_preimage_nhds_zero"><span class="name">MeasureTheory</span>.<span class="name">tendsto_measure_symmDiff_preimage_nhds_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Separation/Basic.html#R1Space">R1Space</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Separation/Basic.html#R1Space">R1Space</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ν</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.InnerRegularCompactLTTop">InnerRegularCompactLTTop</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsLocallyFiniteMeasure">IsLocallyFiniteMeasure</a> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">X</span><a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">Y</span><a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">X</span><a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">Y</span><a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hfg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">f</span> <span class="fn">l</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">g</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">a</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">l</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/Ergodic/MeasurePreserving.html#MeasureTheory.MeasurePreserving">MeasurePreserving</a> <span class="fn">(⇑<span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span>)</span> <span class="fn">μ</span> <span class="fn">ν</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Dynamics/Ergodic/MeasurePreserving.html#MeasureTheory.MeasurePreserving">MeasurePreserving</a> <span class="fn">(⇑<span class="fn">g</span>)</span> <span class="fn">μ</span> <span class="fn">ν</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/NullMeasurable.html#MeasureTheory.NullMeasurableSet">NullMeasurableSet</a> <span class="fn">s</span> <span class="fn">ν</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hνs</span> : <span class="fn"><span class="fn">ν</span> <span class="fn">s</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">a</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">μ</span> <span class="fn">(<a href="../../.././Mathlib/Order/SymmDiff.html#symmDiff">symmDiff</a> (<span class="fn">⇑<span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">s</span>) (<span class="fn">⇑<span class="fn">g</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">s</span>))</span></span>)</span> <span class="fn">l</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span></span></div></div><p>Let <code>X</code> and <code>Y</code> be R₁ topological spaces
+with Borel σ-algebras and measures <code>μ</code> and <code>ν</code>, respectively.
+Suppose that <code>μ</code> is inner regular for finite measure sets with respect to compact sets
+and <code>ν</code> is a locally finite measure.
+Let <code>f : α → C(X, Y)</code> be a family of continuous maps
+that converges to a continuous map <code>g : C(X, Y)</code> in the compact-open topology along a filter <code>l</code>.
+Suppose that <code>g</code> is a measure-preserving map
+and <code>f a</code> is a measure-preserving map eventually along <code>l</code>.
+Then for any finite measure measurable set <code>s</code>,
+the preimages <code>f a ⁻¹' s</code> tend to the preimage <code>g ⁻¹' s</code> in measure.
+More precisely, the measure of the symmetric difference of these two sets tends to zero.</p></div></div><div class="decl" id="MeasureTheory.isClosed_setOf_preimage_ae_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/ContinuousPreimage.lean#L101-L123">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Measure/ContinuousPreimage.html#MeasureTheory.isClosed_setOf_preimage_ae_eq"><span class="name">MeasureTheory</span>.<span class="name">isClosed_setOf_preimage_ae_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Separation/Basic.html#R1Space">R1Space</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Separation/Basic.html#R1Space">R1Space</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Z</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ν</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.InnerRegularCompactLTTop">InnerRegularCompactLTTop</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsLocallyFiniteMeasure">IsLocallyFiniteMeasure</a> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">Z</span> → <a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">X</span><a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">Y</span><a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hfm</span> : <span class="fn">∀ (<span class="fn">z</span> : <span class="fn">Z</span>), <span class="fn"><a href="../../.././Mathlib/Dynamics/Ergodic/MeasurePreserving.html#MeasureTheory.MeasurePreserving">MeasurePreserving</a> <span class="fn">(⇑<span class="fn">(<span class="fn">f</span> <span class="fn">z</span>)</span>)</span> <span class="fn">μ</span> <span class="fn">ν</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">htm</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/NullMeasurable.html#MeasureTheory.NullMeasurableSet">NullMeasurableSet</a> <span class="fn">t</span> <span class="fn">ν</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">ν</span> <span class="fn">t</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">z</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">Z</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">⇑<span class="fn">(<span class="fn">f</span> <span class="fn">z</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">t</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/MeasureTheory/OuterMeasure/AE.html#MeasureTheory.ae">ae</a> <span class="fn">μ</span></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">s</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div><p>Let <code>f : Z → C(X, Y)</code> be a continuous (in the compact open topology) family
+of continuous measure-preserving maps.
+Let <code>t : <a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> Y</code> be a null measurable set of finite measure.
+Then for any <code>s</code>, the set of parameters <code>z</code>
+such that the preimage of <code>t</code> under <code>f_z</code> is a.e. equal to <code>s</code>
+is a closed set.</p><p>In particular, if <code>X = Y</code> and <code>s = t</code>,
+then we see that the a.e. stabilizer of a set is a closed set.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,556 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.LinearAlgebra.AffineSpace.Centroid</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.LinearAlgebra.AffineSpace.Centroid";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">LinearAlgebra</span>.<span class="name">AffineSpace</span>.<span class="name">Centroid</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Combination.html">Mathlib.LinearAlgebra.AffineSpace.Combination</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.LinearAlgebra.AffineSpace.Centroid" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Finset.centroidWeights"><span class="name">Finset</span>.<span class="name">centroidWeights</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroidWeights_apply"><span class="name">Finset</span>.<span class="name">centroidWeights_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroidWeights_eq_const"><span class="name">Finset</span>.<span class="name">centroidWeights_eq_const</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.sum_centroidWeights_eq_one_of_cast_card_ne_zero"><span class="name">Finset</span>.<span class="name">sum_centroidWeights_eq_one_of_cast_card_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.sum_centroidWeights_eq_one_of_card_ne_zero"><span class="name">Finset</span>.<span class="name">sum_centroidWeights_eq_one_of_card_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.sum_centroidWeights_eq_one_of_nonempty"><span class="name">Finset</span>.<span class="name">sum_centroidWeights_eq_one_of_nonempty</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.sum_centroidWeights_eq_one_of_card_eq_add_one"><span class="name">Finset</span>.<span class="name">sum_centroidWeights_eq_one_of_card_eq_add_one</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid"><span class="name">Finset</span>.<span class="name">centroid</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid_def"><span class="name">Finset</span>.<span class="name">centroid_def</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid_univ"><span class="name">Finset</span>.<span class="name">centroid_univ</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid_singleton"><span class="name">Finset</span>.<span class="name">centroid_singleton</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid_pair"><span class="name">Finset</span>.<span class="name">centroid_pair</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid_pair_fin"><span class="name">Finset</span>.<span class="name">centroid_pair_fin</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid_map"><span class="name">Finset</span>.<span class="name">centroid_map</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroidWeightsIndicator"><span class="name">Finset</span>.<span class="name">centroidWeightsIndicator</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroidWeightsIndicator_def"><span class="name">Finset</span>.<span class="name">centroidWeightsIndicator_def</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.sum_centroidWeightsIndicator"><span class="name">Finset</span>.<span class="name">sum_centroidWeightsIndicator</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.sum_centroidWeightsIndicator_eq_one_of_card_ne_zero"><span class="name">Finset</span>.<span class="name">sum_centroidWeightsIndicator_eq_one_of_card_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.sum_centroidWeightsIndicator_eq_one_of_nonempty"><span class="name">Finset</span>.<span class="name">sum_centroidWeightsIndicator_eq_one_of_nonempty</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one"><span class="name">Finset</span>.<span class="name">sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid_eq_affineCombination_fintype"><span class="name">Finset</span>.<span class="name">centroid_eq_affineCombination_fintype</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid_eq_centroid_image_of_inj_on"><span class="name">Finset</span>.<span class="name">centroid_eq_centroid_image_of_inj_on</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid_eq_of_inj_on_of_image_eq"><span class="name">Finset</span>.<span class="name">centroid_eq_of_inj_on_of_image_eq</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.centroid_vsub_const"><span class="name">Finset</span>.<span class="name">centroid_vsub_const</span></a></div><div class="nav_link"><a class="break_within" href="#centroid_mem_affineSpan_of_cast_card_ne_zero"><span class="name">centroid_mem_affineSpan_of_cast_card_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#centroid_mem_affineSpan_of_card_ne_zero"><span class="name">centroid_mem_affineSpan_of_card_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#centroid_mem_affineSpan_of_nonempty"><span class="name">centroid_mem_affineSpan_of_nonempty</span></a></div><div class="nav_link"><a class="break_within" href="#centroid_mem_affineSpan_of_card_eq_add_one"><span class="name">centroid_mem_affineSpan_of_card_eq_add_one</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Centroid-of-a-Finite-Set-of-Points-in-Affine-Space" class="markdown-heading">Centroid of a Finite Set of Points in Affine Space <a class="hover-link" href="#Centroid-of-a-Finite-Set-of-Points-in-Affine-Space">#</a></h1><p>This file defines the centroid of a finite set of points in an affine space over a division
+ring.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><p><code><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a></code>: A constant weight function assigning to each index in a <code><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code> the same
+weight, equal to the reciprocal of the number of elements.</p></li><li><p><code><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a></code>: the centroid of a <code><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code> of points, defined as the affine combination using
+<code><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a></code>.</p></li></ul></div><div class="decl" id="Finset.centroidWeights"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L39-L41">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights"><span class="name">Finset</span>.<span class="name">centroidWeights</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">ι</span> → <span class="fn">k</span></span></div></div><p>The weights for the centroid of some points.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">Finset.centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Function.const">Function.const</a> <span class="fn">ι</span> <span class="fn">(↑<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span>)</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span></li></ul></details><details id="instances-for-list-Finset.centroidWeights" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Finset.centroidWeights_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L43-L46">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights_apply"><span class="name">Finset</span>.<span class="name">centroidWeights_apply</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(↑<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span>)</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div><p><code><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a></code> at any point.</p></div></div><div class="decl" id="Finset.centroidWeights_eq_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L48-L50">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights_eq_const"><span class="name">Finset</span>.<span class="name">centroidWeights_eq_const</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Prelude.html#Function.const">Function.const</a> <span class="fn">ι</span> <span class="fn">(↑<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span>)</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span></div></div><p><code><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a></code> equals a constant function.</p></div></div><div class="decl" id="Finset.sum_centroidWeights_eq_one_of_cast_card_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L53-L56">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.sum_centroidWeights_eq_one_of_cast_card_ne_zero"><span class="name">Finset</span>.<span class="name">sum_centroidWeights_eq_one_of_cast_card_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div><p>The weights in the centroid sum to 1, if the number of points,
+converted to <code>k</code>, is not zero.</p></div></div><div class="decl" id="Finset.sum_centroidWeights_eq_one_of_card_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L58-L62">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.sum_centroidWeights_eq_one_of_card_ne_zero"><span class="name">Finset</span>.<span class="name">sum_centroidWeights_eq_one_of_card_ne_zero</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div><p>In the characteristic zero case, the weights in the centroid sum
+to 1 if the number of points is not zero.</p></div></div><div class="decl" id="Finset.sum_centroidWeights_eq_one_of_nonempty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L64-L68">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.sum_centroidWeights_eq_one_of_nonempty"><span class="name">Finset</span>.<span class="name">sum_centroidWeights_eq_one_of_nonempty</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div><p>In the characteristic zero case, the weights in the centroid sum
+to 1 if the set is nonempty.</p></div></div><div class="decl" id="Finset.sum_centroidWeights_eq_one_of_card_eq_add_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L70-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.sum_centroidWeights_eq_one_of_card_eq_add_one"><span class="name">Finset</span>.<span class="name">sum_centroidWeights_eq_one_of_card_eq_add_one</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div><p>In the characteristic zero case, the weights in the centroid sum
+to 1 if the number of points is <code>n + 1</code>.</p></div></div><div class="decl" id="Finset.centroid"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L76-L80">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid"><span class="name">Finset</span>.<span class="name">centroid</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">P</span></div></div><p>The centroid of some points.  Although defined for any <code>s</code>, this
+is intended to be used in the case where the number of points,
+converted to <code>k</code>, is not zero.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">Finset.centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Combination.html#Finset.affineCombination">Finset.affineCombination</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span>)</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">Finset.centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span>)</span></span></li></ul></details><details id="instances-for-list-Finset.centroid" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Finset.centroid_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L82-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid_def"><span class="name">Finset</span>.<span class="name">centroid_def</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Combination.html#Finset.affineCombination">affineCombination</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span>)</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span>)</span></span></div></div><p>The definition of the centroid.</p></div></div><div class="decl" id="Finset.centroid_univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L86-L90">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid_univ"><span class="name">Finset</span>.<span class="name">centroid_univ</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <a href="../../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">univ</a> <a href="../../.././Init/Prelude.html#Subtype.val">Subtype.val</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#id">id</a></span></div></div></div></div><div class="decl" id="Finset.centroid_singleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L92-L95">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid_singleton"><span class="name">Finset</span>.<span class="name">centroid_singleton</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">i</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">p</span> <span class="fn">i</span></span></div></div><p>The centroid of a single point.</p></div></div><div class="decl" id="Finset.centroid_pair"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L97-L110">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid_pair"><span class="name">Finset</span>.<span class="name">centroid_pair</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₁ </span><span class="fn">i₂</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <a href="../../.././Init/Core.html#Insert.insert">{</a><span class="fn">i₁</span><a href="../../.././Init/Core.html#Insert.insert">,</a> <span class="fn">i₂</span><a href="../../.././Init/Core.html#Insert.insert">}</a> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">2</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> (<span class="fn"><span class="fn">p</span> <span class="fn">i₂</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">p</span> <span class="fn">i₁</span></span>) <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn">p</span> <span class="fn">i₁</span></span></div></div><p>The centroid of two points, expressed directly as adding a vector
+to a point.</p></div></div><div class="decl" id="Finset.centroid_pair_fin"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L112-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid_pair_fin"><span class="name">Finset</span>.<span class="name">centroid_pair_fin</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">2</span></span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <a href="../../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">univ</a> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">2</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> (<span class="fn"><span class="fn">p</span> <span class="fn">1</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn"><span class="fn">p</span> <span class="fn">0</span></span>) <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn">p</span> <span class="fn">0</span></span></div></div><p>The centroid of two points indexed by <code><a href="../../.././Init/Prelude.html#Fin">Fin</a> 2</code>, expressed directly
+as adding a vector to the first point.</p></div></div><div class="decl" id="Finset.centroid_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L119-L123">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid_map"><span class="name">Finset</span>.<span class="name">centroid_map</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s₂</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">ι₂</span> <a href="../../.././Mathlib/Logic/Embedding/Basic.html#Function.Embedding">↪</a> <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <span class="fn">(<a href="../../.././Mathlib/Data/Finset/Image.html#Finset.map">map</a> <span class="fn">e</span> <span class="fn">s₂</span>)</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <span class="fn">s₂</span> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">e</span></span>)</span></div></div><p>A centroid, over the image of an embedding, equals a centroid with
+the same points and weights over the original <code><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code>.</p></div></div><div class="decl" id="Finset.centroidWeightsIndicator"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L125-L132">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeightsIndicator"><span class="name">Finset</span>.<span class="name">centroidWeightsIndicator</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">ι</span> → <span class="fn">k</span></span></div></div><p><code><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a></code> gives the weights for the centroid as a
+constant function, which is suitable when summing over the points
+whose centroid is being taken.  This function gives the weights in a
+form suitable for summing over a larger set of points, as an indicator
+function that is zero outside the set whose centroid is being taken.
+In the case of a <code><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code>, the sum may be over <code>univ</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeightsIndicator">Finset.centroidWeightsIndicator</a> <span class="fn">k</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">s</span>)</span>.<a href="../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">Finset.centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span>)</span></span></li></ul></details><details id="instances-for-list-Finset.centroidWeightsIndicator" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Finset.centroidWeightsIndicator_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L134-L137">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeightsIndicator_def"><span class="name">Finset</span>.<span class="name">centroidWeightsIndicator_def</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeightsIndicator">centroidWeightsIndicator</a> <span class="fn">k</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">s</span>)</span>.<a href="../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span>)</span></span></div></div><p>The definition of <code><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeightsIndicator">centroidWeightsIndicator</a></code>.</p></div></div><div class="decl" id="Finset.sum_centroidWeightsIndicator"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L139-L142">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.sum_centroidWeightsIndicator"><span class="name">Finset</span>.<span class="name">sum_centroidWeightsIndicator</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">i</span> : <span class="fn">ι</span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeightsIndicator">centroidWeightsIndicator</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeights">centroidWeights</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">i</span></span></span></div></div><p>The sum of the weights for the centroid indexed by a <code><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code>.</p></div></div><div class="decl" id="Finset.sum_centroidWeightsIndicator_eq_one_of_card_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L144-L150">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.sum_centroidWeightsIndicator_eq_one_of_card_ne_zero"><span class="name">Finset</span>.<span class="name">sum_centroidWeightsIndicator_eq_one_of_card_ne_zero</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">i</span> : <span class="fn">ι</span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeightsIndicator">centroidWeightsIndicator</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div><p>In the characteristic zero case, the weights in the centroid
+indexed by a <code><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code> sum to 1 if the number of points is not
+zero.</p></div></div><div class="decl" id="Finset.sum_centroidWeightsIndicator_eq_one_of_nonempty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L152-L157">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.sum_centroidWeightsIndicator_eq_one_of_nonempty"><span class="name">Finset</span>.<span class="name">sum_centroidWeightsIndicator_eq_one_of_nonempty</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">i</span> : <span class="fn">ι</span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeightsIndicator">centroidWeightsIndicator</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div><p>In the characteristic zero case, the weights in the centroid
+indexed by a <code><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code> sum to 1 if the set is nonempty.</p></div></div><div class="decl" id="Finset.sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L159-L164">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one"><span class="name">Finset</span>.<span class="name">sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">i</span> : <span class="fn">ι</span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeightsIndicator">centroidWeightsIndicator</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div><p>In the characteristic zero case, the weights in the centroid
+indexed by a <code><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code> sum to 1 if the number of points is <code>n + 1</code>.</p></div></div><div class="decl" id="Finset.centroid_eq_affineCombination_fintype"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L166-L169">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid_eq_affineCombination_fintype"><span class="name">Finset</span>.<span class="name">centroid_eq_affineCombination_fintype</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Combination.html#Finset.affineCombination">affineCombination</a> <span class="fn">k</span> <a href="../../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">univ</a> <span class="fn">p</span>)</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroidWeightsIndicator">centroidWeightsIndicator</a> <span class="fn">k</span> <span class="fn">s</span>)</span></span></div></div><p>The centroid as an affine combination over a <code><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code>.</p></div></div><div class="decl" id="Finset.centroid_eq_centroid_image_of_inj_on"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L171-L200">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid_eq_centroid_image_of_inj_on"><span class="name">Finset</span>.<span class="name">centroid_eq_centroid_image_of_inj_on</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn">∀ <span class="fn">j</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn"><span class="fn">p</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">p</span> <span class="fn">j</span></span> → <span class="fn">i</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">j</span></span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ps</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">↑<span class="fn">ps</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hps</span> : <span class="fn">ps</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">↑<span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <a href="../../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">univ</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">↑<span class="fn">ps</span></span>) =&gt; <span class="fn">↑<span class="fn">x</span></span></span></span></div></div><p>An indexed family of points that is injective on the given
+<code><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code> has the same centroid as the image of that <code><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code>.  This is
+stated in terms of a set equal to the image to provide control of
+definitional equality for the index type used for the centroid of the
+image.</p></div></div><div class="decl" id="Finset.centroid_eq_of_inj_on_of_image_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L202-L210">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid_eq_of_inj_on_of_image_eq"><span class="name">Finset</span>.<span class="name">centroid_eq_of_inj_on_of_image_eq</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s₂</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn">∀ <span class="fn">j</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn"><span class="fn">p</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">p</span> <span class="fn">j</span></span> → <span class="fn">i</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">j</span></span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p₂</span> : <span class="fn"><span class="fn">ι₂</span> → <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s₂</span>, <span class="fn">∀ <span class="fn">j</span> ∈ <span class="fn">s₂</span>, <span class="fn"><span class="fn"><span class="fn">p₂</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">p₂</span> <span class="fn">j</span></span> → <span class="fn">i</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">j</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">he</span> : <span class="fn">p</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">↑<span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₂</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">↑<span class="fn">s₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <span class="fn">s₂</span> <span class="fn">p₂</span></span></div></div><p>Two indexed families of points that are injective on the given
+<code><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code>s and with the same points in the image of those <code><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code>s
+have the same centroid.</p></div></div><div class="decl" id="Finset.centroid_vsub_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L212-L219">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid_vsub_const"><span class="name">Finset</span>.<span class="name">centroid_vsub_const</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p₀</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₀</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">p</span> <span class="fn">i</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₀</span></span></span></div></div><p>The centroid commutes with translation by a constant point.
+Subtracting a fixed point <code>p₀</code> from the centroid is the same as taking the centroid of
+the family translated by <code>-ᵥ p₀</code></p></div></div><div class="decl" id="centroid_mem_affineSpan_of_cast_card_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L230-L234">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#centroid_mem_affineSpan_of_cast_card_ne_zero"><span class="name">centroid_mem_affineSpan_of_cast_card_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">Finset.centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/AffineSubspace/Defs.html#affineSpan">affineSpan</a> <span class="fn">k</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">p</span>)</span></span></div></div><p>The centroid lies in the affine span if the number of points,
+converted to <code>k</code>, is not zero.</p></div></div><div class="decl" id="centroid_mem_affineSpan_of_card_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L238-L242">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#centroid_mem_affineSpan_of_card_ne_zero"><span class="name">centroid_mem_affineSpan_of_card_ne_zero</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">Finset.centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/AffineSubspace/Defs.html#affineSpan">affineSpan</a> <span class="fn">k</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">p</span>)</span></span></div></div><p>In the characteristic zero case, the centroid lies in the affine
+span if the number of points is not zero.</p></div></div><div class="decl" id="centroid_mem_affineSpan_of_nonempty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L244-L248">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#centroid_mem_affineSpan_of_nonempty"><span class="name">centroid_mem_affineSpan_of_nonempty</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">Finset.centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/AffineSubspace/Defs.html#affineSpan">affineSpan</a> <span class="fn">k</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">p</span>)</span></span></div></div><p>In the characteristic zero case, the centroid lies in the affine
+span if the set is nonempty.</p></div></div><div class="decl" id="centroid_mem_affineSpan_of_card_eq_add_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/AffineSpace/Centroid.lean#L250-L254">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#centroid_mem_affineSpan_of_card_eq_add_one"><span class="name">centroid_mem_affineSpan_of_card_eq_add_one</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionRing">DivisionRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/AddTorsor/Defs.html#AddTorsor">AddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Centroid.html#Finset.centroid">Finset.centroid</a> <span class="fn">k</span> <span class="fn">s</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/AffineSubspace/Defs.html#affineSpan">affineSpan</a> <span class="fn">k</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">p</span>)</span></span></div></div><p>In the characteristic zero case, the centroid lies in the affine
+span if the number of points is <code>n + 1</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

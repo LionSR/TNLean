@@ -1,0 +1,334 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.LocallyConvex.Barrelled</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.LocallyConvex.Barrelled";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">LocallyConvex</span>.<span class="name">Barrelled</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/LocallyConvex/Barrelled.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html">Mathlib.Analysis.LocallyConvex.WithSeminorms</a></li><li><a href="../../.././Mathlib/Topology/Baire/Lemmas.html">Mathlib.Topology.Baire.Lemmas</a></li><li><a href="../../.././Mathlib/Topology/Semicontinuity/Basic.html">Mathlib.Topology.Semicontinuity.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.LocallyConvex.Barrelled" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#BarrelledSpace"><span class="name">BarrelledSpace</span></a></div><div class="nav_link"><a class="break_within" href="#Seminorm.continuous_of_lowerSemicontinuous"><span class="name">Seminorm</span>.<span class="name">continuous_of_lowerSemicontinuous</span></a></div><div class="nav_link"><a class="break_within" href="#Seminorm.continuous_iSup"><span class="name">Seminorm</span>.<span class="name">continuous_iSup</span></a></div><div class="nav_link"><a class="break_within" href="#BaireSpace.instBarrelledSpace"><span class="name">BaireSpace</span>.<span class="name">instBarrelledSpace</span></a></div><div class="nav_link"><a class="break_within" href="#WithSeminorms.banach_steinhaus"><span class="name">WithSeminorms</span>.<span class="name">banach_steinhaus</span></a></div><div class="nav_link"><a class="break_within" href="#PolynormableSpace.banach_steinhaus"><span class="name">PolynormableSpace</span>.<span class="name">banach_steinhaus</span></a></div><div class="nav_link"><a class="break_within" href="#continuousLinearMapOfTendsto"><span class="name">continuousLinearMapOfTendsto</span></a></div><div class="nav_link"><a class="break_within" href="#WithSeminorms.continuousLinearMapOfTendsto"><span class="name">WithSeminorms</span>.<span class="name">continuousLinearMapOfTendsto</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Barrelled-spaces-and-the-Banach-Steinhaus-theorem-Uniform-Boundedness-Principle" class="markdown-heading">Barrelled spaces and the Banach-Steinhaus theorem / Uniform Boundedness Principle <a class="hover-link" href="#Barrelled-spaces-and-the-Banach-Steinhaus-theorem-Uniform-Boundedness-Principle">#</a></h1><p>This file defines barrelled spaces over a <code><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a></code>, and proves the
+Banach-Steinhaus theorem for maps from a barrelled space to a space equipped with a family
+of seminorms generating the topology (i.e. <code><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#WithSeminorms">WithSeminorms</a> q</code> for some family of seminorms <code>q</code>).</p><p>The more standard Banach-Steinhaus theorem for normed spaces is then deduced from that in
+<code><a href="../../.././Mathlib/Analysis/Normed/Operator/BanachSteinhaus.html">Mathlib/Analysis/Normed/Operator/BanachSteinhaus.lean</a></code>.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BarrelledSpace">BarrelledSpace</a></code>: a topological vector space <code>E</code> is said to be <strong>barrelled</strong> if all lower
+semicontinuous seminorms on <code>E</code> are actually continuous. See the implementation details below for
+more comments on this definition.</li><li><code><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#continuousLinearMapOfTendsto">continuousLinearMapOfTendsto</a></code>: fix <code>E</code> a barrelled space and <code>F</code> a <code><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#PolynormableSpace">PolynormableSpace</a></code>.
+Given a sequence of continuous linear maps from <code>E</code> to <code>F</code> that converges pointwise to a
+function <code>f : E → F</code>, this bundles <code>f</code> as a continuous linear map using the
+Banach-Steinhaus theorem.</li></ul><h2 id="Main-theorems" class="markdown-heading">Main theorems <a class="hover-link" href="#Main-theorems">#</a></h2><ul><li><code><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BaireSpace.instBarrelledSpace">BaireSpace.instBarrelledSpace</a></code>: any TVS that is also a <code><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a></code> is barrelled. In
+particular, this applies to Banach spaces and Fréchet spaces.</li><li><code><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#WithSeminorms.banach_steinhaus">WithSeminorms.banach_steinhaus</a></code>: the <strong>Banach-Steinhaus</strong> theorem, also called
+<strong>Uniform Boundedness Principle</strong>. Fix <code>E</code> a barrelled space and <code>F</code> a TVS satisfying
+<code><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#WithSeminorms">WithSeminorms</a> q</code> for some <code>q</code>. Any family <code>𝓕 : ι → E →L[𝕜] F</code> of continuous linear maps
+that is pointwise bounded is (uniformly) equicontinuous. Here, pointwise bounded means that
+for all <code>k</code> and <code>x</code>, the family of real numbers <code>i ↦ q k (𝓕 i x)</code> is bounded above.</li><li><code><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#PolynormableSpace.banach_steinhaus">PolynormableSpace.banach_steinhaus</a></code>: a version of the above which does not make reference
+to a fixed seminorm family. Fix <code>E</code> a barrelled space and <code>F</code> a <code><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#PolynormableSpace">PolynormableSpace</a></code>.
+Any family <code>𝓕 : ι → E →L[𝕜] F</code> of continuous linear maps that is pointwise von Neumann bounded
+is (uniformly) equicontinuous.</li></ul><h2 id="Implementation-details" class="markdown-heading">Implementation details <a class="hover-link" href="#Implementation-details">#</a></h2><p>Barrelled spaces are defined in Bourbaki as locally convex spaces where barrels (aka closed
+balanced absorbing convex sets) are neighborhoods of zero. One can then show that barrels in a
+locally convex space are exactly closed unit balls of lower semicontinuous seminorms, hence that a
+locally convex space is barrelled iff any lower semicontinuous seminorm is continuous.</p><p>The problem with this definition is the local convexity, which is essential to prove that the
+barrel definition is equivalent to the seminorm definition, because we can essentially only
+use <code><a href="../../.././Mathlib/Topology/Algebra/Module/LocallyConvex.html#LocallyConvexSpace">LocallyConvexSpace</a></code> over <code>ℝ</code> or <code>ℂ</code> (which is indeed the setup in which Bourbaki does most
+of the theory). Since we can easily prove the normed space version over any
+<code><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a></code>, this wouldn't make for a very satisfying &quot;generalization&quot;.</p><p>Fortunately, it turns out that using the seminorm definition directly solves all problems,
+since it is exactly what we need for the proof. One could then expect to need the barrel
+characterization to prove that Baire TVS are barrelled, but the proof is actually easier to do
+with the seminorm characterization!</p><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li>define barrels and prove that a locally convex space is barrelled iff all barrels are
+neighborhoods of zero.</li></ul><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>[N. Bourbaki, <em>Topological Vector Spaces</em>][bourbaki1987]</li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>banach-steinhaus, uniform boundedness, equicontinuity</p></div><div class="decl" id="BarrelledSpace"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/LocallyConvex/Barrelled.lean#L84-L92">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BarrelledSpace"><span class="name">BarrelledSpace</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A topological vector space <code>E</code> is said to be <strong>barrelled</strong> if all lower semicontinuous
+seminorms on <code>E</code> are actually continuous. This is not the usual definition for TVS over <code>ℝ</code> or <code>ℂ</code>,
+but this has the big advantage of working and giving sensible results over <em>any</em>
+<code><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a></code>. In particular, the Banach-Steinhaus theorem holds for maps between such
+a space and any space whose topology is generated by a family of seminorms.</p><ul class="structure_fields" id="BarrelledSpace.mk"><li id="BarrelledSpace.continuous_of_lowerSemicontinuous" class="structure_field"><div class="structure_field_info">continuous_of_lowerSemicontinuous<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Seminorm.html#Seminorm">Seminorm</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>)</span></span>
+ : <span class="fn"><span class="fn"><a href="../../.././Mathlib/Topology/Semicontinuity/Defs.html#LowerSemicontinuous">LowerSemicontinuous</a> <span class="fn">⇑<span class="fn">p</span></span></span> → <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">⇑<span class="fn">p</span></span></span></span></div><div class="structure_field_doc"><p>In a barrelled space, all lower semicontinuous seminorms on <code>E</code> are actually continuous.</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-BarrelledSpace" class="instances-list"></ul></details></div></div><div class="decl" id="Seminorm.continuous_of_lowerSemicontinuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/LocallyConvex/Barrelled.lean#L94-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#Seminorm.continuous_of_lowerSemicontinuous"><span class="name">Seminorm</span>.<span class="name">continuous_of_lowerSemicontinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BarrelledSpace">BarrelledSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Seminorm.html#Seminorm">Seminorm</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Semicontinuity/Defs.html#LowerSemicontinuous">LowerSemicontinuous</a> <span class="fn">⇑<span class="fn">p</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">⇑<span class="fn">p</span></span></span></div></div></div></div><div class="decl" id="Seminorm.continuous_iSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/LocallyConvex/Barrelled.lean#L99-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#Seminorm.continuous_iSup"><span class="name">Seminorm</span>.<span class="name">continuous_iSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BarrelledSpace">BarrelledSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Analysis/Seminorm.html#Seminorm">Seminorm</a> <span class="fn">𝕜</span> <span class="fn">E</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">⇑<span class="fn">(<span class="fn">p</span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bdd</span> : <span class="fn"><a href="../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">p</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">(⨆ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn">⇑<span class="fn">(<span class="fn">p</span> <span class="fn">i</span>)</span></span>)</span></span></div></div></div></div><div class="decl" id="BaireSpace.instBarrelledSpace"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/LocallyConvex/Barrelled.lean#L119-L150">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BaireSpace.instBarrelledSpace"><span class="name">BaireSpace</span>.<span class="name">instBarrelledSpace</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/ConstMulAction.html#ContinuousConstSMul">ContinuousConstSMul</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BarrelledSpace">BarrelledSpace</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span></div></div><p>Any TVS over a <code><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a></code> that is also a Baire space is barrelled. In
+particular, this applies to Banach spaces and Fréchet spaces.</p></div></div><div class="decl" id="WithSeminorms.banach_steinhaus"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/LocallyConvex/Barrelled.lean#L159-L178">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#WithSeminorms.banach_steinhaus"><span class="name">WithSeminorms</span>.<span class="name">banach_steinhaus</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁₂</span> : <span class="fn">𝕜₁</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#RingHomIsometric">RingHomIsometric</a> <span class="fn">σ₁₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BarrelledSpace">BarrelledSpace</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span> <a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">σ₁₂</span><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#SeminormFamily">SeminormFamily</a> <span class="fn">𝕜₂</span> <span class="fn">F</span> <span class="fn">κ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#WithSeminorms">WithSeminorms</a> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ (<span class="fn">k</span> : <span class="fn">κ</span>) (<span class="fn">x</span> : <span class="fn">E</span>), <span class="fn"><a href="../../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">q</span> <span class="fn">k</span>)</span> <span class="fn">(<span class="fn">(<span class="fn">𝓕</span> <span class="fn">i</span>)</span> <span class="fn">x</span>)</span></span></span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Equicontinuity.html#UniformEquicontinuous">UniformEquicontinuous</a> (<a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">𝓕</span>)</span></div></div><p>The <strong>Banach-Steinhaus</strong> theorem, or <strong>Uniform Boundedness Principle</strong>, for maps from a
+barrelled space to any space whose topology is generated by a family of seminorms. Use
+<code><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#WithSeminorms.equicontinuous_TFAE">WithSeminorms.equicontinuous_TFAE</a></code> and <code><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#Seminorm.bound_of_continuous">Seminorm.bound_of_continuous</a></code> to get explicit bounds on
+the seminorms from equicontinuity.</p></div></div><div class="decl" id="PolynormableSpace.banach_steinhaus"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/LocallyConvex/Barrelled.lean#L189-L197">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#PolynormableSpace.banach_steinhaus"><span class="name">PolynormableSpace</span>.<span class="name">banach_steinhaus</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁₂</span> : <span class="fn">𝕜₁</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#RingHomIsometric">RingHomIsometric</a> <span class="fn">σ₁₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BarrelledSpace">BarrelledSpace</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span> <a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">σ₁₂</span><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#PolynormableSpace">PolynormableSpace</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">E</span>), <span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/Bounded.html#Bornology.IsVonNBounded">Bornology.IsVonNBounded</a> <span class="fn">𝕜₂</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">𝓕</span> <span class="fn">i</span>)</span> <span class="fn">x</span></span></span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Equicontinuity.html#UniformEquicontinuous">UniformEquicontinuous</a> (<a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">𝓕</span>)</span></div></div><p>The <strong>Banach-Steinhaus</strong> theorem, or <strong>Uniform Boundedness Principle</strong>, for maps from a
+barrelled space to any polynormable space.</p></div></div><div class="decl" id="continuousLinearMapOfTendsto"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/LocallyConvex/Barrelled.lean#L201-L225">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#continuousLinearMapOfTendsto"><span class="name">continuousLinearMapOfTendsto</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁₂</span> : <span class="fn">𝕜₁</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#RingHomIsometric">RingHomIsometric</a> <span class="fn">σ₁₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BarrelledSpace">BarrelledSpace</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#PolynormableSpace">PolynormableSpace</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/Order/Filter/CountablyGenerated.html#Filter.IsCountablyGenerated">IsCountablyGenerated</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.NeBot">NeBot</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span> <a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">σ₁₂</span><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <span class="fn">α</span>) (<span class="fn">x</span> : <span class="fn">E</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">n</span>)</span> <span class="fn">x</span></span>)</span> <span class="fn">l</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">f</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">E</span> <a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">σ₁₂</span><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span></div></div><p>Given a sequence of continuous linear maps which converges pointwise and for which the
+domain is barrelled, the Banach-Steinhaus theorem is used to guarantee that the limit map
+is a <em>continuous</em> linear map as well.</p><p>This actually works for any <em>countably generated</em> filter instead of <code>atTop : <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> ℕ</code>,
+but the proof ultimately goes back to sequences.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#continuousLinearMapOfTendsto">continuousLinearMapOfTendsto</a> <span class="fn">g</span> <span class="fn">h</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.mk">{</a> <span class="fn">toLinearMap</span> := <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Module/Basic.html#linearMapOfTendsto">linearMapOfTendsto</a> <span class="fn">f</span> <span class="fn">(fun (<span class="fn">a</span> : <span class="fn">α</span>) =&gt; <span class="fn">↑<span class="fn">(<span class="fn">g</span> <span class="fn">a</span>)</span></span>)</span> <span class="fn">h</span></span>, <span class="fn">cont</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.mk">}</a></li></ul></details><details id="instances-for-list-continuousLinearMapOfTendsto" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="WithSeminorms.continuousLinearMapOfTendsto"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/LocallyConvex/Barrelled.lean#L236-L248">source</a></div><div class="attributes">@[reducible, inline, deprecated continuousLinearMapOfTendsto (since := &quot;2026-01-16&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#WithSeminorms.continuousLinearMapOfTendsto"><span class="name">WithSeminorms</span>.<span class="name">continuousLinearMapOfTendsto</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₁</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁₂</span> : <span class="fn">𝕜₁</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">𝕜₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#RingHomIsometric">RingHomIsometric</a> <span class="fn">σ₁₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#BarrelledSpace">BarrelledSpace</a> <span class="fn">𝕜₁</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜₂</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#SeminormFamily">SeminormFamily</a> <span class="fn">𝕜₂</span> <span class="fn">F</span> <span class="fn">κ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/WithSeminorms.html#WithSeminorms">WithSeminorms</a> <span class="fn">q</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/Order/Filter/CountablyGenerated.html#Filter.IsCountablyGenerated">IsCountablyGenerated</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.NeBot">NeBot</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span> <a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">σ₁₂</span><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">E</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <span class="fn">α</span>) (<span class="fn">x</span> : <span class="fn">E</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">n</span>)</span> <span class="fn">x</span></span>)</span> <span class="fn">l</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">f</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">E</span> <a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→SL[</a><span class="fn">σ₁₂</span><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn">F</span></div></div><p>Given a sequence of continuous linear maps which converges pointwise and for which the
+domain is barrelled, the Banach-Steinhaus theorem is used to guarantee that the limit map
+is a <em>continuous</em> linear map as well.</p><p>This actually works for any <em>countably generated</em> filter instead of <code>atTop : <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> ℕ</code>,
+but the proof ultimately goes back to sequences.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">hq</span>.<a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#WithSeminorms.continuousLinearMapOfTendsto">continuousLinearMapOfTendsto</a></span> <span class="fn">g</span> <span class="fn">h</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/LocallyConvex/Barrelled.html#continuousLinearMapOfTendsto">continuousLinearMapOfTendsto</a> <span class="fn">g</span> <span class="fn">h</span></span></li></ul></details><details id="instances-for-list-WithSeminorms.continuousLinearMapOfTendsto" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

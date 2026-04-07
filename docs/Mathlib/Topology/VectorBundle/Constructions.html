@@ -1,0 +1,527 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.VectorBundle.Constructions</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.VectorBundle.Constructions";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">VectorBundle</span>.<span class="name">Constructions</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html">Mathlib.Topology.FiberBundle.Constructions</a></li><li><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html">Mathlib.Topology.VectorBundle.Basic</a></li><li><a href="../../.././Mathlib/Analysis/Normed/Operator/Prod.html">Mathlib.Analysis.Normed.Operator.Prod</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.VectorBundle.Constructions" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivial.trivialization.isLinear"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">trivialization</span>.<span class="name">isLinear</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivial.trivialization.coordChangeL"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">trivialization</span>.<span class="name">coordChangeL</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivial.vectorBundle"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">vectorBundle</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivial.linearMapAt_trivialization"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">linearMapAt_trivialization</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivial.continuousLinearMapAt_trivialization"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">continuousLinearMapAt_trivialization</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivial.symmₗ_trivialization"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">symmₗ_trivialization</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivial.symmL_trivialization"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">symmL_trivialization</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivial.continuousLinearEquivAt_trivialization"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">continuousLinearEquivAt_trivialization</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivialization.prod.isLinear"><span class="name">Bundle</span>.<span class="name">Trivialization</span>.<span class="name">prod</span>.<span class="name">isLinear</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivialization.coordChangeL_prod"><span class="name">Bundle</span>.<span class="name">Trivialization</span>.<span class="name">coordChangeL_prod</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivialization.prod_apply'"><span class="name">Bundle</span>.<span class="name">Trivialization</span>.<span class="name">prod_apply'</span></a></div><div class="nav_link"><a class="break_within" href="#VectorBundle.prod"><span class="name">VectorBundle</span>.<span class="name">prod</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivialization.continuousLinearEquivAt_prod"><span class="name">Bundle</span>.<span class="name">Trivialization</span>.<span class="name">continuousLinearEquivAt_prod</span></a></div><div class="nav_link"><a class="break_within" href="#instAddCommMonoidPullback"><span class="name">instAddCommMonoidPullback</span></a></div><div class="nav_link"><a class="break_within" href="#instModulePullback"><span class="name">instModulePullback</span></a></div><div class="nav_link"><a class="break_within" href="#Bundle.Trivialization.pullback_linear"><span class="name">Bundle</span>.<span class="name">Trivialization</span>.<span class="name">pullback_linear</span></a></div><div class="nav_link"><a class="break_within" href="#VectorBundle.pullback"><span class="name">VectorBundle</span>.<span class="name">pullback</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Standard-constructions-on-vector-bundles" class="markdown-heading">Standard constructions on vector bundles <a class="hover-link" href="#Standard-constructions-on-vector-bundles">#</a></h1><p>This file contains several standard constructions on vector bundles:</p><ul><li><p><code><a href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivial.vectorBundle">Bundle.Trivial.vectorBundle</a> 𝕜 B F</code>: the trivial vector bundle with scalar field <code>𝕜</code> and model
+fiber <code>F</code> over the base <code>B</code></p></li><li><p><code><a href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#VectorBundle.prod">VectorBundle.prod</a></code>: for vector bundles <code>E₁</code> and <code>E₂</code> with scalar field <code>𝕜</code> over a common base,
+a vector bundle structure on their direct sum <code>E₁ ×ᵇ E₂</code> (the notation stands for
+<code>fun x ↦ E₁ x × E₂ x</code>).</p></li><li><p><code><a href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#VectorBundle.pullback">VectorBundle.pullback</a></code>: for a vector bundle <code>E</code> over <code>B</code>, a vector bundle structure on its
+pullback <code>f *ᵖ E</code> by a map <code>f : B' → B</code> (the notation is a type synonym for <code>E ∘ f</code>).</p></li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>Vector bundle, direct sum, pullback</p></div><div class="mod_doc"><h3 id="The-trivial-vector-bundle" class="markdown-heading">The trivial vector bundle <a class="hover-link" href="#The-trivial-vector-bundle">#</a></h3></div><div class="decl" id="Bundle.Trivial.trivialization.isLinear"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L44-L45">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivial.trivialization.isLinear"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">trivialization</span>.<span class="name">isLinear</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivial.trivialization">trivialization</a> <span class="fn">B</span> <span class="fn">F</span>)</span></span></div></div></div></div><div class="decl" id="Bundle.Trivial.trivialization.coordChangeL"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L48-L53">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivial.trivialization.coordChangeL"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">trivialization</span>.<span class="name">coordChangeL</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.coordChangeL">Trivialization.coordChangeL</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivial.trivialization">trivialization</a> <span class="fn">B</span> <span class="fn">F</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivial.trivialization">trivialization</a> <span class="fn">B</span> <span class="fn">F</span>)</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.refl">ContinuousLinearEquiv.refl</a> <span class="fn">𝕜</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="Bundle.Trivial.vectorBundle"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L55-L63">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivial.vectorBundle"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">vectorBundle</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#VectorBundle">VectorBundle</a> <span class="fn">𝕜</span> <span class="fn">F</span> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.Trivial">Trivial</a> <span class="fn">B</span> <span class="fn">F</span>)</span></span></div></div></div></div><div class="decl" id="Bundle.Trivial.linearMapAt_trivialization"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L65-L69">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivial.linearMapAt_trivialization"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">linearMapAt_trivialization</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.linearMapAt">Trivialization.linearMapAt</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivial.trivialization">trivialization</a> <span class="fn">B</span> <span class="fn">F</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.id">LinearMap.id</a></div></div></div></div><div class="decl" id="Bundle.Trivial.continuousLinearMapAt_trivialization"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L71-L73">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivial.continuousLinearMapAt_trivialization"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">continuousLinearMapAt_trivialization</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.continuousLinearMapAt">Trivialization.continuousLinearMapAt</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivial.trivialization">trivialization</a> <span class="fn">B</span> <span class="fn">F</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.id">ContinuousLinearMap.id</a> <span class="fn">𝕜</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="Bundle.Trivial.symmₗ_trivialization"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L75-L77">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivial.symmₗ_trivialization"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">symmₗ_trivialization</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.symmₗ">Trivialization.symmₗ</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivial.trivialization">trivialization</a> <span class="fn">B</span> <span class="fn">F</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.id">LinearMap.id</a></div></div></div></div><div class="decl" id="Bundle.Trivial.symmL_trivialization"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L79-L81">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivial.symmL_trivialization"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">symmL_trivialization</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.symmL">Trivialization.symmL</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivial.trivialization">trivialization</a> <span class="fn">B</span> <span class="fn">F</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.id">ContinuousLinearMap.id</a> <span class="fn">𝕜</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="Bundle.Trivial.continuousLinearEquivAt_trivialization"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L83-L86">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivial.continuousLinearEquivAt_trivialization"><span class="name">Bundle</span>.<span class="name">Trivial</span>.<span class="name">continuousLinearEquivAt_trivialization</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.continuousLinearEquivAt">Trivialization.continuousLinearEquivAt</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivial.trivialization">trivialization</a> <span class="fn">B</span> <span class="fn">F</span>)</span> <span class="fn">x</span> <span class="fn">⋯</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.refl">ContinuousLinearEquiv.refl</a> <span class="fn">𝕜</span> <span class="fn">F</span></span></div></div></div></div><div class="mod_doc"><h3 id="Direct-sum-of-two-vector-bundles" class="markdown-heading">Direct sum of two vector bundles <a class="hover-link" href="#Direct-sum-of-two-vector-bundles">#</a></h3></div><div class="decl" id="Bundle.Trivialization.prod.isLinear"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L106-L108">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivialization.prod.isLinear"><span class="name">Bundle</span>.<span class="name">Trivialization</span>.<span class="name">prod</span>.<span class="name">isLinear</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E₁</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">TotalSpace</a> <span class="fn">F₁</span> <span class="fn">E₁</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E₂</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_6</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">TotalSpace</a> <span class="fn">F₂</span> <span class="fn">E₂</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization">Trivialization</a> <span class="fn">F₁</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.proj">TotalSpace.proj</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization">Trivialization</a> <span class="fn">F₂</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.proj">TotalSpace.proj</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e₂</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn"><span class="fn">e₁</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivialization.prod">prod</a></span> <span class="fn">e₂</span>)</span></span></div></div></div></div><div class="decl" id="Bundle.Trivialization.coordChangeL_prod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L110-L121">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivialization.coordChangeL_prod"><span class="name">Bundle</span>.<span class="name">Trivialization</span>.<span class="name">coordChangeL_prod</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E₁</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">TotalSpace</a> <span class="fn">F₁</span> <span class="fn">E₁</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E₂</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_6</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">TotalSpace</a> <span class="fn">F₂</span> <span class="fn">E₂</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e₁ </span><span class="fn">e₁'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization">Trivialization</a> <span class="fn">F₁</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.proj">TotalSpace.proj</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e₂ </span><span class="fn">e₂'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization">Trivialization</a> <span class="fn">F₂</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.proj">TotalSpace.proj</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e₁'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e₂'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">b</span> : <span class="fn">B</span>⦄</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : (<span class="fn">b</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">e₁</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization.baseSet">baseSet</a></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">e₂</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization.baseSet">baseSet</a></span>) <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">e₁'</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization.baseSet">baseSet</a></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">e₂'</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization.baseSet">baseSet</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.coordChangeL">coordChangeL</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn"><span class="fn">e₁</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivialization.prod">prod</a></span> <span class="fn">e₂</span>)</span> <span class="fn">(<span class="fn"><span class="fn">e₁'</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivialization.prod">prod</a></span> <span class="fn">e₂'</span>)</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">(<a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.coordChangeL">coordChangeL</a> <span class="fn">𝕜</span> <span class="fn">e₁</span> <span class="fn">e₁'</span> <span class="fn">b</span>)</span>)</span>.<a href="../../.././Mathlib/Topology/Algebra/Module/LinearMapPiProd.html#ContinuousLinearMap.prodMap">prodMap</a></span> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.coordChangeL">coordChangeL</a> <span class="fn">𝕜</span> <span class="fn">e₂</span> <span class="fn">e₂'</span> <span class="fn">b</span>)</span></span></span></div></div></div></div><div class="decl" id="Bundle.Trivialization.prod_apply'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L126-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivialization.prod_apply'"><span class="name">Bundle</span>.<span class="name">Trivialization</span>.<span class="name">prod_apply'</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E₁</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">TotalSpace</a> <span class="fn">F₁</span> <span class="fn">E₁</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E₂</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_6</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">TotalSpace</a> <span class="fn">F₂</span> <span class="fn">E₂</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization">Trivialization</a> <span class="fn">F₁</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.proj">TotalSpace.proj</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization">Trivialization</a> <span class="fn">F₂</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.proj">TotalSpace.proj</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle">FiberBundle</a> <span class="fn">F₁</span> <span class="fn">E₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle">FiberBundle</a> <span class="fn">F₂</span> <span class="fn">E₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">B</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx₁</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">e₁</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization.baseSet">baseSet</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx₂</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">e₂</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization.baseSet">baseSet</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v₁</span> : <span class="fn"><span class="fn">E₁</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v₂</span> : <span class="fn"><span class="fn">E₂</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">e₁</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivialization.prod">prod</a></span> <span class="fn">e₂</span>)</span></span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.mk">{</a> <span class="fn">proj</span> := <span class="fn">x</span>, <span class="fn">snd</span> := <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">v₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">v₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.mk">}</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">x</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.continuousLinearEquivAt">continuousLinearEquivAt</a> <span class="fn">𝕜</span> <span class="fn">e₁</span> <span class="fn">x</span> <span class="fn">hx₁</span>)</span> <span class="fn">v₁</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.continuousLinearEquivAt">continuousLinearEquivAt</a> <span class="fn">𝕜</span> <span class="fn">e₂</span> <span class="fn">x</span> <span class="fn">hx₂</span>)</span> <span class="fn">v₂</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></div></div></div></div><div class="decl" id="VectorBundle.prod"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L140-L159">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#VectorBundle.prod"><span class="name">VectorBundle</span>.<span class="name">prod</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F₁</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E₁</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">Bundle.TotalSpace</a> <span class="fn">F₁</span> <span class="fn">E₁</span>)</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F₂</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E₂</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_6</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">Bundle.TotalSpace</a> <span class="fn">F₂</span> <span class="fn">E₂</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle">FiberBundle</a> <span class="fn">F₁</span> <span class="fn">E₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle">FiberBundle</a> <span class="fn">F₂</span> <span class="fn">E₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#VectorBundle">VectorBundle</a> <span class="fn">𝕜</span> <span class="fn">F₁</span> <span class="fn">E₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#VectorBundle">VectorBundle</a> <span class="fn">𝕜</span> <span class="fn">F₂</span> <span class="fn">E₂</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#VectorBundle">VectorBundle</a> <span class="fn">𝕜</span> (<span class="fn">F₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F₂</span>) <span class="fn">fun (<span class="fn">x</span> : <span class="fn">B</span>) =&gt; <span class="fn"><span class="fn">E₁</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn"><span class="fn">E₂</span> <span class="fn">x</span></span></span></span></div></div><p>The product of two vector bundles is a vector bundle.</p></div></div><div class="decl" id="Bundle.Trivialization.continuousLinearEquivAt_prod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L163-L172">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivialization.continuousLinearEquivAt_prod"><span class="name">Bundle</span>.<span class="name">Trivialization</span>.<span class="name">continuousLinearEquivAt_prod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E₁</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_4</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">TotalSpace</a> <span class="fn">F₁</span> <span class="fn">E₁</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E₂</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_6</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">TotalSpace</a> <span class="fn">F₂</span> <span class="fn">E₂</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<span class="fn">E₁</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<span class="fn">E₂</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle">FiberBundle</a> <span class="fn">F₁</span> <span class="fn">E₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle">FiberBundle</a> <span class="fn">F₂</span> <span class="fn">E₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization">Trivialization</a> <span class="fn">F₁</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.proj">TotalSpace.proj</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization">Trivialization</a> <span class="fn">F₂</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.proj">TotalSpace.proj</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">B</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">e₁</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivialization.prod">prod</a></span> <span class="fn">e₂</span>)</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization.baseSet">baseSet</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.continuousLinearEquivAt">continuousLinearEquivAt</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn"><span class="fn">e₁</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivialization.prod">prod</a></span> <span class="fn">e₂</span>)</span> <span class="fn">x</span> <span class="fn">hx</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.continuousLinearEquivAt">continuousLinearEquivAt</a> <span class="fn">𝕜</span> <span class="fn">e₁</span> <span class="fn">x</span> <span class="fn">⋯</span>)</span>.<a href="../../.././Mathlib/Topology/Algebra/Module/Equiv.html#ContinuousLinearEquiv.prodCongr">prodCongr</a></span> <span class="fn">(<a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.continuousLinearEquivAt">continuousLinearEquivAt</a> <span class="fn">𝕜</span> <span class="fn">e₂</span> <span class="fn">x</span> <span class="fn">⋯</span>)</span></span></div></div></div></div><div class="mod_doc"><h3 id="Pullbacks-of-vector-bundles" class="markdown-heading">Pullbacks of vector bundles <a class="hover-link" href="#Pullbacks-of-vector-bundles">#</a></h3></div><div class="decl" id="instAddCommMonoidPullback"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L182-L182">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#instAddCommMonoidPullback"><span class="name">instAddCommMonoidPullback</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_5</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B'</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">B'</span> → <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">B'</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">((<span class="fn">f</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.Pullback">*ᵖ</a> <span class="fn">E</span>) <span class="fn">x</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#instAddCommMonoidPullback">instAddCommMonoidPullback</a> <span class="fn">E</span> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">i</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></li></ul></details></div></div><div class="decl" id="instModulePullback"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L184-L185">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#instModulePullback"><span class="name">instModulePullback</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_5</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B'</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">B'</span> → <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">(<span class="fn">E</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">B'</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">((<span class="fn">f</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.Pullback">*ᵖ</a> <span class="fn">E</span>) <span class="fn">x</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#instModulePullback">instModulePullback</a> <span class="fn">R</span> <span class="fn">E</span> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">i</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></li></ul></details></div></div><div class="decl" id="Bundle.Trivialization.pullback_linear"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L191-L193">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#Bundle.Trivialization.pullback_linear"><span class="name">Bundle</span>.<span class="name">Trivialization</span>.<span class="name">pullback_linear</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B'</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">TotalSpace</a> <span class="fn">F</span> <span class="fn">E</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">K</span> <span class="fn">B'</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMapClass">ContinuousMapClass</a> <span class="fn">K</span> <span class="fn">B'</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Trivialization.html#Bundle.Trivialization">Trivialization</a> <span class="fn">F</span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace.proj">TotalSpace.proj</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">e</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">K</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#Bundle.Trivialization.IsLinear">Trivialization.IsLinear</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn"><span class="fn">e</span>.<a href="../../.././Mathlib/Topology/FiberBundle/Constructions.html#Bundle.Trivialization.pullback">pullback</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="VectorBundle.pullback"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/VectorBundle/Constructions.lean#L195-L207">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/VectorBundle/Constructions.html#VectorBundle.pullback"><span class="name">VectorBundle</span>.<span class="name">pullback</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">B</span> → <a href="../../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B'</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<a href="../../.././Mathlib/Data/Bundle.html#Bundle.TotalSpace">Bundle.TotalSpace</a> <span class="fn">F</span> <span class="fn">E</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">E</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">E</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">K</span> <span class="fn">B'</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMapClass">ContinuousMapClass</a> <span class="fn">K</span> <span class="fn">B'</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">x</span> : <span class="fn">B</span>) → <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">(<span class="fn">E</span> <span class="fn">x</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle">FiberBundle</a> <span class="fn">F</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#VectorBundle">VectorBundle</a> <span class="fn">𝕜</span> <span class="fn">F</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">K</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/VectorBundle/Basic.html#VectorBundle">VectorBundle</a> <span class="fn">𝕜</span> <span class="fn">F</span> (<span class="fn">⇑<span class="fn">f</span></span> <a href="../../.././Mathlib/Data/Bundle.html#Bundle.Pullback">*ᵖ</a> <span class="fn">E</span>)</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

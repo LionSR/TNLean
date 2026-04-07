@@ -1,0 +1,443 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.MeasureTheory.Function.LpSeminorm.Indicator</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.MeasureTheory.Function.LpSeminorm.Indicator";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">MeasureTheory</span>.<span class="name">Function</span>.<span class="name">LpSeminorm</span>.<span class="name">Indicator</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Analysis/Normed/Group/Indicator.html">Mathlib.Analysis.Normed.Group.Indicator</a></li><li><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Basic.html">Mathlib.MeasureTheory.Function.LpSeminorm.Basic</a></li><li><a href="../../../.././Mathlib/MeasureTheory/Integral/Lebesgue/Sub.html">Mathlib.MeasureTheory.Integral.Lebesgue.Sub</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.MeasureTheory.Function.LpSeminorm.Indicator" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNorm_indicator_eq_eLpNorm_restrict"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_eq_eLpNorm_restrict</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNormEssSup_indicator_eq_eLpNormEssSup_restrict"><span class="name">MeasureTheory</span>.<span class="name">eLpNormEssSup_indicator_eq_eLpNormEssSup_restrict</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNorm_restrict_le"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_restrict_le</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNorm_indicator_le"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_le</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNormEssSup_indicator_le"><span class="name">MeasureTheory</span>.<span class="name">eLpNormEssSup_indicator_le</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNormEssSup_indicator_const_le"><span class="name">MeasureTheory</span>.<span class="name">eLpNormEssSup_indicator_const_le</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNormEssSup_indicator_const_eq"><span class="name">MeasureTheory</span>.<span class="name">eLpNormEssSup_indicator_const_eq</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNorm_indicator_const₀"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_const₀</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNorm_indicator_const"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_const</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNorm_indicator_const'"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_const'</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNorm_indicator_const_le"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_const_le</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.MemLp.indicator"><span class="name">MeasureTheory</span>.<span class="name">MemLp</span>.<span class="name">indicator</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.memLp_indicator_iff_restrict"><span class="name">MeasureTheory</span>.<span class="name">memLp_indicator_iff_restrict</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.memLp_indicator_const"><span class="name">MeasureTheory</span>.<span class="name">memLp_indicator_const</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNormEssSup_piecewise"><span class="name">MeasureTheory</span>.<span class="name">eLpNormEssSup_piecewise</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNorm_top_piecewise"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_top_piecewise</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.MemLp.piecewise"><span class="name">MeasureTheory</span>.<span class="name">MemLp</span>.<span class="name">piecewise</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNorm_indicator_sub_le_of_dist_bdd"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_sub_le_of_dist_bdd</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.eLpNorm_sub_le_of_dist_bdd"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_sub_le_of_dist_bdd</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.MemLp.exists_eLpNorm_indicator_compl_lt"><span class="name">MeasureTheory</span>.<span class="name">MemLp</span>.<span class="name">exists_eLpNorm_indicator_compl_lt</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="ℒp-seminorms-and-indicator-functions" class="markdown-heading">ℒp seminorms and indicator functions <a class="hover-link" href="#ℒp-seminorms-and-indicator-functions">#</a></h1></div><div class="decl" id="MeasureTheory.eLpNorm_indicator_eq_eLpNorm_restrict"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L38-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNorm_indicator_eq_eLpNorm_restrict"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_eq_eLpNorm_restrict</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">ε</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">f</span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span></span></div></div></div></div><div class="decl" id="MeasureTheory.eLpNormEssSup_indicator_eq_eLpNormEssSup_restrict"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L53-L55">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNormEssSup_indicator_eq_eLpNormEssSup_restrict"><span class="name">MeasureTheory</span>.<span class="name">eLpNormEssSup_indicator_eq_eLpNormEssSup_restrict</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNormEssSup">eLpNormEssSup</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">f</span>)</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNormEssSup">eLpNormEssSup</a> <span class="fn">f</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span></span></div></div></div></div><div class="decl" id="MeasureTheory.eLpNorm_restrict_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L57-L59">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNorm_restrict_le"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_restrict_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε'</span> : <a href="../../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ContinuousENorm">ContinuousENorm</a> <span class="fn">ε'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">ε'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.eLpNorm_indicator_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L61-L65">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNorm_indicator_le"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">ε</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">f</span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.eLpNormEssSup_indicator_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L67-L71">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNormEssSup_indicator_le"><span class="name">MeasureTheory</span>.<span class="name">eLpNormEssSup_indicator_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">ε</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNormEssSup">eLpNormEssSup</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">f</span>)</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNormEssSup">eLpNormEssSup</a> <span class="fn">f</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.eLpNormEssSup_indicator_const_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L73-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNormEssSup_indicator_const_le"><span class="name">MeasureTheory</span>.<span class="name">eLpNormEssSup_indicator_const_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">ε</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNormEssSup">eLpNormEssSup</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">c</span></span>)</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖</a><span class="fn">c</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖ₑ</a></div></div></div></div><div class="decl" id="MeasureTheory.eLpNormEssSup_indicator_const_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L80-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNormEssSup_indicator_const_eq"><span class="name">MeasureTheory</span>.<span class="name">eLpNormEssSup_indicator_const_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">ε</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμs</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNormEssSup">eLpNormEssSup</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">c</span></span>)</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖</a><span class="fn">c</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖ₑ</a></div></div></div></div><div class="decl" id="MeasureTheory.eLpNorm_indicator_const₀"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L89-L103">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNorm_indicator_const₀"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_const₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn">ε</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/NullMeasurable.html#MeasureTheory.NullMeasurableSet">NullMeasurableSet</a> <span class="fn">s</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp_top</span> : <span class="fn">p</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">c</span></span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖</a><span class="fn">c</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖ₑ</a> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><span class="fn">p</span>.<a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.toReal">toReal</a></span>)</div></div></div></div><div class="decl" id="MeasureTheory.eLpNorm_indicator_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L105-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNorm_indicator_const"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn">ε</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp_top</span> : <span class="fn">p</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">c</span></span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖</a><span class="fn">c</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖ₑ</a> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><span class="fn">p</span>.<a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.toReal">toReal</a></span>)</div></div></div></div><div class="decl" id="MeasureTheory.eLpNorm_indicator_const'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L109-L113">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNorm_indicator_const'"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_const'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn">ε</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμs</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">c</span></span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖</a><span class="fn">c</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖ₑ</a> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><span class="fn">p</span>.<a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.toReal">toReal</a></span>)</div></div></div></div><div class="decl" id="MeasureTheory.eLpNorm_indicator_const_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L116-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNorm_indicator_const_le"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_const_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">ε</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">c</span></span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖</a><span class="fn">c</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖ₑ</a> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><span class="fn">p</span>.<a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.toReal">toReal</a></span>)</div></div></div></div><div class="decl" id="MeasureTheory.MemLp.indicator"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L132-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.MemLp.indicator"><span class="name">MeasureTheory</span>.<span class="name">MemLp</span>.<span class="name">indicator</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">ε</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MemLp</a> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MemLp</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">f</span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.memLp_indicator_iff_restrict"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L136-L138">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.memLp_indicator_iff_restrict"><span class="name">MeasureTheory</span>.<span class="name">memLp_indicator_iff_restrict</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">ε</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MemLp</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">f</span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MemLp</a> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span></span></div></div></div></div><div class="decl" id="MeasureTheory.memLp_indicator_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L140-L146">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.memLp_indicator_const"><span class="name">MeasureTheory</span>.<span class="name">memLp_indicator_const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμsc</span> : <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MemLp</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">c</span></span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.eLpNormEssSup_piecewise"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L148-L153">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNormEssSup_piecewise"><span class="name">MeasureTheory</span>.<span class="name">eLpNormEssSup_piecewise</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">ε</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidablePred">DecidablePred</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNormEssSup">eLpNormEssSup</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Logic/Function/Basic.html#Set.piecewise">piecewise</a></span> <span class="fn">f</span> <span class="fn">g</span>)</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Init/Prelude.html#Max.max">max</a> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNormEssSup">eLpNormEssSup</a> <span class="fn">f</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNormEssSup">eLpNormEssSup</a> <span class="fn">g</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span><a href="../../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a>)</span>)</span></span></div></div></div></div><div class="decl" id="MeasureTheory.eLpNorm_top_piecewise"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L155-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNorm_top_piecewise"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_top_piecewise</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">ε</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidablePred">DecidablePred</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Logic/Function/Basic.html#Set.piecewise">piecewise</a></span> <span class="fn">f</span> <span class="fn">g</span>)</span> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Init/Prelude.html#Max.max">max</a> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">f</span> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">g</span> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span><a href="../../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a>)</span>)</span></span></div></div></div></div><div class="decl" id="MeasureTheory.MemLp.piecewise"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L160-L181">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.MemLp.piecewise"><span class="name">MeasureTheory</span>.<span class="name">MemLp</span>.<span class="name">piecewise</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ESeminormedAddMonoid">ESeminormedAddMonoid</a> <span class="fn">ε</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">ε</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidablePred">DecidablePred</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">ε</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MemLp</a> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MemLp</a> <span class="fn">g</span> <span class="fn">p</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span><a href="../../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MemLp</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Logic/Function/Basic.html#Set.piecewise">piecewise</a></span> <span class="fn">f</span> <span class="fn">g</span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.eLpNorm_indicator_sub_le_of_dist_bdd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L183-L197">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNorm_indicator_sub_le_of_dist_bdd"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_indicator_sub_le_of_dist_bdd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_9}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span> := by volume_tac)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp'</span> : <span class="fn">p</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">g</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> (<span class="fn">f</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">g</span>))</span> <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.ofReal">ENNReal.ofReal</a> <span class="fn">c</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><span class="fn">p</span>.<a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.toReal">toReal</a></span>)</div></div></div></div><div class="decl" id="MeasureTheory.eLpNorm_sub_le_of_dist_bdd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L199-L207">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.eLpNorm_sub_le_of_dist_bdd"><span class="name">MeasureTheory</span>.<span class="name">eLpNorm_sub_le_of_dist_bdd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_9}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span> := by volume_tac)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">g</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₁</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Notation/Support.html#Function.support">Function.support</a> <span class="fn">f</span></span> <a href="../../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs₂</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Notation/Support.html#Function.support">Function.support</a> <span class="fn">g</span></span> <a href="../../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> (<span class="fn">f</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">g</span>) <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.ofReal">ENNReal.ofReal</a> <span class="fn">c</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><span class="fn">p</span>.<a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal.toReal">toReal</a></span>)</div></div></div></div><div class="decl" id="MeasureTheory.MemLp.exists_eLpNorm_indicator_compl_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.lean#L213-L227">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Indicator.html#MeasureTheory.MemLp.exists_eLpNorm_indicator_compl_lt"><span class="name">MeasureTheory</span>.<span class="name">MemLp</span>.<span class="name">exists_eLpNorm_indicator_compl_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m0</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp_top</span> : <span class="fn">p</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.MemLp">MemLp</a> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">μ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hε</span> : <span class="fn">ε</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>), <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/LpSeminorm/Defs.html#MeasureTheory.eLpNorm">eLpNorm</a> <span class="fn">(<span class="fn"><span class="fn">s</span><a href="../../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a>.<a href="../../../.././Mathlib/Algebra/Notation/Indicator.html#Set.indicator">indicator</a></span> <span class="fn">f</span>)</span> <span class="fn">p</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">ε</span></span></div></div><p>A single function that is <code>MemLp f p μ</code> is tight with respect to <code>μ</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

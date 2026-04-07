@@ -1,0 +1,879 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Lie.Solvable</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Lie.Solvable";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Lie</span>.<span class="name">Solvable</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/Lie/Abelian.html">Mathlib.Algebra.Lie.Abelian</a></li><li><a href="../../.././Mathlib/Algebra/Lie/BaseChange.html">Mathlib.Algebra.Lie.BaseChange</a></li><li><a href="../../.././Mathlib/Algebra/Lie/IdealOperations.html">Mathlib.Algebra.Lie.IdealOperations</a></li><li><a href="../../.././Mathlib/Order/Hom/Basic.html">Mathlib.Order.Hom.Basic</a></li><li><a href="../../.././Mathlib/RingTheory/Flat/FaithfullyFlat/Basic.html">Mathlib.RingTheory.Flat.FaithfullyFlat.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Lie.Solvable" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal_zero"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_zero</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal_succ"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_succ</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeries"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeries_def"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries_def</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal_add"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_add</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal_le"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_le</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal_succ_le"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_succ_le</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal_le_self"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_le_self</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal_mono"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_mono</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal_antitone"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_antitone</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal_add_le_add"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_add_le_add</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeries_of_bot_eq_bot"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries_of_bot_eq_bot</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.abelian_iff_derived_one_eq_bot"><span class="name">LieAlgebra</span>.<span class="name">abelian_iff_derived_one_eq_bot</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.abelian_iff_derived_succ_eq_bot"><span class="name">LieAlgebra</span>.<span class="name">abelian_iff_derived_succ_eq_bot</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeriesOfIdeal_baseChange"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_baseChange</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeries_baseChange"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries_baseChange</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.derivedSeries_eq_derivedSeriesOfIdeal_comap"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_eq_derivedSeriesOfIdeal_comap</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.derivedSeries_eq_derivedSeriesOfIdeal_map"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_eq_derivedSeriesOfIdeal_map</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.derivedSeries_eq_bot_iff"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_eq_bot_iff</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.derivedSeries_add_eq_bot"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_add_eq_bot</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.derivedSeries_map_le"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_map_le</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.derivedSeries_map_eq"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_map_eq</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.derivedSeries_succ_eq_top_iff"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_succ_eq_top_iff</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.derivedSeries_eq_top"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_eq_top</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.coe_derivedSeries_eq_int"><span class="name">LieIdeal</span>.<span class="name">coe_derivedSeries_eq_int</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsSolvable"><span class="name">LieAlgebra</span>.<span class="name">IsSolvable</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.isSolvable_iff_int"><span class="name">LieAlgebra</span>.<span class="name">isSolvable_iff_int</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.isSolvableBot"><span class="name">LieAlgebra</span>.<span class="name">isSolvableBot</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.isSolvable_iff"><span class="name">LieAlgebra</span>.<span class="name">isSolvable_iff</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsSolvable.solvable"><span class="name">LieAlgebra</span>.<span class="name">IsSolvable</span>.<span class="name">solvable</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsSolvable.mk"><span class="name">LieAlgebra</span>.<span class="name">IsSolvable</span>.<span class="name">mk</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.isSolvableAdd"><span class="name">LieAlgebra</span>.<span class="name">isSolvableAdd</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeries_lt_top_of_solvable"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries_lt_top_of_solvable</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.instIsSolvableTensorProduct"><span class="name">LieAlgebra</span>.<span class="name">instIsSolvableTensorProduct</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.isSolvable_tensorProduct_iff"><span class="name">LieAlgebra</span>.<span class="name">isSolvable_tensorProduct_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Injective.lieAlgebra_isSolvable"><span class="name">Function</span>.<span class="name">Injective</span>.<span class="name">lieAlgebra_isSolvable</span></a></div><div class="nav_link"><a class="break_within" href="#Function.instIsSolvableSubtypeMemLieSubmodule"><span class="name">Function</span>.<span class="name">instIsSolvableSubtypeMemLieSubmodule</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Surjective.lieAlgebra_isSolvable"><span class="name">Function</span>.<span class="name">Surjective</span>.<span class="name">lieAlgebra_isSolvable</span></a></div><div class="nav_link"><a class="break_within" href="#LieHom.isSolvable_range"><span class="name">LieHom</span>.<span class="name">isSolvable_range</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.solvable_iff_equiv_solvable"><span class="name">LieAlgebra</span>.<span class="name">solvable_iff_equiv_solvable</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.le_solvable_ideal_solvable"><span class="name">LieAlgebra</span>.<span class="name">le_solvable_ideal_solvable</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.ofAbelianIsSolvable"><span class="name">LieAlgebra</span>.<span class="name">ofAbelianIsSolvable</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.radical"><span class="name">LieAlgebra</span>.<span class="name">radical</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.radicalIsSolvable"><span class="name">LieAlgebra</span>.<span class="name">radicalIsSolvable</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.LieIdeal.solvable_iff_le_radical"><span class="name">LieAlgebra</span>.<span class="name">LieIdeal</span>.<span class="name">solvable_iff_le_radical</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.center_le_radical"><span class="name">LieAlgebra</span>.<span class="name">center_le_radical</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.instIsSolvableSubtypeMemLieSubalgebraTop"><span class="name">LieAlgebra</span>.<span class="name">instIsSolvableSubtypeMemLieSubalgebraTop</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.radical_eq_top_of_isSolvable"><span class="name">LieAlgebra</span>.<span class="name">radical_eq_top_of_isSolvable</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedLengthOfIdeal"><span class="name">LieAlgebra</span>.<span class="name">derivedLengthOfIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedLength"><span class="name">LieAlgebra</span>.<span class="name">derivedLength</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedSeries_of_derivedLength_succ"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries_of_derivedLength_succ</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedLength_eq_derivedLengthOfIdeal"><span class="name">LieAlgebra</span>.<span class="name">derivedLength_eq_derivedLengthOfIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedAbelianOfIdeal"><span class="name">LieAlgebra</span>.<span class="name">derivedAbelianOfIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.instUniqueSubtypeMemLieIdealBot"><span class="name">LieAlgebra</span>.<span class="name">instUniqueSubtypeMemLieIdealBot</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.abelian_derivedAbelianOfIdeal"><span class="name">LieAlgebra</span>.<span class="name">abelian_derivedAbelianOfIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.derivedLength_zero"><span class="name">LieAlgebra</span>.<span class="name">derivedLength_zero</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.abelian_of_solvable_ideal_eq_bot_iff"><span class="name">LieAlgebra</span>.<span class="name">abelian_of_solvable_ideal_eq_bot_iff</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Solvable-Lie-algebras" class="markdown-heading">Solvable Lie algebras <a class="hover-link" href="#Solvable-Lie-algebras">#</a></h1><p>Like groups, Lie algebras admit a natural concept of solvability. We define this here via the
+derived series and prove some related results. We also define the radical of a Lie algebra and
+prove that it is solvable when the Lie algebra is Noetherian.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">LieAlgebra.derivedSeriesOfIdeal</a></code></li><li><code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a></code></li><li><code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">LieAlgebra.IsSolvable</a></code></li><li><code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.isSolvableAdd">LieAlgebra.isSolvableAdd</a></code></li><li><code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.radical">LieAlgebra.radical</a></code></li><li><code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.radicalIsSolvable">LieAlgebra.radicalIsSolvable</a></code></li><li><code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLengthOfIdeal">LieAlgebra.derivedLengthOfIdeal</a></code></li><li><code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLength">LieAlgebra.derivedLength</a></code></li><li><code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedAbelianOfIdeal">LieAlgebra.derivedAbelianOfIdeal</a></code></li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>lie algebra, derived series, derived length, solvable, radical</p></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L49-L58">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span></span></div></div><p>A generalisation of the derived series of a Lie algebra, whose zeroth term is a specified ideal.</p><p>It can be more convenient to work with this generalisation when considering the derived series of
+an ideal since it provides a type-theoretic expression of the fact that the terms of the ideal's
+derived series are also ideals of the enclosing algebra.</p><p>See also <code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.derivedSeries_eq_derivedSeriesOfIdeal_comap">LieIdeal.derivedSeries_eq_derivedSeriesOfIdeal_comap</a></code> and
+<code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.derivedSeries_eq_derivedSeriesOfIdeal_map">LieIdeal.derivedSeries_eq_derivedSeriesOfIdeal_map</a></code> below.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">LieAlgebra.derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(fun (<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>) =&gt; <a href="../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁅</a><span class="fn">I</span><a href="../../.././Mathlib/Data/Bracket.html#Bracket.bracket">,</a> <span class="fn">I</span><a href="../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁆</a>)</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">k</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a></li></ul></details><details id="instances-for-list-LieAlgebra.derivedSeriesOfIdeal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L60-L62">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal_zero"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_zero</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">0</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">I</span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal_succ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L64-L68">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal_succ"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_succ</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>) <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁅</a><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span><a href="../../.././Mathlib/Data/Bracket.html#Bracket.bracket">,</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span><a href="../../.././Mathlib/Data/Bracket.html#Bracket.bracket">⁆</a></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeries"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L70-L72">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span></div></div><p>The derived series of Lie ideals of a Lie algebra.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">LieAlgebra.derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></span></li></ul></details><details id="instances-for-list-LieAlgebra.derivedSeries" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieAlgebra.derivedSeries_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L74-L75">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries_def"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries_def</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L81-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal_add"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k </span><span class="fn">l</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">l</span>) <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">l</span> <span class="fn">I</span>)</span></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L86-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal_le"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k </span><span class="fn">l</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">I</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">J</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">l</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">l</span> <span class="fn">J</span></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal_succ_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L98-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal_succ_le"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_succ_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>) <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal_le_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L101-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal_le_self"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_le_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">I</span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L104-L105">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal_mono"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">I</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">J</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">J</span></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal_antitone"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L107-L108">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal_antitone"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_antitone</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k </span><span class="fn">l</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">l</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">l</span> <span class="fn">I</span></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal_add_le_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L110-L118">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal_add_le_add"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_add_le_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k </span><span class="fn">l</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">l</span>) (<span class="fn">I</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">J</span>)</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">l</span> <span class="fn">J</span></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeries_of_bot_eq_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L120-L121">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries_of_bot_eq_bot"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries_of_bot_eq_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="LieAlgebra.abelian_iff_derived_one_eq_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L123-L125">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.abelian_iff_derived_one_eq_bot"><span class="name">LieAlgebra</span>.<span class="name">abelian_iff_derived_one_eq_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Abelian.html#IsLieAbelian">IsLieAbelian</a> <span class="fn">↥<span class="fn">I</span></span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">1</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="LieAlgebra.abelian_iff_derived_succ_eq_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L127-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.abelian_iff_derived_succ_eq_bot"><span class="name">LieAlgebra</span>.<span class="name">abelian_iff_derived_succ_eq_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Abelian.html#IsLieAbelian">IsLieAbelian</a> <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span>)</span></span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>) <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeriesOfIdeal_baseChange"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L132-L137">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal_baseChange"><span class="name">LieAlgebra</span>.<span class="name">derivedSeriesOfIdeal_baseChange</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">A</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">A</span> <span class="fn">L</span>)</span> <span class="fn">k</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/BaseChange.html#LieSubmodule.baseChange">LieSubmodule.baseChange</a> <span class="fn">A</span> <span class="fn">I</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/BaseChange.html#LieSubmodule.baseChange">LieSubmodule.baseChange</a> <span class="fn">A</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span>)</span></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeries_baseChange"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L140-L143">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries_baseChange"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries_baseChange</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">derivedSeries</a> <span class="fn">A</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">A</span> <span class="fn">L</span>)</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/BaseChange.html#LieSubmodule.baseChange">LieSubmodule.baseChange</a> <span class="fn">A</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span>)</span></span></div></div></div></div><div class="decl" id="LieIdeal.derivedSeries_eq_derivedSeriesOfIdeal_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L153-L160">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.derivedSeries_eq_derivedSeriesOfIdeal_comap"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_eq_derivedSeriesOfIdeal_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">(↥<span class="fn">I</span>)</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal.comap">comap</a> <span class="fn"><span class="fn">I</span>.<a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal.incl">incl</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">LieAlgebra.derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span>)</span></span></div></div></div></div><div class="decl" id="LieIdeal.derivedSeries_eq_derivedSeriesOfIdeal_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L162-L165">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.derivedSeries_eq_derivedSeriesOfIdeal_map"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_eq_derivedSeriesOfIdeal_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal.map">map</a> <span class="fn"><span class="fn">I</span>.<a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal.incl">incl</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">(↥<span class="fn">I</span>)</span> <span class="fn">k</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">LieAlgebra.derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span></div></div></div></div><div class="decl" id="LieIdeal.derivedSeries_eq_bot_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L167-L169">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.derivedSeries_eq_bot_iff"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_eq_bot_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">(↥<span class="fn">I</span>)</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">LieAlgebra.derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="LieIdeal.derivedSeries_add_eq_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L171-L178">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.derivedSeries_add_eq_bot"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_add_eq_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k </span><span class="fn">l</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hI</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">(↥<span class="fn">I</span>)</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hJ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">(↥<span class="fn">J</span>)</span> <span class="fn">l</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">(↥(<span class="fn">I</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">J</span>))</span> (<span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">l</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="LieIdeal.derivedSeries_map_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L180-L185">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.derivedSeries_map_le"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_map_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <a href="../../.././foundational_types.html">Type</a> w₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">L'</span> <a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieHom">→ₗ⁅</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieHom">⁆</a> <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal.map">map</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">L'</span> <span class="fn">k</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span></span></div></div></div></div><div class="decl" id="LieIdeal.derivedSeries_map_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L187-L194">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.derivedSeries_map_eq"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_map_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <a href="../../.././foundational_types.html">Type</a> w₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">L'</span> <a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieHom">→ₗ⁅</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieHom">⁆</a> <span class="fn">L</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal.map">map</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">L'</span> <span class="fn">k</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span></span></div></div></div></div><div class="decl" id="LieIdeal.derivedSeries_succ_eq_top_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L196-L206">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.derivedSeries_succ_eq_top_iff"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_succ_eq_top_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> (<span class="fn">n</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">1</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="LieIdeal.derivedSeries_eq_top"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L208-L212">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.derivedSeries_eq_top"><span class="name">LieIdeal</span>.<span class="name">derivedSeries_eq_top</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">1</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="LieIdeal.coe_derivedSeries_eq_int"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L231-L245">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieIdeal.coe_derivedSeries_eq_int"><span class="name">LieIdeal</span>.<span class="name">coe_derivedSeries_eq_int</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">LieAlgebra.derivedSeries</a> <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a> <span class="fn">L</span> <span class="fn">k</span>)</span></span></div></div></div></div><div class="decl" id="LieAlgebra.IsSolvable"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L251-L255">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable"><span class="name">LieAlgebra</span>.<span class="name">IsSolvable</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A Lie algebra is solvable if its derived series reaches 0 (in a finite number of steps).</p><ul class="structure_ext"><li id="LieAlgebra.IsSolvable.mk_int" class="structure_ext_ctor">mk_int :: (</li><ul class="structure_ext_fields"><li id="LieAlgebra.IsSolvable.solvable_int" class="structure_field"><div class="structure_field_info">solvable_int : <span class="fn">∃ (<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">derivedSeries</a> <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a> <span class="fn">L</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span></div></li></ul><li class="structure_ext_ctor">)</li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-LieAlgebra.IsSolvable" class="instances-list"></ul></details></div></div><div class="decl" id="LieAlgebra.isSolvable_iff_int"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L252-L252">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.isSolvable_iff_int"><span class="name">LieAlgebra</span>.<span class="name">isSolvable_iff_int</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">derivedSeries</a> <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a> <span class="fn">L</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span></div></div></div></div><div class="decl" id="LieAlgebra.isSolvableBot"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L257-L258">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.isSolvableBot"><span class="name">LieAlgebra</span>.<span class="name">isSolvableBot</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥<a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span></span></div></div></div></div><div class="decl" id="LieAlgebra.isSolvable_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L260-L261">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.isSolvable_iff"><span class="name">LieAlgebra</span>.<span class="name">isSolvable_iff</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span></div></div></div></div><div class="decl" id="LieAlgebra.IsSolvable.solvable"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L263-L264">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable.solvable"><span class="name">LieAlgebra</span>.<span class="name">IsSolvable</span>.<span class="name">solvable</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span></div></div></div></div><div class="decl" id="LieAlgebra.IsSolvable.mk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L267-L268">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable.mk"><span class="name">LieAlgebra</span>.<span class="name">IsSolvable</span>.<span class="name">mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span></div></div></div></div><div class="decl" id="LieAlgebra.isSolvableAdd"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L270-L274">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.isSolvableAdd"><span class="name">LieAlgebra</span>.<span class="name">isSolvableAdd</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥<span class="fn">I</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥<span class="fn">J</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥(<span class="fn">I</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">J</span>)</span></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedSeries_lt_top_of_solvable"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L276-L282">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries_lt_top_of_solvable"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries_lt_top_of_solvable</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries">derivedSeries</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">1</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="LieAlgebra.instIsSolvableTensorProduct"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L285-L289">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.instIsSolvableTensorProduct"><span class="name">LieAlgebra</span>.<span class="name">instIsSolvableTensorProduct</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">A</span> <span class="fn">L</span>)</span></span></div></div></div></div><div class="decl" id="LieAlgebra.isSolvable_tensorProduct_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L293-L303">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.isSolvable_tensorProduct_iff"><span class="name">LieAlgebra</span>.<span class="name">isSolvable_tensorProduct_iff</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Flat/FaithfullyFlat/Basic.html#Module.FaithfullyFlat">Module.FaithfullyFlat</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">A</span> <span class="fn">L</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span></div></div></div></div><div class="decl" id="Function.Injective.lieAlgebra_isSolvable"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L313-L319">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#Function.Injective.lieAlgebra_isSolvable"><span class="name">Function</span>.<span class="name">Injective</span>.<span class="name">lieAlgebra_isSolvable</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <a href="../../.././foundational_types.html">Type</a> w₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">L'</span> <a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieHom">→ₗ⁅</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieHom">⁆</a> <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hL</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">LieAlgebra.IsSolvable</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Injective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">LieAlgebra.IsSolvable</a> <span class="fn">L'</span></span></div></div></div></div><div class="decl" id="Function.instIsSolvableSubtypeMemLieSubmodule"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L321-L322">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#Function.instIsSolvableSubtypeMemLieSubmodule"><span class="name">Function</span>.<span class="name">instIsSolvableSubtypeMemLieSubmodule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">LieAlgebra.IsSolvable</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">LieAlgebra.IsSolvable</a> <span class="fn">↥<span class="fn">A</span></span></span></div></div></div></div><div class="decl" id="Function.Surjective.lieAlgebra_isSolvable"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L324-L330">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#Function.Surjective.lieAlgebra_isSolvable"><span class="name">Function</span>.<span class="name">Surjective</span>.<span class="name">lieAlgebra_isSolvable</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <a href="../../.././foundational_types.html">Type</a> w₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">L'</span> <a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieHom">→ₗ⁅</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieHom">⁆</a> <span class="fn">L</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hL'</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">LieAlgebra.IsSolvable</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">LieAlgebra.IsSolvable</a> <span class="fn">L</span></span></div></div></div></div><div class="decl" id="LieHom.isSolvable_range"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L334-L336">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieHom.isSolvable_range"><span class="name">LieHom</span>.<span class="name">isSolvable_range</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <a href="../../.././foundational_types.html">Type</a> w₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">L'</span> <a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieHom">→ₗ⁅</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieHom">⁆</a> <span class="fn">L</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">LieAlgebra.IsSolvable</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">LieAlgebra.IsSolvable</a> <span class="fn">↥<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieHom.range">range</a></span></span></span></div></div></div></div><div class="decl" id="LieAlgebra.solvable_iff_equiv_solvable"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L340-L343">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.solvable_iff_equiv_solvable"><span class="name">LieAlgebra</span>.<span class="name">solvable_iff_equiv_solvable</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <a href="../../.././foundational_types.html">Type</a> w₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">L'</span> <a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieEquiv">≃ₗ⁅</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieEquiv">⁆</a> <span class="fn">L</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L'</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span></div></div></div></div><div class="decl" id="LieAlgebra.le_solvable_ideal_solvable"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L345-L347">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.le_solvable_ideal_solvable"><span class="name">LieAlgebra</span>.<span class="name">le_solvable_ideal_solvable</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">I</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">J</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥<span class="fn">J</span></span></span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥<span class="fn">I</span></span></span></span></div></div></div></div><div class="decl" id="LieAlgebra.ofAbelianIsSolvable"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L352-L355">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.ofAbelianIsSolvable"><span class="name">LieAlgebra</span>.<span class="name">ofAbelianIsSolvable</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Abelian.html#IsLieAbelian">IsLieAbelian</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span></div></div></div></div><div class="decl" id="LieAlgebra.radical"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L357-L359">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.radical"><span class="name">LieAlgebra</span>.<span class="name">radical</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span></div></div><p>The (solvable) radical of Lie algebra is the <code>sSup</code> of all solvable ideals.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.radical">LieAlgebra.radical</a> <span class="fn">R</span> <span class="fn">L</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">I</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">LieAlgebra.IsSolvable</a> <span class="fn">↥<span class="fn">I</span></span></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></li></ul></details><details id="instances-for-list-LieAlgebra.radical" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieAlgebra.radicalIsSolvable"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L361-L368">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.radicalIsSolvable"><span class="name">LieAlgebra</span>.<span class="name">radicalIsSolvable</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Noetherian/Defs.html#IsNoetherian">IsNoetherian</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.radical">radical</a> <span class="fn">R</span> <span class="fn">L</span>)</span></span></span></div></div><p>The radical of a Noetherian Lie algebra is solvable.</p></div></div><div class="decl" id="LieAlgebra.LieIdeal.solvable_iff_le_radical"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L370-L373">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.LieIdeal.solvable_iff_le_radical"><span class="name">LieAlgebra</span>.<span class="name">LieIdeal</span>.<span class="name">solvable_iff_le_radical</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Noetherian/Defs.html#IsNoetherian">IsNoetherian</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥<span class="fn">I</span></span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">I</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.radical">radical</a> <span class="fn">R</span> <span class="fn">L</span></span></div></div><p>The <code>→</code> direction of this lemma is actually true without the <code><a href="../../.././Mathlib/RingTheory/Noetherian/Defs.html#IsNoetherian">IsNoetherian</a></code> assumption.</p></div></div><div class="decl" id="LieAlgebra.center_le_radical"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L376-L378">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.center_le_radical"><span class="name">LieAlgebra</span>.<span class="name">center_le_radical</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Abelian.html#LieAlgebra.center">center</a> <span class="fn">R</span> <span class="fn">L</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.radical">radical</a> <span class="fn">R</span> <span class="fn">L</span></span></div></div></div></div><div class="decl" id="LieAlgebra.instIsSolvableSubtypeMemLieSubalgebraTop"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L380-L381">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.instIsSolvableSubtypeMemLieSubalgebraTop"><span class="name">LieAlgebra</span>.<span class="name">instIsSolvableSubtypeMemLieSubalgebraTop</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥<a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></span></span></div></div></div></div><div class="decl" id="LieAlgebra.radical_eq_top_of_isSolvable"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L383-L387">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.radical_eq_top_of_isSolvable"><span class="name">LieAlgebra</span>.<span class="name">radical_eq_top_of_isSolvable</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.radical">radical</a> <span class="fn">R</span> <span class="fn">L</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="LieAlgebra.derivedLengthOfIdeal"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L389-L394">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLengthOfIdeal"><span class="name">LieAlgebra</span>.<span class="name">derivedLengthOfIdeal</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Nat">ℕ</a></div></div><p>Given a solvable Lie ideal <code>I</code> with derived series <code>I = D₀ ≥ D₁ ≥ ⋯ ≥ Dₖ = ⊥</code>, this is the
+natural number <code>k</code> (the number of inclusions).</p><p>For a non-solvable ideal, the value is 0.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLengthOfIdeal">LieAlgebra.derivedLengthOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">k</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">LieAlgebra.derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></li></ul></details><details id="instances-for-list-LieAlgebra.derivedLengthOfIdeal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieAlgebra.derivedLength"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L396-L400">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLength"><span class="name">LieAlgebra</span>.<span class="name">derivedLength</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Nat">ℕ</a></div></div><p>The derived length of a Lie algebra is the derived length of its 'top' Lie ideal.</p><p>See also <code><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLength_eq_derivedLengthOfIdeal">LieAlgebra.derivedLength_eq_derivedLengthOfIdeal</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLength">LieAlgebra.derivedLength</a> <span class="fn">R</span> <span class="fn">L</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLengthOfIdeal">LieAlgebra.derivedLengthOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></span></li></ul></details><details id="instances-for-list-LieAlgebra.derivedLength" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieAlgebra.derivedSeries_of_derivedLength_succ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L402-L413">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeries_of_derivedLength_succ"><span class="name">LieAlgebra</span>.<span class="name">derivedSeries_of_derivedLength_succ</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLengthOfIdeal">derivedLengthOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">k</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Abelian.html#IsLieAbelian">IsLieAbelian</a> <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span>)</span></span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="LieAlgebra.derivedLength_eq_derivedLengthOfIdeal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L415-L420">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLength_eq_derivedLengthOfIdeal"><span class="name">LieAlgebra</span>.<span class="name">derivedLength_eq_derivedLengthOfIdeal</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLength">derivedLength</a> <span class="fn">R</span> <span class="fn">↥<span class="fn">I</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLengthOfIdeal">derivedLengthOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">I</span></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedAbelianOfIdeal"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L424-L431">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedAbelianOfIdeal"><span class="name">LieAlgebra</span>.<span class="name">derivedAbelianOfIdeal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span></div></div><p>Given a solvable Lie ideal <code>I</code> with derived series <code>I = D₀ ≥ D₁ ≥ ⋯ ≥ Dₖ = ⊥</code>, this is the
+<code>k-1</code>th term in the derived series (and is therefore an Abelian ideal contained in <code>I</code>).</p><p>For a non-solvable ideal, this is the zero ideal, <code>⊥</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedAbelianOfIdeal">LieAlgebra.derivedAbelianOfIdeal</a> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">match <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLengthOfIdeal">LieAlgebra.derivedLengthOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">I</span></span> with
+  | <span class="fn">0</span> =&gt; <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>
+  | <span class="fn"><span class="fn">k</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span> =&gt; <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedSeriesOfIdeal">LieAlgebra.derivedSeriesOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">k</span> <span class="fn">I</span></span></span></li></ul></details><details id="instances-for-list-LieAlgebra.derivedAbelianOfIdeal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieAlgebra.instUniqueSubtypeMemLieIdealBot"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L433-L434">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.instUniqueSubtypeMemLieIdealBot"><span class="name">LieAlgebra</span>.<span class="name">instUniqueSubtypeMemLieIdealBot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/Unique.html#Unique">Unique</a> <span class="fn">↥<a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.instUniqueSubtypeMemLieIdealBot">LieAlgebra.instUniqueSubtypeMemLieIdealBot</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Logic/Unique.html#Unique.mk">{</a> <span class="fn">toInhabited</span> := <a href="../../.././Mathlib/Logic/Unique.html#Unique.instInhabited">Unique.instInhabited</a>, <span class="fn">uniq</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Logic/Unique.html#Unique.mk">}</a></li></ul></details></div></div><div class="decl" id="LieAlgebra.abelian_derivedAbelianOfIdeal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L436-L441">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.abelian_derivedAbelianOfIdeal"><span class="name">LieAlgebra</span>.<span class="name">abelian_derivedAbelianOfIdeal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Abelian.html#IsLieAbelian">IsLieAbelian</a> <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedAbelianOfIdeal">derivedAbelianOfIdeal</a> <span class="fn">I</span>)</span></span></span></div></div></div></div><div class="decl" id="LieAlgebra.derivedLength_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L443-L450">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLength_zero"><span class="name">LieAlgebra</span>.<span class="name">derivedLength_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥<span class="fn">I</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedLengthOfIdeal">derivedLengthOfIdeal</a> <span class="fn">R</span> <span class="fn">L</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">I</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="LieAlgebra.abelian_of_solvable_ideal_eq_bot_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Solvable.lean#L452-L460">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.abelian_of_solvable_ideal_eq_bot_iff"><span class="name">LieAlgebra</span>.<span class="name">abelian_of_solvable_ideal_eq_bot_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.IsSolvable">IsSolvable</a> <span class="fn">↥<span class="fn">I</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Solvable.html#LieAlgebra.derivedAbelianOfIdeal">derivedAbelianOfIdeal</a> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">I</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

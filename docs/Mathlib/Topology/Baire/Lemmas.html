@@ -1,0 +1,424 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.Baire.Lemmas</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.Baire.Lemmas";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">Baire</span>.<span class="name">Lemmas</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Topology/Constructions.html">Mathlib.Topology.Constructions</a></li><li><a href="../../.././Mathlib/Data/Fintype/Powerset.html">Mathlib.Data.Fintype.Powerset</a></li><li><a href="../../.././Mathlib/Topology/GDelta/Basic.html">Mathlib.Topology.GDelta.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.Baire.Lemmas" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Set.Finite.dense_sInter"><span class="name">Set</span>.<span class="name">Finite</span>.<span class="name">dense_sInter</span></a></div><div class="nav_link"><a class="break_within" href="#baire_of_finite"><span class="name">baire_of_finite</span></a></div><div class="nav_link"><a class="break_within" href="#dense_iInter_of_isOpen_nat"><span class="name">dense_iInter_of_isOpen_nat</span></a></div><div class="nav_link"><a class="break_within" href="#IsGδ.baireSpace_of_dense"><span class="name">IsGδ</span>.<span class="name">baireSpace_of_dense</span></a></div><div class="nav_link"><a class="break_within" href="#Topology.IsOpenEmbedding.baireSpace"><span class="name">Topology</span>.<span class="name">IsOpenEmbedding</span>.<span class="name">baireSpace</span></a></div><div class="nav_link"><a class="break_within" href="#IsOpen.baireSpace"><span class="name">IsOpen</span>.<span class="name">baireSpace</span></a></div><div class="nav_link"><a class="break_within" href="#dense_sInter_of_isOpen"><span class="name">dense_sInter_of_isOpen</span></a></div><div class="nav_link"><a class="break_within" href="#dense_biInter_of_isOpen"><span class="name">dense_biInter_of_isOpen</span></a></div><div class="nav_link"><a class="break_within" href="#dense_iInter_of_isOpen"><span class="name">dense_iInter_of_isOpen</span></a></div><div class="nav_link"><a class="break_within" href="#mem_residual"><span class="name">mem_residual</span></a></div><div class="nav_link"><a class="break_within" href="#eventually_residual"><span class="name">eventually_residual</span></a></div><div class="nav_link"><a class="break_within" href="#dense_of_mem_residual"><span class="name">dense_of_mem_residual</span></a></div><div class="nav_link"><a class="break_within" href="#not_isMeagre_of_isOpen"><span class="name">not_isMeagre_of_isOpen</span></a></div><div class="nav_link"><a class="break_within" href="#dense_sInter_of_Gδ"><span class="name">dense_sInter_of_Gδ</span></a></div><div class="nav_link"><a class="break_within" href="#dense_iInter_of_Gδ"><span class="name">dense_iInter_of_Gδ</span></a></div><div class="nav_link"><a class="break_within" href="#dense_biInter_of_Gδ"><span class="name">dense_biInter_of_Gδ</span></a></div><div class="nav_link"><a class="break_within" href="#Dense.inter_of_Gδ"><span class="name">Dense</span>.<span class="name">inter_of_Gδ</span></a></div><div class="nav_link"><a class="break_within" href="#IsGδ.dense_iUnion_interior_of_closed"><span class="name">IsGδ</span>.<span class="name">dense_iUnion_interior_of_closed</span></a></div><div class="nav_link"><a class="break_within" href="#IsGδ.dense_biUnion_interior_of_closed"><span class="name">IsGδ</span>.<span class="name">dense_biUnion_interior_of_closed</span></a></div><div class="nav_link"><a class="break_within" href="#IsGδ.dense_sUnion_interior_of_closed"><span class="name">IsGδ</span>.<span class="name">dense_sUnion_interior_of_closed</span></a></div><div class="nav_link"><a class="break_within" href="#dense_biUnion_interior_of_closed"><span class="name">dense_biUnion_interior_of_closed</span></a></div><div class="nav_link"><a class="break_within" href="#dense_sUnion_interior_of_closed"><span class="name">dense_sUnion_interior_of_closed</span></a></div><div class="nav_link"><a class="break_within" href="#dense_iUnion_interior_of_closed"><span class="name">dense_iUnion_interior_of_closed</span></a></div><div class="nav_link"><a class="break_within" href="#nonempty_interior_of_iUnion_of_closed"><span class="name">nonempty_interior_of_iUnion_of_closed</span></a></div><div class="nav_link"><a class="break_within" href="#not_isMeagre_of_isGδ_of_dense"><span class="name">not_isMeagre_of_isGδ_of_dense</span></a></div><div class="nav_link"><a class="break_within" href="#not_isMeagre_of_mem_residual"><span class="name">not_isMeagre_of_mem_residual</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Baire-spaces" class="markdown-heading">Baire spaces <a class="hover-link" href="#Baire-spaces">#</a></h1><p>A topological space is called a <em>Baire space</em>
+if a countable intersection of dense open subsets is dense.
+Baire theorems say that all completely metrizable spaces
+and all locally compact regular spaces are Baire spaces.
+We prove the theorems in <code>Mathlib/Topology/Baire/CompleteMetrizable</code>
+and <code>Mathlib/Topology/Baire/LocallyCompactRegular</code>.</p><p>In this file we prove some lemmas about Baire spaces.</p><p>The good concept underlying the theorems is that of a Gδ set, i.e., a countable intersection
+of open sets. Then Baire theorem can also be formulated as the fact that a countable
+intersection of dense Gδ sets is a dense Gδ set. We deduce this version from Baire property.
+We also prove the important consequence that, if the space is
+covered by a countable union of closed sets, then the union of their interiors is dense.</p><p>We also prove that in Baire spaces, the <code><a href="../../.././Mathlib/Topology/GDelta/Basic.html#residual">residual</a></code> sets are exactly those containing a dense Gδ set.</p></div><div class="decl" id="Set.Finite.dense_sInter"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L47-L55">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#Set.Finite.dense_sInter"><span class="name">Set</span>.<span class="name">Finite</span>.<span class="name">dense_sInter</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">∀ <span class="fn">t</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">t</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn">∀ <span class="fn">t</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">t</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> (<a href="../../.././Mathlib/Order/SetNotation.html#Set.sInter">⋂₀</a> <span class="fn">s</span>)</span></div></div><p>The intersection of finitely many open dense sets is dense.</p></div></div><div class="decl" id="baire_of_finite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L57-L59">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#baire_of_finite"><span class="name">baire_of_finite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span></div></div><p>A finite set is Baire.</p></div></div><div class="decl" id="dense_iInter_of_isOpen_nat"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L63-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_iInter_of_isOpen_nat"><span class="name">dense_iInter_of_isOpen_nat</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">∀ (<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">(<span class="fn">f</span> <span class="fn">n</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn">∀ (<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(<span class="fn">f</span> <span class="fn">n</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋂ (<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">f</span> <span class="fn">n</span></span>)</span></span></div></div><p>Definition of a Baire space.</p></div></div><div class="decl" id="IsGδ.baireSpace_of_dense"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L68-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#IsGδ.baireSpace_of_dense"><span class="name">IsGδ</span>.<span class="name">baireSpace_of_dense</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hG</span> : <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">↑<span class="fn">s</span></span></span></div></div><p>A dense Gδ subset of a Baire space is Baire.</p></div></div><div class="decl" id="Topology.IsOpenEmbedding.baireSpace"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L80-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#Topology.IsOpenEmbedding.baireSpace"><span class="name">Topology</span>.<span class="name">IsOpenEmbedding</span>.<span class="name">baireSpace</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsOpenEmbedding">IsOpenEmbedding</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">Y</span></span></div></div><p>If <code>p : Y → X</code> is an open embedding and <code>X</code> is a Baire space, then <code>Y</code> is a Baire space.</p></div></div><div class="decl" id="IsOpen.baireSpace"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L109-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#IsOpen.baireSpace"><span class="name">IsOpen</span>.<span class="name">baireSpace</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hO</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">↑<span class="fn">s</span></span></span></div></div><p>An open subset of a Baire space is Baire.</p></div></div><div class="decl" id="dense_sInter_of_isOpen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L113-L119">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_sInter_of_isOpen"><span class="name">dense_sInter_of_isOpen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn"><span class="fn">S</span>.<a href="../../.././Mathlib/Data/Set/Countable.html#Set.Countable">Countable</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> (<a href="../../.././Mathlib/Order/SetNotation.html#Set.sInter">⋂₀</a> <span class="fn">S</span>)</span></div></div><p>Baire theorem: a countable intersection of dense open sets is dense. Formulated here with ⋂₀.</p></div></div><div class="decl" id="dense_biInter_of_isOpen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L121-L126">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_biInter_of_isOpen"><span class="name">dense_biInter_of_isOpen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn"><span class="fn">S</span>.<a href="../../.././Mathlib/Data/Set/Countable.html#Set.Countable">Countable</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋂ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span>)</span></span></div></div><p>Baire theorem: a countable intersection of dense open sets is dense. Formulated here with
+an index set which is a countable set in any type.</p></div></div><div class="decl" id="dense_iInter_of_isOpen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L128-L132">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_iInter_of_isOpen"><span class="name">dense_iInter_of_isOpen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋂ (<span class="fn">s</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span>)</span></span></div></div><p>Baire theorem: a countable intersection of dense open sets is dense. Formulated here with
+an index set which is a countable type.</p></div></div><div class="decl" id="mem_residual"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L134-L142">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#mem_residual"><span class="name">mem_residual</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#residual">residual</a> <span class="fn">X</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ <span class="fn">t</span> ⊆ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">t</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">t</span></span></span></div></div><p>A set is residual (comeagre) if and only if it includes a dense <code>Gδ</code> set.</p></div></div><div class="decl" id="eventually_residual"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L144-L148">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#eventually_residual"><span class="name">eventually_residual</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">X</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#residual">residual</a> <span class="fn">X</span></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">p</span> <span class="fn">x</span></span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>), <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">t</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">t</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn">t</span>, <span class="fn"><span class="fn">p</span> <span class="fn">x</span></span></span></span></div></div><p>A property holds on a residual (comeagre) set if and only if it holds on some dense <code>Gδ</code> set.</p></div></div><div class="decl" id="dense_of_mem_residual"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L150-L152">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_of_mem_residual"><span class="name">dense_of_mem_residual</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#residual">residual</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="not_isMeagre_of_isOpen"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L154-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#not_isMeagre_of_isOpen"><span class="name">not_isMeagre_of_isOpen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hne</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsMeagre">IsMeagre</a> <span class="fn">s</span></span></div></div><p>In a Baire space, every nonempty open set is non‐meagre,
+that is, it cannot be written as a countable union of nowhere‐dense sets.</p></div></div><div class="decl" id="dense_sInter_of_Gδ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L164-L168">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_sInter_of_Gδ"><span class="name">dense_sInter_of_Gδ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn"><span class="fn">S</span>.<a href="../../.././Mathlib/Data/Set/Countable.html#Set.Countable">Countable</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> (<a href="../../.././Mathlib/Order/SetNotation.html#Set.sInter">⋂₀</a> <span class="fn">S</span>)</span></div></div><p>Baire theorem: a countable intersection of dense Gδ sets is dense. Formulated here with ⋂₀.</p></div></div><div class="decl" id="dense_iInter_of_Gδ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L170-L174">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_iInter_of_Gδ"><span class="name">dense_iInter_of_Gδ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">∀ (<span class="fn">s</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn">∀ (<span class="fn">s</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋂ (<span class="fn">s</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span>)</span></span></div></div><p>Baire theorem: a countable intersection of dense Gδ sets is dense. Formulated here with
+an index set which is a countable type.</p></div></div><div class="decl" id="dense_biInter_of_Gδ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L176-L182">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_biInter_of_Gδ"><span class="name">dense_biInter_of_Gδ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>) → <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">∀ (<span class="fn">s</span> : <span class="fn">α</span>) (<span class="fn">H</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span>), <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span> <span class="fn">H</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn"><span class="fn">S</span>.<a href="../../.././Mathlib/Data/Set/Countable.html#Set.Countable">Countable</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn">∀ (<span class="fn">s</span> : <span class="fn">α</span>) (<span class="fn">H</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span> <span class="fn">H</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋂ (<span class="fn">s</span> : <span class="fn">α</span>), <span class="fn">⋂ (<span class="fn">h</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span>), <span class="fn"><span class="fn">f</span> <span class="fn">s</span> <span class="fn">h</span></span></span>)</span></span></div></div><p>Baire theorem: a countable intersection of dense Gδ sets is dense. Formulated here with
+an index set which is a countable set in any type.</p></div></div><div class="decl" id="Dense.inter_of_Gδ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L184-L188">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#Dense.inter_of_Gδ"><span class="name">Dense</span>.<span class="name">inter_of_Gδ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsc</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htc</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> (<span class="fn">s</span> <a href="../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">t</span>)</span></div></div><p>Baire theorem: the intersection of two dense Gδ sets is dense.</p></div></div><div class="decl" id="IsGδ.dense_iUnion_interior_of_closed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L190-L205">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#IsGδ.dense_iUnion_interior_of_closed"><span class="name">IsGδ</span>.<span class="name">dense_iUnion_interior_of_closed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">s</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hU</span> : <span class="fn">s</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">⋃ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋃ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#interior">interior</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span>)</span></span></div></div><p>If a countable family of closed sets cover a dense <code>Gδ</code> set, then the union of their interiors
+is dense. Formulated here with <code>⋃</code>.</p></div></div><div class="decl" id="IsGδ.dense_biUnion_interior_of_closed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L207-L214">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#IsGδ.dense_biUnion_interior_of_closed"><span class="name">IsGδ</span>.<span class="name">dense_biUnion_interior_of_closed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Data/Set/Countable.html#Set.Countable">Countable</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">t</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hU</span> : <span class="fn">s</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">⋃ <span class="fn">i</span> ∈ <span class="fn">t</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋃ <span class="fn">i</span> ∈ <span class="fn">t</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#interior">interior</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span>)</span></span></div></div><p>If a countable family of closed sets cover a dense <code>Gδ</code> set, then the union of their interiors
+is dense. Formulated here with a union over a countable set in any type.</p></div></div><div class="decl" id="IsGδ.dense_sUnion_interior_of_closed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L216-L221">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#IsGδ.dense_sUnion_interior_of_closed"><span class="name">IsGδ</span>.<span class="name">dense_sUnion_interior_of_closed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><span class="fn">T</span>.<a href="../../.././Mathlib/Data/Set/Countable.html#Set.Countable">Countable</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc'</span> : <span class="fn">∀ <span class="fn">t</span> ∈ <span class="fn">T</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">t</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hU</span> : <span class="fn">s</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <a href="../../.././Mathlib/Order/SetNotation.html#Set.sUnion">⋃₀</a> <span class="fn">T</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋃ <span class="fn">t</span> ∈ <span class="fn">T</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#interior">interior</a> <span class="fn">t</span></span>)</span></span></div></div><p>If a countable family of closed sets cover a dense <code>Gδ</code> set, then the union of their interiors
+is dense. Formulated here with <code>⋃₀</code>.</p></div></div><div class="decl" id="dense_biUnion_interior_of_closed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L223-L227">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_biUnion_interior_of_closed"><span class="name">dense_biUnion_interior_of_closed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn"><span class="fn">S</span>.<a href="../../.././Mathlib/Data/Set/Countable.html#Set.Countable">Countable</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hU</span> : <span class="fn">⋃ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋃ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#interior">interior</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span>)</span></span>)</span></span></div></div><p>Baire theorem: if countably many closed sets cover the whole space, then their interiors
+are dense. Formulated here with an index set which is a countable set in any type.</p></div></div><div class="decl" id="dense_sUnion_interior_of_closed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L229-L233">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_sUnion_interior_of_closed"><span class="name">dense_sUnion_interior_of_closed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn"><span class="fn">S</span>.<a href="../../.././Mathlib/Data/Set/Countable.html#Set.Countable">Countable</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hU</span> : <a href="../../.././Mathlib/Order/SetNotation.html#Set.sUnion">⋃₀</a> <span class="fn">S</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋃ <span class="fn">s</span> ∈ <span class="fn">S</span>, <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#interior">interior</a> <span class="fn">s</span></span>)</span></span></div></div><p>Baire theorem: if countably many closed sets cover the whole space, then their interiors
+are dense. Formulated here with <code>⋃₀</code>.</p></div></div><div class="decl" id="dense_iUnion_interior_of_closed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L235-L239">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#dense_iUnion_interior_of_closed"><span class="name">dense_iUnion_interior_of_closed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hU</span> : <span class="fn">⋃ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">(⋃ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#interior">interior</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span>)</span></span></div></div><p>Baire theorem: if countably many closed sets cover the whole space, then their interiors
+are dense. Formulated here with an index set which is a countable type.</p></div></div><div class="decl" id="nonempty_interior_of_iUnion_of_closed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L243-L247">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#nonempty_interior_of_iUnion_of_closed"><span class="name">nonempty_interior_of_iUnion_of_closed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hU</span> : <span class="fn">⋃ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Basic.html#interior">interior</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span>)</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span></span></div></div><p>One of the most useful consequences of Baire theorem: if a countable union of closed sets
+covers the space, then one of the sets has nonempty interior.</p></div></div><div class="decl" id="not_isMeagre_of_isGδ_of_dense"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L249-L255">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#not_isMeagre_of_isGδ_of_dense"><span class="name">not_isMeagre_of_isGδ_of_dense</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsGδ">IsGδ</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsMeagre">IsMeagre</a> <span class="fn">s</span></span></div></div><p>In a nonempty Baire space, any dense <code>Gδ</code> set is not meagre.</p></div></div><div class="decl" id="not_isMeagre_of_mem_residual"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Baire/Lemmas.lean#L257-L262">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/Baire/Lemmas.html#not_isMeagre_of_mem_residual"><span class="name">not_isMeagre_of_mem_residual</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#BaireSpace">BaireSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#residual">residual</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Topology/GDelta/Basic.html#IsMeagre">IsMeagre</a> <span class="fn">s</span></span></div></div><p>In a nonempty Baire space, a residual set is not meagre.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

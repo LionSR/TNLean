@@ -1,0 +1,297 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.NumberTheory.JacobiSum.Basic</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.NumberTheory.JacobiSum.Basic";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">NumberTheory</span>.<span class="name">JacobiSum</span>.<span class="name">Basic</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/NumberTheory/GaussSum.html">Mathlib.NumberTheory.GaussSum</a></li><li><a href="../../.././Mathlib/NumberTheory/MulChar/Lemmas.html">Mathlib.NumberTheory.MulChar.Lemmas</a></li><li><a href="../../.././Mathlib/RingTheory/RootsOfUnity/Lemmas.html">Mathlib.RingTheory.RootsOfUnity.Lemmas</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.NumberTheory.JacobiSum.Basic" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#jacobiSum"><span class="name">jacobiSum</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_comm"><span class="name">jacobiSum_comm</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_ringHomComp"><span class="name">jacobiSum_ringHomComp</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_eq_sum_sdiff"><span class="name">jacobiSum_eq_sum_sdiff</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_trivial_trivial"><span class="name">jacobiSum_trivial_trivial</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_one_one"><span class="name">jacobiSum_one_one</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_one_nontrivial"><span class="name">jacobiSum_one_nontrivial</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_nontrivial_inv"><span class="name">jacobiSum_nontrivial_inv</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_mul_nontrivial"><span class="name">jacobiSum_mul_nontrivial</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_eq_gaussSum_mul_gaussSum_div_gaussSum"><span class="name">jacobiSum_eq_gaussSum_mul_gaussSum_div_gaussSum</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_mul_jacobiSum_inv"><span class="name">jacobiSum_mul_jacobiSum_inv</span></a></div><div class="nav_link"><a class="break_within" href="#jacobiSum_mem_algebraAdjoin_of_pow_eq_one"><span class="name">jacobiSum_mem_algebraAdjoin_of_pow_eq_one</span></a></div><div class="nav_link"><a class="break_within" href="#exists_jacobiSum_eq_neg_one_add"><span class="name">exists_jacobiSum_eq_neg_one_add</span></a></div><div class="nav_link"><a class="break_within" href="#gaussSum_pow_eq_prod_jacobiSum_aux"><span class="name">gaussSum_pow_eq_prod_jacobiSum_aux</span></a></div><div class="nav_link"><a class="break_within" href="#gaussSum_pow_eq_prod_jacobiSum"><span class="name">gaussSum_pow_eq_prod_jacobiSum</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Jacobi-Sums" class="markdown-heading">Jacobi Sums <a class="hover-link" href="#Jacobi-Sums">#</a></h1><p>This file defines the <em>Jacobi sum</em> of two multiplicative characters <code>χ</code> and <code>ψ</code> on a finite
+commutative ring <code>R</code> with values in another commutative ring <code>R'</code>:</p><p><code><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> χ ψ = ∑ x : R, χ x * ψ (1 - x)</code></p><p>(see <code><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a></code>) and provides some basic results and API lemmas on Jacobi sums.</p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><p>We essentially follow</p><ul><li>[K. Ireland, M. Rosen, <em>A classical introduction to modern number theory</em>
+(Section 8.3)][IrelandRosen1990]</li></ul><p>but generalize where appropriate.</p><p>This is based on Lean code written as part of the bachelor's thesis of Alexander Spahl.</p></div><div class="mod_doc"><h3 id="Jacobi-sums-definition-and-first-properties" class="markdown-heading">Jacobi sums: definition and first properties <a class="hover-link" href="#Jacobi-sums-definition-and-first-properties">#</a></h3></div><div class="decl" id="jacobiSum"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L46-L48">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum"><span class="name">jacobiSum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ </span><span class="fn">ψ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">R'</span></div></div><p>The <em>Jacobi sum</em> of two multiplicative characters on a finite commutative ring.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∑ <span class="fn">x</span> : <span class="fn">R</span>, <span class="fn"><span class="fn">χ</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">ψ</span> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</span></span></li></ul></details><details id="instances-for-list-jacobiSum" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="jacobiSum_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L50-L53">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_comm"><span class="name">jacobiSum_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ </span><span class="fn">ψ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">ψ</span> <span class="fn">χ</span></span></div></div></div></div><div class="decl" id="jacobiSum_ringHomComp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L55-L59">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_ringHomComp"><span class="name">jacobiSum_ringHomComp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R''</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R''</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ </span><span class="fn">ψ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R'</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">R''</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">(<span class="fn"><span class="fn">χ</span>.<a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar.ringHomComp">ringHomComp</a></span> <span class="fn">f</span>)</span> <span class="fn">(<span class="fn"><span class="fn">ψ</span>.<a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar.ringHomComp">ringHomComp</a></span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> <span class="fn">ψ</span>)</span></span></div></div><p>The Jacobi sum is compatible with ring homomorphisms.</p></div></div><div class="mod_doc"><h3 id="Jacobi-sums-over-finite-fields" class="markdown-heading">Jacobi sums over finite fields <a class="hover-link" href="#Jacobi-sums-over-finite-fields">#</a></h3></div><div class="decl" id="jacobiSum_eq_sum_sdiff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L71-L79">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_eq_sum_sdiff"><span class="name">jacobiSum_eq_sum_sdiff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ </span><span class="fn">ψ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∑ <span class="fn">x</span> ∈ <a href="../../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">Finset.univ</a> <a href="../../.././Init/Core.html#SDiff.sdiff">\</a> <a href="../../.././Init/Core.html#Insert.insert">{</a><span class="fn">0</span><a href="../../.././Init/Core.html#Insert.insert">,</a> <span class="fn">1</span><a href="../../.././Init/Core.html#Insert.insert">}</a>, <span class="fn"><span class="fn">χ</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">ψ</span> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</span></span></div></div><p>The Jacobi sum of two multiplicative characters on a nontrivial finite commutative ring <code>F</code>
+can be written as a sum over <code>F \ {0,1}</code>.</p></div></div><div class="decl" id="jacobiSum_trivial_trivial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L101-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_trivial_trivial"><span class="name">jacobiSum_trivial_trivial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">(<a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar.trivial">MulChar.trivial</a> <span class="fn">F</span> <span class="fn">R</span>)</span> <span class="fn">(<a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar.trivial">MulChar.trivial</a> <span class="fn">F</span> <span class="fn">R</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F</span>)</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">2</span></div></div><p>The Jacobi sum of twice the trivial multiplicative character on a finite field <code>F</code>
+equals <code>#F-2</code>.</p></div></div><div class="decl" id="jacobiSum_one_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L119-L121">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_one_one"><span class="name">jacobiSum_one_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">1</span> <span class="fn">1</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F</span>)</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">2</span></div></div><p>If <code>1</code> is the trivial multiplicative character on a finite field <code>F</code>, then <code>J(1,1) = #F-2</code>.</p></div></div><div class="decl" id="jacobiSum_one_nontrivial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L125-L135">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_one_nontrivial"><span class="name">jacobiSum_one_nontrivial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn">χ</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">1</span> <span class="fn">χ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">-<span class="fn">1</span></span></div></div><p>If <code>χ</code> is a nontrivial multiplicative character on a finite field <code>F</code>, then <code>J(1,χ) = -1</code>.</p></div></div><div class="decl" id="jacobiSum_nontrivial_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L137-L161">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_nontrivial_inv"><span class="name">jacobiSum_nontrivial_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn">χ</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> <span class="fn">χ</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><span class="fn">χ</span> <span class="fn">(-<span class="fn">1</span>)</span></span></div></div><p>If <code>χ</code> is a nontrivial multiplicative character on a finite field <code>F</code>,
+then <code>J(χ,χ⁻¹) = -χ(-1)</code>.</p></div></div><div class="decl" id="jacobiSum_mul_nontrivial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L163-L183">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_mul_nontrivial"><span class="name">jacobiSum_mul_nontrivial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ </span><span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">χ</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">φ</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">F</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> (<span class="fn">χ</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">φ</span>) <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> <span class="fn">φ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">φ</span> <span class="fn">ψ</span></span></div></div><p>If <code>χ</code> and <code>φ</code> are multiplicative characters on a finite field <code>F</code> such that
+<code>χφ</code> is nontrivial, then <code>g(χφ) * J(χ,φ) = g(χ) * g(φ)</code>.</p></div></div><div class="decl" id="jacobiSum_eq_gaussSum_mul_gaussSum_div_gaussSum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L191-L197">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_eq_gaussSum_mul_gaussSum_div_gaussSum"><span class="name">jacobiSum_eq_gaussSum_mul_gaussSum_div_gaussSum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F</span>)</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ </span><span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">F'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχφ</span> : <span class="fn">χ</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">φ</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ψ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">F</span> <span class="fn">F'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn"><span class="fn">ψ</span>.<a href="../../.././Mathlib/NumberTheory/LegendreSymbol/AddCharacter.html#AddChar.IsPrimitive">IsPrimitive</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> <span class="fn">φ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">φ</span> <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><a href="../../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> (<span class="fn">χ</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">φ</span>) <span class="fn">ψ</span></span></div></div><p>If <code>χ</code> and <code>φ</code> are multiplicative characters on a finite field <code>F</code> with values
+in another field <code>F'</code> and such that <code>χφ</code> is nontrivial, then <code>J(χ,φ) = g(χ) * g(φ) / g(χφ)</code>.</p></div></div><div class="decl" id="jacobiSum_mul_jacobiSum_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L200-L235">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_mul_jacobiSum_inv"><span class="name">jacobiSum_mul_jacobiSum_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F'</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/CharP/Defs.html#ringChar">ringChar</a> <span class="fn">F'</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn"><a href="../../.././Mathlib/Algebra/CharP/Defs.html#ringChar">ringChar</a> <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ </span><span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">F'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn">χ</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn">φ</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hχφ</span> : <span class="fn">χ</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">φ</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> <span class="fn">φ</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">φ</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F</span>)</span></span></div></div><p>If <code>χ</code> and <code>φ</code> are multiplicative characters on a finite field <code>F</code> with values in another
+field <code>F'</code> such that <code>χ</code>, <code>φ</code> and <code>χφ</code> are all nontrivial and <code>char F' ≠ char F</code>, then
+<code>J(χ,φ) * J(χ⁻¹,φ⁻¹) = #F</code> (in <code>F'</code>).</p></div></div><div class="decl" id="jacobiSum_mem_algebraAdjoin_of_pow_eq_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L275-L283">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum_mem_algebraAdjoin_of_pow_eq_one"><span class="name">jacobiSum_mem_algebraAdjoin_of_pow_eq_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ </span><span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn">χ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn">φ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hμ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">μ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> <span class="fn">φ</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>[<span class="fn">μ</span>]</span></div></div><p>If <code>χ</code> and <code>φ</code> are multiplicative characters on a finite field <code>F</code> satisfying <code>χ^n = φ^n = 1</code>
+and with values in an integral domain <code>R</code>, and <code>μ</code> is a primitive <code>n</code>th root of unity in <code>R</code>,
+then the Jacobi sum <code>J(χ,φ)</code> is in <code>ℤ[μ] ⊆ R</code>.</p></div></div><div class="decl" id="exists_jacobiSum_eq_neg_one_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L285-L316">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#exists_jacobiSum_eq_neg_one_add"><span class="name">exists_jacobiSum_eq_neg_one_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">2</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ </span><span class="fn">ψ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn">χ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn">ψ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn'</span> : <span class="fn">n</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn"><a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.html#IsPrimitiveRoot">IsPrimitiveRoot</a> <span class="fn">μ</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">z</span> ∈ <span class="fn"><a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>[<span class="fn">μ</span>]</span>, <span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">-<span class="fn">1</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">z</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> (<span class="fn">μ</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>) <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span></span></div></div><p>If <code>χ</code> and <code>ψ</code> are multiplicative characters of order dividing <code>n</code> on a finite field <code>F</code>
+with values in an integral domain <code>R</code> and <code>μ</code> is a primitive <code>n</code>th root of unity in <code>R</code>,
+then <code>J(χ,ψ) = -1 + z*(μ - 1)^2</code> for some <code>z ∈ ℤ[μ] ⊆ R</code>. (We assume that <code>#F ≡ 1 mod n</code>.)
+Note that we do not state this as a divisibility in <code>R</code>, as this would give a weaker statement.</p></div></div><div class="decl" id="gaussSum_pow_eq_prod_jacobiSum_aux"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L324-L338">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#gaussSum_pow_eq_prod_jacobiSum_aux"><span class="name">gaussSum_pow_eq_prod_jacobiSum_aux</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">F</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#orderOf">orderOf</a> <span class="fn">χ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> (<span class="fn">χ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>) <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">∏ <span class="fn">j</span> ∈ <span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#Finset.Ico">Finset.Ico</a> <span class="fn">1</span> <span class="fn">n</span></span>, <span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> (<span class="fn">χ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">j</span>)</span></span></div></div></div></div><div class="decl" id="gaussSum_pow_eq_prod_jacobiSum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/JacobiSum/Basic.lean#L340-L351">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#gaussSum_pow_eq_prod_jacobiSum"><span class="name">gaussSum_pow_eq_prod_jacobiSum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ψ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">F</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn">2</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#orderOf">orderOf</a> <span class="fn">χ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn"><span class="fn">ψ</span>.<a href="../../.././Mathlib/NumberTheory/LegendreSymbol/AddCharacter.html#AddChar.IsPrimitive">IsPrimitive</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#orderOf">orderOf</a> <span class="fn">χ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> <span class="fn">(-<span class="fn">1</span>)</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F</span>)</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">∏ <span class="fn">i</span> ∈ <span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#Finset.Ico">Finset.Ico</a> <span class="fn">1</span> (<span class="fn"><a href="../../.././Mathlib/GroupTheory/OrderOfElement.html#orderOf">orderOf</a> <span class="fn">χ</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</span>, <span class="fn"><a href="../../.././Mathlib/NumberTheory/JacobiSum/Basic.html#jacobiSum">jacobiSum</a> <span class="fn">χ</span> (<span class="fn">χ</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">i</span>)</span></span></div></div><p>If <code>χ</code> is a multiplicative character of order <code>n ≥ 2</code> on a finite field <code>F</code>,
+then <code>g(χ)^n = χ(-1) * #F * J(χ,χ) * J(χ,χ²) * ... * J(χ,χⁿ⁻²)</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

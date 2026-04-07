@@ -1,0 +1,123 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../../.././style.css"></link><link rel="icon" href="../../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Ring.Action.Pointwise.Set</title><script defer="true" src="../../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Ring.Action.Pointwise.Set";</script><script type="module" src="../../../../.././jump-src.js"></script><script type="module" src="../../../../.././search.js"></script><script type="module" src="../../../../.././expand-nav.js"></script><script type="module" src="../../../../.././how-about.js"></script><script type="module" src="../../../../.././instances.js"></script><script type="module" src="../../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Ring</span>.<span class="name">Action</span>.<span class="name">Pointwise</span>.<span class="name">Set</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Ring/Action/Pointwise/Set.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../../.././Init.html">Init</a></li><li><a href="../../../../.././Mathlib/Algebra/Module/Torsion/Free.html">Mathlib.Algebra.Module.Torsion.Free</a></li><li><a href="../../../../.././Mathlib/Algebra/Group/Pointwise/Set/Basic.html">Mathlib.Algebra.Group.Pointwise.Set.Basic</a></li><li><a href="../../../../.././Mathlib/Algebra/Group/Pointwise/Set/Scalar.html">Mathlib.Algebra.Group.Pointwise.Set.Scalar</a></li><li><a href="../../../../.././Mathlib/Algebra/GroupWithZero/Action/Pointwise/Set.html">Mathlib.Algebra.GroupWithZero.Action.Pointwise.Set</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Ring.Action.Pointwise.Set" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Set.smul_set_neg"><span class="name">Set</span>.<span class="name">smul_set_neg</span></a></div><div class="nav_link"><a class="break_within" href="#Set.smul_neg"><span class="name">Set</span>.<span class="name">smul_neg</span></a></div><div class="nav_link"><a class="break_within" href="#Set.add_smul_subset"><span class="name">Set</span>.<span class="name">add_smul_subset</span></a></div><div class="nav_link"><a class="break_within" href="#Set.zero_mem_smul_set_iff"><span class="name">Set</span>.<span class="name">zero_mem_smul_set_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Set.zero_mem_smul_iff"><span class="name">Set</span>.<span class="name">zero_mem_smul_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Set.neg_smul_set"><span class="name">Set</span>.<span class="name">neg_smul_set</span></a></div><div class="nav_link"><a class="break_within" href="#Set.neg_smul"><span class="name">Set</span>.<span class="name">neg_smul</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Pointwise-operations-of-sets-in-a-ring" class="markdown-heading">Pointwise operations of sets in a ring <a class="hover-link" href="#Pointwise-operations-of-sets-in-a-ring">#</a></h1><p>This file proves properties of pointwise operations of sets in a ring.</p><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>set multiplication, set addition, pointwise addition, pointwise multiplication,
+pointwise subtraction</p></div><div class="decl" id="Set.smul_set_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Ring/Action/Pointwise/Set.lean#L38-L40">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Ring/Action/Pointwise/Set.html#Set.smul_set_neg"><span class="name">Set</span>.<span class="name">smul_set_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/GroupWithZero/Action/Defs.html#DistribMulAction">DistribMulAction</a> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">t</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a>(<span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span>)</div></div></div></div><div class="decl" id="Set.smul_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Ring/Action/Pointwise/Set.lean#L42-L45">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Ring/Action/Pointwise/Set.html#Set.smul_neg"><span class="name">Set</span>.<span class="name">smul_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/GroupWithZero/Action/Defs.html#DistribMulAction">DistribMulAction</a> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">t</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a>(<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span>)</div></div></div></div><div class="decl" id="Set.add_smul_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Ring/Action/Pointwise/Set.lean#L52-L54">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Ring/Action/Pointwise/Set.html#Set.add_smul_subset"><span class="name">Set</span>.<span class="name">add_smul_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">s</span> <a href="../../../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">s</span></div></div></div></div><div class="decl" id="Set.zero_mem_smul_set_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Ring/Action/Pointwise/Set.lean#L58-L61">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Ring/Action/Pointwise/Set.html#Set.zero_mem_smul_set_iff"><span class="name">Set</span>.<span class="name">zero_mem_smul_set_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span> <a href="../../../../.././Init/Core.html#Iff">↔</a> <span class="fn">0</span> <a href="../../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></div></div></div></div><div class="decl" id="Set.zero_mem_smul_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Ring/Action/Pointwise/Set.lean#L63-L68">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Ring/Action/Pointwise/Set.html#Set.zero_mem_smul_iff"><span class="name">Set</span>.<span class="name">zero_mem_smul_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">Module.IsTorsionFree</a> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span> <a href="../../../../.././Init/Core.html#Iff">↔</a> <span class="fn">0</span> <a href="../../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">t</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span> <a href="../../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">0</span> <a href="../../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span> <a href="../../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">s</span>.<a href="../../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span></div></div></div></div><div class="decl" id="Set.neg_smul_set"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Ring/Action/Pointwise/Set.lean#L75-L77">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Ring/Action/Pointwise/Set.html#Set.neg_smul_set"><span class="name">Set</span>.<span class="name">neg_smul_set</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a>(<span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span>)</div></div></div></div><div class="decl" id="Set.neg_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Ring/Action/Pointwise/Set.lean#L79-L82">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Ring/Action/Pointwise/Set.html#Set.neg_smul"><span class="name">Set</span>.<span class="name">neg_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn"><a href="../../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a>(<span class="fn">s</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span>)</div></div></div></div></main>
+<nav class="nav"><iframe src="../../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

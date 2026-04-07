@@ -1,0 +1,217 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Lie.Killing</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Lie.Killing";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Lie</span>.<span class="name">Killing</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/Lie/InvariantForm.html">Mathlib.Algebra.Lie.InvariantForm</a></li><li><a href="../../.././Mathlib/Algebra/Lie/TraceForm.html">Mathlib.Algebra.Lie.TraceForm</a></li><li><a href="../../.././Mathlib/Algebra/Lie/Semisimple/Basic.html">Mathlib.Algebra.Lie.Semisimple.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Lie.Killing" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.ker_killingForm_eq_bot"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">ker_killingForm_eq_bot</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.killingForm_nondegenerate"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">killingForm_nondegenerate</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.ideal_eq_bot_of_isLieAbelian"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">ideal_eq_bot_of_isLieAbelian</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.instSemisimple"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">instSemisimple</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.instHasTrivialRadical"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">instHasTrivialRadical</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.isLieAbelian_iff_subsingleton"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">isLieAbelian_iff_subsingleton</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.killingForm_of_equiv_apply"><span class="name">LieAlgebra</span>.<span class="name">killingForm_of_equiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.isKilling_of_equiv"><span class="name">LieAlgebra</span>.<span class="name">isKilling_of_equiv</span></a></div><div class="nav_link"><a class="break_within" href="#LieEquiv.isKilling"><span class="name">LieEquiv</span>.<span class="name">isKilling</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.isCompl_killingCompl"><span class="name">LieIdeal</span>.<span class="name">isCompl_killingCompl</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Lie-algebras-with-non-degenerate-Killing-forms" class="markdown-heading">Lie algebras with non-degenerate Killing forms. <a class="hover-link" href="#Lie-algebras-with-non-degenerate-Killing-forms">#</a></h1><p>In characteristic zero, the following three conditions are equivalent:</p><ol><li>The solvable radical of a Lie algebra is trivial</li><li>A Lie algebra is a direct sum of its simple ideals</li><li>A Lie algebra has non-degenerate Killing form</li></ol><p>In positive characteristic, it is still true that 3 implies 2, and that 2 implies 1, but there are
+counterexamples to the remaining implications. Thus condition 3 is the strongest assumption.
+Furthermore, much of the Cartan-Killing classification of semisimple Lie algebras in characteristic
+zero, continues to hold in positive characteristic (over a perfect field) if the Lie algebra has a
+non-degenerate Killing form.</p><p>This file contains basic definitions and results for such Lie algebras.</p><h2 id="Main-declarations" class="markdown-heading">Main declarations <a class="hover-link" href="#Main-declarations">#</a></h2><ul><li><code><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a></code>: a typeclass encoding the fact that a Lie algebra has a non-singular
+Killing form.</li><li><code><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling.instSemisimple">LieAlgebra.IsKilling.instSemisimple</a></code>: if a finite-dimensional Lie algebra over a field
+has non-singular Killing form then it is semisimple.</li><li><code><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling.instHasTrivialRadical">LieAlgebra.IsKilling.instHasTrivialRadical</a></code>: if a Lie algebra over a PID
+has non-singular Killing form then it has trivial radical.</li><li><code><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieIdeal.isCompl_killingCompl">LieIdeal.isCompl_killingCompl</a></code>: if a Lie algebra has non-singular Killing form then for all
+ideals, an ideal and its Killing orthogonal complement are complements.</li></ul><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li>Prove that in characteristic zero, a semisimple Lie algebra has non-singular Killing form.</li></ul></div><div class="decl" id="LieAlgebra.IsKilling"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L51-L57">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>We say a Lie algebra is Killing if its Killing form is non-singular.</p><p>NB: This is not standard terminology (the literature does not seem to name Lie algebras with this
+property).</p><ul class="structure_fields" id="LieAlgebra.IsKilling.mk"><li id="LieAlgebra.IsKilling.killingCompl_top_eq_bot" class="structure_field"><div class="structure_field_info">killingCompl_top_eq_bot : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/TraceForm.html#LieIdeal.killingCompl">LieIdeal.killingCompl</a> <span class="fn">R</span> <span class="fn">L</span> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div><div class="structure_field_doc"><p>We say a Lie algebra is Killing if its Killing form is non-singular.</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-LieAlgebra.IsKilling" class="instances-list"></ul></details></div></div><div class="decl" id="LieAlgebra.IsKilling.ker_killingForm_eq_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L65-L67">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling.ker_killingForm_eq_bot"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">ker_killingForm_eq_bot</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Ker.html#LinearMap.ker">LinearMap.ker</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/TraceForm.html#killingForm">killingForm</a> <span class="fn">R</span> <span class="fn">L</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.killingForm_nondegenerate"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L69-L72">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling.killingForm_nondegenerate"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">killingForm_nondegenerate</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/TraceForm.html#killingForm">killingForm</a> <span class="fn">R</span> <span class="fn">L</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/BilinearForm/Properties.html#LinearMap.BilinForm.Nondegenerate">Nondegenerate</a></span></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.ideal_eq_bot_of_isLieAbelian"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L76-L80">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling.ideal_eq_bot_of_isLieAbelian"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">ideal_eq_bot_of_isLieAbelian</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FreeModule/Basic.html#Module.Free">Module.Free</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Span.html#IsPrincipalIdealRing">IsPrincipalIdealRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">R</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Abelian.html#IsLieAbelian">IsLieAbelian</a> <span class="fn">↥<span class="fn">I</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">I</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.instSemisimple"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L83-L89">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling.instSemisimple"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">instSemisimple</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Semisimple/Defs.html#LieAlgebra.IsSemisimple">IsSemisimple</a> <span class="fn">K</span> <span class="fn">L</span></span></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.instHasTrivialRadical"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L91-L99">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling.instHasTrivialRadical"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">instHasTrivialRadical</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FreeModule/Basic.html#Module.Free">Module.Free</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Span.html#IsPrincipalIdealRing">IsPrincipalIdealRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Semisimple/Defs.html#LieAlgebra.HasTrivialRadical">HasTrivialRadical</a> <span class="fn">R</span> <span class="fn">L</span></span></div></div><p>The converse of this is true over a field of characteristic zero. There are counterexamples
+over fields with positive characteristic.</p><p>Note that when the coefficients are a field this instance is redundant since we have
+<code><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling.instSemisimple">LieAlgebra.IsKilling.instSemisimple</a></code> and <code><a href="../../.././Mathlib/Algebra/Lie/Semisimple/Basic.html#LieAlgebra.IsSemisimple.instHasTrivialRadical">LieAlgebra.IsSemisimple.instHasTrivialRadical</a></code>.</p></div></div><div class="decl" id="LieAlgebra.IsKilling.isLieAbelian_iff_subsingleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L101-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling.isLieAbelian_iff_subsingleton"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">isLieAbelian_iff_subsingleton</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FreeModule/Basic.html#Module.Free">Module.Free</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Span.html#IsPrincipalIdealRing">IsPrincipalIdealRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Abelian.html#IsLieAbelian">IsLieAbelian</a> <span class="fn">L</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">L</span></span></div></div></div></div><div class="decl" id="LieAlgebra.killingForm_of_equiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L118-L123">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.killingForm_of_equiv_apply"><span class="name">LieAlgebra</span>.<span class="name">killingForm_of_equiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">L</span> <a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieEquiv">≃ₗ⁅</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieEquiv">⁆</a> <span class="fn">L'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">L</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/TraceForm.html#killingForm">killingForm</a> <span class="fn">R</span> <span class="fn">L'</span>)</span> <span class="fn">(<span class="fn">e</span> <span class="fn">x</span>)</span>)</span> <span class="fn">(<span class="fn">e</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/TraceForm.html#killingForm">killingForm</a> <span class="fn">R</span> <span class="fn">L</span>)</span> <span class="fn">x</span>)</span> <span class="fn">y</span></span></div></div><p>Given an equivalence <code>e</code> of Lie algebras from <code>L</code> to <code>L'</code>, and elements <code>x y : L</code>, the
+respective Killing forms of <code>L</code> and <code>L'</code> satisfy <code>κ'(e x, e y) = κ(x, y)</code>.</p></div></div><div class="decl" id="LieAlgebra.isKilling_of_equiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L125-L137">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.isKilling_of_equiv"><span class="name">LieAlgebra</span>.<span class="name">isKilling_of_equiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">L</span> <a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieEquiv">≃ₗ⁅</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieEquiv">⁆</a> <span class="fn">L'</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">R</span> <span class="fn">L'</span></span></div></div><p>Given a Killing Lie algebra <code>L</code>, if <code>L'</code> is isomorphic to <code>L</code>, then <code>L'</code> is Killing too.</p></div></div><div class="decl" id="LieEquiv.isKilling"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L139-L139">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieEquiv.isKilling"><span class="name">LieEquiv</span>.<span class="name">isKilling</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">R</span> <span class="fn">L'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">R</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">L</span> <a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieEquiv">≃ₗ⁅</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieEquiv">⁆</a> <span class="fn">L'</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">R</span> <span class="fn">L'</span></span></div></div><p><strong>Alias</strong> of <code><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.isKilling_of_equiv">LieAlgebra.isKilling_of_equiv</a></code>.</p><hr>
+<p>Given a Killing Lie algebra <code>L</code>, if <code>L'</code> is isomorphic to <code>L</code>, then <code>L'</code> is Killing too.</p></div></div><div class="decl" id="LieIdeal.isCompl_killingCompl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Killing.lean#L148-L164">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Lie/Killing.html#LieIdeal.isCompl_killingCompl"><span class="name">LieIdeal</span>.<span class="name">isCompl_killingCompl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Disjoint.html#IsCompl">IsCompl</a> <span class="fn">I</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Lie/TraceForm.html#LieIdeal.killingCompl">killingCompl</a> <span class="fn">K</span> <span class="fn">L</span> <span class="fn">I</span>)</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

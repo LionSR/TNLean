@@ -1,0 +1,122 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.LinearAlgebra.Center</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.LinearAlgebra.Center";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">LinearAlgebra</span>.<span class="name">Center</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Center.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/LinearAlgebra/Transvection/Basic.html">Mathlib.LinearAlgebra.Transvection.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.LinearAlgebra.Center" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#LinearMap.commute_transvections_iff_of_basis"><span class="name">LinearMap</span>.<span class="name">commute_transvections_iff_of_basis</span></a></div><div class="nav_link"><a class="break_within" href="#LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent_of_basis"><span class="name">LinearMap</span>.<span class="name">exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent_of_basis</span></a></div><div class="nav_link"><a class="break_within" href="#LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent"><span class="name">LinearMap</span>.<span class="name">exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent</span></a></div><div class="nav_link"><a class="break_within" href="#LinearMap.exists_eq_smul_id_of_forall_notLinearIndependent"><span class="name">LinearMap</span>.<span class="name">exists_eq_smul_id_of_forall_notLinearIndependent</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Center-of-the-algebra-of-linear-endomorphisms" class="markdown-heading">Center of the algebra of linear endomorphisms <a class="hover-link" href="#Center-of-the-algebra-of-linear-endomorphisms">#</a></h1><p>If <code>V</code> is an <code>R</code>-module, we say that an endomorphism <code>f : <a href="../.././Mathlib/Algebra/Module/LinearMap/End.html#Module.End">Module.End</a> R V</code>
+is a <em>homothety</em> with central ratio if there exists <code>a ∈ <a href="../.././Mathlib/Algebra/Group/Center.html#Set.center">Set.center</a> R</code>
+such that <code>f x = a • x</code> for all <code>x</code>.
+By <code><a href="../.././Mathlib/Algebra/Central/End.html#Module.End.mem_subsemiringCenter_iff">Module.End.mem_subsemiringCenter_iff</a></code>, these linear maps constitute
+the center of <code><a href="../.././Mathlib/Algebra/Module/LinearMap/End.html#Module.End">Module.End</a> R V</code>.
+(When <code>R</code> is commutative, we can write <code>f = a • <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.id">LinearMap.id</a></code>.)</p><p>In what follows, <code>V</code> is assumed to be a free <code>R</code>-module.</p><ul><li><p><code><a href="../.././Mathlib/LinearAlgebra/Center.html#LinearMap.commute_transvections_iff_of_basis">LinearMap.commute_transvections_iff_of_basis</a></code>:
+if an endomorphism <code>f : V →ₗ[R] V</code> commutes with every elementary transvections
+(in a given basis), then it is an homothety with central ratio.
+(Assumes that the basis is provided and has a non trivial set of indices.)</p></li><li><p><code><a href="../.././Mathlib/LinearAlgebra/Center.html#LinearMap.exists_eq_smul_id_of_forall_notLinearIndependent">LinearMap.exists_eq_smul_id_of_forall_notLinearIndependent</a></code>:
+over a commutative ring <code>R</code> which is a domain, an endomorphism <code>f : V →ₗ[R] V</code>
+of a free domain such that <code>v</code> and <code>f v</code> are not linearly independent,
+for all <code>v : V</code>, is a homothety.</p></li><li><p><code><a href="../.././Mathlib/LinearAlgebra/Center.html#LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent">LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent</a></code>:
+a variant that does not assume that <code>R</code> is commutative.
+Then the homothety has central ratio.</p></li><li><p><code><a href="../.././Mathlib/LinearAlgebra/Center.html#LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent_of_basis">LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent_of_basis</a></code>:
+a variant that does not assume that <code>R</code> has the strong rank condition,
+but requires a basis.</p></li></ul><p>Note. In the noncommutative case, the last two results do not hold
+when the rank is equal to 1. Indeed, right multiplications
+with noncentral ratio of the <code>R</code>-module <code>R</code> satisfy the property
+that <code>f v</code> and <code>v</code> are linearly independent, for all <code>v : V</code>,
+but they are not left multiplication by some element.</p></div><div class="decl" id="LinearMap.commute_transvections_iff_of_basis"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Center.lean#L58-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/LinearAlgebra/Center.html#LinearMap.commute_transvections_iff_of_basis"><span class="name">LinearMap</span>.<span class="name">commute_transvections_iff_of_basis</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">V</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">V</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">V</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hcomm</span> : <span class="fn">∀ (<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>) (<span class="fn">r</span> : <span class="fn">R</span>), <span class="fn"><span class="fn">i</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">j</span> → <span class="fn"><a href="../.././Mathlib/Algebra/Group/Commute/Defs.html#Commute">Commute</a> <span class="fn">f</span> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">b</span>.<a href="../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.coord">coord</a></span> <span class="fn">i</span>)</span>.<a href="../.././Mathlib/LinearAlgebra/Transvection/Basic.html#LinearMap.transvection">transvection</a></span> (<span class="fn">r</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">b</span> <span class="fn">j</span></span>))</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/Algebra/Ring/Subring/Basic.html#Subring.center">Subring.center</a> <span class="fn">R</span>)</span></span>), <span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">1</span></span></div></div><p>A linear endomorphism of a free module of rank at least 2
+that commutes with transvections consists of homotheties with central ratio.</p></div></div><div class="decl" id="LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent_of_basis"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Center.lean#L94-L180">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/LinearAlgebra/Center.html#LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent_of_basis"><span class="name">LinearMap</span>.<span class="name">exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent_of_basis</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">V</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">V</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">v</span> : <span class="fn">V</span>), <a href="../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">R</span> <a href="../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">v</span><a href="../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">v</span></span><a href="../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/Algebra/Ring/Subring/Basic.html#Subring.center">Subring.center</a> <span class="fn">R</span>)</span></span>), <span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">1</span></span></div></div><p>Over a domain, an endomorphism <code>f</code> of a free module <code>V</code>
+of rank ≠ 1 such that <code>f v</code> and <code>v</code> are colinear, for all <code>v : V</code>,
+consists of homotheties with central ratio.</p><p>In the commutative case, use <code>LinearMap.exists_eq_smul_id</code>.</p><p>This is a variant of <code>LinearMap.exists_mem_center_apply_smul</code>
+which switches the use <code>StrongRankInduction</code> and <code>finrank</code>
+for the cardinality of a given basis.</p><p>When <code>finrank R V = 1</code>, up to a linear equivalence <code>V ≃ₗ[R] R</code>,
+then any <code>f</code> is <em>right</em>-multiplication by some <code>a : K</code>,
+but not necessarily <em>left</em>-multiplication by an element of the center of <code>R</code>.</p></div></div><div class="decl" id="LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Center.lean#L183-L210">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/LinearAlgebra/Center.html#LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent"><span class="name">LinearMap</span>.<span class="name">exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/InvariantBasisNumber.html#StrongRankCondition">StrongRankCondition</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/FreeModule/Basic.html#Module.Free">Module.Free</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">V</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">V</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hV1</span> : <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">R</span> <span class="fn">V</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">v</span> : <span class="fn">V</span>), <a href="../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">R</span> <a href="../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">v</span><a href="../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">v</span></span><a href="../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/Algebra/Ring/Subring/Basic.html#Subring.center">Subring.center</a> <span class="fn">R</span>)</span></span>), <span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">1</span></span></div></div><p>Over a domain <code>R</code>, an endomorphism <code>f</code> of a free module <code>V</code>
+of rank ≠ 1 such that <code>f v</code> and <code>v</code> are colinear, for all <code>v : V</code>,
+consists of homotheties with central ratio.</p><p>When <code>R</code>does not satisfy <code><a href="../.././Mathlib/LinearAlgebra/InvariantBasisNumber.html#StrongRankCondition">StrongRankCondition</a></code>, use
+<code>LinearMap.exists_mem_center_apply_eq_smul_of_basis</code>.</p><p>When <code>finrank R V = 1</code>, up to a linear equivalence <code>V ≃ₗ[R] R</code>,
+then any <code>f</code> is <em>right</em>-multiplication by some <code>a : K</code>,
+but not necessarily <em>left</em>-multiplication by an element of the center of <code>R</code>.</p></div></div><div class="decl" id="LinearMap.exists_eq_smul_id_of_forall_notLinearIndependent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Center.lean#L212-L228">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/LinearAlgebra/Center.html#LinearMap.exists_eq_smul_id_of_forall_notLinearIndependent"><span class="name">LinearMap</span>.<span class="name">exists_eq_smul_id_of_forall_notLinearIndependent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/FreeModule/Basic.html#Module.Free">Module.Free</a> <span class="fn">R</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">V</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">V</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">v</span> : <span class="fn">V</span>), <a href="../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">R</span> <a href="../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">v</span><a href="../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">v</span></span><a href="../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">R</span>), <span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">1</span></span></div></div><p>Over a commutative domain, an endomorphism <code>f</code> of a free module <code>V</code>
+such that <code>f v</code> and <code>v</code> are colinear, for all <code>v : V</code>,
+consists of homotheties.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

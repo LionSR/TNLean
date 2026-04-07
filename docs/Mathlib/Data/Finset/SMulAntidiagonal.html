@@ -1,0 +1,488 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Data.Finset.SMulAntidiagonal</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Data.Finset.SMulAntidiagonal";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Data</span>.<span class="name">Finset</span>.<span class="name">SMulAntidiagonal</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Data/Set/SMulAntidiagonal.html">Mathlib.Data.Set.SMulAntidiagonal</a></li><li><a href="../../.././Mathlib/Algebra/Group/Pointwise/Set/Scalar.html">Mathlib.Algebra.Group.Pointwise.Set.Scalar</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Data.Finset.SMulAntidiagonal" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Set.IsPWO.smul"><span class="name">Set</span>.<span class="name">IsPWO</span>.<span class="name">smul</span></a></div><div class="nav_link"><a class="break_within" href="#Set.IsPWO.vadd"><span class="name">Set</span>.<span class="name">IsPWO</span>.<span class="name">vadd</span></a></div><div class="nav_link"><a class="break_within" href="#Set.IsWF.smul"><span class="name">Set</span>.<span class="name">IsWF</span>.<span class="name">smul</span></a></div><div class="nav_link"><a class="break_within" href="#Set.IsWF.vadd"><span class="name">Set</span>.<span class="name">IsWF</span>.<span class="name">vadd</span></a></div><div class="nav_link"><a class="break_within" href="#Set.IsWF.min_smul"><span class="name">Set</span>.<span class="name">IsWF</span>.<span class="name">min_smul</span></a></div><div class="nav_link"><a class="break_within" href="#Set.IsWF.min_vadd"><span class="name">Set</span>.<span class="name">IsWF</span>.<span class="name">min_vadd</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SMulAntidiagonal"><span class="name">Finset</span>.<span class="name">SMulAntidiagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.VAddAntidiagonal"><span class="name">Finset</span>.<span class="name">VAddAntidiagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.mem_smulAntidiagonal"><span class="name">Finset</span>.<span class="name">mem_smulAntidiagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.mem_vaddAntidiagonal"><span class="name">Finset</span>.<span class="name">mem_vaddAntidiagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.smulAntidiagonal_mono_left"><span class="name">Finset</span>.<span class="name">smulAntidiagonal_mono_left</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.vaddAntidiagonal_mono_left"><span class="name">Finset</span>.<span class="name">vaddAntidiagonal_mono_left</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.smulAntidiagonal_mono_right"><span class="name">Finset</span>.<span class="name">smulAntidiagonal_mono_right</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.vaddAntidiagonal_mono_right"><span class="name">Finset</span>.<span class="name">vaddAntidiagonal_mono_right</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.support_smulAntidiagonal_subset_smul"><span class="name">Finset</span>.<span class="name">support_smulAntidiagonal_subset_smul</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.support_vaddAntidiagonal_subset_vadd"><span class="name">Finset</span>.<span class="name">support_vaddAntidiagonal_subset_vadd</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.isPWO_support_smulAntidiagonal"><span class="name">Finset</span>.<span class="name">isPWO_support_smulAntidiagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.isPWO_support_vaddAntidiagonal"><span class="name">Finset</span>.<span class="name">isPWO_support_vaddAntidiagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.smulAntidiagonal_min_smul_min"><span class="name">Finset</span>.<span class="name">smulAntidiagonal_min_smul_min</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.vaddAntidiagonal_min_vadd_min"><span class="name">Finset</span>.<span class="name">vaddAntidiagonal_min_vadd_min</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Antidiagonal-for-scalar-multiplication-as-a-Finset" class="markdown-heading">Antidiagonal for scalar multiplication as a <code><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code>. <a class="hover-link" href="#Antidiagonal-for-scalar-multiplication-as-a-Finset">#</a></h1><p>Given partially ordered sets <code>G</code> and <code>P</code>, with an action of <code>G</code> on <code>P</code> that preserves and reflects
+the order relation, we construct, for any element <code>a</code> in <code>P</code> and partially well-ordered subsets <code>s</code>
+in <code>G</code> and <code>t</code> in <code>P</code>, the <code><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code> of all pairs of an element in <code>s</code> and an element in <code>t</code> that
+scalar-multiply to <code>a</code>.</p><h2 id="Definitions" class="markdown-heading">Definitions <a class="hover-link" href="#Definitions">#</a></h2><ul><li>Finset.SMulAntidiagonal : Finset antidiagonal for PWO inputs.</li><li>Finset.VAddAntidiagonal : Finset antidiagonal for PWO inputs.</li></ul></div><div class="decl" id="Set.IsPWO.smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L33-L37">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Set.IsPWO.smul"><span class="name">Set</span>.<span class="name">IsPWO</span>.<span class="name">smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul">IsOrderedSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span>).<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span></div></div></div></div><div class="decl" id="Set.IsPWO.vadd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L33-L33">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Set.IsPWO.vadd"><span class="name">Set</span>.<span class="name">IsPWO</span>.<span class="name">vadd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd">IsOrderedVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">s</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">t</span>).<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span></div></div></div></div><div class="decl" id="Set.IsWF.smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L39-L42">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Set.IsWF.smul"><span class="name">Set</span>.<span class="name">IsWF</span>.<span class="name">smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul">IsOrderedSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span>).<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span></div></div></div></div><div class="decl" id="Set.IsWF.vadd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L39-L39">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Set.IsWF.vadd"><span class="name">Set</span>.<span class="name">IsWF</span>.<span class="name">vadd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd">IsOrderedVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">s</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">t</span>).<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span></div></div></div></div><div class="decl" id="Set.IsWF.min_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L44-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Set.IsWF.min_smul"><span class="name">Set</span>.<span class="name">IsWF</span>.<span class="name">min_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul">IsOrderedSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsn</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htn</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">⋯</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">⋯</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">hs</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">hsn</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn"><span class="fn">ht</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">htn</span></span></div></div></div></div><div class="decl" id="Set.IsWF.min_vadd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L44-L44">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Set.IsWF.min_vadd"><span class="name">Set</span>.<span class="name">IsWF</span>.<span class="name">min_vadd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd">IsOrderedVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsn</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htn</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">⋯</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">⋯</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">hs</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">hsn</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn"><span class="fn">ht</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">htn</span></span></div></div></div></div><div class="decl" id="Finset.SMulAntidiagonal"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L65-L73">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal"><span class="name">Finset</span>.<span class="name">SMulAntidiagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> (<span class="fn">G</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">P</span>)</span></div></div><p><code><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal">Finset.SMulAntidiagonal</a> hs ht a</code> is the set of all pairs of an element in <code>s</code> and an
+element in <code>t</code> whose scalar multiplication yields <code>a</code>, but its construction requires proofs that <code>s</code>
+and <code>t</code> are well-ordered.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal">Finset.SMulAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">⋯</span>.<a href="../../.././Mathlib/Data/Set/Finite/Basic.html#Set.Finite.toFinset">toFinset</a></span></li></ul></details><details id="instances-for-list-Finset.SMulAntidiagonal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Finset.VAddAntidiagonal"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L68-L70">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal"><span class="name">Finset</span>.<span class="name">VAddAntidiagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> (<span class="fn">G</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">P</span>)</span></div></div><p><code><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal">Finset.VAddAntidiagonal</a> hs ht a</code> is the set of all pairs of an element in <code>s</code>
+and an element in <code>t</code> whose vector addition yields <code>a</code>, but its construction requires proofs that
+<code>s</code> and <code>t</code> are well-ordered.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal">Finset.VAddAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">⋯</span>.<a href="../../.././Mathlib/Data/Set/Finite/Basic.html#Set.Finite.toFinset">toFinset</a></span></li></ul></details><details id="instances-for-list-Finset.VAddAntidiagonal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Finset.mem_smulAntidiagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L75-L79">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.mem_smulAntidiagonal"><span class="name">Finset</span>.<span class="name">mem_smulAntidiagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">P</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">G</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">P</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal">SMulAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">x</span>.1</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">x</span>.2</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">x</span>.1</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="Finset.mem_vaddAntidiagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L75-L75">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.mem_vaddAntidiagonal"><span class="name">Finset</span>.<span class="name">mem_vaddAntidiagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">P</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">G</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">P</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal">VAddAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">x</span>.1</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">x</span>.2</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">x</span>.1</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn">x</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="Finset.smulAntidiagonal_mono_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L81-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.smulAntidiagonal_mono_left"><span class="name">Finset</span>.<span class="name">smulAntidiagonal_mono_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">u</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hu</span> : <span class="fn"><span class="fn">u</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">P</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">u</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal">SMulAntidiagonal</a> <span class="fn">hu</span> <span class="fn">ht</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal">SMulAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="Finset.vaddAntidiagonal_mono_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L81-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.vaddAntidiagonal_mono_left"><span class="name">Finset</span>.<span class="name">vaddAntidiagonal_mono_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">u</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hu</span> : <span class="fn"><span class="fn">u</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">P</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">u</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal">VAddAntidiagonal</a> <span class="fn">hu</span> <span class="fn">ht</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal">VAddAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="Finset.smulAntidiagonal_mono_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L86-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.smulAntidiagonal_mono_right"><span class="name">Finset</span>.<span class="name">smulAntidiagonal_mono_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t </span><span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hv</span> : <span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">P</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">v</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">t</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal">SMulAntidiagonal</a> <span class="fn">hs</span> <span class="fn">hv</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal">SMulAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="Finset.vaddAntidiagonal_mono_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L86-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.vaddAntidiagonal_mono_right"><span class="name">Finset</span>.<span class="name">vaddAntidiagonal_mono_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t </span><span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hv</span> : <span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">P</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">v</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">t</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal">VAddAntidiagonal</a> <span class="fn">hs</span> <span class="fn">hv</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal">VAddAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="Finset.support_smulAntidiagonal_subset_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L91-L94">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.support_smulAntidiagonal_subset_smul"><span class="name">Finset</span>.<span class="name">support_smulAntidiagonal_subset_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">a</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">P</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal">SMulAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span>)</span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span></div></div></div></div><div class="decl" id="Finset.support_vaddAntidiagonal_subset_vadd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L91-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.support_vaddAntidiagonal_subset_vadd"><span class="name">Finset</span>.<span class="name">support_vaddAntidiagonal_subset_vadd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">a</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">P</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal">VAddAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span>)</span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">t</span></div></div></div></div><div class="decl" id="Finset.isPWO_support_smulAntidiagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L96-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.isPWO_support_smulAntidiagonal"><span class="name">Finset</span>.<span class="name">isPWO_support_smulAntidiagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">a</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">P</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal">SMulAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span>)</span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span></div></div></div></div><div class="decl" id="Finset.isPWO_support_vaddAntidiagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L96-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.isPWO_support_vaddAntidiagonal"><span class="name">Finset</span>.<span class="name">isPWO_support_vaddAntidiagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">a</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">P</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal">VAddAntidiagonal</a> <span class="fn">hs</span> <span class="fn">ht</span> <span class="fn">a</span>)</span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsPWO">IsPWO</a></span></div></div></div></div><div class="decl" id="Finset.smulAntidiagonal_min_smul_min"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L103-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.smulAntidiagonal_min_smul_min"><span class="name">Finset</span>.<span class="name">smulAntidiagonal_min_smul_min</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hns</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hnt</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.SMulAntidiagonal">SMulAntidiagonal</a> <span class="fn">⋯</span> <span class="fn">⋯</span> (<span class="fn"><span class="fn"><span class="fn">hs</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">hns</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn"><span class="fn">ht</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">hnt</span></span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">hs</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">hns</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn"><span class="fn">ht</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">hnt</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a><a href="../../.././Init/Core.html#Singleton.singleton">}</a></div></div></div></div><div class="decl" id="Finset.vaddAntidiagonal_min_vadd_min"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finset/SMulAntidiagonal.lean#L103-L103">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.vaddAntidiagonal_min_vadd_min"><span class="name">Finset</span>.<span class="name">vaddAntidiagonal_min_vadd_min</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF">IsWF</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hns</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hnt</span> : <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finset/SMulAntidiagonal.html#Finset.VAddAntidiagonal">VAddAntidiagonal</a> <span class="fn">⋯</span> <span class="fn">⋯</span> (<span class="fn"><span class="fn"><span class="fn">hs</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">hns</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn"><span class="fn">ht</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">hnt</span></span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">hs</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">hns</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn"><span class="fn">ht</span>.<a href="../../.././Mathlib/Order/WellFoundedSet.html#Set.IsWF.min">min</a></span> <span class="fn">hnt</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a><a href="../../.././Init/Core.html#Singleton.singleton">}</a></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

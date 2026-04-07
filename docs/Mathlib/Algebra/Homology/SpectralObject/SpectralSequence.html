@@ -1,0 +1,1010 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Homology.SpectralObject.SpectralSequence</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Homology.SpectralObject.SpectralSequence";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Homology</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Order/WithBotTop.html">Mathlib.Order.WithBotTop</a></li><li><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html">Mathlib.Algebra.Homology.SpectralObject.HasSpectralSequence</a></li><li><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Homology.html">Mathlib.Algebra.Homology.SpectralObject.Homology</a></li><li><a href="../../../.././Mathlib/Algebra/Homology/SpectralSequence/Basic.html">Mathlib.Algebra.Homology.SpectralSequence.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Homology.SpectralObject.SpectralSequence" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageX</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageXIso"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageXIso</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageD</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD_eq"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageD_eq</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD_pageD"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageD_pageD</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD_pageD_assoc"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageD_pageD_assoc</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">page</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page_d"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">page_d</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page_X"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">page_X</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.shortComplexIso"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">shortComplexIso</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf_w"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kf_w</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kf</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_X₂"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_X₂</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_X₃"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_X₃</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_f"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_f</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_X₁"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_X₁</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_g"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_g</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.instMonoFKfSc"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">instMonoFKfSc</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.isIso_mapFourδ₁Toδ₀'"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">isIso_mapFourδ₁Toδ₀'</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_exact"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_exact</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.isLimitKf"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">isLimitKf</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="The-spectral-sequence-of-a-spectral-object" class="markdown-heading">The spectral sequence of a spectral object <a class="hover-link" href="#The-spectral-sequence-of-a-spectral-object">#</a></h1><p>The main definition in this file is <code>Abelian.SpectralObject.spectralSequence</code> (TODO).
+Assume that <code>X</code> is a spectral object indexed by <code>ι</code> in an abelian category <code>C</code>,
+and that we have <code>data : SpectralSequenceDataCore ι c r₀</code> for a family
+of complex shapes <code>c : ℤ → <a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> κ</code> for a type <code>κ</code> and <code>r₀ : ℤ</code>.
+Then, under the assumption <code>X.HasSpectralSequence data</code> (see the file
+<code><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html">Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.lean</a></code>),
+we obtain <code>X.spectralSequence data</code> (TODO) which is a spectral sequence starting
+on page <code>r₀</code>, such that the <code>r</code>th page (for <code>r₀ ≤ r</code>) is a homological
+complex of shape <code>c r</code>.</p><h2 id="Outline-of-the-construction" class="markdown-heading">Outline of the construction <a class="hover-link" href="#Outline-of-the-construction">#</a></h2><p>The construction of the spectral sequence is as follows. If <code>r₀ ≤ r</code>
+and <code>pq : κ</code>, we define the object of the spectral sequence in position <code>pq</code>
+on the <code>r</code>th page as <code>E^d(i₀ r pq ≤ i₁ pq ≤ i₂ pq ≤ i₃ r pq)</code>
+where <code>d := data.deg pq</code> and the indices <code>i₀</code>, <code>i₁</code>, <code>i₂</code>, <code>i₃</code> are given
+by <code>data</code> (they all depend on <code>pq</code>, and <code>i₀</code> and <code>i₃</code> also depend on the page <code>r</code>),
+see <code>spectralSequencePageXIso</code>.</p><p>When <code>(c r).<a href="../../../.././Mathlib/Data/Rel.html#Rel">Rel</a> pq pq'</code>, the differential from the object in position <code>pq</code>
+to the object in position <code>pq'</code> on the <code>r</code>th page can be related to
+the differential <code>X.d</code> of the spectral object (see the lemma
+<code>spectralSequence_page_d_eq</code>). Indeed, the assumptions that
+are part of <code>data</code> give equalities of indices <code>i₂ r pq' = i₀ r pq</code>
+and <code>i₃ pq' = i₁ pq</code>, so that we have a chain of inequalities
+<code>i₀ r pq' ≤ i₁ pq' ≤ i₂ pq' ≤ i₃ r pq' ≤ i₂ pq ≤ i₃ r pq</code> for which
+the API of spectral objects provides a differential
+<code>X.d : E^n(i₀ r pq ≤ i₁ pq ≤ i₂ pq ≤ i₃ r pq) ⟶ E^{n + 1}(i₀ r pq' ≤ i₁ pq' ≤ i₂ pq' ≤ i₃ r pq')</code>.</p><p>Now, fix <code>r</code> and three positions <code>pq</code>, <code>pq'</code> and <code>pq''</code> such that
+<code>pq</code> is the previous object of <code>pq'</code> for <code>c r</code> and <code>pq''</code> is the next
+object of <code>pq'</code>. (Note that in case there are no nontrivial differentials
+to the object <code>pq'</code> for the complex shape <code>c r</code>, according to the homological
+complex API, we have <code>pq = pq'</code> and the differential is zero. Similarly,
+when there are no nontrivial differentials from the object in position <code>pq'</code>,
+we have <code>pq'' = pq</code> and the corresponding differential is zero.)
+In the favourable case where both <code>(c r).<a href="../../../.././Mathlib/Data/Rel.html#Rel">Rel</a> pq pq'</code> and <code>(c r).<a href="../../../.././Mathlib/Data/Rel.html#Rel">Rel</a> pq' pq''</code>
+hold, the definition <code><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.shortComplexIso">SpectralObject.SpectralSequence.shortComplexIso</a></code>
+in this file can be used in combination to <code>SpectralObject.SpectralSequence.dHomologyIso</code>
+in order to compute the homology of the differentials.)</p><p>In the general case, using the assumptions in <code>X.HasSpectralSequence data</code>,
+we provide a limit kernel fork <code><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf">kf</a></code> and
+a limit cokernel cofork <code>cc</code> of the differentials on the <code>r</code>th page,
+together with an epi-mono factorization <code>fac</code> which allows
+to obtain that the homology of the <code>r</code>th page identifies to the next page (see the definitions
+<code>SpectralObject.SpectralSequence.homologyData</code> (TODO) and
+<code>SpectralObject.spectralSequenceHomologyData</code> (TODO)).</p></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L85-L88">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageX</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">C</span></div></div><p>The object on position <code>pq</code> on the <code>r</code>th page of the spectral sequence.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageXIso"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L90-L105">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageXIso"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageXIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX">pageX</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">hr</span></span> <a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn"><span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Page.html#CategoryTheory.Abelian.SpectralObject.E">E</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span></span></div></div><p>The object on position <code>pq</code> on the <code>r</code>th page of the spectral sequence identifies
+to <code>E^{deg pq}(i₀ ≤ i₁ ≤ i₂ ≤ i₃)</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageXIso">CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageXIso</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">hr</span> <span class="fn">pq</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">h₀</span> <span class="fn">h₁</span> <span class="fn">h₂</span> <span class="fn">h₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">h</span> <span class="fn">hn₁</span>
+    <span class="fn">hn₂</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/EqToHom.html#CategoryTheory.eqToIso">CategoryTheory.eqToIso</a> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageXIso" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L108-L119">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageD</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq </span><span class="fn">pq'</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX">pageX</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">hr</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX">pageX</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">hr</span></span></div></div><p>The differential on the <code>r</code>th page of the spectral sequence.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L122-L141">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD_eq"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageD_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq </span><span class="fn">pq'</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq</span> : <span class="fn"><span class="fn"><span class="fn">(<span class="fn">c</span> <span class="fn">r</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape.Rel">Rel</a></span> <span class="fn">pq</span> <span class="fn">pq'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃ </span><span class="fn">i₄ </span><span class="fn">i₅</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn">i₀</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">i₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn">i₁</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">i₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₃</span> : <span class="fn">i₂</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">i₃</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₄</span> : <span class="fn">i₃</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">i₄</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₅</span> : <span class="fn">i₄</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">i₅</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₄</span> : <span class="fn">i₄</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₅</span> : <span class="fn">i₅</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂ </span><span class="fn">n₃</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₃</span> : <span class="fn">n₂</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₃</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD">pageD</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageXIso">pageXIso</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">⋯</span> <span class="fn">pq</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">i₄</span> <span class="fn">i₅</span> <span class="fn">h₂</span> <span class="fn">h₃</span> <span class="fn">h₄</span> <span class="fn">h₅</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>
+    <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">(<span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Differentials.html#CategoryTheory.Abelian.SpectralObject.d">d</a></span> <span class="fn">f₁</span> <span class="fn">f₂</span> <span class="fn">f₃</span> <span class="fn">f₄</span> <span class="fn">f₅</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">n₃</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span> <span class="fn">hn₃</span>)</span>
+      <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageXIso">pageXIso</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">⋯</span> <span class="fn">pq'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">h₀</span> <span class="fn">h₁</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">n₃</span> <span class="fn">⋯</span> <span class="fn">hn₂</span> <span class="fn">hn₃</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD_pageD"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L143-L163">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD_pageD"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageD_pageD</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq </span><span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD">pageD</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">pq'</span> <span class="fn">hr</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD">pageD</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">hr</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD_pageD_assoc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L143-L143">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD_pageD_assoc"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">pageD_pageD_assoc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq </span><span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX">pageX</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq''</span> <span class="fn">hr</span></span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD">pageD</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">pq'</span> <span class="fn">hr</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD">pageD</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">hr</span>)</span> <span class="fn">h</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">0</span> <span class="fn">h</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.page"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L165-L171">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">page</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/HomologicalComplex.html#HomologicalComplex">HomologicalComplex</a> <span class="fn">C</span> <span class="fn">(<span class="fn">c</span> <span class="fn">r</span>)</span></span></div></div><p>The <code>r</code>th page of the spectral sequence.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.SpectralObject.SpectralSequence.page" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.page_d"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L166-L166">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page_d"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">page_d</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq </span><span class="fn">pq'</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page">page</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">hr</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/HomologicalComplex.html#HomologicalComplex.d">d</a></span> <span class="fn">pq</span> <span class="fn">pq'</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD">pageD</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.page_X"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L166-L166">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page_X"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">page_X</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page">page</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">hr</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/HomologicalComplex.html#HomologicalComplex.X">X</a></span> <span class="fn">pq</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX">pageX</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.shortComplexIso"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L173-L201">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.shortComplexIso"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">shortComplexIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq </span><span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq</span> : <span class="fn"><span class="fn"><span class="fn">(<span class="fn">c</span> <span class="fn">r</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape.Rel">Rel</a></span> <span class="fn">pq</span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq'</span> : <span class="fn"><span class="fn"><span class="fn">(<span class="fn">c</span> <span class="fn">r</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape.Rel">Rel</a></span> <span class="fn">pq'</span> <span class="fn">pq''</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂ </span><span class="fn">n₃ </span><span class="fn">n₄</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₃</span> : <span class="fn">n₂</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₃</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₄</span> : <span class="fn">n₃</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₄</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂'</span> : <span class="fn">n₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page">page</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">hr</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ShortComplex/HomologicalComplex.html#HomologicalComplex.sc'">sc'</a></span> <span class="fn">pq</span> <span class="fn">pq'</span> <span class="fn">pq''</span></span> <a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a>   <span class="fn"><span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Homology.html#CategoryTheory.Abelian.SpectralObject.dShortComplex">dShortComplex</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">n₃</span> <span class="fn">n₄</span> <span class="fn">hn₁</span>
+    <span class="fn">hn₂</span> <span class="fn">hn₃</span> <span class="fn">hn₄</span></span></div></div><p>The short complex of the <code>r</code>th page of the spectral sequence on position <code>pq'</code>
+identifies to the short complex given by the differentials of the spectral object.
+Then, the homology of this short complex can be computed using
+<code>SpectralSequence.dHomologyIso</code>.
+(This only applies in the favourable case when there are <code>pq</code> and <code>pq''</code> such
+that <code>(c r).<a href="../../../.././Mathlib/Data/Rel.html#Rel">Rel</a> pq pq'</code> and <code>(c r).<a href="../../../.././Mathlib/Data/Rel.html#Rel">Rel</a> pq' pq''</code> hold.)</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.SpectralObject.SpectralSequence.shortComplexIso" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf_w"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L220-L233">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf_w"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kf_w</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a>
+    <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">(<span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/EpiMono.html#CategoryTheory.Abelian.SpectralObject.mapFourδ₁Toδ₀'">mapFourδ₁Toδ₀'</a></span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span>
+      <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageXIso">pageXIso</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span>)</span>
+    <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page">page</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">hr</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/HomologicalComplex.html#HomologicalComplex.d">d</a></span> <span class="fn">pq'</span> <span class="fn">pq''</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">0</span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L235-L240">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/Shapes/Kernels.html#CategoryTheory.Limits.KernelFork">Limits.KernelFork</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.page">page</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">hr</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/HomologicalComplex.html#HomologicalComplex.d">d</a></span> <span class="fn">pq'</span> <span class="fn">pq''</span>)</span></span></div></div><p>A (limit) kernel fork of the differential on the <code>r</code>th page whose point
+identifies to an object <code>X.E</code></p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L242-L247">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ShortComplex/Basic.html#CategoryTheory.ShortComplex">ShortComplex</a> <span class="fn">C</span></span></div></div><p>The (exact) short complex attached to the kernel fork <code><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf">kf</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_X₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L243-L243">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_X₂"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_X₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc">kfSc</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">r'</span> <span class="fn">hrr'</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀'</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ShortComplex/Basic.html#CategoryTheory.ShortComplex.X₂">X₂</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX">pageX</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">hr</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_X₃"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L243-L243">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_X₃"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_X₃</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc">kfSc</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">r'</span> <span class="fn">hrr'</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀'</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ShortComplex/Basic.html#CategoryTheory.ShortComplex.X₃">X₃</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageX">pageX</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq''</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_f"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L243-L243">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_f"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_f</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc">kfSc</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">r'</span> <span class="fn">hrr'</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀'</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ShortComplex/Basic.html#CategoryTheory.ShortComplex.f">f</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">(<span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/EpiMono.html#CategoryTheory.Abelian.SpectralObject.mapFourδ₁Toδ₀'">mapFourδ₁Toδ₀'</a></span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁</span> <span class="fn">⋯</span>)</span>
+    <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageXIso">pageXIso</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">⋯</span>)</span>.<a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_X₁"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L243-L243">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_X₁"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_X₁</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc">kfSc</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">r'</span> <span class="fn">hrr'</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀'</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ShortComplex/Basic.html#CategoryTheory.ShortComplex.X₁">X₁</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Page.html#CategoryTheory.Abelian.SpectralObject.E">E</a></span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/CategoryTheory/Category/Preorder.html#CategoryTheory.homOfLE">homOfLE</a> <span class="fn">⋯</span>)</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_g"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L243-L243">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_g"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_g</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc">kfSc</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">r'</span> <span class="fn">hrr'</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀'</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ShortComplex/Basic.html#CategoryTheory.ShortComplex.g">g</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.pageD">pageD</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.instMonoFKfSc"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L249-L253">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.instMonoFKfSc"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">instMonoFKfSc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc">kfSc</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">r'</span> <span class="fn">hrr'</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀'</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ShortComplex/Basic.html#CategoryTheory.ShortComplex.f">f</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.isIso_mapFourδ₁Toδ₀'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L257-L266">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.isIso_mapFourδ₁Toδ₀'"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">isIso_mapFourδ₁Toδ₀'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq'</span> : <span class="fn"><span class="fn"><span class="fn">(<span class="fn">c</span> <span class="fn">r</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape.next">next</a></span> <span class="fn">pq'</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">pq''</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.HasSpectralSequence">HasSpectralSequence</a></span> <span class="fn">data</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <a href="../../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn"><span class="fn">(<span class="fn">c</span> <span class="fn">r</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape.Rel">Rel</a></span> <span class="fn">pq'</span> <span class="fn">pq''</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">(<span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/EpiMono.html#CategoryTheory.Abelian.SpectralObject.mapFourδ₁Toδ₀'">mapFourδ₁Toδ₀'</a></span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_exact"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L270-L298">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc_exact"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">kfSc_exact</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq'</span> : <span class="fn"><span class="fn"><span class="fn">(<span class="fn">c</span> <span class="fn">r</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape.next">next</a></span> <span class="fn">pq'</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">pq''</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.HasSpectralSequence">HasSpectralSequence</a></span> <span class="fn">data</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kfSc">kfSc</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">r'</span> <span class="fn">hrr'</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀'</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ShortComplex/Exact.html#CategoryTheory.ShortComplex.Exact">Exact</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.isLimitKf"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.lean#L301-L306">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.isLimitKf"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">SpectralObject</span>.<span class="name">SpectralSequence</span>.<span class="name">HomologyData</span>.<span class="name">isLimitKf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">κ</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/Basic.html#CategoryTheory.Abelian.SpectralObject">SpectralObject</a> <span class="fn">C</span> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn"><a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a> → <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape">ComplexShape</a> <span class="fn">κ</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₀</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">data</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore">SpectralSequenceDataCore</a> <span class="fn">ι</span> <span class="fn">c</span> <span class="fn">r₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">r'</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrr'</span> : <span class="fn">r</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">r₀</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">pq' </span><span class="fn">pq''</span> : <span class="fn">κ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq'</span> : <span class="fn"><span class="fn"><span class="fn">(<span class="fn">c</span> <span class="fn">r</span>)</span>.<a href="../../../.././Mathlib/Algebra/Homology/ComplexShape.html#ComplexShape.next">next</a></span> <span class="fn">pq'</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">pq''</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i₀' </span><span class="fn">i₀ </span><span class="fn">i₁ </span><span class="fn">i₂ </span><span class="fn">i₃</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀'</span> : <span class="fn">i₀'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r'</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₀</span> : <span class="fn">i₀</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₀">i₀</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₁</span> : <span class="fn">i₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₁">i₁</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₂</span> : <span class="fn">i₂</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₂">i₂</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi₃</span> : <span class="fn">i₃</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.i₃">i₃</a></span> <span class="fn">r</span> <span class="fn">pq'</span> <span class="fn">⋯</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n₀ </span><span class="fn">n₁ </span><span class="fn">n₂</span> : <a href="../../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₁'</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">data</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequenceDataCore.deg">deg</a></span> <span class="fn">pq'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">X</span>.<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/HasSpectralSequence.html#CategoryTheory.Abelian.SpectralObject.HasSpectralSequence">HasSpectralSequence</a></span> <span class="fn">data</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn₁</span> : <span class="fn">n₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₁</span> := by lia)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn₂</span> : <span class="fn">n₁</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">n₂</span> := by lia)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Limits/IsLimit.html#CategoryTheory.Limits.IsLimit">Limits.IsLimit</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf">kf</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">r'</span> <span class="fn">hrr'</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">i₀'</span> <span class="fn">i₀</span> <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀'</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span>)</span></span></div></div><p>The kernel fork <code><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.kf">kf</a></code> is a limit.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Algebra/Homology/SpectralObject/SpectralSequence.html#CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.isLimitKf">CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.isLimitKf</a> <span class="fn">X</span> <span class="fn">data</span> <span class="fn">r</span> <span class="fn">r'</span> <span class="fn">hrr'</span> <span class="fn">hr</span> <span class="fn">pq'</span> <span class="fn">pq''</span> <span class="fn">hpq'</span> <span class="fn">i₀'</span> <span class="fn">i₀</span>
+    <span class="fn">i₁</span> <span class="fn">i₂</span> <span class="fn">i₃</span> <span class="fn">hi₀'</span> <span class="fn">hi₀</span> <span class="fn">hi₁</span> <span class="fn">hi₂</span> <span class="fn">hi₃</span> <span class="fn">n₀</span> <span class="fn">n₁</span> <span class="fn">n₂</span> <span class="fn">hn₁'</span> <span class="fn">hn₁</span> <span class="fn">hn₂</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">⋯</span>.<a href="../../../.././Mathlib/Algebra/Homology/ShortComplex/Exact.html#CategoryTheory.ShortComplex.Exact.fIsKernel">fIsKernel</a></span></li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.SpectralObject.SpectralSequence.HomologyData.isLimitKf" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

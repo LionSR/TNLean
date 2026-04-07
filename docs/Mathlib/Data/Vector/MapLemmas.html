@@ -1,0 +1,886 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Data.Vector.MapLemmas</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Data.Vector.MapLemmas";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Data</span>.<span class="name">Vector</span>.<span class="name">MapLemmas</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Data/Vector/Basic.html">Mathlib.Data.Vector.Basic</a></li><li><a href="../../.././Mathlib/Data/Vector/Snoc.html">Mathlib.Data.Vector.Snoc</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Data.Vector.MapLemmas" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr_mapAccumr"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_mapAccumr</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr_map"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_map</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.map_mapAccumr"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map_mapAccumr</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.map_map"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map_map</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.map_pmap"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map_pmap</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.pmap_map"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">pmap_map</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_mapAccumr_left"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr_left</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.map₂_map_left"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map₂_map_left</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_mapAccumr_right"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr_right</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.map₂_map_right"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map₂_map_right</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr_mapAccumr₂"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_mapAccumr₂</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.map_map₂"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map_map₂</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_mapAccumr₂_left_left"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr₂_left_left</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_mapAccumr₂_left_right"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr₂_left_right</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_mapAccumr₂_right_left"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr₂_right_left</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_mapAccumr₂_right_right"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr₂_right_right</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr_bisim"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_bisim</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr_bisim_tail"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_bisim_tail</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_bisim"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_bisim</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_bisim_tail"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_bisim_tail</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.map_eq_mapAccumr"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map_eq_mapAccumr</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr_eq_map"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_eq_map</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.map₂_eq_mapAccumr₂"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map₂_eq_mapAccumr₂</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_eq_map₂"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_eq_map₂</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr_eq_map_of_constant_state"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_eq_map_of_constant_state</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_eq_map₂_of_constant_state"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_eq_map₂_of_constant_state</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr_eq_map_of_unused_state"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_eq_map_of_unused_state</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_eq_map₂_of_unused_state"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_eq_map₂_of_unused_state</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr_redundant_pair"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_redundant_pair</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_redundant_pair"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_redundant_pair</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_unused_input_left"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_unused_input_left</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_unused_input_right"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_unused_input_right</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.map₂_comm"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map₂_comm</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_comm"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_comm</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.map₂_flip"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map₂_flip</span></a></div><div class="nav_link"><a class="break_within" href="#List.Vector.mapAccumr₂_flip"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_flip</span></a></div></nav><main>
+<div class="mod_doc"><p>This file establishes a set of normalization lemmas for <code>map</code>/<code>mapAccumr</code> operations on vectors</p></div><div class="mod_doc"><h2 id="Fold-nested-mapAccumrs-into-one" class="markdown-heading">Fold nested <code>mapAccumr</code>s into one <a class="hover-link" href="#Fold-nested-mapAccumrs-into-one">#</a></h2></div><div class="decl" id="List.Vector.mapAccumr_mapAccumr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L30-L39">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr_mapAccumr"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_mapAccumr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₁</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">s₂</span>)</span>.2</span> <span class="fn">s₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">have <span class="fn">m</span> :=
+    <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a>
+      <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">s</span> : <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ₂</span>) =&gt;
+        <span class="fn">have <span class="fn">r₂</span> := <span class="fn"><span class="fn">f₂</span> <span class="fn">x</span> <span class="fn"><span class="fn">s</span>.2</span></span>;
+        <span class="fn">have <span class="fn">r₁</span> := <span class="fn"><span class="fn">f₁</span> <span class="fn"><span class="fn">r₂</span>.2</span> <span class="fn"><span class="fn">s</span>.1</span></span>;
+        <a href="../../.././Init/Prelude.html#Prod.mk">(</a><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">r₁</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₂</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₁</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></span>)</span>
+      <span class="fn">xs</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>;
+  <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">m</span>.1</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">m</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L41-L44">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr_map"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₁</span> <span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f₂</span> <span class="fn">xs</span>)</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">s</span> : <span class="fn">σ₁</span>) =&gt; <span class="fn"><span class="fn">f₁</span> <span class="fn">(<span class="fn">f₂</span> <span class="fn">x</span>)</span> <span class="fn">s</span></span>)</span> <span class="fn">xs</span> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="List.Vector.map_mapAccumr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L46-L51">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.map_mapAccumr"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map_mapAccumr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f₁</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">s</span>)</span>.2</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a>
+      <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">s</span> : <span class="fn">σ₂</span>) =&gt;
+        <span class="fn">have <span class="fn">r</span> := <span class="fn"><span class="fn">f₂</span> <span class="fn">x</span> <span class="fn">s</span></span>;
+        <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">r</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">f₁</span> <span class="fn"><span class="fn">r</span>.2</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>)</span>
+      <span class="fn">xs</span> <span class="fn">s</span>)</span>.2</span></div></div></div></div><div class="decl" id="List.Vector.map_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L53-L56">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.map_map"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f₁</span> <span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f₂</span> <span class="fn">xs</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">f₁</span> <span class="fn">(<span class="fn">f₂</span> <span class="fn">x</span>)</span></span>)</span> <span class="fn">xs</span></span></div></div></div></div><div class="decl" id="List.Vector.map_pmap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L58-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.map_pmap"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map_pmap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>) → <span class="fn"><span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> → <span class="fn">β</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">xs</span>.<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.toList">toList</a></span> → <span class="fn"><span class="fn">p</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f₁</span> <span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.pmap">pmap</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">H</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.pmap">pmap</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">hx</span> : <span class="fn"><span class="fn">p</span> <span class="fn">x</span></span>) =&gt; <span class="fn"><span class="fn">f₁</span> <span class="fn">(<span class="fn">f₂</span> <span class="fn">x</span> <span class="fn">hx</span>)</span></span>)</span> <span class="fn">xs</span> <span class="fn">H</span></span></div></div></div></div><div class="decl" id="List.Vector.pmap_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L62-L65">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.pmap_map"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">pmap_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">β</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn">(<span class="fn">b</span> : <span class="fn">β</span>) → <span class="fn"><span class="fn"><span class="fn">p</span> <span class="fn">b</span></span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f₂</span> <span class="fn">xs</span>)</span>.<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.toList">toList</a></span> → <span class="fn"><span class="fn">p</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.pmap">pmap</a> <span class="fn">f₁</span> <span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f₂</span> <span class="fn">xs</span>)</span> <span class="fn">H</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.pmap">pmap</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">hx</span> : <span class="fn"><span class="fn">p</span> <span class="fn">(<span class="fn">f₂</span> <span class="fn">x</span>)</span></span>) =&gt; <span class="fn"><span class="fn">f₁</span> <span class="fn">(<span class="fn">f₂</span> <span class="fn">x</span>)</span> <span class="fn">hx</span></span>)</span> <span class="fn">xs</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_mapAccumr_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L72-L81">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_mapAccumr_left"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">ζ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₁</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">s₂</span>)</span>.2</span> <span class="fn">ys</span> <span class="fn">s₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">have <span class="fn">m</span> :=
+    <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a>
+      <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) (<span class="fn">s</span> : <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ₂</span>) =&gt;
+        <span class="fn">have <span class="fn">r₂</span> := <span class="fn"><span class="fn">f₂</span> <span class="fn">x</span> <span class="fn"><span class="fn">s</span>.2</span></span>;
+        <span class="fn">have <span class="fn">r₁</span> := <span class="fn"><span class="fn">f₁</span> <span class="fn"><span class="fn">r₂</span>.2</span> <span class="fn">y</span> <span class="fn"><span class="fn">s</span>.1</span></span>;
+        <a href="../../.././Init/Prelude.html#Prod.mk">(</a><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">r₁</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₂</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₁</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></span>)</span>
+      <span class="fn">xs</span> <span class="fn">ys</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>;
+  <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">m</span>.1</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">m</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></div></div></div></div><div class="decl" id="List.Vector.map₂_map_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L83-L86">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.map₂_map_left"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map₂_map_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">ζ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">f₁</span> <span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f₂</span> <span class="fn">xs</span>)</span> <span class="fn">ys</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">f₁</span> <span class="fn">(<span class="fn">f₂</span> <span class="fn">x</span>)</span> <span class="fn">y</span></span>)</span> <span class="fn">xs</span> <span class="fn">ys</span></span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_mapAccumr_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L88-L97">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_mapAccumr_right"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">ζ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₁</span> <span class="fn">xs</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₂</span> <span class="fn">ys</span> <span class="fn">s₂</span>)</span>.2</span> <span class="fn">s₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">have <span class="fn">m</span> :=
+    <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a>
+      <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) (<span class="fn">s</span> : <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ₂</span>) =&gt;
+        <span class="fn">have <span class="fn">r₂</span> := <span class="fn"><span class="fn">f₂</span> <span class="fn">y</span> <span class="fn"><span class="fn">s</span>.2</span></span>;
+        <span class="fn">have <span class="fn">r₁</span> := <span class="fn"><span class="fn">f₁</span> <span class="fn">x</span> <span class="fn"><span class="fn">r₂</span>.2</span> <span class="fn"><span class="fn">s</span>.1</span></span>;
+        <a href="../../.././Init/Prelude.html#Prod.mk">(</a><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">r₁</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₂</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₁</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></span>)</span>
+      <span class="fn">xs</span> <span class="fn">ys</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>;
+  <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">m</span>.1</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">m</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></div></div></div></div><div class="decl" id="List.Vector.map₂_map_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L99-L102">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.map₂_map_right"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map₂_map_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn">ζ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">f₁</span> <span class="fn">xs</span> <span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f₂</span> <span class="fn">ys</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">f₁</span> <span class="fn">x</span> <span class="fn">(<span class="fn">f₂</span> <span class="fn">y</span>)</span></span>)</span> <span class="fn">xs</span> <span class="fn">ys</span></span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr_mapAccumr₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L104-L113">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr_mapAccumr₂"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_mapAccumr₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">ζ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₁</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₂</span>)</span>.2</span> <span class="fn">s₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">have <span class="fn">m</span> :=
+    <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a>
+      <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) (<span class="fn">s</span> : <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ₂</span>) =&gt;
+        <span class="fn">have <span class="fn">r₂</span> := <span class="fn"><span class="fn">f₂</span> <span class="fn">x</span> <span class="fn">y</span> <span class="fn"><span class="fn">s</span>.2</span></span>;
+        <span class="fn">have <span class="fn">r₁</span> := <span class="fn"><span class="fn">f₁</span> <span class="fn"><span class="fn">r₂</span>.2</span> <span class="fn"><span class="fn">s</span>.1</span></span>;
+        <a href="../../.././Init/Prelude.html#Prod.mk">(</a><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">r₁</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₂</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₁</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></span>)</span>
+      <span class="fn">xs</span> <span class="fn">ys</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>;
+  <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">m</span>.1</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">m</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></div></div></div></div><div class="decl" id="List.Vector.map_map₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L115-L118">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.map_map₂"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map_map₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ζ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">ζ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f₁</span> <span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">ys</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">f₁</span> <span class="fn">(<span class="fn">f₂</span> <span class="fn">x</span> <span class="fn">y</span>)</span></span>)</span> <span class="fn">xs</span> <span class="fn">ys</span></span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_mapAccumr₂_left_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L120-L130">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_mapAccumr₂_left_left"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr₂_left_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">φ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₁</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₂</span>)</span>.2</span> <span class="fn">xs</span> <span class="fn">s₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">have <span class="fn">m</span> :=
+    <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a>
+      <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) (<span class="fn">x_1</span> : <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ₂</span>) =&gt;
+        <span class="fn">match <span class="fn">x_1</span> with
+        | <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> =&gt;
+          <span class="fn">have <span class="fn">r₂</span> := <span class="fn"><span class="fn">f₂</span> <span class="fn">x</span> <span class="fn">y</span> <span class="fn">s₂</span></span>;
+          <span class="fn">have <span class="fn">r₁</span> := <span class="fn"><span class="fn">f₁</span> <span class="fn"><span class="fn">r₂</span>.2</span> <span class="fn">x</span> <span class="fn">s₁</span></span>;
+          <a href="../../.././Init/Prelude.html#Prod.mk">(</a><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">r₁</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₂</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₁</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></span></span>)</span>
+      <span class="fn">xs</span> <span class="fn">ys</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>;
+  <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">m</span>.1</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">m</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_mapAccumr₂_left_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L132-L143">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_mapAccumr₂_left_right"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr₂_left_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">φ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₁</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₂</span>)</span>.2</span> <span class="fn">ys</span> <span class="fn">s₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">have <span class="fn">m</span> :=
+    <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a>
+      <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) (<span class="fn">x_1</span> : <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ₂</span>) =&gt;
+        <span class="fn">match <span class="fn">x_1</span> with
+        | <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> =&gt;
+          <span class="fn">have <span class="fn">r₂</span> := <span class="fn"><span class="fn">f₂</span> <span class="fn">x</span> <span class="fn">y</span> <span class="fn">s₂</span></span>;
+          <span class="fn">have <span class="fn">r₁</span> := <span class="fn"><span class="fn">f₁</span> <span class="fn"><span class="fn">r₂</span>.2</span> <span class="fn">y</span> <span class="fn">s₁</span></span>;
+          <a href="../../.././Init/Prelude.html#Prod.mk">(</a><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">r₁</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₂</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₁</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></span></span>)</span>
+      <span class="fn">xs</span> <span class="fn">ys</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>;
+  <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">m</span>.1</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">m</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_mapAccumr₂_right_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L145-L155">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_mapAccumr₂_right_left"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr₂_right_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">φ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₁</span> <span class="fn">xs</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₂</span>)</span>.2</span> <span class="fn">s₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">have <span class="fn">m</span> :=
+    <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a>
+      <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) (<span class="fn">x_1</span> : <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ₂</span>) =&gt;
+        <span class="fn">match <span class="fn">x_1</span> with
+        | <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> =&gt;
+          <span class="fn">have <span class="fn">r₂</span> := <span class="fn"><span class="fn">f₂</span> <span class="fn">x</span> <span class="fn">y</span> <span class="fn">s₂</span></span>;
+          <span class="fn">have <span class="fn">r₁</span> := <span class="fn"><span class="fn">f₁</span> <span class="fn">x</span> <span class="fn"><span class="fn">r₂</span>.2</span> <span class="fn">s₁</span></span>;
+          <a href="../../.././Init/Prelude.html#Prod.mk">(</a><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">r₁</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₂</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₁</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></span></span>)</span>
+      <span class="fn">xs</span> <span class="fn">ys</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>;
+  <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">m</span>.1</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">m</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_mapAccumr₂_right_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L157-L167">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_mapAccumr₂_right_right"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_mapAccumr₂_right_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₁</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">γ</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">φ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₁</span> <span class="fn">ys</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₂</span>)</span>.2</span> <span class="fn">s₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">have <span class="fn">m</span> :=
+    <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a>
+      <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) (<span class="fn">x_1</span> : <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ₂</span>) =&gt;
+        <span class="fn">match <span class="fn">x_1</span> with
+        | <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> =&gt;
+          <span class="fn">have <span class="fn">r₂</span> := <span class="fn"><span class="fn">f₂</span> <span class="fn">x</span> <span class="fn">y</span> <span class="fn">s₂</span></span>;
+          <span class="fn">have <span class="fn">r₁</span> := <span class="fn"><span class="fn">f₁</span> <span class="fn">y</span> <span class="fn"><span class="fn">r₂</span>.2</span> <span class="fn">s₁</span></span>;
+          <a href="../../.././Init/Prelude.html#Prod.mk">(</a><a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">r₁</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₂</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">r₁</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></span></span>)</span>
+      <span class="fn">xs</span> <span class="fn">ys</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s₁</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s₂</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>;
+  <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">m</span>.1</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">m</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></div></div></div></div><div class="mod_doc"><h2 id="Bisimulations" class="markdown-heading">Bisimulations <a class="hover-link" href="#Bisimulations">#</a></h2><p>We can prove two applications of <code>mapAccumr</code> equal by providing a bisimulation relation that relates
+the initial states.</p><p>That is, by providing a relation <code>R : σ₁ → σ₁ → Prop</code> such that <code>R s₁ s₂</code> implies that <code>R</code> also
+relates any pair of states reachable by applying <code>f₁</code> to <code>s₁</code> and <code>f₂</code> to <code>s₂</code>, with any possible
+input values.</p></div><div class="decl" id="List.Vector.mapAccumr_bisim"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L186-L196">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr_bisim"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_bisim</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><span class="fn">σ₁</span> → <span class="fn"><span class="fn">σ₂</span> → <a href="../../.././foundational_types.html">Prop</a></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><span class="fn">R</span> <span class="fn">s₁</span> <span class="fn">s₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hR</span> : <span class="fn">∀ {<span class="fn">s</span> : <span class="fn">σ₁</span>} {<span class="fn">q</span> : <span class="fn">σ₂</span>} (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn"><span class="fn">R</span> <span class="fn">s</span> <span class="fn">q</span></span> → <span class="fn"><span class="fn">R</span> <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">a</span> <span class="fn">s</span>)</span>.1</span> <span class="fn"><span class="fn">(<span class="fn">f₂</span> <span class="fn">a</span> <span class="fn">q</span>)</span>.1</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">a</span> <span class="fn">s</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">f₂</span> <span class="fn">a</span> <span class="fn">q</span>)</span>.2</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">R</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₁</span> <span class="fn">xs</span> <span class="fn">s₁</span>)</span>.1</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">s₂</span>)</span>.1</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₁</span> <span class="fn">xs</span> <span class="fn">s₁</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">s₂</span>)</span>.2</span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr_bisim_tail"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L198-L203">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr_bisim_tail"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_bisim_tail</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> :
+  <a href="../../.././Init/Core.html#Exists">∃</a> <a href="../../.././Init/Core.html#Exists">(</a><span class="fn">R</span> <a href="../../.././Init/Core.html#Exists">:</a> <span class="fn"><span class="fn">σ₁</span> → <span class="fn"><span class="fn">σ₂</span> → <a href="../../.././foundational_types.html">Prop</a></span></span><a href="../../.././Init/Core.html#Exists">)</a><a href="../../.././Init/Core.html#Exists">,</a>     <span class="fn"><span class="fn">R</span> <span class="fn">s₁</span> <span class="fn">s₂</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ {<span class="fn">s</span> : <span class="fn">σ₁</span>} {<span class="fn">q</span> : <span class="fn">σ₂</span>} (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn"><span class="fn">R</span> <span class="fn">s</span> <span class="fn">q</span></span> → <span class="fn"><span class="fn">R</span> <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">a</span> <span class="fn">s</span>)</span>.1</span> <span class="fn"><span class="fn">(<span class="fn">f₂</span> <span class="fn">a</span> <span class="fn">q</span>)</span>.1</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">a</span> <span class="fn">s</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">f₂</span> <span class="fn">a</span> <span class="fn">q</span>)</span>.2</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₁</span> <span class="fn">xs</span> <span class="fn">s₁</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">s₂</span>)</span>.2</span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_bisim"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L205-L216">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_bisim"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_bisim</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <span class="fn"><span class="fn">σ₁</span> → <span class="fn"><span class="fn">σ₂</span> → <a href="../../.././foundational_types.html">Prop</a></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><span class="fn">R</span> <span class="fn">s₁</span> <span class="fn">s₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hR</span> : <span class="fn">∀ {<span class="fn">s</span> : <span class="fn">σ₁</span>} {<span class="fn">q</span> : <span class="fn">σ₂</span>} (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn"><span class="fn">R</span> <span class="fn">s</span> <span class="fn">q</span></span> → <span class="fn"><span class="fn">R</span> <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s</span>)</span>.1</span> <span class="fn"><span class="fn">(<span class="fn">f₂</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">q</span>)</span>.1</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">f₂</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">q</span>)</span>.2</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">R</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₁</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₁</span>)</span>.1</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₂</span>)</span>.1</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₁</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₁</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₂</span>)</span>.2</span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_bisim_tail"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L218-L224">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_bisim_tail"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_bisim_tail</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₁</span> → <span class="fn">σ₁</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₂</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ₂</span> → <span class="fn">σ₂</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn">σ₁</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn">σ₂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> :
+  <a href="../../.././Init/Core.html#Exists">∃</a> <a href="../../.././Init/Core.html#Exists">(</a><span class="fn">R</span> <a href="../../.././Init/Core.html#Exists">:</a> <span class="fn"><span class="fn">σ₁</span> → <span class="fn"><span class="fn">σ₂</span> → <a href="../../.././foundational_types.html">Prop</a></span></span><a href="../../.././Init/Core.html#Exists">)</a><a href="../../.././Init/Core.html#Exists">,</a>     <span class="fn"><span class="fn">R</span> <span class="fn">s₁</span> <span class="fn">s₂</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ {<span class="fn">s</span> : <span class="fn">σ₁</span>} {<span class="fn">q</span> : <span class="fn">σ₂</span>} (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn"><span class="fn">R</span> <span class="fn">s</span> <span class="fn">q</span></span> → <span class="fn"><span class="fn">R</span> <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s</span>)</span>.1</span> <span class="fn"><span class="fn">(<span class="fn">f₂</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">q</span>)</span>.1</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">f₂</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">q</span>)</span>.2</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₁</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₁</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f₂</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₂</span>)</span>.2</span></div></div></div></div><div class="mod_doc"><h2 id="Redundant-state-optimization" class="markdown-heading">Redundant state optimization <a class="hover-link" href="#Redundant-state-optimization">#</a></h2><p>The following section are collection of rewrites to simplify, or even get rid, redundant
+accumulation state</p></div><div class="decl" id="List.Vector.map_eq_mapAccumr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L237-L239">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.map_eq_mapAccumr"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map_eq_mapAccumr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f</span> <span class="fn">xs</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">x_1</span> : <a href="../../.././Init/Prelude.html#Unit">Unit</a>) =&gt; <a href="../../.././Init/Prelude.html#Prod.mk">(</a><a href="../../.././Init/Prelude.html#Unit.unit">(</a><a href="../../.././Init/Prelude.html#Unit.unit">)</a><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span> <span class="fn">xs</span> <a href="../../.././Init/Prelude.html#Unit.unit">(</a><a href="../../.././Init/Prelude.html#Unit.unit">)</a>)</span>.2</span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr_eq_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L241-L253">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr_eq_map"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_eq_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₀</span> : <span class="fn">σ</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">σ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn">s₀</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">closure</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">s</span> : <span class="fn">σ</span>), <span class="fn"><span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> → <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">s</span>)</span>.1</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">out</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">s </span><span class="fn">s'</span> : <span class="fn">σ</span>), <span class="fn"><span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> → <span class="fn"><span class="fn">s'</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> → <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">s</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">s'</span>)</span>.2</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">s₀</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <span class="fn">s₀</span>)</span>.2</span>)</span> <span class="fn">xs</span></span></div></div><p>If there is a set of states that is closed under <code>f</code>, and such that <code>f</code> produces that same output
+for all states in this set, then the state is not actually needed.
+Hence, then we can rewrite <code>mapAccumr</code> into just <code>map</code>.</p></div></div><div class="decl" id="List.Vector.map₂_eq_mapAccumr₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L255-L257">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.map₂_eq_mapAccumr₂"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map₂_eq_mapAccumr₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) (<span class="fn">x_1</span> : <a href="../../.././Init/Prelude.html#Unit">Unit</a>) =&gt; <a href="../../.././Init/Prelude.html#Prod.mk">(</a><a href="../../.././Init/Prelude.html#Unit.unit">(</a><a href="../../.././Init/Prelude.html#Unit.unit">)</a><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span> <span class="fn">xs</span> <span class="fn">ys</span> <a href="../../.././Init/Prelude.html#Unit.unit">(</a><a href="../../.././Init/Prelude.html#Unit.unit">)</a>)</span>.2</span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_eq_map₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L259-L271">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_eq_map₂"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_eq_map₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₀</span> : <span class="fn">σ</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">σ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn">s₀</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">closure</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) (<span class="fn">s</span> : <span class="fn">σ</span>), <span class="fn"><span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> → <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s</span>)</span>.1</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">out</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) (<span class="fn">s </span><span class="fn">s'</span> : <span class="fn">σ</span>), <span class="fn"><span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> → <span class="fn"><span class="fn">s'</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> → <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s'</span>)</span>.2</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s₀</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">(fun (<span class="fn">x1</span> : <span class="fn">α</span>) (<span class="fn">x2</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x1</span> <span class="fn">x2</span> <span class="fn">s₀</span>)</span>.2</span>)</span> <span class="fn">xs</span> <span class="fn">ys</span></span></div></div><p>If there is a set of states that is closed under <code>f</code>, and such that <code>f</code> produces that same output
+for all states in this set, then the state is not actually needed.
+Hence, then we can rewrite <code>mapAccumr₂</code> into just <code>map₂</code>.</p></div></div><div class="decl" id="List.Vector.mapAccumr_eq_map_of_constant_state"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L273-L280">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr_eq_map_of_constant_state"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_eq_map_of_constant_state</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn">σ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">s</span>)</span>.1</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <span class="fn">s</span>)</span>.2</span>)</span> <span class="fn">xs</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></div></div><p>If an accumulation function <code>f</code>, given an initial state <code>s</code>, produces <code>s</code> as its output state
+for all possible input bits, then the state is redundant and can be optimized out.</p></div></div><div class="decl" id="List.Vector.mapAccumr₂_eq_map₂_of_constant_state"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L282-L290">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_eq_map₂_of_constant_state"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_eq_map₂_of_constant_state</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn">σ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s</span>)</span>.1</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <span class="fn">y</span> <span class="fn">s</span>)</span>.2</span>)</span> <span class="fn">xs</span> <span class="fn">ys</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></div></div><p>If an accumulation function <code>f</code>, given an initial state <code>s</code>, produces <code>s</code> as its output state
+for all possible input bits, then the state is redundant and can be optimized out.</p></div></div><div class="decl" id="List.Vector.mapAccumr_eq_map_of_unused_state"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L292-L302">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr_eq_map_of_unused_state"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_eq_map_of_unused_state</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn">σ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">s</span> : <span class="fn">σ</span>), <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">s</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">a</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">s</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map">map</a> <span class="fn">f'</span> <span class="fn">xs</span></span></div></div><p>If an accumulation function <code>f</code>, produces the same output bits regardless of accumulation state,
+then the state is redundant and can be optimized out.</p></div></div><div class="decl" id="List.Vector.mapAccumr₂_eq_map₂_of_unused_state"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L304-L313">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_eq_map₂_of_unused_state"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_eq_map₂_of_unused_state</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn">σ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) (<span class="fn">s</span> : <span class="fn">σ</span>), <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">a</span> <span class="fn">b</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s</span>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <span class="fn">y</span> <span class="fn">s</span>)</span>.2</span>)</span> <span class="fn">xs</span> <span class="fn">ys</span></span></div></div><p>If an accumulation function <code>f</code>, produces the same output bits regardless of accumulation state,
+then the state is redundant and can be optimized out.</p></div></div><div class="decl" id="List.Vector.mapAccumr_redundant_pair"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L315-L326">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr_redundant_pair"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr_redundant_pair</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">σ</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ</span> → (<span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ</span>) <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">s</span> : <span class="fn">σ</span>), <span class="fn"><span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span>.1</span>.1</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span>.1</span>.2</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f</span> <span class="fn">xs</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">s</span> : <span class="fn">σ</span>) =&gt; <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span>.1</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span> <span class="fn">xs</span> <span class="fn">s</span>)</span>.2</span></div></div><p>If <code>f</code> takes a pair of states, but always returns the same value for both elements of the
+pair, then we can simplify to just a single element of state.</p></div></div><div class="decl" id="List.Vector.mapAccumr₂_redundant_pair"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L328-L339">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_redundant_pair"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_redundant_pair</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">σ</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ</span> → (<span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">σ</span>) <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> :
+  <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) (<span class="fn">s</span> : <span class="fn">σ</span>),
+    <span class="fn">have <span class="fn">s'</span> := <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span>.1</span>;
+    <span class="fn"><span class="fn">s'</span>.1</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">s'</span>.2</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span>.2</span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) (<span class="fn">y</span> : <span class="fn">β</span>) (<span class="fn">s</span> : <span class="fn">σ</span>) =&gt; <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span>.1</span>.1</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span> <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">s</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span>.2</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a>)</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s</span>)</span>.2</span></div></div><p>If <code>f</code> takes a pair of states, but always returns the same value for both elements of the
+pair, then we can simplify to just a single element of state.</p></div></div><div class="mod_doc"><h2 id="Unused-input-optimizations" class="markdown-heading">Unused input optimizations <a class="hover-link" href="#Unused-input-optimizations">#</a></h2></div><div class="decl" id="List.Vector.mapAccumr₂_unused_input_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L349-L359">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_unused_input_left"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_unused_input_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">σ</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) (<span class="fn">s</span> : <span class="fn">σ</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">b</span> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f'</span> <span class="fn">ys</span> <span class="fn">s</span></span></div></div><p>If <code>f</code> returns the same output and next state for every value of it's first argument, then
+<code>xs : <a href="../../.././Init/Data/Vector/Basic.html#Vector">Vector</a></code> is ignored, and we can rewrite <code>mapAccumr₂</code> into <code>map</code>.</p></div></div><div class="decl" id="List.Vector.mapAccumr₂_unused_input_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L361-L371">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_unused_input_right"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_unused_input_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">σ</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>) (<span class="fn">b</span> : <span class="fn">β</span>) (<span class="fn">s</span> : <span class="fn">σ</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f'</span> <span class="fn">a</span> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr">mapAccumr</a> <span class="fn">f'</span> <span class="fn">xs</span> <span class="fn">s</span></span></div></div><p>If <code>f</code> returns the same output and next state for every value of it's second argument, then
+<code>ys : <a href="../../.././Init/Data/Vector/Basic.html#Vector">Vector</a></code> is ignored, and we can rewrite <code>mapAccumr₂</code> into <code>map</code>.</p></div></div><div class="mod_doc"><h2 id="Commutativity" class="markdown-heading">Commutativity <a class="hover-link" href="#Commutativity">#</a></h2></div><div class="decl" id="List.Vector.map₂_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L381-L383">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.map₂_comm"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map₂_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs </span><span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">comm</span> : <span class="fn">∀ (<span class="fn">a₁ </span><span class="fn">a₂</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a₁</span> <span class="fn">a₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">a₂</span> <span class="fn">a₁</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">f</span> <span class="fn">ys</span> <span class="fn">xs</span></span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L385-L387">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_comm"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">σ</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs </span><span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">comm</span> : <span class="fn">∀ (<span class="fn">a₁ </span><span class="fn">a₂</span> : <span class="fn">α</span>) (<span class="fn">s</span> : <span class="fn">σ</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a₁</span> <span class="fn">a₂</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">a₂</span> <span class="fn">a₁</span> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f</span> <span class="fn">ys</span> <span class="fn">xs</span> <span class="fn">s</span></span></div></div></div></div><div class="mod_doc"><h2 id="Argument-Flipping" class="markdown-heading">Argument Flipping <a class="hover-link" href="#Argument-Flipping">#</a></h2></div><div class="decl" id="List.Vector.map₂_flip"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L397-L399">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.map₂_flip"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">map₂_flip</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.map₂">map₂</a> <span class="fn">(<a href="../../.././Init/Core.html#flip">flip</a> <span class="fn">f</span>)</span> <span class="fn">ys</span> <span class="fn">xs</span></span></div></div></div></div><div class="decl" id="List.Vector.mapAccumr₂_flip"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Vector/MapLemmas.lean#L401-L403">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Vector/MapLemmas.html#List.Vector.mapAccumr₂_flip"><span class="name">List</span>.<span class="name">Vector</span>.<span class="name">mapAccumr₂_flip</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">σ</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">xs</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">α</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ys</span> : <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector">Vector</a> <span class="fn">β</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn"><span class="fn">β</span> → <span class="fn"><span class="fn">σ</span> → <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">γ</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">f</span> <span class="fn">xs</span> <span class="fn">ys</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Vector/Defs.html#List.Vector.mapAccumr₂">mapAccumr₂</a> <span class="fn">(<a href="../../.././Init/Core.html#flip">flip</a> <span class="fn">f</span>)</span> <span class="fn">ys</span> <span class="fn">xs</span> <span class="fn">s</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

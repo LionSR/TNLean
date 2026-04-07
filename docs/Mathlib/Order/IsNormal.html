@@ -1,0 +1,454 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Order.IsNormal</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Order.IsNormal";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Order</span>.<span class="name">IsNormal</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Order/SuccPred/CompleteLinearOrder.html">Mathlib.Order.SuccPred.CompleteLinearOrder</a></li><li><a href="../.././Mathlib/Order/SuccPred/InitialSeg.html">Mathlib.Order.SuccPred.InitialSeg</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Order.IsNormal" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal"><span class="name">Order</span>.<span class="name">IsNormal</span></a></div><div class="nav_link"><a class="break_within" href="#Order.isNormal_iff'"><span class="name">Order</span>.<span class="name">isNormal_iff'</span></a></div><div class="nav_link"><a class="break_within" href="#Order.isNormal_iff"><span class="name">Order</span>.<span class="name">isNormal_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.monotone"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">monotone</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.isLUB_image_Iio_of_isSuccLimit"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">isLUB_image_Iio_of_isSuccLimit</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.le_iff_forall_le"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">le_iff_forall_le</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.lt_iff_exists_lt"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">lt_iff_exists_lt</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.map_isSuccLimit"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">map_isSuccLimit</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.map_isLUB"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">map_isLUB</span></a></div><div class="nav_link"><a class="break_within" href="#InitialSeg.isNormal"><span class="name">InitialSeg</span>.<span class="name">isNormal</span></a></div><div class="nav_link"><a class="break_within" href="#PrincipalSeg.isNormal"><span class="name">PrincipalSeg</span>.<span class="name">isNormal</span></a></div><div class="nav_link"><a class="break_within" href="#OrderIso.isNormal"><span class="name">OrderIso</span>.<span class="name">isNormal</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.id"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">id</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.comp"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.to_Iio"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">to_Iio</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.map_sSup"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">map_sSup</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.map_iSup"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">map_iSup</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.preimage_Iic"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">preimage_Iic</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.le_iff_le_sSup"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">le_iff_le_sSup</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.le_iff_le_sSup'"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">le_iff_le_sSup'</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.apply_of_isSuccLimit"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">apply_of_isSuccLimit</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.of_succ_lt"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">of_succ_lt</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.ext_iff"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">ext_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.ext"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">ext</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.exists_map_le_lt_map_succ_of_exists_ge"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">exists_map_le_lt_map_succ_of_exists_ge</span></a></div><div class="nav_link"><a class="break_within" href="#Order.IsNormal.exists_map_le_lt_map_succ"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">exists_map_le_lt_map_succ</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Normal-functions" class="markdown-heading">Normal functions <a class="hover-link" href="#Normal-functions">#</a></h1><p>A normal function between well-orders is a strictly monotonic continuous function. Normal functions
+arise chiefly in the context of cardinal and ordinal-valued functions.</p><p>We opt for an equivalent definition that's both simpler and often more convenient: a normal function
+is a strictly monotonic function <code>f</code> such that at successor limits <code>a</code>, <code>f a</code> is the least upper
+bound of <code>f b</code> with <code>b &lt; a</code>.</p><p>See <code><a href="../.././Mathlib/Topology/Order/IsNormal.html#Order.isNormal_iff_strictMono_and_continuous">Order.isNormal_iff_strictMono_and_continuous</a></code> for a proof that these notions are equivalent.</p></div><div class="decl" id="Order.IsNormal"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L32-L39">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal"><span class="name">Order</span>.<span class="name">IsNormal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A normal function between well-orders is a strictly monotonic continuous function.</p><ul class="structure_fields" id="Order.IsNormal.mk"><li id="Order.IsNormal.strictMono" class="structure_field"><div class="structure_field_info">strictMono : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">f</span></span></div></li><li id="Order.IsNormal.mem_lowerBounds_upperBounds_of_isSuccLimit" class="structure_field"><div class="structure_field_info">mem_lowerBounds_upperBounds_of_isSuccLimit<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Order/SuccPred/Limit.html#Order.IsSuccLimit">IsSuccLimit</a> <span class="fn">a</span></span>)</span></span>
+ : <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#lowerBounds">lowerBounds</a> <span class="fn">(<a href="../.././Mathlib/Order/Bounds/Defs.html#upperBounds">upperBounds</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iio">Set.Iio</a> <span class="fn">a</span></span>))</span></span></div><div class="structure_field_doc"><p>This condition is the RHS of the <code><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> (f '' Iio a) (f a)</code> predicate, which is sufficient
+since the LHS is implied by monotonicity.</p></div></li></ul><details id="instances-for-list-Order.IsNormal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Order.isNormal_iff'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L33-L33">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.isNormal_iff'"><span class="name">Order</span>.<span class="name">isNormal_iff'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ {<span class="fn">a</span> : <span class="fn">α</span>}, <span class="fn"><span class="fn"><a href="../.././Mathlib/Order/SuccPred/Limit.html#Order.IsSuccLimit">IsSuccLimit</a> <span class="fn">a</span></span> → <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#lowerBounds">lowerBounds</a> <span class="fn">(<a href="../.././Mathlib/Order/Bounds/Defs.html#upperBounds">upperBounds</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iio">Set.Iio</a> <span class="fn">a</span></span>))</span></span></span></span></div></div></div></div><div class="decl" id="Order.isNormal_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L41-L43">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.isNormal_iff"><span class="name">Order</span>.<span class="name">isNormal_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ (<span class="fn">o</span> : <span class="fn">α</span>), <span class="fn"><span class="fn"><a href="../.././Mathlib/Order/SuccPred/Limit.html#Order.IsSuccLimit">IsSuccLimit</a> <span class="fn">o</span></span> → <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">(∀ <span class="fn">b</span> &lt; <span class="fn">o</span>, <span class="fn"><span class="fn">f</span> <span class="fn">b</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span>)</span> → <span class="fn"><span class="fn">f</span> <span class="fn">o</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span></span></span></span></span></div></div></div></div><div class="decl" id="Order.IsNormal.monotone"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L50-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.monotone"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">monotone</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Order.IsNormal.isLUB_image_Iio_of_isSuccLimit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L53-L57">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.isLUB_image_Iio_of_isSuccLimit"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">isLUB_image_Iio_of_isSuccLimit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Order/SuccPred/Limit.html#Order.IsSuccLimit">IsSuccLimit</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iio">Set.Iio</a> <span class="fn">a</span></span>) <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="Order.IsNormal.le_iff_forall_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L59-L61">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.le_iff_forall_le"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">le_iff_forall_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Order/SuccPred/Limit.html#Order.IsSuccLimit">IsSuccLimit</a> <span class="fn">a</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">β</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ <span class="fn">a'</span> &lt; <span class="fn">a</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a'</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="Order.IsNormal.lt_iff_exists_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L63-L65">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.lt_iff_exists_lt"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">lt_iff_exists_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Order/SuccPred/Limit.html#Order.IsSuccLimit">IsSuccLimit</a> <span class="fn">a</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">β</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ <span class="fn">a'</span> &lt; <span class="fn">a</span>, <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">a'</span></span></span></div></div></div></div><div class="decl" id="Order.IsNormal.map_isSuccLimit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L67-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.map_isSuccLimit"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">map_isSuccLimit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Order/SuccPred/Limit.html#Order.IsSuccLimit">IsSuccLimit</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SuccPred/Limit.html#Order.IsSuccLimit">IsSuccLimit</a> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="Order.IsNormal.map_isLUB"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L76-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.map_isLUB"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">map_isLUB</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> <span class="fn">s</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs'</span> : <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>) <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="InitialSeg.isNormal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L89-L93">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#InitialSeg.isNormal"><span class="name">InitialSeg</span>.<span class="name">isNormal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../.././Mathlib/Order/InitialSeg.html#InitialSeg">InitialSeg</a> <span class="fn">(fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">α</span>) =&gt; <span class="fn">x1</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">x2</span>)</span> <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">β</span>) =&gt; <span class="fn">x1</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">x2</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">Order.IsNormal</a> <span class="fn">⇑<span class="fn">f</span></span></span></div></div></div></div><div class="decl" id="PrincipalSeg.isNormal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L95-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#PrincipalSeg.isNormal"><span class="name">PrincipalSeg</span>.<span class="name">isNormal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../.././Mathlib/Order/InitialSeg.html#PrincipalSeg">PrincipalSeg</a> <span class="fn">(fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">α</span>) =&gt; <span class="fn">x1</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">x2</span>)</span> <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">β</span>) =&gt; <span class="fn">x1</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">x2</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">Order.IsNormal</a> <span class="fn">⇑<span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/Order/InitialSeg.html#PrincipalSeg.toRelEmbedding">toRelEmbedding</a></span></span></span></div></div></div></div><div class="decl" id="OrderIso.isNormal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L98-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#OrderIso.isNormal"><span class="name">OrderIso</span>.<span class="name">isNormal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">Order.IsNormal</a> <span class="fn">⇑<span class="fn">f</span></span></span></div></div></div></div><div class="decl" id="Order.IsNormal.id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L101-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.id"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <a href="../.././Init/Prelude.html#id">id</a></span></div></div></div></div><div class="decl" id="Order.IsNormal.comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L104-L108">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.comp"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> (<span class="fn">g</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="Order.IsNormal.to_Iio"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L110-L115">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.to_Iio"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">to_Iio</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iio">Set.Iio</a> <span class="fn">a</span>)</span></span>) =&gt; <a href="../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn"><span class="fn">f</span> <span class="fn">↑<span class="fn">x</span></span></span>, <span class="fn">⋯</span><a href="../.././Init/Prelude.html#Subtype.mk">⟩</a></span></span></div></div><p>Restrict a normal function <code>α → β</code> to a normal function <code>Iio a → Iio (f a)</code>.</p></div></div><div class="decl" id="Order.IsNormal.map_sSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L122-L124">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.map_sSup"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">map_sSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrder">ConditionallyCompleteLinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrder">ConditionallyCompleteLinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs'</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="Order.IsNormal.map_iSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L126-L131">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.map_iSup"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">map_iSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrder">ConditionallyCompleteLinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrder">ConditionallyCompleteLinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">g</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(⨆ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">g</span> <span class="fn">i</span></span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">⨆ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span></span></span></div></div></div></div><div class="decl" id="Order.IsNormal.preimage_Iic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L133-L144">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.preimage_Iic"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">preimage_Iic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrder">ConditionallyCompleteLinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrder">ConditionallyCompleteLinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">β</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">(<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">x</span></span>).<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">x</span></span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">x</span></span>))</span></span></div></div></div></div><div class="decl" id="Order.IsNormal.le_iff_le_sSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L146-L149">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.le_iff_le_sSup"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">le_iff_le_sSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrder">ConditionallyCompleteLinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrder">ConditionallyCompleteLinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn">β</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">(<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">y</span></span>).<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">y</span></span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">y</span></span>)</span></div></div></div></div><div class="decl" id="Order.IsNormal.le_iff_le_sSup'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L151-L155">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.le_iff_le_sSup'"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">le_iff_le_sSup'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrder">ConditionallyCompleteLinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">(<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">y</span></span>).<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">y</span></span>)</span></div></div><p>If <code>f : α → α</code> in a well-order, we can infer one of the hypotheses in
+<code><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.le_iff_le_sSup">Order.IsNormal.le_iff_le_sSup</a></code>.</p></div></div><div class="decl" id="Order.IsNormal.apply_of_isSuccLimit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L162-L169">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.apply_of_isSuccLimit"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">apply_of_isSuccLimit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrderBot">ConditionallyCompleteLinearOrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLinearOrder">ConditionallyCompleteLinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Order/SuccPred/Limit.html#Order.IsSuccLimit">IsSuccLimit</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">⨆ (<span class="fn">b</span> : <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iio">Set.Iio</a> <span class="fn">a</span>)</span></span>), <span class="fn"><span class="fn">f</span> <span class="fn">↑<span class="fn">b</span></span></span></span></div></div></div></div><div class="decl" id="Order.IsNormal.of_succ_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L176-L191">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.of_succ_lt"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">of_succ_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/SuccPred/Basic.html#SuccOrder">SuccOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SuccPred/Basic.html#Order.succ">succ</a> <span class="fn">a</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hl</span> : <span class="fn">∀ {<span class="fn">a</span> : <span class="fn">α</span>}, <span class="fn"><span class="fn"><a href="../.././Mathlib/Order/SuccPred/Limit.html#Order.IsSuccLimit">IsSuccLimit</a> <span class="fn">a</span></span> → <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iio">Set.Iio</a> <span class="fn">a</span></span>) <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Order.IsNormal.ext_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L193-L205">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.ext_iff"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">ext_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/SuccPred/Basic.html#SuccOrder">SuccOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">a</span></span> → <span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SuccPred/Basic.html#Order.succ">succ</a> <span class="fn">a</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">(<a href="../.././Mathlib/Order/SuccPred/Basic.html#Order.succ">succ</a> <span class="fn">a</span>)</span></span></span></span></div></div></div></div><div class="decl" id="Order.IsNormal.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L207-L207">source</a></div><div class="attributes">@[deprecated Order.IsNormal.ext_iff (since := &quot;2026-03-22&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.ext"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/SuccPred/Basic.html#SuccOrder">SuccOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">a</span></span> → <span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SuccPred/Basic.html#Order.succ">succ</a> <span class="fn">a</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">(<a href="../.././Mathlib/Order/SuccPred/Basic.html#Order.succ">succ</a> <span class="fn">a</span>)</span></span></span></span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.ext_iff">Order.IsNormal.ext_iff</a></code>.</p></div></div><div class="decl" id="Order.IsNormal.exists_map_le_lt_map_succ_of_exists_ge"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L209-L221">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.exists_map_le_lt_map_succ_of_exists_ge"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">exists_map_le_lt_map_succ_of_exists_ge</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/SuccPred/Basic.html#SuccOrder">SuccOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">β</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf'</span> : <span class="fn">∃ (<span class="fn">y</span> : <span class="fn">α</span>), <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><span class="fn">f</span> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SuccPred/Basic.html#Order.succ">succ</a> <span class="fn">a</span>)</span></span></span></div></div></div></div><div class="decl" id="Order.IsNormal.exists_map_le_lt_map_succ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/IsNormal.lean#L223-L227">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.exists_map_le_lt_map_succ"><span class="name">Order</span>.<span class="name">IsNormal</span>.<span class="name">exists_map_le_lt_map_succ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/SuccPred/Basic.html#SuccOrder">SuccOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal">IsNormal</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><span class="fn">f</span> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SuccPred/Basic.html#Order.succ">succ</a> <span class="fn">a</span>)</span></span></span></div></div><p>If <code>f : α → α</code>, we can infer one of the hypotheses in
+<code><a href="../.././Mathlib/Order/IsNormal.html#Order.IsNormal.exists_map_le_lt_map_succ_of_exists_ge">exists_map_le_lt_map_succ_of_exists_ge</a></code>.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

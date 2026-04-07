@@ -1,0 +1,231 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.Algebra.Order.Archimedean</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.Algebra.Order.Archimedean";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">Algebra</span>.<span class="name">Order</span>.<span class="name">Archimedean</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/GroupTheory/Archimedean.html">Mathlib.GroupTheory.Archimedean</a></li><li><a href="../../../.././Mathlib/Topology/Order/Basic.html">Mathlib.Topology.Order.Basic</a></li><li><a href="../../../.././Mathlib/Topology/Algebra/Order/Group.html">Mathlib.Topology.Algebra.Order.Group</a></li><li><a href="../../../.././Mathlib/Algebra/Group/Subgroup/ZPowers/Basic.html">Mathlib.Algebra.Group.Subgroup.ZPowers.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.Algebra.Order.Archimedean" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Rat.denseRange_cast"><span class="name">Rat</span>.<span class="name">denseRange_cast</span></a></div><div class="nav_link"><a class="break_within" href="#Subgroup.dense_of_not_isolated_one"><span class="name">Subgroup</span>.<span class="name">dense_of_not_isolated_one</span></a></div><div class="nav_link"><a class="break_within" href="#AddSubgroup.dense_of_not_isolated_zero"><span class="name">AddSubgroup</span>.<span class="name">dense_of_not_isolated_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Subgroup.dense_of_no_min"><span class="name">Subgroup</span>.<span class="name">dense_of_no_min</span></a></div><div class="nav_link"><a class="break_within" href="#AddSubgroup.dense_of_no_min"><span class="name">AddSubgroup</span>.<span class="name">dense_of_no_min</span></a></div><div class="nav_link"><a class="break_within" href="#Subgroup.dense_or_cyclic"><span class="name">Subgroup</span>.<span class="name">dense_or_cyclic</span></a></div><div class="nav_link"><a class="break_within" href="#AddSubgroup.dense_or_cyclic"><span class="name">AddSubgroup</span>.<span class="name">dense_or_cyclic</span></a></div><div class="nav_link"><a class="break_within" href="#Subgroup.dense_xor'_cyclic"><span class="name">Subgroup</span>.<span class="name">dense_xor'_cyclic</span></a></div><div class="nav_link"><a class="break_within" href="#AddSubgroup.dense_xor'_cyclic"><span class="name">AddSubgroup</span>.<span class="name">dense_xor'_cyclic</span></a></div><div class="nav_link"><a class="break_within" href="#Subgroup.dense_iff_ne_zpowers"><span class="name">Subgroup</span>.<span class="name">dense_iff_ne_zpowers</span></a></div><div class="nav_link"><a class="break_within" href="#AddSubgroup.dense_iff_ne_zmultiples"><span class="name">AddSubgroup</span>.<span class="name">dense_iff_ne_zmultiples</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Topology-on-archimedean-groups-and-fields" class="markdown-heading">Topology on archimedean groups and fields <a class="hover-link" href="#Topology-on-archimedean-groups-and-fields">#</a></h1><p>In this file we prove the following theorems:</p><ul><li><p><code><a href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#Rat.denseRange_cast">Rat.denseRange_cast</a></code>: the coercion from <code>ℚ</code> to a linear ordered archimedean field has dense
+range;</p></li><li><p><code><a href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#AddSubgroup.dense_of_not_isolated_zero">AddSubgroup.dense_of_not_isolated_zero</a></code>, <code><a href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#AddSubgroup.dense_of_no_min">AddSubgroup.dense_of_no_min</a></code>: two sufficient conditions
+for a subgroup of an archimedean linear ordered additive commutative group to be dense;</p></li><li><p><code><a href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#AddSubgroup.dense_or_cyclic">AddSubgroup.dense_or_cyclic</a></code>: an additive subgroup of an archimedean linear ordered additive
+commutative group <code>G</code> with order topology either is dense in <code>G</code> or is a cyclic subgroup.</p></li></ul></div><div class="decl" id="Rat.denseRange_cast"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L32-L36">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#Rat.denseRange_cast"><span class="name">Rat</span>.<span class="name">denseRange_cast</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#Archimedean">Archimedean</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#DenseRange">DenseRange</a> <a href="../../../.././Batteries/Classes/RatCast.html#Rat.cast">Rat.cast</a></span></div></div><p>Rational numbers are dense in a linear ordered archimedean field.</p></div></div><div class="decl" id="Subgroup.dense_of_not_isolated_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L44-L61">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#Subgroup.dense_of_not_isolated_one"><span class="name">Subgroup</span>.<span class="name">dense_of_not_isolated_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedMonoid">IsOrderedMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#MulArchimedean">MulArchimedean</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn">∀ <span class="fn">ε</span> &gt; <span class="fn">1</span>, <span class="fn">∃ <span class="fn">g</span> ∈ <span class="fn">S</span>, <span class="fn">g</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ioo">Set.Ioo</a> <span class="fn">1</span> <span class="fn">ε</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">↑<span class="fn">S</span></span></span></div></div><p>A subgroup of an archimedean linear ordered multiplicative commutative group with order
+topology is dense provided that for all <code>ε &gt; 1</code> there exists an element of the subgroup
+that belongs to <code>(1, ε)</code>.</p></div></div><div class="decl" id="AddSubgroup.dense_of_not_isolated_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L47-L49">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#AddSubgroup.dense_of_not_isolated_zero"><span class="name">AddSubgroup</span>.<span class="name">dense_of_not_isolated_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#Archimedean">Archimedean</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hS</span> : <span class="fn">∀ <span class="fn">ε</span> &gt; <span class="fn">0</span>, <span class="fn">∃ <span class="fn">g</span> ∈ <span class="fn">S</span>, <span class="fn">g</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ioo">Set.Ioo</a> <span class="fn">0</span> <span class="fn">ε</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">↑<span class="fn">S</span></span></span></div></div><p>An additive subgroup of an archimedean linear ordered additive commutative group
+with order topology is dense provided that for all positive <code>ε</code> there exists a positive element of
+the subgroup that is less than <code>ε</code>.</p></div></div><div class="decl" id="Subgroup.dense_of_no_min"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L63-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#Subgroup.dense_of_no_min"><span class="name">Subgroup</span>.<span class="name">dense_of_no_min</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedMonoid">IsOrderedMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#MulArchimedean">MulArchimedean</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hbot</span> : <span class="fn">S</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <a href="../../../.././Init/Prelude.html#Not">¬</a><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">G</span>), <span class="fn"><a href="../../../.././Mathlib/Order/Bounds/Defs.html#IsLeast">IsLeast</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">g</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">G</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">g</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">g</span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a> <span class="fn">a</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">↑<span class="fn">S</span></span></span></div></div><p>Let <code>S</code> be a nontrivial subgroup in an archimedean linear ordered multiplicative commutative
+group <code>G</code> with order topology. If the set of elements of <code>S</code> that are greater than one
+does not have a minimal element, then <code>S</code> is dense <code>G</code>.</p></div></div><div class="decl" id="AddSubgroup.dense_of_no_min"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L66-L68">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#AddSubgroup.dense_of_no_min"><span class="name">AddSubgroup</span>.<span class="name">dense_of_no_min</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#Archimedean">Archimedean</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hbot</span> : <span class="fn">S</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <a href="../../../.././Init/Prelude.html#Not">¬</a><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">G</span>), <span class="fn"><a href="../../../.././Mathlib/Order/Bounds/Defs.html#IsLeast">IsLeast</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">g</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">G</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">g</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">g</span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a> <span class="fn">a</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">↑<span class="fn">S</span></span></span></div></div><p>Let <code>S</code> be a nontrivial additive subgroup in an archimedean linear ordered
+additive commutative group <code>G</code> with order topology. If the set of positive elements of <code>S</code> does not
+have a minimal element, then <code>S</code> is dense <code>G</code>.</p></div></div><div class="decl" id="Subgroup.dense_or_cyclic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L75-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#Subgroup.dense_or_cyclic"><span class="name">Subgroup</span>.<span class="name">dense_or_cyclic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedMonoid">IsOrderedMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#MulArchimedean">MulArchimedean</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">↑<span class="fn">S</span></span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">∃ (<span class="fn">a</span> : <span class="fn">G</span>), <span class="fn">S</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Lattice.html#Subgroup.closure">closure</a> <a href="../../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">a</span><a href="../../../.././Init/Core.html#Singleton.singleton">}</a></span></span></div></div><p>A subgroup of an archimedean linear ordered multiplicative commutative group <code>G</code> with order
+topology either is dense in <code>G</code> or is a cyclic subgroup.</p></div></div><div class="decl" id="AddSubgroup.dense_or_cyclic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L77-L79">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#AddSubgroup.dense_or_cyclic"><span class="name">AddSubgroup</span>.<span class="name">dense_or_cyclic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#Archimedean">Archimedean</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">↑<span class="fn">S</span></span></span> <a href="../../../.././Init/Prelude.html#Or">∨</a> <span class="fn">∃ (<span class="fn">a</span> : <span class="fn">G</span>), <span class="fn">S</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Lattice.html#AddSubgroup.closure">closure</a> <a href="../../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">a</span><a href="../../../.././Init/Core.html#Singleton.singleton">}</a></span></span></div></div><p>An additive subgroup of an archimedean linear ordered additive commutative group <code>G</code>
+with order topology either is dense in <code>G</code> or is a cyclic subgroup.</p></div></div><div class="decl" id="Subgroup.dense_xor'_cyclic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L88-L106">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#Subgroup.dense_xor'_cyclic"><span class="name">Subgroup</span>.<span class="name">dense_xor'_cyclic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedMonoid">IsOrderedMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#MulArchimedean">MulArchimedean</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Basic.html#DenselyOrdered">DenselyOrdered</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Xor'">Xor'</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">↑<span class="fn">s</span></span>)</span> <span class="fn">(∃ (<span class="fn">a</span> : <span class="fn">G</span>), <span class="fn">s</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/ZPowers/Basic.html#Subgroup.zpowers">zpowers</a> <span class="fn">a</span></span>)</span></span></div></div><p>In a nontrivial densely linear ordered archimedean topological multiplicative group,
+a subgroup is either dense or is cyclic, but not both.</p><p>For a non-exclusive <code><a href="../../../.././Init/Prelude.html#Or">Or</a></code> version with weaker assumptions, see <code><a href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#Subgroup.dense_or_cyclic">Subgroup.dense_or_cyclic</a></code> above.</p></div></div><div class="decl" id="AddSubgroup.dense_xor'_cyclic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L92-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#AddSubgroup.dense_xor'_cyclic"><span class="name">AddSubgroup</span>.<span class="name">dense_xor'_cyclic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#Archimedean">Archimedean</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Basic.html#DenselyOrdered">DenselyOrdered</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Logic/Basic.html#Xor'">Xor'</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">↑<span class="fn">s</span></span>)</span> <span class="fn">(∃ (<span class="fn">a</span> : <span class="fn">G</span>), <span class="fn">s</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/ZPowers/Basic.html#AddSubgroup.zmultiples">zmultiples</a> <span class="fn">a</span></span>)</span></span></div></div><p>In a nontrivial densely linear ordered archimedean topological additive group,
+a subgroup is either dense or is cyclic, but not both.</p><p>For a non-exclusive <code><a href="../../../.././Init/Prelude.html#Or">Or</a></code> version with weaker assumptions, see <code><a href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#AddSubgroup.dense_or_cyclic">AddSubgroup.dense_or_cyclic</a></code> above.</p></div></div><div class="decl" id="Subgroup.dense_iff_ne_zpowers"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L108-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#Subgroup.dense_iff_ne_zpowers"><span class="name">Subgroup</span>.<span class="name">dense_iff_ne_zpowers</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedMonoid">IsOrderedMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#MulArchimedean">MulArchimedean</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Basic.html#DenselyOrdered">DenselyOrdered</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">↑<span class="fn">s</span></span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">G</span>), <span class="fn">s</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/ZPowers/Basic.html#Subgroup.zpowers">zpowers</a> <span class="fn">a</span></span></span></div></div></div></div><div class="decl" id="AddSubgroup.dense_iff_ne_zmultiples"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Order/Archimedean.lean#L108-L108">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Order/Archimedean.html#AddSubgroup.dense_iff_ne_zmultiples"><span class="name">AddSubgroup</span>.<span class="name">dense_iff_ne_zmultiples</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#Archimedean">Archimedean</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Basic.html#DenselyOrdered">DenselyOrdered</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Dense">Dense</a> <span class="fn">↑<span class="fn">s</span></span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">G</span>), <span class="fn">s</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/ZPowers/Basic.html#AddSubgroup.zmultiples">zmultiples</a> <span class="fn">a</span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

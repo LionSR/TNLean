@@ -1,0 +1,83 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href=".././style.css"></link><link rel="icon" href=".././favicon.svg"></link><link rel="mask-icon" href=".././favicon.svg" color="#000000"></link><link rel="prefetch" href=".././/declarations/declaration-data.bmp" as="image"></link><title>Plausible.Tactic</title><script defer="true" src=".././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT=".././";</script><script>const MODULE_NAME="Plausible.Tactic";</script><script type="module" src=".././jump-src.js"></script><script type="module" src=".././search.js"></script><script type="module" src=".././expand-nav.js"></script><script type="module" src=".././how-about.js"></script><script type="module" src=".././instances.js"></script><script type="module" src=".././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Plausible</span>.<span class="name">Tactic</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/plausible/blob/83e90935a17ca19ebe4b7893c7f7066e266f50d3/Plausible/Tactic.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href=".././Init.html">Init</a></li><li><a href=".././Plausible/Attr.html">Plausible.Attr</a></li><li><a href=".././Plausible/Testable.html">Plausible.Testable</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Plausible.Tactic" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#plausibleSyntax"><span class="name">plausibleSyntax</span></a></div></nav><main>
+<div class="mod_doc"><h2 id="Finding-counterexamples-automatically-using-plausible" class="markdown-heading">Finding counterexamples automatically using <code>plausible</code> <a class="hover-link" href="#Finding-counterexamples-automatically-using-plausible">#</a></h2><p>A proposition can be tested by writing it out as:</p><pre><code class="language-lean">example (xs : <a href=".././Init/Prelude.html#List">List</a> Nat) (w : ∃ x ∈ xs, x &lt; 3) : ∀ y ∈ xs, y &lt; 5 := by plausible
+-- ===================
+-- Found problems!
+
+-- xs := [0, 5]
+-- x := 0
+-- y := 5
+-- -------------------
+
+example (x : Nat) (h : 2 ∣ x) : x &lt; 100 := by plausible
+-- ===================
+-- Found problems!
+
+-- x := 258
+-- -------------------
+
+example (α : Type) (xs ys : <a href=".././Init/Prelude.html#List">List</a> α) : xs ++ ys = ys ++ xs := by plausible
+-- ===================
+-- Found problems!
+
+-- α := <a href=".././Init/Data/Int/Basic.html#Int">Int</a>
+-- xs := [-4]
+-- ys := [1]
+-- -------------------
+
+example : ∀ x ∈ [1,2,3], x &lt; 4 := by plausible
+-- Success
+</code></pre><p>In the first example, <code>plausible</code> is called on the following goal:</p><pre><code class="language-lean">xs : <a href=".././Init/Prelude.html#List">List</a> Nat,
+h : ∃ (x : Nat) (H : x ∈ xs), x &lt; 3
+⊢ ∀ (y : Nat), y ∈ xs → y &lt; 5
+</code></pre><p>The local constants are reverted and an instance is found for
+<code>Testable (∀ (xs : <a href=".././Init/Prelude.html#List">List</a> Nat), (∃ x ∈ xs, x &lt; 3) → (∀ y ∈ xs, y &lt; 5))</code>.
+The <code>Testable</code> instance is supported by instances of <code>Sampleable (List Nat)</code>,
+<code><a href=".././Init/Prelude.html#Decidable">Decidable</a> (x &lt; 3)</code> and <code><a href=".././Init/Prelude.html#Decidable">Decidable</a> (y &lt; 5)</code>. <code>plausible</code> builds a
+<code>Testable</code> instance step by step with:</p><pre><code>- Testable (∀ (xs : <a href=".././Init/Prelude.html#List">List</a> Nat), (∃ x ∈ xs, x &lt; 3) → (∀ y ∈ xs, y &lt; 5))
+                                     -: Sampleable (List xs)
+- Testable ((∃ x ∈ xs, x &lt; 3) → (∀ y ∈ xs, y &lt; 5))
+- Testable (∀ x ∈ xs, x &lt; 3 → (∀ y ∈ xs, y &lt; 5))
+- Testable (x &lt; 3 → (∀ y ∈ xs, y &lt; 5))
+                                     -: <a href=".././Init/Prelude.html#Decidable">Decidable</a> (x &lt; 3)
+- Testable (∀ y ∈ xs, y &lt; 5)
+                                     -: <a href=".././Init/Prelude.html#Decidable">Decidable</a> (y &lt; 5)
+</code></pre><p><code>Sampleable (List Nat)</code> lets us create random data of type <code><a href=".././Init/Prelude.html#List">List</a> <a href=".././Init/Prelude.html#Nat">Nat</a></code> in a way that
+helps find small counter-examples.  Next, the test of the proposition
+hinges on <code>x &lt; 3</code> and <code>y &lt; 5</code> to both be decidable. The
+implication between the two could be tested as a whole but it would be
+less informative. Indeed, if we generate lists that only contain numbers
+greater than <code>3</code>, the implication will always trivially hold but we should
+conclude that we haven't found meaningful examples. Instead, when <code>x &lt; 3</code>
+does not hold, we reject the example (i.e.  we do not count it toward
+the 100 required positive examples) and we start over. Therefore, when
+<code>plausible</code> prints <code>Success</code>, it means that a hundred suitable lists
+were found and successfully tested.</p><p>If no counter-examples are found, <code>plausible</code> behaves like <code>admit</code>.</p><p><code>plausible</code> can also be invoked using <code>#eval</code>:</p><pre><code class="language-lean">#eval <a href=".././Plausible/Testable.html#Plausible.Testable.check">Plausible.Testable.check</a> (∀ (α : Type) (xs ys : <a href=".././Init/Prelude.html#List">List</a> α), xs ++ ys = ys ++ xs)
+-- ===================
+-- Found problems!
+
+-- α := <a href=".././Init/Data/Int/Basic.html#Int">Int</a>
+-- xs := [-4]
+-- ys := [1]
+-- -------------------
+</code></pre><p>For more information on writing your own <code>Sampleable</code> and <code>Testable</code>
+instances, see <code>Testing.Plausible.Testable</code>.</p></div><div class="decl" id="plausibleSyntax"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/plausible/blob/83e90935a17ca19ebe4b7893c7f7066e266f50d3/Plausible/Tactic.lean#L108-L159">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href=".././Plausible/Tactic.html#plausibleSyntax"><span class="name">plausibleSyntax</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href=".././Init/Prelude.html#Lean.ParserDescr">Lean.ParserDescr</a></div></div><p><code>plausible</code> considers a proof goal and tries to generate examples
+that would contradict the statement.</p><p>Let's consider the following proof goal.</p><pre><code class="language-lean">xs : <a href=".././Init/Prelude.html#List">List</a> Nat,
+h : ∃ (x : Nat) (H : x ∈ xs), x &lt; 3
+⊢ ∀ (y : Nat), y ∈ xs → y &lt; 5
+</code></pre><p>The local constants will be reverted and an instance will be found for
+<code>Testable (∀ (xs : <a href=".././Init/Prelude.html#List">List</a> Nat), (∃ x ∈ xs, x &lt; 3) → (∀ y ∈ xs, y &lt; 5))</code>.
+The <code>Testable</code> instance is supported by an instance of <code>Sampleable (List Nat)</code>,
+<code><a href=".././Init/Prelude.html#Decidable">Decidable</a> (x &lt; 3)</code> and <code><a href=".././Init/Prelude.html#Decidable">Decidable</a> (y &lt; 5)</code>.</p><p>Examples will be created in ascending order of size (more or less)</p><p>The first counter-examples found will be printed and will result in an error:</p><pre><code>===================
+Found problems!
+xs := [1, 28]
+x := 1
+y := 28
+-------------------
+</code></pre><p>If <code>plausible</code> successfully tests 100 examples, it acts like
+admit. If it gives up or finds a counter-example, it reports an error.</p><p>For more information on writing your own <code>Sampleable</code> and <code>Testable</code>
+instances, see <code>Testing.Plausible.Testable</code>.</p><p>Optional arguments given with <code>plausible (config : { ... })</code></p><ul><li><code>numInst</code> (default 100): number of examples to test properties with</li><li><code>maxSize</code> (default 100): final size argument</li></ul><p>Options:</p><ul><li><code>set_option trace.plausible.decoration true</code>: print the proposition with quantifier annotations</li><li><code>set_option trace.plausible.discarded true</code>: print the examples discarded because they do not
+satisfy assumptions</li><li><code>set_option trace.plausible.shrink.steps true</code>: trace the shrinking of counter-example</li><li><code>set_option trace.plausible.shrink.candidates true</code>: print the lists of candidates considered
+when shrinking each variable</li><li><code>set_option trace.plausible.instance true</code>: print the instances of <code>testable</code> being used to test
+the proposition</li><li><code>set_option trace.plausible.success true</code>: print the tested samples that satisfy a property</li></ul><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-plausibleSyntax" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src=".././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

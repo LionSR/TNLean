@@ -1,0 +1,850 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.QuasiFinite.Basic</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.QuasiFinite.Basic";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">QuasiFinite</span>.<span class="name">Basic</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/RingTheory/FiniteStability.html">Mathlib.RingTheory.FiniteStability</a></li><li><a href="../../.././Mathlib/Algebra/Module/FinitePresentation.html">Mathlib.Algebra.Module.FinitePresentation</a></li><li><a href="../../.././Mathlib/RingTheory/Artinian/Ring.html">Mathlib.RingTheory.Artinian.Ring</a></li><li><a href="../../.././Mathlib/RingTheory/Finiteness/NilpotentKer.html">Mathlib.RingTheory.Finiteness.NilpotentKer</a></li><li><a href="../../.././Mathlib/RingTheory/Jacobson/Artinian.html">Mathlib.RingTheory.Jacobson.Artinian</a></li><li><a href="../../.././Mathlib/RingTheory/Localization/InvSubmonoid.html">Mathlib.RingTheory.Localization.InvSubmonoid</a></li><li><a href="../../.././Mathlib/RingTheory/Localization/Submodule.html">Mathlib.RingTheory.Localization.Submodule</a></li><li><a href="../../.././Mathlib/RingTheory/TensorProduct/Pi.html">Mathlib.RingTheory.TensorProduct.Pi</a></li><li><a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Fiber.html">Mathlib.RingTheory.LocalRing.ResidueField.Fiber</a></li><li><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Jacobson.html">Mathlib.RingTheory.Spectrum.Prime.Jacobson</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.QuasiFinite.Basic" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.quasiFinite_iff"><span class="name">Algebra</span>.<span class="name">quasiFinite_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.instIsArtinianRingFiber"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instIsArtinianRingFiber</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.finite_comap_preimage_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">finite_comap_preimage_singleton</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.finite_primesOver"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">finite_primesOver</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.finite_comap_preimage"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">finite_comap_preimage</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.isDiscrete_comap_preimage_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">isDiscrete_comap_preimage_singleton</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.isDiscrete_comap_preimage"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">isDiscrete_comap_preimage</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.instOfFinite"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instOfFinite</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.baseChange"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">baseChange</span></a></div><div class="nav_link"><a class="break_within" href="#Module.Finite.of_quasiFinite"><span class="name">Module</span>.<span class="name">Finite</span>.<span class="name">of_quasiFinite</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.iff_of_isArtinianRing"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">iff_of_isArtinianRing</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.trans"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">trans</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.of_surjective_algHom"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">of_surjective_algHom</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.instQuotientIdeal"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instQuotientIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.iff_of_algEquiv"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">iff_of_algEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.of_isLocalization"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">of_isLocalization</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.instLocalization"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instLocalization</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.instOfIsFractionRing"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instOfIsFractionRing</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.instResidueField"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instResidueField</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.of_restrictScalars"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">of_restrictScalars</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.discreteTopology_primeSpectrum"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">discreteTopology_primeSpectrum</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.finite_primeSpectrum"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">finite_primeSpectrum</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.of_forall_exists_mul_mem_range"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">of_forall_exists_mul_mem_range</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.eq_of_le_of_under_eq"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">eq_of_le_of_under_eq</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.instFiniteResidueField"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instFiniteResidueField</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.iff_finite_comap_preimage_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">iff_finite_comap_preimage_singleton</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.iff_finite_primesOver"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">iff_finite_primesOver</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFinite.of_isIntegral_of_finiteType"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">of_isIntegral_of_finiteType</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFiniteAt"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFiniteAt.baseChange"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">baseChange</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFiniteAt.of_surjectiveOnStalks"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">of_surjectiveOnStalks</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFiniteAt.of_surjectiveOnStalks_of_liesOver"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">of_surjectiveOnStalks_of_liesOver</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFiniteAt.comap_algEquiv"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">comap_algEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFiniteAt.of_le"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">of_le</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFiniteAt.eq_of_le_of_under_eq"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">eq_of_le_of_under_eq</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.instFiniteResidueFieldOfQuasiFiniteAt"><span class="name">Algebra</span>.<span class="name">instFiniteResidueFieldOfQuasiFiniteAt</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFiniteAt.exists_basicOpen_eq_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">exists_basicOpen_eq_singleton</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFiniteAt.isClopen_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">isClopen_singleton</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.QuasiFiniteAt.of_isOpen_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">of_isOpen_singleton</span></a></div><div class="nav_link"><a class="break_within" href="#Ideal.exists_not_mem_forall_mem_of_ne_of_liesOver"><span class="name">Ideal</span>.<span class="name">exists_not_mem_forall_mem_of_ne_of_liesOver</span></a></div><div class="nav_link"><a class="break_within" href="#Ideal.Fiber.lift_residueField_surjective"><span class="name">Ideal</span>.<span class="name">Fiber</span>.<span class="name">lift_residueField_surjective</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Quasi-finite-algebras" class="markdown-heading">Quasi-finite algebras <a class="hover-link" href="#Quasi-finite-algebras">#</a></h1><p>In this file, we define the notion of quasi-finite algebras and prove basic properties about them</p><h2 id="Main-definition-and-results" class="markdown-heading">Main definition and results <a class="hover-link" href="#Main-definition-and-results">#</a></h2><ul><li><code><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">Algebra.QuasiFinite</a></code>: The class of quasi-finite algebras.
+We say that an <code>R</code>-algebra <code>S</code> is quasi-finite
+if <code>κ(p) ⊗[R] S</code> is finite-dimensional over <code>κ(p)</code> for all primes <code>p</code> of <code>R</code>.</li><li><code><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.finite_comap_preimage_singleton">Algebra.QuasiFinite.finite_comap_preimage_singleton</a></code>:
+Quasi-finite algebras have finite fibers.</li><li><code><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.iff_of_isArtinianRing">Algebra.QuasiFinite.iff_of_isArtinianRing</a></code>:
+Over an artinian ring, an algebra is quasi-finite iff it is module-finite.</li><li><code><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.iff_finite_comap_preimage_singleton">Algebra.QuasiFinite.iff_finite_comap_preimage_singleton</a></code>: For a finite-type <code>R</code>-algebra <code>S</code>,
+<code>S</code> is quasi-finite if and only if <code>Spec S → Spec R</code> has finite fibers.</li><li><code><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">Algebra.QuasiFiniteAt</a></code>: If <code>S</code> is an <code>R</code>-algebra and <code>p</code> a prime of <code>S</code>,
+we say that <code>S</code> is <code>R</code>-quasi-finite at <code>p</code> if <code>Sₚ</code> is <code>R</code>-quasi-finite.</li></ul></div><div class="decl" id="Algebra.QuasiFinite"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L55-L69">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>We say that an <code>R</code>-algebra <code>S</code> is quasi-finite
+if <code>κ(p) ⊗[R] S</code> is finite-dimensional over <code>κ(p)</code> for all primes <code>p</code> of <code>R</code>.</p><p>This is slightly different from the
+<a href="https://stacks.math.columbia.edu/tag/00PL">stacks projects definition</a>,
+which requires <code>S</code> to be of finite type over <code>R</code>.</p><p>Also see <code><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.iff_finite_comap_preimage_singleton">Algebra.QuasiFinite.iff_finite_comap_preimage_singleton</a></code> that
+this is equivalent to having finite fibers for finite-type algebras.</p><ul class="structure_fields" id="Algebra.QuasiFinite.mk"><li id="Algebra.QuasiFinite.finite_fiber" class="structure_field"><div class="structure_field_info">finite_fiber<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Ideal.html#Ideal.ResidueField">ResidueField</a></span> <span class="fn">(<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Fiber.html#Ideal.Fiber">Fiber</a></span> <span class="fn">S</span>)</span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-Algebra.QuasiFinite" class="instances-list"></ul></details></div></div><div class="decl" id="Algebra.quasiFinite_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L66-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.quasiFinite_iff"><span class="name">Algebra</span>.<span class="name">quasiFinite_iff</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><a href="../../.././Init/Tactics.html#autoParam">autoParam</a> <span class="fn">(∀ (<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>) [<span class="fn">inst</span> : <span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>], <span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Ideal.html#Ideal.ResidueField">ResidueField</a></span> <span class="fn">(<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Fiber.html#Ideal.Fiber">Fiber</a></span> <span class="fn">S</span>)</span></span>)</span>
+    <a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.finite_fiber">QuasiFinite.finite_fiber._autoParam</a></span></div></div><p><a href="https://stacks.math.columbia.edu/tag/00PM">Stacks Tag 00PM</a></p></div></div><div class="decl" id="Algebra.QuasiFinite.instIsArtinianRingFiber"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L77-L78">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.instIsArtinianRingFiber"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instIsArtinianRingFiber</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Artinian/Module.html#IsArtinianRing">IsArtinianRing</a> <span class="fn">(<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Fiber.html#Ideal.Fiber">Fiber</a></span> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.finite_comap_preimage_singleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L80-L82">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.finite_comap_preimage_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">finite_comap_preimage_singleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn"><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/RingHom.html#PrimeSpectrum.comap">PrimeSpectrum.comap</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">P</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a>).<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.finite_primesOver"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L84-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.finite_primesOver"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">finite_primesOver</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">I</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.primesOver">primesOver</a></span> <span class="fn">S</span>)</span>.<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.finite_comap_preimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L93-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.finite_comap_preimage"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">finite_comap_preimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn"><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/RingHom.html#PrimeSpectrum.comap">PrimeSpectrum.comap</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">s</span>).<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.isDiscrete_comap_preimage_singleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L97-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.isDiscrete_comap_preimage_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">isDiscrete_comap_preimage_singleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Constructions.html#IsDiscrete">IsDiscrete</a> (<span class="fn"><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/RingHom.html#PrimeSpectrum.comap">PrimeSpectrum.comap</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">P</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a>)</span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.isDiscrete_comap_preimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L101-L105">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.isDiscrete_comap_preimage"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">isDiscrete_comap_preimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Constructions.html#IsDiscrete">IsDiscrete</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Constructions.html#IsDiscrete">IsDiscrete</a> (<span class="fn"><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/RingHom.html#PrimeSpectrum.comap">PrimeSpectrum.comap</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.instOfFinite"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L107-L107">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.instOfFinite"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instOfFinite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.baseChange"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L109-L117">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.baseChange"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">baseChange</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">A</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">A</span> <span class="fn">S</span>)</span></span></div></div><p><a href="https://stacks.math.columbia.edu/tag/00PP">Stacks Tag 00PP</a> ((3))</p></div></div><div class="decl" id="Module.Finite.of_quasiFinite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L140-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Module.Finite.of_quasiFinite"><span class="name">Module</span>.<span class="name">Finite</span>.<span class="name">of_quasiFinite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Artinian/Module.html#IsArtinianRing">IsArtinianRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">Algebra.QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.iff_of_isArtinianRing"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L160-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.iff_of_isArtinianRing"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">iff_of_isArtinianRing</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Artinian/Module.html#IsArtinianRing">IsArtinianRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">S</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.trans"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L166-L182">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.trans"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">trans</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">T</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">T</span></span></div></div><p><a href="https://stacks.math.columbia.edu/tag/00PO">Stacks Tag 00PO</a></p></div></div><div class="decl" id="Algebra.QuasiFinite.of_surjective_algHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L185-L190">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.of_surjective_algHom"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">of_surjective_algHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">S</span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">T</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">T</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.instQuotientIdeal"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L192-L193">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.instQuotientIdeal"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instQuotientIdeal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> (<span class="fn">S</span> <a href="../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">I</span>)</span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.iff_of_algEquiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L196-L199">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.iff_of_algEquiv"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">iff_of_algEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">S</span> <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">≃ₐ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">]</a> <span class="fn">T</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">T</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.of_isLocalization"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L201-L217">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.of_isLocalization"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">of_isLocalization</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid">Submonoid</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Localization/Defs.html#IsLocalization">IsLocalization</a> <span class="fn">M</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">T</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.instLocalization"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L219-L219">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.instLocalization"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instLocalization</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid">Submonoid</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/GroupTheory/MonoidLocalization/Basic.html#Localization">Localization</a> <span class="fn">M</span>)</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.instOfIsFractionRing"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L221-L222">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.instOfIsFractionRing"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instOfIsFractionRing</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Localization/FractionRing.html#IsFractionRing">IsFractionRing</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.instResidueField"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L224-L225">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.instResidueField"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instResidueField</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Ideal.html#Ideal.ResidueField">ResidueField</a></span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.of_restrictScalars"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L228-L239">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.of_restrictScalars"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">of_restrictScalars</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">T</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">S</span> <span class="fn">T</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.discreteTopology_primeSpectrum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L242-L245">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.discreteTopology_primeSpectrum"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">discreteTopology_primeSpectrum</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.finite_primeSpectrum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L248-L251">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.finite_primeSpectrum"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">finite_primeSpectrum</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.of_forall_exists_mul_mem_range"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L254-L264">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.of_forall_exists_mul_mem_range"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">of_forall_exists_mul_mem_range</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">S</span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">T</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">T</span>), <span class="fn">∃ (<span class="fn">s</span> : <span class="fn">S</span>), <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">(<span class="fn">f</span> <span class="fn">s</span>)</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Basic.html#AlgHom.range">range</a></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">T</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.eq_of_le_of_under_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L267-L271">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.eq_of_le_of_under_eq"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">eq_of_le_of_under_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P </span><span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">P</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">Q</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.under">Ideal.under</a> <span class="fn">R</span> <span class="fn">P</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.under">Ideal.under</a> <span class="fn">R</span> <span class="fn">Q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">P</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">Q</span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.instFiniteResidueField"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L273-L276">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.instFiniteResidueField"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">instFiniteResidueField</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.LiesOver">LiesOver</a></span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Ideal.html#Ideal.ResidueField">ResidueField</a></span> <span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Ideal.html#Ideal.ResidueField">ResidueField</a></span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.iff_finite_comap_preimage_singleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L280-L288">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.iff_finite_comap_preimage_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">iff_finite_comap_preimage_singleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">FiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>), <span class="fn">(<span class="fn"><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/RingHom.html#PrimeSpectrum.comap">PrimeSpectrum.comap</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a>).<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.iff_finite_primesOver"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L290-L299">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.iff_finite_primesOver"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">iff_finite_primesOver</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">FiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>), <span class="fn"><span class="fn"><span class="fn">I</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span> → <span class="fn"><span class="fn">(<span class="fn"><span class="fn">I</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.primesOver">primesOver</a></span> <span class="fn">S</span>)</span>.<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span></span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFinite.of_isIntegral_of_finiteType"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L301-L336">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite.of_isIntegral_of_finiteType"><span class="name">Algebra</span>.<span class="name">QuasiFinite</span>.<span class="name">of_isIntegral_of_finiteType</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/IntegralClosure/Algebra/Defs.html#Algebra.IsIntegral">Algebra.IsIntegral</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">FiniteType</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn">S</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Localization/Away/Basic.html#IsLocalization.Away">IsLocalization.Away</a> <span class="fn">s</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">QuasiFinite</a> <span class="fn">R</span> <span class="fn">T</span></span></div></div><p>If <code>T</code> is both a finite type <code>R</code>-algebra, and the localization of an integral <code>R</code>-algebra
+(away from an element), then <code>T</code> is quasi-finite over <code>R</code></p></div></div><div class="decl" id="Algebra.QuasiFiniteAt"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L345-L350">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>If <code>S</code> is an <code>R</code>-algebra and <code>p</code> a prime of <code>S</code>, we say that <code>S</code> is <code>R</code>-quasi-finite at <code>p</code>
+if <code>Sₚ</code> is <code>R</code>-quasi-finite. In the case where <code>S</code> is (essentially) of finite type over <code>R</code>,
+this is equivalent to the usual definition that <code>p</code> is isolated in its fiber.
+See <code>Ideal.exists_notMem_forall_mem_of_ne_of_liesOver</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">Algebra.QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFinite">Algebra.QuasiFinite</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html#Localization.AtPrime">Localization.AtPrime</a> <span class="fn">p</span>)</span></span></li></ul></details><details id="instances-for-list-Algebra.QuasiFiniteAt" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Algebra.QuasiFiniteAt.baseChange"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L352-L368">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt.baseChange"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">baseChange</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">A</span> <span class="fn">S</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.comap">Ideal.comap</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/TensorProduct/Basic.html#Algebra.TensorProduct.includeRight">TensorProduct.includeRight</a>.<a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.toRingHom">toRingHom</a></span> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">A</span> <span class="fn">q</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFiniteAt.of_surjectiveOnStalks"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L372-L379">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt.of_surjectiveOnStalks"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">of_surjectiveOnStalks</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">S</span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">T</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">T</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.comap">Ideal.comap</a> <span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.toRingHom">toRingHom</a></span> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">q</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFiniteAt.of_surjectiveOnStalks_of_liesOver"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L381-L384">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt.of_surjectiveOnStalks_of_liesOver"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">of_surjectiveOnStalks_of_liesOver</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">S</span> <span class="fn">T</span>)</span>.<a href="../../.././Mathlib/RingTheory/SurjectiveOnStalks.html#RingHom.SurjectiveOnStalks">SurjectiveOnStalks</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">T</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.LiesOver">LiesOver</a></span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">q</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFiniteAt.comap_algEquiv"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L386-L389">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt.comap_algEquiv"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">comap_algEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">T</span> <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">≃ₐ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">]</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.comap">Ideal.comap</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv.toRingEquiv">toRingEquiv</a></span>.<a href="../../.././Mathlib/Algebra/Ring/Equiv.html#RingEquiv.toRingHom">toRingHom</a></span> <span class="fn">p</span>)</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFiniteAt.of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L392-L402">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt.of_le"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P </span><span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">P</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">Q</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">Q</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFiniteAt.eq_of_le_of_under_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L405-L417">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt.eq_of_le_of_under_eq"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">eq_of_le_of_under_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P </span><span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">P</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">Q</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.under">Ideal.under</a> <span class="fn">R</span> <span class="fn">P</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.under">Ideal.under</a> <span class="fn">R</span> <span class="fn">Q</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">Q</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">P</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">Q</span></div></div></div></div><div class="decl" id="Algebra.instFiniteResidueFieldOfQuasiFiniteAt"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L419-L426">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.instFiniteResidueFieldOfQuasiFiniteAt"><span class="name">Algebra</span>.<span class="name">instFiniteResidueFieldOfQuasiFiniteAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.LiesOver">LiesOver</a></span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Ideal.html#Ideal.ResidueField">ResidueField</a></span> <span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Ideal.html#Ideal.ResidueField">ResidueField</a></span></span></div></div></div></div><div class="decl" id="Algebra.QuasiFiniteAt.exists_basicOpen_eq_singleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L428-L455">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt.exists_basicOpen_eq_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">exists_basicOpen_eq_singleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Artinian/Module.html#IsArtinianRing">IsArtinianRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">f</span> ∉ <span class="fn">p</span>, <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Topology.html#PrimeSpectrum.basicOpen">PrimeSpectrum.basicOpen</a> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.mk">{</a> <span class="fn">asIdeal</span> := <span class="fn">p</span>, <span class="fn">isPrime</span> := <span class="fn">inst✝</span> <a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.mk">}</a><a href="../../.././Init/Core.html#Singleton.singleton">}</a></span></div></div></div></div><div class="decl" id="Algebra.QuasiFiniteAt.isClopen_singleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L457-L466">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt.isClopen_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">isClopen_singleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Artinian/Module.html#IsArtinianRing">IsArtinianRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">FiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClopen">IsClopen</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a></span></div></div><p>If <code>R</code> is an artinian ring, and <code>S</code> is a finite type <code>R</code>-algebra <code>R</code>-quasi-finite at <code>p</code>,
+then <code>{p}</code> is clopen in <code>Spec S</code>.</p></div></div><div class="decl" id="Algebra.QuasiFiniteAt.of_isOpen_singleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L468-L506">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt.of_isOpen_singleton"><span class="name">Algebra</span>.<span class="name">QuasiFiniteAt</span>.<span class="name">of_isOpen_singleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Artinian/Module.html#IsArtinianRing">IsArtinianRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">FiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsOpen">IsOpen</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">p</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span></span></div></div></div></div><div class="decl" id="Ideal.exists_not_mem_forall_mem_of_ne_of_liesOver"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L509-L538">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Ideal.exists_not_mem_forall_mem_of_ne_of_liesOver"><span class="name">Ideal</span>.<span class="name">exists_not_mem_forall_mem_of_ne_of_liesOver</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.LiesOver">LiesOver</a></span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">Algebra.EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">Algebra.QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">q</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">s</span> ∉ <span class="fn">q</span>, <span class="fn">∀ (<span class="fn">q'</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>), <span class="fn"><span class="fn"><span class="fn">q'</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span> → <span class="fn"><span class="fn">q'</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">q</span> → <span class="fn"><span class="fn"><span class="fn"><span class="fn">q'</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.LiesOver">LiesOver</a></span> <span class="fn">p</span></span> → <span class="fn">s</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">q'</span></span></span></span></span></span></div></div></div></div><div class="decl" id="Ideal.Fiber.lift_residueField_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/QuasiFinite/Basic.lean#L540-L555">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Ideal.Fiber.lift_residueField_surjective"><span class="name">Ideal</span>.<span class="name">Fiber</span>.<span class="name">lift_residueField_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">Algebra.FiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">q</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Over.html#Ideal.LiesOver">LiesOver</a></span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/QuasiFinite/Basic.html#Algebra.QuasiFiniteAt">Algebra.QuasiFiniteAt</a> <span class="fn">R</span> <span class="fn">q</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a>
+  <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/RingTheory/TensorProduct/Maps.html#Algebra.TensorProduct.lift">Algebra.TensorProduct.lift</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Hom.html#Algebra.ofId">Algebra.ofId</a> <span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Ideal.html#Ideal.ResidueField">ResidueField</a></span> <span class="fn"><span class="fn">q</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Ideal.html#Ideal.ResidueField">ResidueField</a></span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Tower.html#IsScalarTower.toAlgHom">IsScalarTower.toAlgHom</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn"><span class="fn">q</span>.<a href="../../.././Mathlib/RingTheory/LocalRing/ResidueField/Ideal.html#Ideal.ResidueField">ResidueField</a></span>)</span>
+      <span class="fn">⋯</span>)</span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

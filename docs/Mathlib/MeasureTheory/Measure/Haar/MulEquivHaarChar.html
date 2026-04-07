@@ -1,0 +1,502 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.MeasureTheory.Measure.Haar.MulEquivHaarChar</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.MeasureTheory.Measure.Haar.MulEquivHaarChar";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">MeasureTheory</span>.<span class="name">Measure</span>.<span class="name">Haar</span>.<span class="name">MulEquivHaarChar</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Unique.html">Mathlib.MeasureTheory.Measure.Haar.Unique</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.MeasureTheory.Measure.Haar.MulEquivHaarChar" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar_pos"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_pos</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar_pos"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_pos</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar_eq"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_eq</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar_eq"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_eq</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar_smul_map"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_smul_map</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar_smul_map"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_smul_map</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar_smul_eq_comap"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_smul_eq_comap</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar_smul_eq_comap"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_smul_eq_comap</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar_smul_integral_map"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_smul_integral_map</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar_smul_integral_map"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_smul_integral_map</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.integral_comap_eq_mulEquivHaarChar_smul"><span class="name">MeasureTheory</span>.<span class="name">integral_comap_eq_mulEquivHaarChar_smul</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.integral_comap_eq_addEquivAddHaarChar_smul"><span class="name">MeasureTheory</span>.<span class="name">integral_comap_eq_addEquivAddHaarChar_smul</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar_smul_preimage"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_smul_preimage</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar_smul_preimage"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_smul_preimage</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar_refl"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_refl</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar_refl"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_refl</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar_trans"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_trans</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar_trans"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_trans</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar_symm"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_symm</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar_symm"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_symm</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.mulEquivHaarChar_eq_one_of_compactSpace"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_eq_one_of_compactSpace</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.addEquivAddHaarChar_eq_one_of_compactSpace"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_eq_one_of_compactSpace</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Scaling-Haar-measure-by-a-continuous-isomorphism" class="markdown-heading">Scaling Haar measure by a continuous isomorphism <a class="hover-link" href="#Scaling-Haar-measure-by-a-continuous-isomorphism">#</a></h1><p>If <code>G</code> is a locally compact topological group and <code>μ</code> is a regular Haar measure
+on <code>G</code>, then an isomorphism <code>φ : G ≃ₜ* G</code> scales this measure by some positive
+real constant which we call <code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> φ</code>.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> φ</code>: the positive real such that <code>(mulEquivHaarChar φ) • map φ μ = μ</code>
+for <code>μ</code> a regular Haar measure.</li><li><code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> φ</code>: the additive version.</li></ul></div><div class="decl" id="MeasureTheory.mulEquivHaarChar"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L36-L41">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a></div></div><p>If <code>φ : G ≃ₜ* G</code> then <code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> φ</code> is the positive real factor by which
+<code>φ</code> scales Haar measures on <code>G</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">MeasureTheory.mulEquivHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Basic.html#MeasureTheory.Measure.haar">MeasureTheory.Measure.haar</a>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Unique.html#MeasureTheory.Measure.haarScalarFactor">haarScalarFactor</a></span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Basic.html#MeasureTheory.Measure.haar">MeasureTheory.Measure.haar</a>)</span></span></li></ul></details><details id="instances-for-list-MeasureTheory.mulEquivHaarChar" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L38-L39">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Data/NNReal/Defs.html#NNReal">NNReal</a></div></div><p>If <code>φ : A ≃ₜ+ A</code> then <code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> φ</code> is the positive
+real factor by which <code>φ</code> scales Haar measures on <code>A</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">MeasureTheory.addEquivAddHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Basic.html#MeasureTheory.Measure.addHaar">MeasureTheory.Measure.addHaar</a>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Unique.html#MeasureTheory.Measure.addHaarScalarFactor">addHaarScalarFactor</a></span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Basic.html#MeasureTheory.Measure.addHaar">MeasureTheory.Measure.addHaar</a>)</span></span></li></ul></details><details id="instances-for-list-MeasureTheory.addEquivAddHaarChar" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MeasureTheory.mulEquivHaarChar_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L43-L45">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar_pos"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L43-L43">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar_pos"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.mulEquivHaarChar_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L47-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar_eq"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsHaarMeasure">IsHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Unique.html#MeasureTheory.Measure.haarScalarFactor">haarScalarFactor</a></span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">Measure.map</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <span class="fn">μ</span>)</span></span></div></div></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L47-L47">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar_eq"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsAddHaarMeasure">IsAddHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Unique.html#MeasureTheory.Measure.addHaarScalarFactor">addHaarScalarFactor</a></span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">Measure.map</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <span class="fn">μ</span>)</span></span></div></div></div></div><div class="decl" id="MeasureTheory.mulEquivHaarChar_smul_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L62-L68">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar_smul_map"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_smul_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsHaarMeasure">IsHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">Measure.map</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">μ</span></div></div></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar_smul_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L62-L62">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar_smul_map"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_smul_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsAddHaarMeasure">IsAddHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">Measure.map</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">μ</span></div></div></div></div><div class="decl" id="MeasureTheory.mulEquivHaarChar_smul_eq_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L70-L80">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar_smul_eq_comap"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_smul_eq_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsHaarMeasure">IsHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">μ</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Comap.html#MeasureTheory.Measure.comap">Measure.comap</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar_smul_eq_comap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L70-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar_smul_eq_comap"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_smul_eq_comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsAddHaarMeasure">IsAddHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">μ</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Comap.html#MeasureTheory.Measure.comap">Measure.comap</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.mulEquivHaarChar_smul_integral_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L82-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar_smul_integral_map"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_smul_integral_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsHaarMeasure">IsHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">G</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">a</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">Measure.map</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <span class="fn">μ</span></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">a</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar_smul_integral_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L82-L82">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar_smul_integral_map"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_smul_integral_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsAddHaarMeasure">IsAddHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">G</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">a</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">Measure.map</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <span class="fn">μ</span></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">a</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.integral_comap_eq_mulEquivHaarChar_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L89-L101">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.integral_comap_eq_mulEquivHaarChar_smul"><span class="name">MeasureTheory</span>.<span class="name">integral_comap_eq_mulEquivHaarChar_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsHaarMeasure">IsHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">G</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">a</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Comap.html#MeasureTheory.Measure.comap">Measure.comap</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <span class="fn">μ</span></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">a</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.integral_comap_eq_addEquivAddHaarChar_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L89-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.integral_comap_eq_addEquivAddHaarChar_smul"><span class="name">MeasureTheory</span>.<span class="name">integral_comap_eq_addEquivAddHaarChar_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsAddHaarMeasure">IsAddHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">G</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">a</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Comap.html#MeasureTheory.Measure.comap">Measure.comap</a> <span class="fn">(⇑<span class="fn">φ</span>)</span> <span class="fn">μ</span></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">a</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.mulEquivHaarChar_smul_preimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L103-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar_smul_preimage"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_smul_preimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsHaarMeasure">IsHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">μ</span> (<span class="fn">⇑<span class="fn">φ</span></span> <a href="../../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">X</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">μ</span> <span class="fn">X</span></span></div></div></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar_smul_preimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L103-L103">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar_smul_preimage"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_smul_preimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsAddHaarMeasure">IsAddHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Regular.html#MeasureTheory.Measure.Regular">Regular</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">μ</span> (<span class="fn">⇑<span class="fn">φ</span></span> <a href="../../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">X</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">μ</span> <span class="fn">X</span></span></div></div></div></div><div class="decl" id="MeasureTheory.mulEquivHaarChar_refl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L111-L114">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar_refl"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_refl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv.refl">ContinuousMulEquiv.refl</a> <span class="fn">G</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar_refl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L111-L111">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar_refl"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_refl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv.refl">ContinuousAddEquiv.refl</a> <span class="fn">G</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="MeasureTheory.mulEquivHaarChar_trans"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L116-L125">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar_trans"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_trans</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ </span><span class="fn">ψ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">(<span class="fn"><span class="fn">ψ</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv.trans">trans</a></span> <span class="fn">φ</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">ψ</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar_trans"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L116-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar_trans"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_trans</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ </span><span class="fn">ψ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">(<span class="fn"><span class="fn">ψ</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv.trans">trans</a></span> <span class="fn">φ</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">ψ</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.mulEquivHaarChar_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L127-L132">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar_symm"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn"><span class="fn">φ</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv.symm">symm</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">φ</span>)</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L127-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar_symm"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn"><span class="fn">φ</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv.symm">symm</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">φ</span>)</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></div></div></div></div><div class="decl" id="MeasureTheory.mulEquivHaarChar_eq_one_of_compactSpace"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L135-L148">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar_eq_one_of_compactSpace"><span class="name">MeasureTheory</span>.<span class="name">mulEquivHaarChar_eq_one_of_compactSpace</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMulEquiv">≃ₜ*</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.mulEquivHaarChar">mulEquivHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="MeasureTheory.addEquivAddHaarChar_eq_one_of_compactSpace"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.lean#L135-L135">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar_eq_one_of_compactSpace"><span class="name">MeasureTheory</span>.<span class="name">addEquivAddHaarChar_eq_one_of_compactSpace</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddEquiv">≃ₜ+</a> <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/MulEquivHaarChar.html#MeasureTheory.addEquivAddHaarChar">addEquivAddHaarChar</a> <span class="fn">φ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

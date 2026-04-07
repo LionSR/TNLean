@@ -1,0 +1,928 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.Valuation.Integers</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.Valuation.Integers";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">Valuation</span>.<span class="name">Integers</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html">Mathlib.RingTheory.Valuation.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.Valuation.Integers" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Valuation.integer"><span class="name">Valuation</span>.<span class="name">integer</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.mem_integer_iff"><span class="name">Valuation</span>.<span class="name">mem_integer_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers"><span class="name">Valuation</span>.<span class="name">Integers</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.instAlgebraSubtypeMemSubringInteger"><span class="name">Valuation</span>.<span class="name">instAlgebraSubtypeMemSubringInteger</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.integer.integers"><span class="name">Valuation</span>.<span class="name">integer</span>.<span class="name">integers</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.one_of_isUnit'"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">one_of_isUnit'</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.one_of_isUnit"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">one_of_isUnit</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.isUnit_of_one"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">isUnit_of_one</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.le_of_dvd"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">le_of_dvd</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.nontrivial_iff"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">nontrivial_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.IsTrivialOn.of_le_one"><span class="name">Valuation</span>.<span class="name">IsTrivialOn</span>.<span class="name">of_le_one</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.integers_nontrivial"><span class="name">Valuation</span>.<span class="name">integers_nontrivial</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.dvd_of_le"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">dvd_of_le</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.dvd_iff_le"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">dvd_iff_le</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.le_iff_dvd"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">le_iff_dvd</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.isUnit_of_one'"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">isUnit_of_one'</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.isUnit_iff_valuation_eq_one"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">isUnit_iff_valuation_eq_one</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.valuation_irreducible_lt_one"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">valuation_irreducible_lt_one</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.valuation_unit"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">valuation_unit</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.valuation_pos_iff_ne_zero"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">valuation_pos_iff_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.valuation_irreducible_pos"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">valuation_irreducible_pos</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.dvdNotUnit_iff_lt"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">dvdNotUnit_iff_lt</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.eq_algebraMap_or_inv_eq_algebraMap"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">eq_algebraMap_or_inv_eq_algebraMap</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.coe_span_singleton_eq_setOf_le_v_algebraMap"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">coe_span_singleton_eq_setOf_le_v_algebraMap</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.bijective_algebraMap_of_subsingleton_units_mrange"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">bijective_algebraMap_of_subsingleton_units_mrange</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.isPrincipal_iff_exists_isGreatest"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">isPrincipal_iff_exists_isGreatest</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.isPrincipal_iff_exists_eq_setOf_valuation_le"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">isPrincipal_iff_exists_eq_setOf_valuation_le</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integers.not_denselyOrdered_of_isPrincipalIdealRing"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">not_denselyOrdered_of_isPrincipalIdealRing</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.Integer.not_isUnit_iff_valuation_lt_one"><span class="name">Valuation</span>.<span class="name">Integer</span>.<span class="name">not_isUnit_iff_valuation_lt_one</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.integer.v_irreducible_lt_one"><span class="name">Valuation</span>.<span class="name">integer</span>.<span class="name">v_irreducible_lt_one</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.integer.v_irreducible_pos"><span class="name">Valuation</span>.<span class="name">integer</span>.<span class="name">v_irreducible_pos</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.integer.coe_span_singleton_eq_setOf_le_v_coe"><span class="name">Valuation</span>.<span class="name">integer</span>.<span class="name">coe_span_singleton_eq_setOf_le_v_coe</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.leSubmodule"><span class="name">Valuation</span>.<span class="name">leSubmodule</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.ltSubmodule"><span class="name">Valuation</span>.<span class="name">ltSubmodule</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.leSubmodule_monotone"><span class="name">Valuation</span>.<span class="name">leSubmodule_monotone</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.ltSubmodule_monotone"><span class="name">Valuation</span>.<span class="name">ltSubmodule_monotone</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.ltSubmodule_le_leSubmodule"><span class="name">Valuation</span>.<span class="name">ltSubmodule_le_leSubmodule</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.mem_leSubmodule_iff"><span class="name">Valuation</span>.<span class="name">mem_leSubmodule_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.mem_ltSubmodule_iff"><span class="name">Valuation</span>.<span class="name">mem_ltSubmodule_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.leSubmodule_zero"><span class="name">Valuation</span>.<span class="name">leSubmodule_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.leSubmodule_v_le_of_mem"><span class="name">Valuation</span>.<span class="name">leSubmodule_v_le_of_mem</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.ltSubmodule_v_le_of_mem"><span class="name">Valuation</span>.<span class="name">ltSubmodule_v_le_of_mem</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.leIdeal"><span class="name">Valuation</span>.<span class="name">leIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.ltIdeal"><span class="name">Valuation</span>.<span class="name">ltIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.leIdeal_mono"><span class="name">Valuation</span>.<span class="name">leIdeal_mono</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.ltIdeal_mono"><span class="name">Valuation</span>.<span class="name">ltIdeal_mono</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.ltIdeal_le_leIdeal"><span class="name">Valuation</span>.<span class="name">ltIdeal_le_leIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.mem_leIdeal_iff"><span class="name">Valuation</span>.<span class="name">mem_leIdeal_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.mem_ltIdeal_iff"><span class="name">Valuation</span>.<span class="name">mem_ltIdeal_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.leIdeal_zero"><span class="name">Valuation</span>.<span class="name">leIdeal_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.leSubmodule_comap_algebraMap_eq_leIdeal"><span class="name">Valuation</span>.<span class="name">leSubmodule_comap_algebraMap_eq_leIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.leIdeal_map_algebraMap_eq_leSubmodule_min"><span class="name">Valuation</span>.<span class="name">leIdeal_map_algebraMap_eq_leSubmodule_min</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.leIdeal_v_le_of_mem"><span class="name">Valuation</span>.<span class="name">leIdeal_v_le_of_mem</span></a></div><div class="nav_link"><a class="break_within" href="#Valuation.ltIdeal_v_le_of_mem"><span class="name">Valuation</span>.<span class="name">ltIdeal_v_le_of_mem</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Ring-of-integers-under-a-given-valuation" class="markdown-heading">Ring of integers under a given valuation <a class="hover-link" href="#Ring-of-integers-under-a-given-valuation">#</a></h1><p>The elements with valuation less than or equal to 1.</p><p>TODO: Define characteristic predicate.</p></div><div class="decl" id="Valuation.integer"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L31-L38">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer"><span class="name">Valuation</span>.<span class="name">integer</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Subring/Defs.html#Subring">Subring</a> <span class="fn">R</span></span></div></div><p>The ring of integers under a given valuation is the subring of elements with valuation ≤ 1.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Ring/Subring/Defs.html#Subring.mk">{</a> <span class="fn">carrier</span> := <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">1</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>, <span class="fn">mul_mem'</span> := <span class="fn">⋯</span>, <span class="fn">one_mem'</span> := <span class="fn">⋯</span>, <span class="fn">add_mem'</span> := <span class="fn">⋯</span>, <span class="fn">zero_mem'</span> := <span class="fn">⋯</span>, <span class="fn">neg_mem'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Ring/Subring/Defs.html#Subring.mk">}</a></li></ul></details><details id="instances-for-list-Valuation.integer" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Valuation.mem_integer_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L40-L40">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.mem_integer_iff"><span class="name">Valuation</span>.<span class="name">mem_integer_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">r</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">v</span> <span class="fn">r</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Valuation.Integers"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L50-L55">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers"><span class="name">Valuation</span>.<span class="name">Integers</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>Given a valuation v : R → Γ₀ and a ring homomorphism O →+* R, we say that O is the integers of v
+if f is injective, and its range is exactly <code>v.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></code>.</p><ul class="structure_fields" id="Valuation.Integers.mk"><li id="Valuation.Integers.hom_inj" class="structure_field"><div class="structure_field_info">hom_inj : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">R</span>)</span></span></span></div></li><li id="Valuation.Integers.map_le_one" class="structure_field"><div class="structure_field_info">map_le_one<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">O</span>)</span></span>
+ : <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">R</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">1</span></div></li><li id="Valuation.Integers.exists_of_le_one" class="structure_field"><div class="structure_field_info">exists_of_le_one<span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">r</span> : <span class="fn">R</span>⦄</span></span>
+</span> : <span class="fn"><span class="fn"><span class="fn">v</span> <span class="fn">r</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">1</span> → <span class="fn">∃ (<span class="fn">x</span> : <span class="fn">O</span>), <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">R</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span></span></span></div></li></ul><details id="instances-for-list-Valuation.Integers" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Valuation.instAlgebraSubtypeMemSubringInteger"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L58-L59">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.instAlgebraSubtypeMemSubringInteger"><span class="name">Valuation</span>.<span class="name">instAlgebraSubtypeMemSubringInteger</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">(↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span>)</span> <span class="fn">R</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.instAlgebraSubtypeMemSubringInteger">instAlgebraSubtypeMemSubringInteger</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#inferInstance">inferInstance</a></li></ul></details></div></div><div class="decl" id="Valuation.integer.integers"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L61-L64">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer.integers"><span class="name">Valuation</span>.<span class="name">integer</span>.<span class="name">integers</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span></span></div></div></div></div><div class="decl" id="Valuation.Integers.one_of_isUnit'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L70-L75">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.one_of_isUnit'"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">one_of_isUnit'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">O</span>), <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">R</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">1</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">R</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Valuation.Integers.one_of_isUnit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L77-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.one_of_isUnit"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">one_of_isUnit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">R</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Valuation.Integers.isUnit_of_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L80-L94">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.isUnit_of_one"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">isUnit_of_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">R</span>)</span> <span class="fn">x</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hvx</span> : <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">R</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">x</span></span></div></div><p>Let <code>O</code> be the integers of the valuation <code>v</code> on some commutative ring <code>R</code>. For every element <code>x</code> in
+<code>O</code>, <code>x</code> is a unit in <code>O</code> if and only if the image of <code>x</code> in <code>R</code> is a unit and has valuation 1.</p></div></div><div class="decl" id="Valuation.Integers.le_of_dvd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L96-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.le_of_dvd"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">le_of_dvd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">R</span>)</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">R</span>)</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="Valuation.Integers.nontrivial_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L101-L108">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.nontrivial_iff"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">nontrivial_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">O</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span></div></div></div></div><div class="decl" id="Valuation.IsTrivialOn.of_le_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L112-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.IsTrivialOn.of_le_one"><span class="name">Valuation</span>.<span class="name">IsTrivialOn</span>.<span class="name">of_le_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">k</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hle</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">k</span>), <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">k</span> <span class="fn">R</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">1</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation.IsTrivialOn">IsTrivialOn</a> <span class="fn">k</span> <span class="fn">v</span></span></div></div></div></div><div class="decl" id="Valuation.integers_nontrivial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L116-L118">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integers_nontrivial"><span class="name">Valuation</span>.<span class="name">integers_nontrivial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span></div></div></div></div><div class="decl" id="Valuation.Integers.dvd_of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L129-L141">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.dvd_of_le"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">dvd_of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">y</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="Valuation.Integers.dvd_iff_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L143-L145">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.dvd_iff_le"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">dvd_iff_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">y</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="Valuation.Integers.le_iff_dvd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L147-L149">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.le_iff_dvd"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">le_iff_dvd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="Valuation.Integers.isUnit_of_one'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L151-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.isUnit_of_one'"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">isUnit_of_one'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hvx</span> : <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">x</span></span></div></div><p>This is the special case of <code><a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.isUnit_of_one">Valuation.Integers.isUnit_of_one</a></code> when the valuation is defined
+over a field. Let <code>v</code> be a valuation on some field <code>F</code> and <code>O</code> be its integers. For every element
+<code>x</code> in <code>O</code>, <code>x</code> is a unit in <code>O</code> if and only if the image of <code>x</code> in <code>F</code> has valuation 1.</p></div></div><div class="decl" id="Valuation.Integers.isUnit_iff_valuation_eq_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L160-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.isUnit_iff_valuation_eq_one"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">isUnit_iff_valuation_eq_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Valuation.Integers.valuation_irreducible_lt_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L164-L166">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.valuation_irreducible_lt_one"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">valuation_irreducible_lt_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϖ</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">ϖ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">ϖ</span>)</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Valuation.Integers.valuation_unit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L168-L170">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.valuation_unit"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">valuation_unit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">O</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">↑<span class="fn">x</span></span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Valuation.Integers.valuation_pos_iff_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L172-L176">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.valuation_pos_iff_ne_zero"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">valuation_pos_iff_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="Valuation.Integers.valuation_irreducible_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L178-L180">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.valuation_irreducible_pos"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">valuation_irreducible_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϖ</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">ϖ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">ϖ</span>)</span></span></div></div></div></div><div class="decl" id="Valuation.Integers.dvdNotUnit_iff_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L182-L193">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.dvdNotUnit_iff_lt"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">dvdNotUnit_iff_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">O</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Divisibility.html#DvdNotUnit">DvdNotUnit</a> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="Valuation.Integers.eq_algebraMap_or_inv_eq_algebraMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L195-L199">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.eq_algebraMap_or_inv_eq_algebraMap"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">eq_algebraMap_or_inv_eq_algebraMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">O</span>), <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">x</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">a</span></span></span></div></div></div></div><div class="decl" id="Valuation.Integers.coe_span_singleton_eq_setOf_le_v_algebraMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L201-L206">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.coe_span_singleton_eq_setOf_le_v_algebraMap"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">coe_span_singleton_eq_setOf_le_v_algebraMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">O</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/RingTheory/Ideal/Span.html#Ideal.span">Ideal.span</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">y</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">O</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">x</span>)</span></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></div></div></div></div><div class="decl" id="Valuation.Integers.bijective_algebraMap_of_subsingleton_units_mrange"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L208-L215">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.bijective_algebraMap_of_subsingleton_units_mrange"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">bijective_algebraMap_of_subsingleton_units_mrange</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Group/Submonoid/Operations.html#MonoidHom.mrange">MonoidHom.mrange</a> <span class="fn">v</span>)</span>)</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span></span></span></div></div></div></div><div class="decl" id="Valuation.Integers.isPrincipal_iff_exists_isGreatest"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L217-L232">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.isPrincipal_iff_exists_isGreatest"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">isPrincipal_iff_exists_isGreatest</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">O</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.IsPrincipal">Submodule.IsPrincipal</a> <span class="fn">I</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">x</span> : <span class="fn">Γ₀</span>), <span class="fn"><a href="../../.././Mathlib/Order/Bounds/Defs.html#IsGreatest">IsGreatest</a> (<span class="fn">⇑<span class="fn">v</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">↑<span class="fn">I</span></span>) <span class="fn">x</span></span></span></div></div></div></div><div class="decl" id="Valuation.Integers.isPrincipal_iff_exists_eq_setOf_valuation_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L234-L248">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.isPrincipal_iff_exists_eq_setOf_valuation_le"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">isPrincipal_iff_exists_eq_setOf_valuation_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">O</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.IsPrincipal">Submodule.IsPrincipal</a> <span class="fn">I</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">x</span> : <span class="fn">O</span>), <span class="fn">↑<span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">y</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">O</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">v</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">F</span>)</span> <span class="fn">x</span>)</span></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="Valuation.Integers.not_denselyOrdered_of_isPrincipalIdealRing"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L250-L273">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers.not_denselyOrdered_of_isPrincipalIdealRing"><span class="name">Valuation</span>.<span class="name">Integers</span>.<span class="name">not_denselyOrdered_of_isPrincipalIdealRing</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Span.html#IsPrincipalIdealRing">IsPrincipalIdealRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integers">Integers</a></span> <span class="fn">O</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Order/Basic.html#DenselyOrdered">DenselyOrdered</a> <span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">v</span></span>)</span></span></span></div></div></div></div><div class="decl" id="Valuation.Integer.not_isUnit_iff_valuation_lt_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L278-L281">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.Integer.not_isUnit_iff_valuation_lt_one"><span class="name">Valuation</span>.<span class="name">Integer</span>.<span class="name">not_isUnit_iff_valuation_lt_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">v</span> <span class="fn">↑<span class="fn">x</span></span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Valuation.integer.v_irreducible_lt_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L285-L287">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer.v_irreducible_lt_one"><span class="name">Valuation</span>.<span class="name">integer</span>.<span class="name">v_irreducible_lt_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϖ</span> : <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">ϖ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">↑<span class="fn">ϖ</span></span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Valuation.integer.v_irreducible_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L289-L290">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer.v_irreducible_pos"><span class="name">Valuation</span>.<span class="name">integer</span>.<span class="name">v_irreducible_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϖ</span> : <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">ϖ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">v</span> <span class="fn">↑<span class="fn">ϖ</span></span></span></div></div></div></div><div class="decl" id="Valuation.integer.coe_span_singleton_eq_setOf_le_v_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L292-L294">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer.coe_span_singleton_eq_setOf_le_v_coe"><span class="name">Valuation</span>.<span class="name">integer</span>.<span class="name">coe_span_singleton_eq_setOf_le_v_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">F</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../.././Mathlib/RingTheory/Ideal/Span.html#Ideal.span">Ideal.span</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">y</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">v</span> <span class="fn">↑<span class="fn">y</span></span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">v</span> <span class="fn">↑<span class="fn">x</span></span></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></div></div></div></div><div class="decl" id="Valuation.leSubmodule"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L306-L311">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule"><span class="name">Valuation</span>.<span class="name">leSubmodule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">γ</span> : <span class="fn">Γ₀</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">(↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span>)</span> <span class="fn">R</span></span></div></div><p>The <code>v.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></code>-submodule of <code>R</code> of elements whose valuation is less than or equal to a
+certain value.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule">leSubmodule</a></span> <span class="fn">γ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">{</a> <span class="fn">toAddSubmonoid</span> := <span class="fn"><span class="fn">(<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation.leAddSubgroup">leAddSubgroup</a></span> <span class="fn">γ</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.toAddSubmonoid">toAddSubmonoid</a></span>, <span class="fn">smul_mem'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">}</a></li></ul></details><details id="instances-for-list-Valuation.leSubmodule" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Valuation.ltSubmodule"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L313-L317">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltSubmodule"><span class="name">Valuation</span>.<span class="name">ltSubmodule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">γ</span> : <span class="fn">Γ₀</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">(↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span>)</span> <span class="fn">R</span></span></div></div><p>The <code>v.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></code>-submodule of <code>R</code> of elements whose valuation is less than a certain unit.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltSubmodule">ltSubmodule</a></span> <span class="fn">γ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">{</a> <span class="fn">toAddSubmonoid</span> := <span class="fn"><span class="fn">(<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation.ltAddSubgroup">ltAddSubgroup</a></span> <span class="fn">γ</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.toAddSubmonoid">toAddSubmonoid</a></span>, <span class="fn">smul_mem'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">}</a></li></ul></details><details id="instances-for-list-Valuation.ltSubmodule" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Valuation.leSubmodule_monotone"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L319-L320">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule_monotone"><span class="name">Valuation</span>.<span class="name">leSubmodule_monotone</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule">leSubmodule</a></span></span></div></div></div></div><div class="decl" id="Valuation.ltSubmodule_monotone"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L322-L323">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltSubmodule_monotone"><span class="name">Valuation</span>.<span class="name">ltSubmodule_monotone</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltSubmodule">ltSubmodule</a></span></span></div></div></div></div><div class="decl" id="Valuation.ltSubmodule_le_leSubmodule"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L325-L327">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltSubmodule_le_leSubmodule"><span class="name">Valuation</span>.<span class="name">ltSubmodule_le_leSubmodule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">γ</span> : <span class="fn">Γ₀</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltSubmodule">ltSubmodule</a></span> <span class="fn">γ</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule">leSubmodule</a></span> <span class="fn">↑<span class="fn">γ</span></span></span></div></div></div></div><div class="decl" id="Valuation.mem_leSubmodule_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L330-L333">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.mem_leSubmodule_iff"><span class="name">Valuation</span>.<span class="name">mem_leSubmodule_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn">Γ₀</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule">leSubmodule</a></span> <span class="fn">γ</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">γ</span></div></div></div></div><div class="decl" id="Valuation.mem_ltSubmodule_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L336-L339">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.mem_ltSubmodule_iff"><span class="name">Valuation</span>.<span class="name">mem_ltSubmodule_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn">Γ₀</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltSubmodule">ltSubmodule</a></span> <span class="fn">γ</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">↑<span class="fn">γ</span></span></div></div></div></div><div class="decl" id="Valuation.leSubmodule_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L341-L344">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule_zero"><span class="name">Valuation</span>.<span class="name">leSubmodule_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">K</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule">leSubmodule</a></span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="Valuation.leSubmodule_v_le_of_mem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L346-L353">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule_v_le_of_mem"><span class="name">Valuation</span>.<span class="name">leSubmodule_v_le_of_mem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">K</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">(↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span>)</span> <span class="fn">K</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">K</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule">leSubmodule</a></span> <span class="fn">(<span class="fn">v</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">S</span></div></div></div></div><div class="decl" id="Valuation.ltSubmodule_v_le_of_mem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L355-L358">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltSubmodule_v_le_of_mem"><span class="name">Valuation</span>.<span class="name">ltSubmodule_v_le_of_mem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">K</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">(↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span>)</span> <span class="fn">K</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">K</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxv</span> : <span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltSubmodule">ltSubmodule</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Units/Basic.html#Units.mk0">Units.mk0</a> <span class="fn">(<span class="fn">v</span> <span class="fn">x</span>)</span> <span class="fn">hxv</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">S</span></div></div></div></div><div class="decl" id="Valuation.leIdeal"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L363-L370">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal"><span class="name">Valuation</span>.<span class="name">leIdeal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">γ</span> : <span class="fn">Γ₀</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span></span></div></div><p>The ideal of elements of the valuation subring whose valuation is less than or equal to a
+certain value.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal">leIdeal</a></span> <span class="fn">γ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">{</a> <span class="fn">toAddSubmonoid</span> := <span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation.leAddSubgroup">leAddSubgroup</a></span> <span class="fn">γ</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Map.html#AddSubgroup.addSubgroupOf">addSubgroupOf</a></span> <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span>.<a href="../../.././Mathlib/Algebra/Ring/Subring/Defs.html#Subring.toAddSubgroup">toAddSubgroup</a></span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.toAddSubmonoid">toAddSubmonoid</a></span>, <span class="fn">smul_mem'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">}</a></li></ul></details><details id="instances-for-list-Valuation.leIdeal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Valuation.ltIdeal"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L372-L377">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltIdeal"><span class="name">Valuation</span>.<span class="name">ltIdeal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">γ</span> : <span class="fn">Γ₀</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span></span></div></div><p>The ideal of elements of the valuation subring whose valuation is less than a certain unit.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltIdeal">ltIdeal</a></span> <span class="fn">γ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">{</a> <span class="fn">toAddSubmonoid</span> := <span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation.ltAddSubgroup">ltAddSubgroup</a></span> <span class="fn">γ</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Map.html#AddSubgroup.addSubgroupOf">addSubgroupOf</a></span> <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span>.<a href="../../.././Mathlib/Algebra/Ring/Subring/Defs.html#Subring.toAddSubgroup">toAddSubgroup</a></span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.toAddSubmonoid">toAddSubmonoid</a></span>, <span class="fn">smul_mem'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">}</a></li></ul></details><details id="instances-for-list-Valuation.ltIdeal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Valuation.leIdeal_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L380-L381">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal_mono"><span class="name">Valuation</span>.<span class="name">leIdeal_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal">leIdeal</a></span></span></div></div></div></div><div class="decl" id="Valuation.ltIdeal_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L383-L384">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltIdeal_mono"><span class="name">Valuation</span>.<span class="name">ltIdeal_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltIdeal">ltIdeal</a></span></span></div></div></div></div><div class="decl" id="Valuation.ltIdeal_le_leIdeal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L386-L388">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltIdeal_le_leIdeal"><span class="name">Valuation</span>.<span class="name">ltIdeal_le_leIdeal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">γ</span> : <span class="fn">Γ₀</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltIdeal">ltIdeal</a></span> <span class="fn">γ</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal">leIdeal</a></span> <span class="fn">↑<span class="fn">γ</span></span></span></div></div></div></div><div class="decl" id="Valuation.mem_leIdeal_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L391-L394">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.mem_leIdeal_iff"><span class="name">Valuation</span>.<span class="name">mem_leIdeal_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn">Γ₀</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal">leIdeal</a></span> <span class="fn">γ</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">v</span> <span class="fn">↑<span class="fn">x</span></span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">γ</span></div></div></div></div><div class="decl" id="Valuation.mem_ltIdeal_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L397-L400">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.mem_ltIdeal_iff"><span class="name">Valuation</span>.<span class="name">mem_ltIdeal_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">R</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn">Γ₀</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltIdeal">ltIdeal</a></span> <span class="fn">γ</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">v</span> <span class="fn">↑<span class="fn">x</span></span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">↑<span class="fn">γ</span></span></div></div></div></div><div class="decl" id="Valuation.leIdeal_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L402-L405">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal_zero"><span class="name">Valuation</span>.<span class="name">leIdeal_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">K</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal">leIdeal</a></span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="Valuation.leSubmodule_comap_algebraMap_eq_leIdeal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L407-L409">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule_comap_algebraMap_eq_leIdeal"><span class="name">Valuation</span>.<span class="name">leSubmodule_comap_algebraMap_eq_leIdeal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">K</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">γ</span> : <span class="fn">Γ₀</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Map.html#Submodule.comap">Submodule.comap</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra.linearMap">Algebra.linearMap</a> <span class="fn">(↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span>)</span> <span class="fn">K</span>)</span> <span class="fn">(<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule">leSubmodule</a></span> <span class="fn">γ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal">leIdeal</a></span> <span class="fn">γ</span></span></div></div></div></div><div class="decl" id="Valuation.leIdeal_map_algebraMap_eq_leSubmodule_min"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L411-L426">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal_map_algebraMap_eq_leSubmodule_min"><span class="name">Valuation</span>.<span class="name">leIdeal_map_algebraMap_eq_leSubmodule_min</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">K</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">γ</span> : <span class="fn">Γ₀</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Map.html#Submodule.map">Submodule.map</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra.linearMap">Algebra.linearMap</a> <span class="fn">(↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span>)</span> <span class="fn">K</span>)</span> <span class="fn">(<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal">leIdeal</a></span> <span class="fn">γ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leSubmodule">leSubmodule</a></span> <span class="fn">(<a href="../../.././Init/Prelude.html#Min.min">min</a> <span class="fn">1</span> <span class="fn">γ</span>)</span></span></div></div></div></div><div class="decl" id="Valuation.leIdeal_v_le_of_mem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L429-L437">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal_v_le_of_mem"><span class="name">Valuation</span>.<span class="name">leIdeal_v_le_of_mem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">K</span> <span class="fn">Γ₀</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">I</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.leIdeal">leIdeal</a></span> <span class="fn">(<span class="fn">v</span> <span class="fn">↑<span class="fn">x</span></span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">I</span></div></div></div></div><div class="decl" id="Valuation.ltIdeal_v_le_of_mem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Valuation/Integers.lean#L439-L442">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltIdeal_v_le_of_mem"><span class="name">Valuation</span>.<span class="name">ltIdeal_v_le_of_mem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ₀</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/GroupWithZero/Canonical.html#LinearOrderedCommGroupWithZero">LinearOrderedCommGroupWithZero</a> <span class="fn">Γ₀</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/Basic.html#Valuation">Valuation</a> <span class="fn">K</span> <span class="fn">Γ₀</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">↥<span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.integer">integer</a></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">I</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxv</span> : <span class="fn"><span class="fn">v</span> <span class="fn">↑<span class="fn">x</span></span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/RingTheory/Valuation/Integers.html#Valuation.ltIdeal">ltIdeal</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/GroupWithZero/Units/Basic.html#Units.mk0">Units.mk0</a> <span class="fn">(<span class="fn">v</span> <span class="fn">↑<span class="fn">x</span></span>)</span> <span class="fn">hxv</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">I</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

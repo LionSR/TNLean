@@ -1,0 +1,623 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.AlgebraicIndependent.Transcendental</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.AlgebraicIndependent.Transcendental";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">AlgebraicIndependent</span>.<span class="name">Transcendental</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/RingTheory/Algebraic/MvPolynomial.html">Mathlib.RingTheory.Algebraic.MvPolynomial</a></li><li><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html">Mathlib.RingTheory.AlgebraicIndependent.Basic</a></li><li><a href="../../.././Mathlib/Data/Fin/Tuple/Reflection.html">Mathlib.Data.Fin.Tuple.Reflection</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.AlgebraicIndependent.Transcendental" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#algebraicIndependent_unique_type_iff"><span class="name">algebraicIndependent_unique_type_iff</span></a></div><div class="nav_link"><a class="break_within" href="#algebraicIndependent_singleton_iff"><span class="name">algebraicIndependent_singleton_iff</span></a></div><div class="nav_link"><a class="break_within" href="#algebraicIndependent_iff_transcendental"><span class="name">algebraicIndependent_iff_transcendental</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.transcendental"><span class="name">AlgebraicIndependent</span>.<span class="name">transcendental</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.isEmpty_of_isAlgebraic"><span class="name">AlgebraicIndependent</span>.<span class="name">isEmpty_of_isAlgebraic</span></a></div><div class="nav_link"><a class="break_within" href="#trdeg_eq_zero"><span class="name">trdeg_eq_zero</span></a></div><div class="nav_link"><a class="break_within" href="#trdeg_pos"><span class="name">trdeg_pos</span></a></div><div class="nav_link"><a class="break_within" href="#trdeg_eq_zero_iff"><span class="name">trdeg_eq_zero_iff</span></a></div><div class="nav_link"><a class="break_within" href="#trdeg_ne_zero_iff"><span class="name">trdeg_ne_zero_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.option_iff_transcendental"><span class="name">AlgebraicIndependent</span>.<span class="name">option_iff_transcendental</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.option_iff"><span class="name">AlgebraicIndependent</span>.<span class="name">option_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndepOn.insert_iff"><span class="name">AlgebraicIndepOn</span>.<span class="name">insert_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndepOn.insert"><span class="name">AlgebraicIndepOn</span>.<span class="name">insert</span></a></div><div class="nav_link"><a class="break_within" href="#algebraicIndependent_of_set_of_finite"><span class="name">algebraicIndependent_of_set_of_finite</span></a></div><div class="nav_link"><a class="break_within" href="#algebraicIndependent_of_finite_type'"><span class="name">algebraicIndependent_of_finite_type'</span></a></div><div class="nav_link"><a class="break_within" href="#algebraicIndependent_of_finite'"><span class="name">algebraicIndependent_of_finite'</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.sumElim_iff"><span class="name">AlgebraicIndependent</span>.<span class="name">sumElim_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.iff_adjoin_image"><span class="name">AlgebraicIndependent</span>.<span class="name">iff_adjoin_image</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.iff_adjoin_image_compl"><span class="name">AlgebraicIndependent</span>.<span class="name">iff_adjoin_image_compl</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.iff_transcendental_adjoin_image"><span class="name">AlgebraicIndependent</span>.<span class="name">iff_transcendental_adjoin_image</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.sumElim"><span class="name">AlgebraicIndependent</span>.<span class="name">sumElim</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.sumElim_of_tower"><span class="name">AlgebraicIndependent</span>.<span class="name">sumElim_of_tower</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.sumElim_comp"><span class="name">AlgebraicIndependent</span>.<span class="name">sumElim_comp</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.adjoin_of_disjoint"><span class="name">AlgebraicIndependent</span>.<span class="name">adjoin_of_disjoint</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.adjoin_iff_disjoint"><span class="name">AlgebraicIndependent</span>.<span class="name">adjoin_iff_disjoint</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.transcendental_adjoin"><span class="name">AlgebraicIndependent</span>.<span class="name">transcendental_adjoin</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.transcendental_adjoin_iff"><span class="name">AlgebraicIndependent</span>.<span class="name">transcendental_adjoin_iff</span></a></div><div class="nav_link"><a class="break_within" href="#lift_trdeg_add_le"><span class="name">lift_trdeg_add_le</span></a></div><div class="nav_link"><a class="break_within" href="#trdeg_add_le"><span class="name">trdeg_add_le</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.algebraicIndependent_polynomial_aeval_X"><span class="name">MvPolynomial</span>.<span class="name">algebraicIndependent_polynomial_aeval_X</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicIndependent.polynomial_aeval_of_transcendental"><span class="name">AlgebraicIndependent</span>.<span class="name">polynomial_aeval_of_transcendental</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Algebraic-Independence" class="markdown-heading">Algebraic Independence <a class="hover-link" href="#Algebraic-Independence">#</a></h1><p>This file relates algebraic independence and transcendence (or algebraicity) of elements.</p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li><a href="https://stacks.math.columbia.edu/tag/030D">Stacks: Transcendence</a></li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>transcendence</p></div><div class="decl" id="algebraicIndependent_unique_type_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L38-L48">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#algebraicIndependent_unique_type_iff"><span class="name">algebraicIndependent_unique_type_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Unique.html#Unique">Unique</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">R</span> <span class="fn">(<span class="fn">x</span> <a href="../../.././Init/Prelude.html#Inhabited.default">default</a>)</span></span></div></div><p>A one-element family <code>x</code> is algebraically independent if and only if
+its element is transcendental.</p></div></div><div class="decl" id="algebraicIndependent_singleton_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L50-L53">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#algebraicIndependent_singleton_iff"><span class="name">algebraicIndependent_singleton_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">R</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></div></div></div></div><div class="decl" id="algebraicIndependent_iff_transcendental"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L55-L59">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#algebraicIndependent_iff_transcendental"><span class="name">algebraicIndependent_iff_transcendental</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">![</a><span class="fn">x</span><a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">]</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">R</span> <span class="fn">x</span></span></div></div><p>The one-element family <code>![x]</code> is algebraically independent if and only if
+<code>x</code> is transcendental.</p></div></div><div class="decl" id="AlgebraicIndependent.transcendental"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L66-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.transcendental"><span class="name">AlgebraicIndependent</span>.<span class="name">transcendental</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">R</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></div></div><p>If a family <code>x</code> is algebraically independent, then any of its element is transcendental.</p></div></div><div class="decl" id="AlgebraicIndependent.isEmpty_of_isAlgebraic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L72-L76">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.isEmpty_of_isAlgebraic"><span class="name">AlgebraicIndependent</span>.<span class="name">isEmpty_of_isAlgebraic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Algebra.IsAlgebraic">Algebra.IsAlgebraic</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn">ι</span></span></div></div><p>If <code>A/R</code> is algebraic, then all algebraically independent families are empty.</p></div></div><div class="decl" id="trdeg_eq_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L80-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#trdeg_eq_zero"><span class="name">trdeg_eq_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Algebra.IsAlgebraic">Algebra.IsAlgebraic</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#Algebra.trdeg">Algebra.trdeg</a> <span class="fn">R</span> <span class="fn">A</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="trdeg_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L84-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#trdeg_pos"><span class="name">trdeg_pos</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Algebra.Transcendental">Algebra.Transcendental</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#Algebra.trdeg">Algebra.trdeg</a> <span class="fn">R</span> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="trdeg_eq_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L89-L94">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#trdeg_eq_zero_iff"><span class="name">trdeg_eq_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#Algebra.trdeg">Algebra.trdeg</a> <span class="fn">R</span> <span class="fn">A</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Algebra.IsAlgebraic">Algebra.IsAlgebraic</a> <span class="fn">R</span> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="trdeg_ne_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L96-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#trdeg_ne_zero_iff"><span class="name">trdeg_ne_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#Algebra.trdeg">Algebra.trdeg</a> <span class="fn">R</span> <span class="fn">A</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Algebra.Transcendental">Algebra.Transcendental</a> <span class="fn">R</span> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.option_iff_transcendental"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L101-L108">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.option_iff_transcendental"><span class="name">AlgebraicIndependent</span>.<span class="name">option_iff_transcendental</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">fun (<span class="fn">o</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">ι</span></span>) =&gt; <span class="fn"><span class="fn"><span class="fn">o</span>.<a href="../../.././Init/Data/Option/Basic.html#Option.elim">elim</a></span> <span class="fn">a</span> <span class="fn">x</span></span></span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">x</span>)</span>)</span>)</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.option_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L110-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.option_iff"><span class="name">AlgebraicIndependent</span>.<span class="name">option_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">fun (<span class="fn">o</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Option">Option</a> <span class="fn">ι</span></span>) =&gt; <span class="fn"><span class="fn"><span class="fn">o</span>.<a href="../../.././Init/Data/Option/Basic.html#Option.elim">elim</a></span> <span class="fn">a</span> <span class="fn">x</span></span></span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">x</span>)</span>)</span>)</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="AlgebraicIndepOn.insert_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L116-L123">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndepOn.insert_iff"><span class="name">AlgebraicIndepOn</span>.<span class="name">insert_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">i</span> ∉ <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndepOn">AlgebraicIndepOn</a> <span class="fn">R</span> <span class="fn">x</span> <span class="fn">(<a href="../../.././Init/Core.html#Insert.insert">insert</a> <span class="fn">i</span> <span class="fn">s</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndepOn">AlgebraicIndepOn</a> <span class="fn">R</span> <span class="fn">x</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>))</span>)</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></div></div></div></div><div class="decl" id="AlgebraicIndepOn.insert"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L125-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndepOn.insert"><span class="name">AlgebraicIndepOn</span>.<span class="name">insert</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndepOn">AlgebraicIndepOn</a> <span class="fn">R</span> <span class="fn">x</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>))</span>)</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndepOn">AlgebraicIndepOn</a> <span class="fn">R</span> <span class="fn">x</span> <span class="fn">(<a href="../../.././Init/Core.html#Insert.insert">insert</a> <span class="fn">i</span> <span class="fn">s</span>)</span></span></div></div></div></div><div class="decl" id="algebraicIndependent_of_set_of_finite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L132-L148">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#algebraicIndependent_of_set_of_finite"><span class="name">algebraicIndependent_of_set_of_finite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ind</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">↑<span class="fn">s</span></span>) =&gt; <span class="fn"><span class="fn">x</span> <span class="fn">↑<span class="fn">i</span></span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> :
+  <span class="fn">∀ (<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>),
+    <span class="fn"><span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span> →
+      <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">↑<span class="fn">t</span></span>) =&gt; <span class="fn"><span class="fn">x</span> <span class="fn">↑<span class="fn">i</span></span></span></span>)</span> →
+        <span class="fn">∀ <span class="fn">i</span> ∉ <span class="fn">s</span>, <span class="fn"><span class="fn"><span class="fn">i</span> ∉ <span class="fn">t</span></span> → <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">t</span>))</span>)</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="algebraicIndependent_of_finite_type'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L150-L157">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#algebraicIndependent_of_finite_type'"><span class="name">algebraicIndependent_of_finite_type'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hinj</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">A</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> :
+  <span class="fn">∀ (<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>),
+    <span class="fn"><span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span> →
+      <span class="fn"><span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">↑<span class="fn">t</span></span>) =&gt; <span class="fn"><span class="fn">x</span> <span class="fn">↑<span class="fn">i</span></span></span></span>)</span> → <span class="fn">∀ <span class="fn">i</span> ∉ <span class="fn">t</span>, <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">t</span>))</span>)</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span></div></div><p>Variant of <code><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#algebraicIndependent_of_finite_type">algebraicIndependent_of_finite_type</a></code> using <code><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a></code>.</p></div></div><div class="decl" id="algebraicIndependent_of_finite'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L159-L167">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#algebraicIndependent_of_finite'"><span class="name">algebraicIndependent_of_finite'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hinj</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">A</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ <span class="fn">t</span> ⊆ <span class="fn">s</span>, <span class="fn"><span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span> → <span class="fn"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <a href="../../.././Init/Prelude.html#Subtype.val">Subtype.val</a></span> → <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn"><span class="fn">a</span> ∉ <span class="fn">t</span></span> → <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> <span class="fn">t</span>)</span>)</span> <span class="fn">a</span></span></span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <a href="../../.././Init/Prelude.html#Subtype.val">Subtype.val</a></span></div></div><p>Variant of <code><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#algebraicIndependent_of_finite">algebraicIndependent_of_finite</a></code> using <code><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a></code>.</p></div></div><div class="decl" id="AlgebraicIndependent.sumElim_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L171-L178">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.sumElim_iff"><span class="name">AlgebraicIndependent</span>.<span class="name">sumElim_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> <span class="fn">y</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">x</span>)</span>)</span>)</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.iff_adjoin_image"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L180-L186">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.iff_adjoin_image"><span class="name">AlgebraicIndependent</span>.<span class="name">iff_adjoin_image</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">↑<span class="fn">s</span></span>) =&gt; <span class="fn"><span class="fn">x</span> <span class="fn">↑<span class="fn">i</span></span></span></span>)</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndepOn">AlgebraicIndepOn</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>))</span>)</span> <span class="fn">x</span> <span class="fn">s</span><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.iff_adjoin_image_compl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L188-L191">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.iff_adjoin_image_compl"><span class="name">AlgebraicIndependent</span>.<span class="name">iff_adjoin_image_compl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">↑<span class="fn">s</span><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a></span>) =&gt; <span class="fn"><span class="fn">x</span> <span class="fn">↑<span class="fn">i</span></span></span></span>)</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndepOn">AlgebraicIndepOn</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a>))</span>)</span> <span class="fn">x</span> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.iff_transcendental_adjoin_image"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L193-L197">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.iff_transcendental_adjoin_image"><span class="name">AlgebraicIndependent</span>.<span class="name">iff_transcendental_adjoin_image</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">fun (<span class="fn">j</span> : <a href="../../.././Init/Prelude.html#Subtype">{</a> <span class="fn">j</span> <a href="../../.././Init/Prelude.html#Subtype">:</a> <span class="fn">ι</span> <a href="../../.././Init/Prelude.html#Subtype">//</a> <span class="fn">j</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">i</span> <a href="../../.././Init/Prelude.html#Subtype">}</a>) =&gt; <span class="fn"><span class="fn">x</span> <span class="fn">↑<span class="fn">j</span></span></span></span>)</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">i</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a>))</span>)</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.sumElim"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L202-L204">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.sumElim"><span class="name">AlgebraicIndependent</span>.<span class="name">sumElim</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">x</span>)</span>)</span>)</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> <span class="fn">y</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.sumElim_of_tower"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L206-L214">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.sumElim_of_tower"><span class="name">AlgebraicIndependent</span>.<span class="name">sumElim_of_tower</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hxS</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">S</span> <span class="fn">A</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">S</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> <span class="fn">y</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.sumElim_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L217-L220">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.sumElim_comp"><span class="name">AlgebraicIndependent</span>.<span class="name">sumElim_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">S</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> <span class="fn">y</span> (<span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">S</span> <span class="fn">A</span>)</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">x</span>))</span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.adjoin_of_disjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L222-L224">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.adjoin_of_disjoint"><span class="name">AlgebraicIndependent</span>.<span class="name">adjoin_of_disjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">s</span> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>))</span></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">↑<span class="fn">t</span></span>) =&gt; <span class="fn"><span class="fn">x</span> <span class="fn">↑<span class="fn">i</span></span></span></span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.adjoin_iff_disjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L226-L231">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.adjoin_iff_disjoint"><span class="name">AlgebraicIndependent</span>.<span class="name">adjoin_iff_disjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>))</span></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">↑<span class="fn">t</span></span>) =&gt; <span class="fn"><span class="fn">x</span> <span class="fn">↑<span class="fn">i</span></span></span></span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">s</span> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.transcendental_adjoin"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L233-L236">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.transcendental_adjoin"><span class="name">AlgebraicIndependent</span>.<span class="name">transcendental_adjoin</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn"><span class="fn">i</span> ∉ <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>))</span>)</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></div></div></div></div><div class="decl" id="AlgebraicIndependent.transcendental_adjoin_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L238-L242">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.transcendental_adjoin_iff"><span class="name">AlgebraicIndependent</span>.<span class="name">transcendental_adjoin_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">(↥<span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> (<span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>))</span>)</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">i</span> ∉ <span class="fn">s</span></span></div></div></div></div><div class="decl" id="lift_trdeg_add_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L247-L255">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#lift_trdeg_add_le"><span class="name">lift_trdeg_add_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">S</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/SetTheory/Cardinal/Defs.html#Cardinal.lift">Cardinal.lift.{v, u}</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#Algebra.trdeg">Algebra.trdeg</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../.././Mathlib/SetTheory/Cardinal/Defs.html#Cardinal.lift">Cardinal.lift.{u, v}</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#Algebra.trdeg">Algebra.trdeg</a> <span class="fn">S</span> <span class="fn">A</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a>   <span class="fn"><a href="../../.././Mathlib/SetTheory/Cardinal/Defs.html#Cardinal.lift">Cardinal.lift.{u, v}</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#Algebra.trdeg">Algebra.trdeg</a> <span class="fn">R</span> <span class="fn">A</span>)</span></span></div></div></div></div><div class="decl" id="trdeg_add_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L257-L261">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#trdeg_add_le"><span class="name">trdeg_add_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">S</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#Algebra.trdeg">Algebra.trdeg</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#Algebra.trdeg">Algebra.trdeg</a> <span class="fn">S</span> <span class="fn">A</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Basic.html#Algebra.trdeg">Algebra.trdeg</a> <span class="fn">R</span> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="MvPolynomial.algebraicIndependent_polynomial_aeval_X"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L263-L276">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#MvPolynomial.algebraicIndependent_polynomial_aeval_X"><span class="name">MvPolynomial</span>.<span class="name">algebraicIndependent_polynomial_aeval_X</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">R</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Polynomial/AlgebraMap.html#Polynomial.aeval">Polynomial.aeval</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.X">X</a> <span class="fn">i</span>)</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span></span></div></div><p>If for each <code>i : ι</code>, <code>f_i : R[X]</code> is transcendental over <code>R</code>, then <code>{f_i(X_i) | i : ι}</code>
+in <code><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> ι R</code> is algebraically independent over <code>R</code>.</p></div></div><div class="decl" id="AlgebraicIndependent.polynomial_aeval_of_transcendental"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/AlgebraicIndependent/Transcendental.lean#L278-L287">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Transcendental.html#AlgebraicIndependent.polynomial_aeval_of_transcendental"><span class="name">AlgebraicIndependent</span>.<span class="name">polynomial_aeval_of_transcendental</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/RingTheory/Algebraic/Defs.html#Transcendental">Transcendental</a> <span class="fn">R</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/AlgebraicIndependent/Defs.html#AlgebraicIndependent">AlgebraicIndependent</a> <span class="fn">R</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Polynomial/AlgebraMap.html#Polynomial.aeval">Polynomial.aeval</a> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span></span></div></div><p>If <code>{x_i : A | i : ι}</code> is algebraically independent over <code>R</code>, and for each <code>i</code>,
+<code>f_i : R[X]</code> is transcendental over <code>R</code>, then <code>{f_i(x_i) | i : ι}</code> is also
+algebraically independent over <code>R</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

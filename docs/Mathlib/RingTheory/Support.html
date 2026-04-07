@@ -1,0 +1,422 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.Support</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.Support";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">Support</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/RingTheory/Nakayama.html">Mathlib.RingTheory.Nakayama</a></li><li><a href="../.././Mathlib/RingTheory/QuotSMulTop.html">Mathlib.RingTheory.QuotSMulTop</a></li><li><a href="../.././Mathlib/RingTheory/Ideal/Colon.html">Mathlib.RingTheory.Ideal.Colon</a></li><li><a href="../.././Mathlib/RingTheory/LocalProperties/Basic.html">Mathlib.RingTheory.LocalProperties.Basic</a></li><li><a href="../.././Mathlib/RingTheory/Localization/Finiteness.html">Mathlib.RingTheory.Localization.Finiteness</a></li><li><a href="../.././Mathlib/Algebra/Module/LocalizedModule/Submodule.html">Mathlib.Algebra.Module.LocalizedModule.Submodule</a></li><li><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Basic.html">Mathlib.RingTheory.Spectrum.Prime.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.Support" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Module.support"><span class="name">Module</span>.<span class="name">support</span></a></div><div class="nav_link"><a class="break_within" href="#Module.mem_support_iff"><span class="name">Module</span>.<span class="name">mem_support_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Module.notMem_support_iff"><span class="name">Module</span>.<span class="name">notMem_support_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Module.notMem_support_iff'"><span class="name">Module</span>.<span class="name">notMem_support_iff'</span></a></div><div class="nav_link"><a class="break_within" href="#Module.mem_support_iff'"><span class="name">Module</span>.<span class="name">mem_support_iff'</span></a></div><div class="nav_link"><a class="break_within" href="#Module.mem_support_iff_exists_annihilator"><span class="name">Module</span>.<span class="name">mem_support_iff_exists_annihilator</span></a></div><div class="nav_link"><a class="break_within" href="#Module.mem_support_mono"><span class="name">Module</span>.<span class="name">mem_support_mono</span></a></div><div class="nav_link"><a class="break_within" href="#Module.mem_support_iff_of_span_eq_top"><span class="name">Module</span>.<span class="name">mem_support_iff_of_span_eq_top</span></a></div><div class="nav_link"><a class="break_within" href="#Module.annihilator_le_of_mem_support"><span class="name">Module</span>.<span class="name">annihilator_le_of_mem_support</span></a></div><div class="nav_link"><a class="break_within" href="#LocalizedModule.subsingleton_iff_support_subset"><span class="name">LocalizedModule</span>.<span class="name">subsingleton_iff_support_subset</span></a></div><div class="nav_link"><a class="break_within" href="#Module.support_eq_empty_iff"><span class="name">Module</span>.<span class="name">support_eq_empty_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Module.nonempty_support_iff"><span class="name">Module</span>.<span class="name">nonempty_support_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Module.nonempty_support_of_nontrivial"><span class="name">Module</span>.<span class="name">nonempty_support_of_nontrivial</span></a></div><div class="nav_link"><a class="break_within" href="#Module.support_eq_empty"><span class="name">Module</span>.<span class="name">support_eq_empty</span></a></div><div class="nav_link"><a class="break_within" href="#Module.support_of_algebra"><span class="name">Module</span>.<span class="name">support_of_algebra</span></a></div><div class="nav_link"><a class="break_within" href="#Module.support_of_noZeroSMulDivisors"><span class="name">Module</span>.<span class="name">support_of_noZeroSMulDivisors</span></a></div><div class="nav_link"><a class="break_within" href="#Module.support_subset_of_injective"><span class="name">Module</span>.<span class="name">support_subset_of_injective</span></a></div><div class="nav_link"><a class="break_within" href="#Module.support_subset_of_surjective"><span class="name">Module</span>.<span class="name">support_subset_of_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#Module.support_of_exact"><span class="name">Module</span>.<span class="name">support_of_exact</span></a></div><div class="nav_link"><a class="break_within" href="#LinearEquiv.support_eq"><span class="name">LinearEquiv</span>.<span class="name">support_eq</span></a></div><div class="nav_link"><a class="break_within" href="#Module.mem_support_iff_of_finite"><span class="name">Module</span>.<span class="name">mem_support_iff_of_finite</span></a></div><div class="nav_link"><a class="break_within" href="#Module.support_eq_zeroLocus"><span class="name">Module</span>.<span class="name">support_eq_zeroLocus</span></a></div><div class="nav_link"><a class="break_within" href="#LocalizedModule.exists_subsingleton_away"><span class="name">LocalizedModule</span>.<span class="name">exists_subsingleton_away</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocalizedModule.exists_subsingleton_away"><span class="name">IsLocalizedModule</span>.<span class="name">exists_subsingleton_away</span></a></div><div class="nav_link"><a class="break_within" href="#Module.support_quotient"><span class="name">Module</span>.<span class="name">support_quotient</span></a></div><div class="nav_link"><a class="break_within" href="#Module.support_quotSMulTop"><span class="name">Module</span>.<span class="name">support_quotSMulTop</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Support-of-a-module" class="markdown-heading">Support of a module <a class="hover-link" href="#Support-of-a-module">#</a></h1><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../.././Mathlib/RingTheory/Support.html#Module.support">Module.support</a></code>: The support of an <code>R</code>-module as a subset of <code>Spec R</code>.</li><li><code><a href="../.././Mathlib/RingTheory/Support.html#Module.mem_support_iff_exists_annihilator">Module.mem_support_iff_exists_annihilator</a></code>: <code>p ∈ Supp M ↔ ∃ m, Ann(m) ≤ p</code>.</li><li><code><a href="../.././Mathlib/RingTheory/Support.html#Module.support_eq_empty_iff">Module.support_eq_empty_iff</a></code>: <code>Supp M = ∅ ↔ M = 0</code></li><li><code><a href="../.././Mathlib/RingTheory/Support.html#Module.support_of_exact">Module.support_of_exact</a></code>: <code>Supp N = Supp M ∪ Supp P</code> for an exact sequence <code>0 → M → N → P → 0</code>.</li><li><code><a href="../.././Mathlib/RingTheory/Support.html#Module.support_eq_zeroLocus">Module.support_eq_zeroLocus</a></code>: If <code>M</code> is <code>R</code>-finite, then <code>Supp M = Z(Ann(M))</code>.</li><li><code><a href="../.././Mathlib/RingTheory/Support.html#LocalizedModule.exists_subsingleton_away">LocalizedModule.exists_subsingleton_away</a></code>:
+If <code>M</code> is <code>R</code>-finite and <code>Mₚ = 0</code>, then <code>M[1/f] = 0</code> for some <code>p ∈ D(f)</code>.</li></ul><p>Also see <code><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Module.html">Mathlib/RingTheory/Spectrum/Prime/Module.lean</a></code> for other results
+depending on the Zariski topology.</p><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li>Connect to associated primes once we have them in mathlib.</li><li>Given an <code>R</code>-algebra <code>f : R → A</code> and a finite <code>R</code>-module <code>M</code>,
+<code>Supp_A (A ⊗ M) = f♯ ⁻¹ Supp M</code> where <code>f♯ : Spec A → Spec R</code>. (stacks#0BUR)</li></ul></div><div class="decl" id="Module.support"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L47-L50">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support"><span class="name">Module</span>.<span class="name">support</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span>)</span></span></div></div><p>The support of a module, defined as the set of primes <code>p</code> such that <code>Mₚ ≠ 0</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">Module.support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">p</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Module/LocalizedModule/Basic.html#LocalizedModule">LocalizedModule</a> <span class="fn"><span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.primeCompl">primeCompl</a></span> <span class="fn">M</span>)</span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></li></ul></details><details id="instances-for-list-Module.support" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Module.mem_support_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L52-L53">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.mem_support_iff"><span class="name">Module</span>.<span class="name">mem_support_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Module/LocalizedModule/Basic.html#LocalizedModule">LocalizedModule</a> <span class="fn"><span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.primeCompl">primeCompl</a></span> <span class="fn">M</span>)</span></span></div></div></div></div><div class="decl" id="Module.notMem_support_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L55-L57">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.notMem_support_iff"><span class="name">Module</span>.<span class="name">notMem_support_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">p</span> ∉ <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Module/LocalizedModule/Basic.html#LocalizedModule">LocalizedModule</a> <span class="fn"><span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.primeCompl">primeCompl</a></span> <span class="fn">M</span>)</span></span></div></div></div></div><div class="decl" id="Module.notMem_support_iff'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L59-L62">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.notMem_support_iff'"><span class="name">Module</span>.<span class="name">notMem_support_iff'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">p</span> ∉ <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">m</span> : <span class="fn">M</span>), <span class="fn">∃ <span class="fn">r</span> ∉ <span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span>, <span class="fn">r</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">m</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></span></div></div></div></div><div class="decl" id="Module.mem_support_iff'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L64-L68">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.mem_support_iff'"><span class="name">Module</span>.<span class="name">mem_support_iff'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">m</span> : <span class="fn">M</span>), <span class="fn">∀ <span class="fn">r</span> ∉ <span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span>, <span class="fn">r</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">m</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></span></span></div></div></div></div><div class="decl" id="Module.mem_support_iff_exists_annihilator"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L70-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.mem_support_iff_exists_annihilator"><span class="name">Module</span>.<span class="name">mem_support_iff_exists_annihilator</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">m</span> : <span class="fn">M</span>), <span class="fn">(<span class="fn">R</span> <a href="../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">∙</a> <span class="fn">m</span>).<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Submodule.annihilator">annihilator</a></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span></span></div></div></div></div><div class="decl" id="Module.mem_support_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L75-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.mem_support_mono"><span class="name">Module</span>.<span class="name">mem_support_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">p</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">q</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">q</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span></div></div></div></div><div class="decl" id="Module.mem_support_iff_of_span_eq_top"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L80-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.mem_support_iff_of_span_eq_top"><span class="name">Module</span>.<span class="name">mem_support_iff_of_span_eq_top</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">R</span> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ <span class="fn">m</span> ∈ <span class="fn">s</span>, <span class="fn">(<span class="fn">R</span> <a href="../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">∙</a> <span class="fn">m</span>).<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Submodule.annihilator">annihilator</a></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span></span></div></div></div></div><div class="decl" id="Module.annihilator_le_of_mem_support"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L94-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.annihilator_le_of_mem_support"><span class="name">Module</span>.<span class="name">annihilator_le_of_mem_support</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Module.annihilator">annihilator</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span></div></div></div></div><div class="decl" id="LocalizedModule.subsingleton_iff_support_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L99-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#LocalizedModule.subsingleton_iff_support_subset"><span class="name">LocalizedModule</span>.<span class="name">subsingleton_iff_support_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Module/LocalizedModule/Basic.html#LocalizedModule">LocalizedModule</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Group/Submonoid/Membership.html#Submonoid.powers">Submonoid.powers</a> <span class="fn">f</span>)</span> <span class="fn">M</span>)</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">Module.support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Basic.html#PrimeSpectrum.zeroLocus">PrimeSpectrum.zeroLocus</a> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">f</span><a href="../.././Init/Core.html#Singleton.singleton">}</a></span></div></div></div></div><div class="decl" id="Module.support_eq_empty_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L119-L124">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support_eq_empty_iff"><span class="name">Module</span>.<span class="name">support_eq_empty_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">M</span></span></div></div></div></div><div class="decl" id="Module.nonempty_support_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L126-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.nonempty_support_iff"><span class="name">Module</span>.<span class="name">nonempty_support_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span>)</span>.<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">M</span></span></div></div></div></div><div class="decl" id="Module.nonempty_support_of_nontrivial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L131-L132">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.nonempty_support_of_nontrivial"><span class="name">Module</span>.<span class="name">nonempty_support_of_nontrivial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span>)</span>.<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span></div></div></div></div><div class="decl" id="Module.support_eq_empty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L134-L136">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support_eq_empty"><span class="name">Module</span>.<span class="name">support_eq_empty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a></div></div></div></div><div class="decl" id="Module.support_of_algebra"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L138-L144">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support_of_algebra"><span class="name">Module</span>.<span class="name">support_of_algebra</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">A</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Basic.html#PrimeSpectrum.zeroLocus">PrimeSpectrum.zeroLocus</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#RingHom.ker">RingHom.ker</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">A</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="Module.support_of_noZeroSMulDivisors"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L146-L150">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support_of_noZeroSMulDivisors"><span class="name">Module</span>.<span class="name">support_of_noZeroSMulDivisors</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Torsion/Free.html#Module.IsTorsionFree">IsTorsionFree</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a></div></div></div></div><div class="decl" id="Module.support_subset_of_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L155-L160">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support_subset_of_injective"><span class="name">Module</span>.<span class="name">support_subset_of_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">M</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">N</span></span></div></div><p><a href="https://stacks.math.columbia.edu/tag/00L3">Stacks Tag 00L3</a> ((2))</p></div></div><div class="decl" id="Module.support_subset_of_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L162-L168">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support_subset_of_surjective"><span class="name">Module</span>.<span class="name">support_subset_of_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">M</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">N</span></span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span></div></div><p><a href="https://stacks.math.columbia.edu/tag/00L3">Stacks Tag 00L3</a> ((3))</p></div></div><div class="decl" id="Module.support_of_exact"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L171-L186">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support_of_exact"><span class="name">Module</span>.<span class="name">support_of_exact</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">M</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">N</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">N</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Exact.html#Function.Exact">Function.Exact</a> <span class="fn">⇑<span class="fn">f</span></span> <span class="fn">⇑<span class="fn">g</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">g</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">N</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#Union.union">∪</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">P</span></span></div></div><p>Given an exact sequence <code>0 → M → N → P → 0</code> of <code>R</code>-modules, <code>Supp N = Supp M ∪ Supp P</code>.</p></div></div><div class="decl" id="LinearEquiv.support_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L188-L191">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#LinearEquiv.support_eq"><span class="name">LinearEquiv</span>.<span class="name">support_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">M</span> <a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">Module.support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">Module.support</a> <span class="fn">R</span> <span class="fn">N</span></span></div></div></div></div><div class="decl" id="Module.mem_support_iff_of_finite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L199-L212">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.mem_support_iff_of_finite"><span class="name">Module</span>.<span class="name">mem_support_iff_of_finite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum">PrimeSpectrum</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Module.annihilator">annihilator</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Spectrum/Prime/Defs.html#PrimeSpectrum.asIdeal">asIdeal</a></span></div></div></div></div><div class="decl" id="Module.support_eq_zeroLocus"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L214-L218">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support_eq_zeroLocus"><span class="name">Module</span>.<span class="name">support_eq_zeroLocus</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Basic.html#PrimeSpectrum.zeroLocus">PrimeSpectrum.zeroLocus</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Module.annihilator">annihilator</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></span></div></div><p>If <code>M</code> is <code>R</code>-finite, then <code>Supp M = Z(Ann(M))</code>.</p></div></div><div class="decl" id="LocalizedModule.exists_subsingleton_away"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L220-L231">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#LocalizedModule.exists_subsingleton_away"><span class="name">LocalizedModule</span>.<span class="name">exists_subsingleton_away</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Module/LocalizedModule/Basic.html#LocalizedModule">LocalizedModule</a> <span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.primeCompl">primeCompl</a></span> <span class="fn">M</span>)</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">f</span> ∉ <span class="fn">p</span>, <span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Module/LocalizedModule/Basic.html#LocalizedModule">LocalizedModule</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Group/Submonoid/Membership.html#Submonoid.powers">Submonoid.powers</a> <span class="fn">f</span>)</span> <span class="fn">M</span>)</span></span></span></div></div><p>If <code>M</code> is a finite module such that <code>Mₚ = 0</code> for some <code>p</code>,
+then <code>M[1/f] = 0</code> for some <code>p ∈ D(f)</code>.</p></div></div><div class="decl" id="IsLocalizedModule.exists_subsingleton_away"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L233-L239">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#IsLocalizedModule.exists_subsingleton_away"><span class="name">IsLocalizedModule</span>.<span class="name">exists_subsingleton_away</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M'</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn">M</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">M'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/LocalizedModule/Basic.html#IsLocalizedModule">IsLocalizedModule</a> <span class="fn"><span class="fn">p</span>.<a href="../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.primeCompl">primeCompl</a></span> <span class="fn">l</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">M'</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">f</span> ∉ <span class="fn">p</span>, <span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Module/LocalizedModule/Basic.html#LocalizedModule">LocalizedModule</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Group/Submonoid/Membership.html#Submonoid.powers">Submonoid.powers</a> <span class="fn">f</span>)</span> <span class="fn">M</span>)</span></span></span></div></div></div></div><div class="decl" id="Module.support_quotient"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L241-L267">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support_quotient"><span class="name">Module</span>.<span class="name">support_quotient</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> (<span class="fn">M</span> <a href="../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#Inter.inter">∩</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Basic.html#PrimeSpectrum.zeroLocus">PrimeSpectrum.zeroLocus</a> <span class="fn">↑<span class="fn">I</span></span></span></div></div><p><code>Supp(M/IM) = Supp(M) ∩ Z(I)</code>.</p></div></div><div class="decl" id="Module.support_quotSMulTop"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Support.lean#L270-L275">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Support.html#Module.support_quotSMulTop"><span class="name">Module</span>.<span class="name">support_quotSMulTop</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">(<a href="../.././Mathlib/RingTheory/QuotSMulTop.html#QuotSMulTop">QuotSMulTop</a> <span class="fn">x</span> <span class="fn">M</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Support.html#Module.support">support</a> <span class="fn">R</span> <span class="fn">M</span></span> <a href="../.././Init/Core.html#Inter.inter">∩</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Spectrum/Prime/Basic.html#PrimeSpectrum.zeroLocus">PrimeSpectrum.zeroLocus</a> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../.././Init/Core.html#Singleton.singleton">}</a></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

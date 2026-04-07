@@ -1,0 +1,179 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Order.Ring.Pow</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Order.Ring.Pow";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Order</span>.<span class="name">Ring</span>.<span class="name">Pow</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Ring/Pow.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Tactic/Abel.html">Mathlib.Tactic.Abel</a></li><li><a href="../../../.././Mathlib/Data/Nat/Cast/Commute.html">Mathlib.Data.Nat.Cast.Commute</a></li><li><a href="../../../.././Mathlib/Data/Nat/Cast/Order/Ring.html">Mathlib.Data.Nat.Cast.Order.Ring</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Order.Ring.Pow" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Commute.pow_add_mul_le_add_pow_of_sq_nonneg"><span class="name">Commute</span>.<span class="name">pow_add_mul_le_add_pow_of_sq_nonneg</span></a></div><div class="nav_link"><a class="break_within" href="#one_add_mul_le_pow_of_sq_nonneg"><span class="name">one_add_mul_le_pow_of_sq_nonneg</span></a></div><div class="nav_link"><a class="break_within" href="#one_add_mul_le_pow'"><span class="name">one_add_mul_le_pow'</span></a></div><div class="nav_link"><a class="break_within" href="#pow_add_mul_le_add_pow_of_sq_nonneg"><span class="name">pow_add_mul_le_add_pow_of_sq_nonneg</span></a></div><div class="nav_link"><a class="break_within" href="#Commute.pow_add_mul_le_add_pow"><span class="name">Commute</span>.<span class="name">pow_add_mul_le_add_pow</span></a></div><div class="nav_link"><a class="break_within" href="#pow_add_mul_le_add_pow"><span class="name">pow_add_mul_le_add_pow</span></a></div><div class="nav_link"><a class="break_within" href="#one_add_le_pow_of_two_add_nonneg"><span class="name">one_add_le_pow_of_two_add_nonneg</span></a></div><div class="nav_link"><a class="break_within" href="#one_add_mul_le_pow"><span class="name">one_add_mul_le_pow</span></a></div><div class="nav_link"><a class="break_within" href="#one_add_mul_sub_le_pow"><span class="name">one_add_mul_sub_le_pow</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Bernoulli-s-inequality" class="markdown-heading">Bernoulli's inequality <a class="hover-link" href="#Bernoulli-s-inequality">#</a></h1><p>In this file we prove several versions of Bernoulli's inequality.
+Besides the standard version <code>1 + n * a ≤ (1 + a) ^ n</code>,
+we also prove <code>a ^ n + n * a ^ (n - 1) * b ≤ (a + b) ^ n</code>,
+which can be regarded as Bernoulli's inequality for <code>b / a</code> multiplied by <code>a ^ n</code>.</p><p>Also, we prove versions for different typeclass assumptions on the (semi)ring.</p></div><div class="decl" id="Commute.pow_add_mul_le_add_pow_of_sq_nonneg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Ring/Pow.lean#L29-L56">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Ring/Pow.html#Commute.pow_add_mul_le_add_pow_of_sq_nonneg"><span class="name">Commute</span>.<span class="name">pow_add_mul_le_add_pow_of_sq_nonneg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsOrderedRing">IsOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Hcomm</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Commute/Defs.html#Commute">Commute</a> <span class="fn">a</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Hsq</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Hsq'</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">2</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>) <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div><p>Bernoulli's inequality for <code>b / a</code>, written after multiplication by the denominators.</p></div></div><div class="decl" id="one_add_mul_le_pow_of_sq_nonneg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Ring/Pow.lean#L58-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Ring/Pow.html#one_add_mul_le_pow_of_sq_nonneg"><span class="name">one_add_mul_le_pow_of_sq_nonneg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsOrderedRing">IsOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Hsq</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Hsq'</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">2</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div><p><strong>Bernoulli's inequality</strong>. This version works for semirings but requires
+additional hypotheses <code>0 ≤ a ^ 2</code> and <code>0 ≤ (1 + a) ^ 2</code>.</p></div></div><div class="decl" id="one_add_mul_le_pow'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Ring/Pow.lean#L65-L70">source</a></div><div class="attributes">@[deprecated one_add_mul_le_pow_of_sq_nonneg (since := &quot;2025-11-11&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Ring/Pow.html#one_add_mul_le_pow'"><span class="name">one_add_mul_le_pow'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsOrderedRing">IsOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Hsq</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Hsq'</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span>) <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span>))</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">2</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div><p><strong>Bernoulli's inequality</strong>. This version works for semirings but requires
+additional hypotheses <code>0 ≤ a * a</code> and <code>0 ≤ (1 + a) * (1 + a)</code>.</p></div></div><div class="decl" id="pow_add_mul_le_add_pow_of_sq_nonneg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Ring/Pow.lean#L74-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Ring/Pow.html#pow_add_mul_le_add_pow_of_sq_nonneg"><span class="name">pow_add_mul_le_add_pow_of_sq_nonneg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsOrderedRing">IsOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Hsq</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Hsq'</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">2</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>) <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div><p>Bernoulli's inequality for <code>b / a</code>, written after multiplication by the denominators.</p><p>This version works for partially ordered commutative semirings,
+but explicitly assumes that <code>b ^ 2</code> and <code>(a + b) ^ 2</code> are nonnegative.</p></div></div><div class="decl" id="Commute.pow_add_mul_le_add_pow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Ring/Pow.lean#L83-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Ring/Pow.html#Commute.pow_add_mul_le_add_pow"><span class="name">Commute</span>.<span class="name">pow_add_mul_le_add_pow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsOrderedRing">IsOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/ExistsOfLE.html#ExistsAddOfLE">ExistsAddOfLE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Hcomm</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Commute/Defs.html#Commute">Commute</a> <span class="fn">a</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">2</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>) <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div><p>Bernoulli's inequality for <code>b / a</code>, written after multiplication by the denominators.</p><p>This is a version for a linear ordered semiring.</p></div></div><div class="decl" id="pow_add_mul_le_add_pow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Ring/Pow.lean#L91-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Ring/Pow.html#pow_add_mul_le_add_pow"><span class="name">pow_add_mul_le_add_pow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsOrderedRing">IsOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/ExistsOfLE.html#ExistsAddOfLE">ExistsAddOfLE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">2</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>) <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div><p>Bernoulli's inequality for <code>b / a</code>, written after multiplication by the denominators.</p><p>This is a version for a linear ordered semiring.</p></div></div><div class="decl" id="one_add_le_pow_of_two_add_nonneg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Ring/Pow.lean#L99-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Ring/Pow.html#one_add_le_pow_of_two_add_nonneg"><span class="name">one_add_le_pow_of_two_add_nonneg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsOrderedRing">IsOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Monoid/Unbundled/ExistsOfLE.html#ExistsAddOfLE">ExistsAddOfLE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">2</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div><p>Bernoulli's inequality for linear ordered semirings.</p></div></div><div class="decl" id="one_add_mul_le_pow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Ring/Pow.lean#L107-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Ring/Pow.html#one_add_mul_le_pow"><span class="name">one_add_mul_le_pow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">-<span class="fn">2</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div><p><strong>Bernoulli's inequality</strong> for <code>n : ℕ</code>, <code>-2 ≤ a</code>.</p></div></div><div class="decl" id="one_add_mul_sub_le_pow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/Ring/Pow.lean#L111-L115">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Order/Ring/Pow.html#one_add_mul_sub_le_pow"><span class="name">one_add_mul_sub_le_pow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">-<span class="fn">1</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">↑<span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>) <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span></div></div><p><strong>Bernoulli's inequality</strong> reformulated to estimate <code>a^n</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

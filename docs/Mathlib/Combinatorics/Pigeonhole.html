@@ -1,0 +1,844 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Combinatorics.Pigeonhole</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Combinatorics.Pigeonhole";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Combinatorics</span>.<span class="name">Pigeonhole</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Algebra/Module/BigOperators.html">Mathlib.Algebra.Module.BigOperators</a></li><li><a href="../.././Mathlib/Data/Nat/ModEq.html">Mathlib.Data.Nat.ModEq</a></li><li><a href="../.././Mathlib/Order/Preorder/Finite.html">Mathlib.Order.Preorder.Finite</a></li><li><a href="../.././Mathlib/Algebra/Order/Ring/Nat.html">Mathlib.Algebra.Order.Ring.Nat</a></li><li><a href="../.././Mathlib/Algebra/Order/BigOperators/Group/Finset.html">Mathlib.Algebra.Order.BigOperators.Group.Finset</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Combinatorics.Pigeonhole" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum"><span class="name">Finset</span>.<span class="name">exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul"><span class="name">Finset</span>.<span class="name">exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum"><span class="name">Finset</span>.<span class="name">exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul"><span class="name">Finset</span>.<span class="name">exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum"><span class="name">Finset</span>.<span class="name">exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul"><span class="name">Finset</span>.<span class="name">exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum"><span class="name">Finset</span>.<span class="name">exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul"><span class="name">Finset</span>.<span class="name">exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to"><span class="name">Finset</span>.<span class="name">exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to"><span class="name">Finset</span>.<span class="name">exists_lt_card_fiber_of_mul_lt_card_of_maps_to</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_card_fiber_lt_of_card_lt_nsmul"><span class="name">Finset</span>.<span class="name">exists_card_fiber_lt_of_card_lt_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_card_fiber_lt_of_card_lt_mul"><span class="name">Finset</span>.<span class="name">exists_card_fiber_lt_of_card_lt_mul</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_le_card_fiber_of_nsmul_le_card_of_maps_to"><span class="name">Finset</span>.<span class="name">exists_le_card_fiber_of_nsmul_le_card_of_maps_to</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_le_card_fiber_of_mul_le_card_of_maps_to"><span class="name">Finset</span>.<span class="name">exists_le_card_fiber_of_mul_le_card_of_maps_to</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_card_fiber_le_of_card_le_nsmul"><span class="name">Finset</span>.<span class="name">exists_card_fiber_le_of_card_le_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.exists_card_fiber_le_of_card_le_mul"><span class="name">Finset</span>.<span class="name">exists_card_fiber_le_of_card_le_mul</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_lt_sum_fiber_of_nsmul_lt_sum"><span class="name">Fintype</span>.<span class="name">exists_lt_sum_fiber_of_nsmul_lt_sum</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_le_sum_fiber_of_nsmul_le_sum"><span class="name">Fintype</span>.<span class="name">exists_le_sum_fiber_of_nsmul_le_sum</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_sum_fiber_lt_of_sum_lt_nsmul"><span class="name">Fintype</span>.<span class="name">exists_sum_fiber_lt_of_sum_lt_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_sum_fiber_le_of_sum_le_nsmul"><span class="name">Fintype</span>.<span class="name">exists_sum_fiber_le_of_sum_le_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_lt_card_fiber_of_nsmul_lt_card"><span class="name">Fintype</span>.<span class="name">exists_lt_card_fiber_of_nsmul_lt_card</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_lt_card_fiber_of_mul_lt_card"><span class="name">Fintype</span>.<span class="name">exists_lt_card_fiber_of_mul_lt_card</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_card_fiber_lt_of_card_lt_nsmul"><span class="name">Fintype</span>.<span class="name">exists_card_fiber_lt_of_card_lt_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_card_fiber_lt_of_card_lt_mul"><span class="name">Fintype</span>.<span class="name">exists_card_fiber_lt_of_card_lt_mul</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_le_card_fiber_of_nsmul_le_card"><span class="name">Fintype</span>.<span class="name">exists_le_card_fiber_of_nsmul_le_card</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_le_card_fiber_of_mul_le_card"><span class="name">Fintype</span>.<span class="name">exists_le_card_fiber_of_mul_le_card</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_card_fiber_le_of_card_le_nsmul"><span class="name">Fintype</span>.<span class="name">exists_card_fiber_le_of_card_le_nsmul</span></a></div><div class="nav_link"><a class="break_within" href="#Fintype.exists_card_fiber_le_of_card_le_mul"><span class="name">Fintype</span>.<span class="name">exists_card_fiber_le_of_card_le_mul</span></a></div><div class="nav_link"><a class="break_within" href="#Nat.exists_lt_modEq_of_infinite"><span class="name">Nat</span>.<span class="name">exists_lt_modEq_of_infinite</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Pigeonhole-principles" class="markdown-heading">Pigeonhole principles <a class="hover-link" href="#Pigeonhole-principles">#</a></h1><p>Given pigeons (possibly infinitely many) in pigeonholes, the
+pigeonhole principle states that, if there are more pigeons than
+pigeonholes, then there is a pigeonhole with two or more pigeons.</p><p>There are a few variations on this statement, and the conclusion can
+be made stronger depending on how many pigeons you know you might
+have.</p><p>The basic statements of the pigeonhole principle appear in the
+following locations:</p><ul><li><code>Data.Finset.Basic</code> has <code><a href="../.././Mathlib/Data/Finset/Card.html#Finset.exists_ne_map_eq_of_card_lt_of_maps_to">Finset.exists_ne_map_eq_of_card_lt_of_maps_to</a></code></li><li><code>Data.Fintype.Basic</code> has <code><a href="../.././Mathlib/Data/Fintype/Pigeonhole.html#Fintype.exists_ne_map_eq_of_card_lt">Fintype.exists_ne_map_eq_of_card_lt</a></code></li><li><code>Data.Fintype.Basic</code> has <code><a href="../.././Mathlib/Data/Fintype/Pigeonhole.html#Finite.exists_ne_map_eq_of_infinite">Finite.exists_ne_map_eq_of_infinite</a></code></li><li><code>Data.Fintype.Basic</code> has <code><a href="../.././Mathlib/Data/Fintype/Pigeonhole.html#Finite.exists_infinite_fiber">Finite.exists_infinite_fiber</a></code></li><li><code>Data.Set.<a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a></code> has <code>Set.infinite.exists_ne_map_eq_of_mapsTo</code></li></ul><p>This module gives access to these pigeonhole principles along with 20 more.
+The versions vary by:</p><ul><li>using a function between <code><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code>s or a function between possibly infinite types restricted to
+<code><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code>s;</li><li>counting pigeons by a general weight function (<code>∑ x ∈ s, w x</code>) or by heads (<code>#s</code>);</li><li>using strict or non-strict inequalities;</li><li>establishing upper or lower estimate on the number (or the total weight) of the pigeons in one
+pigeonhole;</li><li>in case when we count pigeons by some weight function <code>w</code> and consider a function <code>f</code> between
+<code><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code>s <code>s</code> and <code>t</code>, we can either assume that each pigeon is in one of the pigeonholes
+(<code>∀ x ∈ s, f x ∈ t</code>), or assume that for <code>y ∉ t</code>, the total weight of the pigeons in this
+pigeonhole <code>∑ x ∈ s with f x = y, w x</code> is nonpositive or nonnegative depending on
+the inequality we are proving.</li></ul><p>Lemma names follow <code>mathlib</code> convention (e.g.,
+<code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum">Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum</a></code>); &quot;pigeonhole principle&quot; is mentioned in the
+docstrings instead of the names.</p><h2 id="See-also" class="markdown-heading">See also <a class="hover-link" href="#See-also">#</a></h2><ul><li><p><code>Ordinal.infinite_pigeonhole</code>: pigeonhole principle for cardinals, formulated using cofinality;</p></li><li><p><code><a href="../.././Mathlib/MeasureTheory/Measure/MeasureSpace.html#MeasureTheory.exists_nonempty_inter_of_measure_univ_lt_tsum_measure">MeasureTheory.exists_nonempty_inter_of_measure_univ_lt_tsum_measure</a></code>,
+<code><a href="../.././Mathlib/MeasureTheory/Measure/MeasureSpace.html#MeasureTheory.exists_nonempty_inter_of_measure_univ_lt_sum_measure">MeasureTheory.exists_nonempty_inter_of_measure_univ_lt_sum_measure</a></code>: pigeonhole principle in a
+measure space.</p></li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>pigeonhole principle</p></div><div class="mod_doc"><h3 id="The-pigeonhole-principles-on-Finsets-pigeons-counted-by-weight" class="markdown-heading">The pigeonhole principles on <code><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code>s, pigeons counted by weight <a class="hover-link" href="#The-pigeonhole-principles-on-Finsets-pigeons-counted-by-weight">#</a></h3><p>In this section we prove the following version of the pigeonhole principle: if the total weight of a
+finite set of pigeons is greater than <code>n • b</code>, and they are sorted into <code>n</code> pigeonholes, then for
+some pigeonhole, the total weight of the pigeons in this pigeonhole is greater than <code>b</code>, and a few
+variations of this theorem.</p><p>The principle is formalized in the following way, see
+<code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum">Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum</a></code>: if <code>f : α → β</code> is a function which maps all
+elements of <code>s : <a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> α</code> to <code>t : <a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> β</code> and <code>#t • b &lt; ∑ x ∈ s, w x</code>, where <code>w : α → M</code> is
+a weight function taking values in a <code>LinearOrderedCancelAddCommMonoid</code>, then for
+some <code>y ∈ t</code>, the sum of the weights of all <code>x ∈ s</code> such that <code>f x = y</code> is greater than <code>b</code>.</p><p>There are a few bits we can change in this theorem:</p><ul><li>reverse all inequalities, with obvious adjustments to the name;</li><li>replace the assumption <code>∀ a ∈ s, f a ∈ t</code> with <code>∀ y ∉ t, ∑ x ∈ s with f x = y, w x ≤ 0</code>,
+and replace <code>of_maps_to</code> with <code>of_sum_fiber_nonpos</code> in the name;</li><li>use non-strict inequalities assuming <code>t</code> is nonempty.</li></ul><p>We can do all these variations independently, so we have eight versions of the theorem.</p></div><div class="mod_doc"><h4 id="Strict-inequality-versions" class="markdown-heading">Strict inequality versions <a class="hover-link" href="#Strict-inequality-versions">#</a></h4></div><div class="decl" id="Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L112-L118">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum"><span class="name">Finset</span>.<span class="name">exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by weight, strict inequality version:
+if the total weight of a finite set of pigeons is greater than <code>n • b</code>, and they are sorted into
+<code>n</code> pigeonholes, then for some pigeonhole, the total weight of the pigeons in this pigeonhole is
+greater than <code>b</code>.</p></div></div><div class="decl" id="Finset.exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L120-L126">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul"><span class="name">Finset</span>.<span class="name">exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by weight, strict inequality version:
+if the total weight of a finite set of pigeons is less than <code>n • b</code>, and they are sorted into <code>n</code>
+pigeonholes, then for some pigeonhole, the total weight of the pigeons in this pigeonhole is less
+than <code>b</code>.</p></div></div><div class="decl" id="Finset.exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L128-L139">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum"><span class="name">Finset</span>.<span class="name">exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn">∀ <span class="fn">y</span> ∉ <span class="fn">t</span>, <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by weight, strict inequality version:
+if the total weight of a finite set of pigeons is greater than <code>n • b</code>, they are sorted into some
+pigeonholes, and for all but <code>n</code> pigeonholes the total weight of the pigeons there is nonpositive,
+then for at least one of these <code>n</code> pigeonholes, the total weight of the pigeons in this pigeonhole
+is greater than <code>b</code>.</p></div></div><div class="decl" id="Finset.exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L141-L149">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul"><span class="name">Finset</span>.<span class="name">exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn">∀ <span class="fn">y</span> ∉ <span class="fn">t</span>, <span class="fn">0</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by weight, strict inequality version:
+if the total weight of a finite set of pigeons is less than <code>n • b</code>, they are sorted into some
+pigeonholes, and for all but <code>n</code> pigeonholes the total weight of the pigeons there is nonnegative,
+then for at least one of these <code>n</code> pigeonholes, the total weight of the pigeons in this pigeonhole
+is less than <code>b</code>.</p></div></div><div class="mod_doc"><h4 id="Non-strict-inequality-versions" class="markdown-heading">Non-strict inequality versions <a class="hover-link" href="#Non-strict-inequality-versions">#</a></h4></div><div class="decl" id="Finset.exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L156-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum"><span class="name">Finset</span>.<span class="name">exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">b</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by weight, non-strict inequality
+version: if the total weight of a finite set of pigeons is greater than or equal to <code>n • b</code>, and
+they are sorted into <code>n &gt; 0</code> pigeonholes, then for some pigeonhole, the total weight of the pigeons
+in this pigeonhole is greater than or equal to <code>b</code>.</p></div></div><div class="decl" id="Finset.exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L164-L170">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul"><span class="name">Finset</span>.<span class="name">exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by weight, non-strict inequality
+version: if the total weight of a finite set of pigeons is less than or equal to <code>n • b</code>, and they
+are sorted into <code>n &gt; 0</code> pigeonholes, then for some pigeonhole, the total weight of the pigeons in
+this pigeonhole is less than or equal to <code>b</code>.</p></div></div><div class="decl" id="Finset.exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L172-L184">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum"><span class="name">Finset</span>.<span class="name">exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">y</span> ∉ <span class="fn">t</span>, <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">b</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by weight, non-strict inequality
+version: if the total weight of a finite set of pigeons is greater than or equal to <code>n • b</code>, they
+are sorted into some pigeonholes, and for all but <code>n &gt; 0</code> pigeonholes the total weight of the
+pigeons there is nonpositive, then for at least one of these <code>n</code> pigeonholes, the total weight of
+the pigeons in this pigeonhole is greater than or equal to <code>b</code>.</p></div></div><div class="decl" id="Finset.exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L186-L194">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul"><span class="name">Finset</span>.<span class="name">exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">y</span> ∉ <span class="fn">t</span>, <span class="fn">0</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">∑ <span class="fn">x</span> ∈ <span class="fn">s</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by weight, non-strict inequality
+version: if the total weight of a finite set of pigeons is less than or equal to <code>n • b</code>, they are
+sorted into some pigeonholes, and for all but <code>n &gt; 0</code> pigeonholes the total weight of the pigeons
+there is nonnegative, then for at least one of these <code>n</code> pigeonholes, the total weight of the
+pigeons in this pigeonhole is less than or equal to <code>b</code>.</p></div></div><div class="mod_doc"><h3 id="The-pigeonhole-principles-on-Finsets-pigeons-counted-by-heads" class="markdown-heading">The pigeonhole principles on <code><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a></code>s, pigeons counted by heads <a class="hover-link" href="#The-pigeonhole-principles-on-Finsets-pigeons-counted-by-heads">#</a></h3><p>In this section we formalize a few versions of the following pigeonhole principle: there is a
+pigeonhole with at least as many pigeons as the ceiling of the average number of pigeons across all
+pigeonholes.</p><p>First, we can use strict or non-strict inequalities. While the versions with non-strict inequalities
+are weaker than those with strict inequalities, sometimes it might be more convenient to apply the
+weaker version. Second, we can either state that there exists a pigeonhole with at least <code>n</code>
+pigeons, or state that there exists a pigeonhole with at most <code>n</code> pigeons. In the latter case we do
+not need the assumption <code>∀ a ∈ s, f a ∈ t</code>.</p><p>So, we prove four theorems: <code>Finset.exists_lt_card_fiber_of_maps_to_of_mul_lt_card</code>,
+<code>Finset.exists_le_card_fiber_of_maps_to_of_mul_le_card</code>,
+<code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_card_fiber_lt_of_card_lt_mul">Finset.exists_card_fiber_lt_of_card_lt_mul</a></code>, and <code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_card_fiber_le_of_card_le_mul">Finset.exists_card_fiber_le_of_card_le_mul</a></code>.</p></div><div class="decl" id="Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L218-L223">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to"><span class="name">Finset</span>.<span class="name">exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">↑<span class="fn"><span class="fn">{<span class="fn">x</span> ∈ <span class="fn">s</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by heads: there is a pigeonhole with
+at least as many pigeons as the ceiling of the average number of pigeons across all pigeonholes.</p></div></div><div class="decl" id="Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L225-L234">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to"><span class="name">Finset</span>.<span class="name">exists_lt_card_fiber_of_mul_lt_card_of_maps_to</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">n</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">n</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">{<span class="fn">x</span> ∈ <span class="fn">s</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by heads: there is a pigeonhole with
+at least as many pigeons as the ceiling of the average number of pigeons across all pigeonholes.
+(&quot;The maximum is at least the mean&quot; specialized to integers.)</p><p>More formally, given a function between finite sets <code>s</code> and <code>t</code> and a natural number <code>n</code> such that
+<code>#t * n &lt; #s</code>, there exists <code>y ∈ t</code> such that its preimage in <code>s</code> has more than <code>n</code>
+elements.</p></div></div><div class="decl" id="Finset.exists_card_fiber_lt_of_card_lt_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L236-L243">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_card_fiber_lt_of_card_lt_nsmul"><span class="name">Finset</span>.<span class="name">exists_card_fiber_lt_of_card_lt_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">↑<span class="fn"><span class="fn">{<span class="fn">x</span> ∈ <span class="fn">s</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by heads: there is a pigeonhole with
+at most as many pigeons as the floor of the average number of pigeons across all pigeonholes.</p></div></div><div class="decl" id="Finset.exists_card_fiber_lt_of_card_lt_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L245-L253">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_card_fiber_lt_of_card_lt_mul"><span class="name">Finset</span>.<span class="name">exists_card_fiber_lt_of_card_lt_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn"><span class="fn">{<span class="fn">x</span> ∈ <span class="fn">s</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by heads: there is a pigeonhole with
+at most as many pigeons as the floor of the average number of pigeons across all pigeonholes.  (&quot;The
+minimum is at most the mean&quot; specialized to integers.)</p><p>More formally, given a function <code>f</code>, a finite sets <code>s</code> in its domain, a finite set <code>t</code> in its
+codomain, and a natural number <code>n</code> such that <code>#s &lt; #t * n</code>, there exists <code>y ∈ t</code> such that
+its preimage in <code>s</code> has less than <code>n</code> elements.</p></div></div><div class="decl" id="Finset.exists_le_card_fiber_of_nsmul_le_card_of_maps_to"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L255-L262">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_le_card_fiber_of_nsmul_le_card_of_maps_to"><span class="name">Finset</span>.<span class="name">exists_le_card_fiber_of_nsmul_le_card_of_maps_to</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">b</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn"><span class="fn">{<span class="fn">x</span> ∈ <span class="fn">s</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by heads: given a function between
+finite sets <code>s</code> and <code>t</code> and a number <code>b</code> such that <code>#t • b ≤ #s</code>, there exists <code>y ∈ t</code> such
+that its preimage in <code>s</code> has at least <code>b</code> elements.
+See also <code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to">Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to</a></code> for a stronger statement.</p></div></div><div class="decl" id="Finset.exists_le_card_fiber_of_mul_le_card_of_maps_to"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L264-L270">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_le_card_fiber_of_mul_le_card_of_maps_to"><span class="name">Finset</span>.<span class="name">exists_le_card_fiber_of_mul_le_card_of_maps_to</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">n</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">n</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">{<span class="fn">x</span> ∈ <span class="fn">s</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by heads: given a function between
+finite sets <code>s</code> and <code>t</code> and a natural number <code>b</code> such that <code>#t * n ≤ #s</code>, there exists
+<code>y ∈ t</code> such that its preimage in <code>s</code> has at least <code>n</code> elements. See also
+<code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to">Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to</a></code> for a stronger statement.</p></div></div><div class="decl" id="Finset.exists_card_fiber_le_of_card_le_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L272-L281">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_card_fiber_le_of_card_le_nsmul"><span class="name">Finset</span>.<span class="name">exists_card_fiber_le_of_card_le_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn">↑<span class="fn"><span class="fn">{<span class="fn">x</span> ∈ <span class="fn">s</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by heads: given a function <code>f</code>, a
+finite sets <code>s</code> and <code>t</code>, and a number <code>b</code> such that <code>#s ≤ #t • b</code>, there exists <code>y ∈ t</code> such
+that its preimage in <code>s</code> has no more than <code>b</code> elements.
+See also <code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_card_fiber_lt_of_card_lt_nsmul">Finset.exists_card_fiber_lt_of_card_lt_nsmul</a></code> for a stronger statement.</p></div></div><div class="decl" id="Finset.exists_card_fiber_le_of_card_le_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L283-L289">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_card_fiber_le_of_card_le_mul"><span class="name">Finset</span>.<span class="name">exists_card_fiber_le_of_card_le_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">y</span> ∈ <span class="fn">t</span>, <span class="fn"><span class="fn">{<span class="fn">x</span> ∈ <span class="fn">s</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">n</span></span></div></div><p>The pigeonhole principle for finitely many pigeons counted by heads: given a function <code>f</code>, a
+finite sets <code>s</code> in its domain, a finite set <code>t</code> in its codomain, and a natural number <code>n</code> such that
+<code>#s ≤ #t * n</code>, there exists <code>y ∈ t</code> such that its preimage in <code>s</code> has no more than <code>n</code>
+elements. See also <code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Finset.exists_card_fiber_lt_of_card_lt_mul">Finset.exists_card_fiber_lt_of_card_lt_mul</a></code> for a stronger statement.</p></div></div><div class="mod_doc"><h3 id="The-pigeonhole-principles-on-Fintypess-pigeons-counted-by-weight" class="markdown-heading">The pigeonhole principles on <code>Fintypes</code>s, pigeons counted by weight <a class="hover-link" href="#The-pigeonhole-principles-on-Fintypess-pigeons-counted-by-weight">#</a></h3><p>In this section we specialize theorems from the previous section to the special case of functions
+between <code><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code>s and <code>s = univ</code>, <code>t = univ</code>. In this case the assumption <code>∀ x ∈ s, f x ∈ t</code> always
+holds, so we have four theorems instead of eight.</p></div><div class="decl" id="Fintype.exists_lt_sum_fiber_of_nsmul_lt_sum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L311-L317">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_lt_sum_fiber_of_nsmul_lt_sum"><span class="name">Fintype</span>.<span class="name">exists_lt_sum_fiber_of_nsmul_lt_sum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">∑ <span class="fn">x</span> : <span class="fn">α</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">∑ <span class="fn">x</span> : <span class="fn">α</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span></span></div></div><p>The pigeonhole principle for finitely many pigeons of different weights, strict inequality
+version: there is a pigeonhole with the total weight of pigeons in it greater than <code>b</code> provided that
+the total number of pigeonholes times <code>b</code> is less than the total weight of all pigeons.</p></div></div><div class="decl" id="Fintype.exists_le_sum_fiber_of_nsmul_le_sum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L319-L327">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_le_sum_fiber_of_nsmul_le_sum"><span class="name">Fintype</span>.<span class="name">exists_le_sum_fiber_of_nsmul_le_sum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">∑ <span class="fn">x</span> : <span class="fn">α</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">b</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">∑ <span class="fn">x</span> : <span class="fn">α</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span></span></div></div><p>The pigeonhole principle for finitely many pigeons of different weights, non-strict inequality
+version: there is a pigeonhole with the total weight of pigeons in it greater than or equal to <code>b</code>
+provided that the total number of pigeonholes times <code>b</code> is less than or equal to the total weight of
+all pigeons.</p></div></div><div class="decl" id="Fintype.exists_sum_fiber_lt_of_sum_lt_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L329-L334">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_sum_fiber_lt_of_sum_lt_nsmul"><span class="name">Fintype</span>.<span class="name">exists_sum_fiber_lt_of_sum_lt_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">∑ <span class="fn">x</span> : <span class="fn">α</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">∑ <span class="fn">x</span> : <span class="fn">α</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span></span></div></div><p>The pigeonhole principle for finitely many pigeons of different weights, strict inequality
+version: there is a pigeonhole with the total weight of pigeons in it less than <code>b</code> provided that
+the total number of pigeonholes times <code>b</code> is greater than the total weight of all pigeons.</p></div></div><div class="decl" id="Fintype.exists_sum_fiber_le_of_sum_le_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L336-L342">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_sum_fiber_le_of_sum_le_nsmul"><span class="name">Fintype</span>.<span class="name">exists_sum_fiber_le_of_sum_le_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">∑ <span class="fn">x</span> : <span class="fn">α</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">∑ <span class="fn">x</span> : <span class="fn">α</span> with <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>, <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span></span></div></div><p>The pigeonhole principle for finitely many pigeons of different weights, non-strict inequality
+version: there is a pigeonhole with the total weight of pigeons in it less than or equal to <code>b</code>
+provided that the total number of pigeonholes times <code>b</code> is greater than or equal to the total weight
+of all pigeons.</p></div></div><div class="decl" id="Fintype.exists_lt_card_fiber_of_nsmul_lt_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L348-L354">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_lt_card_fiber_of_nsmul_lt_card"><span class="name">Fintype</span>.<span class="name">exists_lt_card_fiber_of_nsmul_lt_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">α</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">↑<span class="fn"><span class="fn">{<span class="fn">x</span> : <span class="fn">α</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span></span></div></div><p>The strong pigeonhole principle for finitely many pigeons and pigeonholes. There is a pigeonhole
+with at least as many pigeons as the ceiling of the average number of pigeons across all
+pigeonholes.</p></div></div><div class="decl" id="Fintype.exists_lt_card_fiber_of_mul_lt_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L356-L366">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_lt_card_fiber_of_mul_lt_card"><span class="name">Fintype</span>.<span class="name">exists_lt_card_fiber_of_mul_lt_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">n</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">n</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">{<span class="fn">x</span> : <span class="fn">α</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span></div></div><p>The strong pigeonhole principle for finitely many pigeons and pigeonholes.
+There is a pigeonhole with at least as many pigeons as
+the ceiling of the average number of pigeons across all pigeonholes.
+(&quot;The maximum is at least the mean&quot; specialized to integers.)</p><p>More formally, given a function <code>f</code> between finite types <code>α</code> and <code>β</code> and a number <code>n</code> such that
+<code>card β * n &lt; card α</code>, there exists an element <code>y : β</code> such that its preimage has more than <code>n</code>
+elements.</p></div></div><div class="decl" id="Fintype.exists_card_fiber_lt_of_card_lt_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L368-L374">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_card_fiber_lt_of_card_lt_nsmul"><span class="name">Fintype</span>.<span class="name">exists_card_fiber_lt_of_card_lt_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">α</span>)</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">↑<span class="fn"><span class="fn">{<span class="fn">x</span> : <span class="fn">α</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span></span></div></div><p>The strong pigeonhole principle for finitely many pigeons and pigeonholes. There is a pigeonhole
+with at most as many pigeons as the floor of the average number of pigeons across all pigeonholes.</p></div></div><div class="decl" id="Fintype.exists_card_fiber_lt_of_card_lt_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L376-L386">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_card_fiber_lt_of_card_lt_mul"><span class="name">Fintype</span>.<span class="name">exists_card_fiber_lt_of_card_lt_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">α</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">{<span class="fn">x</span> : <span class="fn">α</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span></span></div></div><p>The strong pigeonhole principle for finitely many pigeons and pigeonholes.
+There is a pigeonhole with at most as many pigeons as
+the floor of the average number of pigeons across all pigeonholes.
+(&quot;The minimum is at most the mean&quot; specialized to integers.)</p><p>More formally, given a function <code>f</code> between finite types <code>α</code> and <code>β</code> and a number <code>n</code> such that
+<code>card α &lt; card β * n</code>, there exists an element <code>y : β</code> such that its preimage has less than <code>n</code>
+elements.</p></div></div><div class="decl" id="Fintype.exists_le_card_fiber_of_nsmul_le_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L388-L396">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_le_card_fiber_of_nsmul_le_card"><span class="name">Fintype</span>.<span class="name">exists_le_card_fiber_of_nsmul_le_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">α</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">b</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn"><span class="fn">{<span class="fn">x</span> : <span class="fn">α</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span></span></div></div><p>The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Given a function <code>f</code>
+between finite types <code>α</code> and <code>β</code> and a number <code>b</code> such that <code>card β • b ≤ card α</code>, there exists an
+element <code>y : β</code> such that its preimage has at least <code>b</code> elements.
+See also <code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_lt_card_fiber_of_nsmul_lt_card">Fintype.exists_lt_card_fiber_of_nsmul_lt_card</a></code> for a stronger statement.</p></div></div><div class="decl" id="Fintype.exists_le_card_fiber_of_mul_le_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L398-L404">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_le_card_fiber_of_mul_le_card"><span class="name">Fintype</span>.<span class="name">exists_le_card_fiber_of_mul_le_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">n</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">n</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">{<span class="fn">x</span> : <span class="fn">α</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span></div></div><p>The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Given a function <code>f</code>
+between finite types <code>α</code> and <code>β</code> and a number <code>n</code> such that <code>card β * n ≤ card α</code>, there exists an
+element <code>y : β</code> such that its preimage has at least <code>n</code> elements. See also
+<code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_lt_card_fiber_of_mul_lt_card">Fintype.exists_lt_card_fiber_of_mul_lt_card</a></code> for a stronger statement.</p></div></div><div class="decl" id="Fintype.exists_card_fiber_le_of_card_le_nsmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L406-L413">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_card_fiber_le_of_card_le_nsmul"><span class="name">Fintype</span>.<span class="name">exists_card_fiber_le_of_card_le_nsmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">α</span>)</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">↑<span class="fn"><span class="fn">{<span class="fn">x</span> : <span class="fn">α</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span></span></div></div><p>The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Given a function <code>f</code>
+between finite types <code>α</code> and <code>β</code> and a number <code>b</code> such that <code>card α ≤ card β • b</code>, there exists an
+element <code>y : β</code> such that its preimage has at most <code>b</code> elements.
+See also <code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_card_fiber_lt_of_card_lt_nsmul">Fintype.exists_card_fiber_lt_of_card_lt_nsmul</a></code> for a stronger statement.</p></div></div><div class="decl" id="Fintype.exists_card_fiber_le_of_card_le_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L415-L421">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_card_fiber_le_of_card_le_mul"><span class="name">Fintype</span>.<span class="name">exists_card_fiber_le_of_card_le_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">α</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">card</a> <span class="fn">β</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn"><span class="fn">{<span class="fn">x</span> : <span class="fn">α</span> | <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>}</span>.<a href="../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">n</span></span></div></div><p>The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Given a function <code>f</code>
+between finite types <code>α</code> and <code>β</code> and a number <code>n</code> such that <code>card α ≤ card β * n</code>, there exists an
+element <code>y : β</code> such that its preimage has at most <code>n</code> elements. See also
+<code><a href="../.././Mathlib/Combinatorics/Pigeonhole.html#Fintype.exists_card_fiber_lt_of_card_lt_mul">Fintype.exists_card_fiber_lt_of_card_lt_mul</a></code> for a stronger statement.</p></div></div><div class="decl" id="Nat.exists_lt_modEq_of_infinite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Pigeonhole.lean#L429-L434">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Combinatorics/Pigeonhole.html#Nat.exists_lt_modEq_of_infinite"><span class="name">Nat</span>.<span class="name">exists_lt_modEq_of_infinite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <a href="../.././Init/Prelude.html#Nat">ℕ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finite/Defs.html#Set.Infinite">Infinite</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hk</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">m</span> ∈ <span class="fn">s</span>, <span class="fn">∃ <span class="fn">n</span> ∈ <span class="fn">s</span>, <span class="fn">m</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">m</span> <a href="../.././Mathlib/Data/Nat/ModEq.html#Nat.ModEq">≡</a> <span class="fn">n</span> <a href="../.././Mathlib/Data/Nat/ModEq.html#Nat.ModEq">[MOD</a> <span class="fn">k</span><a href="../.././Mathlib/Data/Nat/ModEq.html#Nat.ModEq">]</a></span></span></div></div><p>If <code>s</code> is an infinite set of natural numbers and <code>k &gt; 0</code>, then <code>s</code> contains two elements <code>m &lt; n</code>
+that are equal mod <code>k</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

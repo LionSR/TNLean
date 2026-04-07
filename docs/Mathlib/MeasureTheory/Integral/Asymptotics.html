@@ -1,0 +1,406 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.MeasureTheory.Integral.Asymptotics</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.MeasureTheory.Integral.Asymptotics";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">MeasureTheory</span>.<span class="name">Integral</span>.<span class="name">Asymptotics</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/MeasureTheory/Group/Measure.html">Mathlib.MeasureTheory.Group.Measure</a></li><li><a href="../../.././Mathlib/MeasureTheory/Integral/Bochner/ContinuousLinearMap.html">Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.MeasureTheory.Integral.Asymptotics" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Asymptotics.IsBigO.integrableAtFilter"><span class="name">Asymptotics</span>.<span class="name">IsBigO</span>.<span class="name">integrableAtFilter</span></a></div><div class="nav_link"><a class="break_within" href="#Asymptotics.IsBigO.integrable"><span class="name">Asymptotics</span>.<span class="name">IsBigO</span>.<span class="name">integrable</span></a></div><div class="nav_link"><a class="break_within" href="#Asymptotics.IsBigO.eventually_integrableOn"><span class="name">Asymptotics</span>.<span class="name">IsBigO</span>.<span class="name">eventually_integrableOn</span></a></div><div class="nav_link"><a class="break_within" href="#Asymptotics.IsBigO.set_integral_isBigO"><span class="name">Asymptotics</span>.<span class="name">IsBigO</span>.<span class="name">set_integral_isBigO</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_cocompact"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrable</span>.<span class="name">integrable_of_isBigO_cocompact</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atBot_atTop"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrable</span>.<span class="name">integrable_of_isBigO_atBot_atTop</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.LocallyIntegrableOn.integrableOn_of_isBigO_atBot"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrableOn</span>.<span class="name">integrableOn_of_isBigO_atBot</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.LocallyIntegrableOn.integrableOn_of_isBigO_atTop"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrableOn</span>.<span class="name">integrableOn_of_isBigO_atTop</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atBot"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrable</span>.<span class="name">integrable_of_isBigO_atBot</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atTop"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrable</span>.<span class="name">integrable_of_isBigO_atTop</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrable</span>.<span class="name">integrable_of_isBigO_atTop_of_norm_isNegInvariant</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Bounding-of-integrals-by-asymptotics" class="markdown-heading">Bounding of integrals by asymptotics <a class="hover-link" href="#Bounding-of-integrals-by-asymptotics">#</a></h1><p>We establish integrability of <code>f</code> from <code>f = O(g)</code>.</p><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#Asymptotics.IsBigO.integrableAtFilter">Asymptotics.IsBigO.integrableAtFilter</a></code>: If <code>f = O[l] g</code> on measurably generated <code>l</code>,
+<code>f</code> is strongly measurable at <code>l</code>, and <code>g</code> is integrable at <code>l</code>, then <code>f</code> is integrable at <code>l</code>.</li><li><code><a href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_cocompact">MeasureTheory.LocallyIntegrable.integrable_of_isBigO_cocompact</a></code>: If <code>f</code> is locally integrable,
+and <code>f =O[cocompact] g</code> for some <code>g</code> integrable at <code>cocompact</code>, then <code>f</code> is integrable.</li><li><code><a href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atBot_atTop">MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atBot_atTop</a></code>: If <code>f</code> is locally integrable,
+and <code>f =O[atBot] g</code>, <code>f =O[atTop] g'</code> for some <code>g</code>, <code>g'</code> integrable <code>atBot</code> and <code>atTop</code>
+respectively, then <code>f</code> is integrable.</li><li><code><a href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant">MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant</a></code>:
+If <code>f</code> is locally integrable, <code>‖f(-x)‖ = ‖f(x)‖</code>, and <code>f =O[atTop] g</code> for some
+<code>g</code> integrable <code>atTop</code>, then <code>f</code> is integrable.</li></ul></div><div class="decl" id="Asymptotics.IsBigO.integrableAtFilter"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L42-L52">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#Asymptotics.IsBigO.integrableAtFilter"><span class="name">Asymptotics</span>.<span class="name">IsBigO</span>.<span class="name">integrableAtFilter</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/MeasurablyGenerated.html#Filter.IsMeasurablyGenerated">IsMeasurablyGenerated</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><span class="fn">l</span><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hfm</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#StronglyMeasurableAtFilter">StronglyMeasurableAtFilter</a> <span class="fn">f</span> <span class="fn">l</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableAtFilter">MeasureTheory.IntegrableAtFilter</a> <span class="fn">g</span> <span class="fn">l</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableAtFilter">MeasureTheory.IntegrableAtFilter</a> <span class="fn">f</span> <span class="fn">l</span> <span class="fn">μ</span></span></div></div><p>If <code>f = O[l] g</code> on measurably generated <code>l</code>, <code>f</code> is strongly measurable at <code>l</code>,
+and <code>g</code> is integrable at <code>l</code>, then <code>f</code> is integrable at <code>l</code>.</p></div></div><div class="decl" id="Asymptotics.IsBigO.integrable"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L54-L58">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#Asymptotics.IsBigO.integrable"><span class="name">Asymptotics</span>.<span class="name">IsBigO</span>.<span class="name">integrable</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hfm</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/StronglyMeasurable/AEStronglyMeasurable.html#MeasureTheory.AEStronglyMeasurable">MeasureTheory.AEStronglyMeasurable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">g</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span></div></div><p>Variant of <code><a href="../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable.mono">MeasureTheory.Integrable.mono</a></code> taking <code>f =O[⊤] (g)</code> instead of <code>‖f(x)‖ ≤ ‖g(x)‖</code></p></div></div><div class="decl" id="Asymptotics.IsBigO.eventually_integrableOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L64-L80">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#Asymptotics.IsBigO.eventually_integrableOn"><span class="name">Asymptotics</span>.<span class="name">IsBigO</span>.<span class="name">eventually_integrableOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm">Norm</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">Filter.principal</a> <span class="fn">s</span></span> <a href="../../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn">l</span><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <a href="../../.././Init/Prelude.html#Prod.snd">Prod.snd</a>))</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hfm</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">l</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/StronglyMeasurable/AEStronglyMeasurable.html#MeasureTheory.AEStronglyMeasurable">MeasureTheory.AEStronglyMeasurable</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">f</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">i</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">x</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>)</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμ</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">x</span> : <span class="fn">α</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">l</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">MeasureTheory.IntegrableOn</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">f</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">i</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">x</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>)</span> <span class="fn">s</span> <span class="fn">μ</span></span></span></div></div><p>Let <code>f : X x Y → Z</code>. If as <code>y</code> tends to <code>l</code>, <code>f(x, y) = O(g(y))</code> uniformly on <code>s : <a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> X</code>
+of finite measure, then f is eventually (as <code>y</code> tends to <code>l</code>) integrable along <code>s</code>.</p></div></div><div class="decl" id="Asymptotics.IsBigO.set_integral_isBigO"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L84-L101">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#Asymptotics.IsBigO.set_integral_isBigO"><span class="name">Asymptotics</span>.<span class="name">IsBigO</span>.<span class="name">set_integral_isBigO</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.principal">Filter.principal</a> <span class="fn">s</span></span> <a href="../../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn">l</span><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <a href="../../.././Init/Prelude.html#Prod.snd">Prod.snd</a>))</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμ</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">i</span> : <span class="fn">ι</span>) <a href="../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">in</a> <span class="fn">s</span><a href="../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">i</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">x</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span> <a href="../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span>)</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><span class="fn">l</span><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g</span></div></div><p>Let <code>f : X x Y → Z</code>. If as <code>y</code> tends to <code>l</code>, <code>f(x, y) = O(g(y))</code> uniformly on <code>s : <a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> X</code>
+of finite measure, then the integral of <code>f</code> along <code>s</code> is <code>O(g(y))</code>.</p></div></div><div class="decl" id="MeasureTheory.LocallyIntegrable.integrable_of_isBigO_cocompact"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L110-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_cocompact"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrable</span>.<span class="name">integrable_of_isBigO_cocompact</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#Filter.cocompact">Filter.cocompact</a> <span class="fn">α</span>)</span>.<a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/MeasurablyGenerated.html#Filter.IsMeasurablyGenerated">IsMeasurablyGenerated</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/LocallyIntegrable.html#MeasureTheory.LocallyIntegrable">LocallyIntegrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#Filter.cocompact">Filter.cocompact</a> <span class="fn">α</span></span><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableAtFilter">IntegrableAtFilter</a> <span class="fn">g</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#Filter.cocompact">Filter.cocompact</a> <span class="fn">α</span>)</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span></div></div><p>If <code>f</code> is locally integrable, and <code>f =O[cocompact] g</code> for some <code>g</code> integrable at <code>cocompact</code>,
+then <code>f</code> is integrable.</p></div></div><div class="decl" id="MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atBot_atTop"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L122-L131">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atBot_atTop"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrable</span>.<span class="name">integrable_of_isBigO_atBot_atTop</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Compact.html#CompactIccSpace">CompactIccSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atBot">Filter.atBot</a>.<a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/MeasurablyGenerated.html#Filter.IsMeasurablyGenerated">IsMeasurablyGenerated</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a>.<a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/MeasurablyGenerated.html#Filter.IsMeasurablyGenerated">IsMeasurablyGenerated</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/LocallyIntegrable.html#MeasureTheory.LocallyIntegrable">LocallyIntegrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atBot">Filter.atBot</a><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableAtFilter">IntegrableAtFilter</a> <span class="fn">g</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atBot">Filter.atBot</a> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ho'</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg'</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableAtFilter">IntegrableAtFilter</a> <span class="fn">g'</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span></div></div><p>If <code>f</code> is locally integrable, and <code>f =O[atBot] g</code>, <code>f =O[atTop] g'</code> for some
+<code>g</code>, <code>g'</code> integrable at <code>atBot</code> and <code>atTop</code> respectively, then <code>f</code> is integrable.</p></div></div><div class="decl" id="MeasureTheory.LocallyIntegrableOn.integrableOn_of_isBigO_atBot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L133-L139">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#MeasureTheory.LocallyIntegrableOn.integrableOn_of_isBigO_atBot"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrableOn</span>.<span class="name">integrableOn_of_isBigO_atBot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Compact.html#CompactIccSpace">CompactIccSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atBot">Filter.atBot</a>.<a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/MeasurablyGenerated.html#Filter.IsMeasurablyGenerated">IsMeasurablyGenerated</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/LocallyIntegrable.html#MeasureTheory.LocallyIntegrableOn">LocallyIntegrableOn</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">a</span>)</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atBot">Filter.atBot</a><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableAtFilter">IntegrableAtFilter</a> <span class="fn">g</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atBot">Filter.atBot</a> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">IntegrableOn</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">a</span>)</span> <span class="fn">μ</span></span></div></div><p>If <code>f</code> is locally integrable on <code>(∞, a]</code>, and <code>f =O[atBot] g</code>, for some
+<code>g</code> integrable at <code>atBot</code>, then <code>f</code> is integrable on <code>(∞, a]</code>.</p></div></div><div class="decl" id="MeasureTheory.LocallyIntegrableOn.integrableOn_of_isBigO_atTop"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L141-L147">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#MeasureTheory.LocallyIntegrableOn.integrableOn_of_isBigO_atTop"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrableOn</span>.<span class="name">integrableOn_of_isBigO_atTop</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Compact.html#CompactIccSpace">CompactIccSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a>.<a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/MeasurablyGenerated.html#Filter.IsMeasurablyGenerated">IsMeasurablyGenerated</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/LocallyIntegrable.html#MeasureTheory.LocallyIntegrableOn">LocallyIntegrableOn</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ici">Set.Ici</a> <span class="fn">a</span>)</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableAtFilter">IntegrableAtFilter</a> <span class="fn">g</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">IntegrableOn</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ici">Set.Ici</a> <span class="fn">a</span>)</span> <span class="fn">μ</span></span></div></div><p>If <code>f</code> is locally integrable on <code>[a, ∞)</code>, and <code>f =O[atTop] g</code>, for some
+<code>g</code> integrable at <code>atTop</code>, then <code>f</code> is integrable on <code>[a, ∞)</code>.</p></div></div><div class="decl" id="MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atBot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L149-L155">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atBot"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrable</span>.<span class="name">integrable_of_isBigO_atBot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Compact.html#CompactIccSpace">CompactIccSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atBot">Filter.atBot</a>.<a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/MeasurablyGenerated.html#Filter.IsMeasurablyGenerated">IsMeasurablyGenerated</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderTop">OrderTop</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/LocallyIntegrable.html#MeasureTheory.LocallyIntegrable">LocallyIntegrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atBot">Filter.atBot</a><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableAtFilter">IntegrableAtFilter</a> <span class="fn">g</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atBot">Filter.atBot</a> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span></div></div><p>If <code>f</code> is locally integrable, <code>f</code> has a top element, and <code>f =O[atBot] g</code>, for some
+<code>g</code> integrable at <code>atBot</code>, then <code>f</code> is integrable.</p></div></div><div class="decl" id="MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atTop"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L157-L163">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atTop"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrable</span>.<span class="name">integrable_of_isBigO_atTop</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Compact.html#CompactIccSpace">CompactIccSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a>.<a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/MeasurablyGenerated.html#Filter.IsMeasurablyGenerated">IsMeasurablyGenerated</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/LocallyIntegrable.html#MeasureTheory.LocallyIntegrable">LocallyIntegrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableAtFilter">IntegrableAtFilter</a> <span class="fn">g</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span></div></div><p>If <code>f</code> is locally integrable, <code>f</code> has a bottom element, and <code>f =O[atTop] g</code>, for some
+<code>g</code> integrable at <code>atTop</code>, then <code>f</code> is integrable.</p></div></div><div class="decl" id="MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Integral/Asymptotics.lean#L171-L186">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/MeasureTheory/Integral/Asymptotics.html#MeasureTheory.LocallyIntegrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant"><span class="name">MeasureTheory</span>.<span class="name">LocallyIntegrable</span>.<span class="name">integrable_of_isBigO_atTop_of_norm_isNegInvariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">F</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Compact.html#CompactIccSpace">CompactIccSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a>.<a href="../../.././Mathlib/MeasureTheory/MeasurableSpace/MeasurablyGenerated.html#Filter.IsMeasurablyGenerated">IsMeasurablyGenerated</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableNeg">MeasurableNeg</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsNegInvariant">IsNegInvariant</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/LocallyIntegrable.html#MeasureTheory.LocallyIntegrable">LocallyIntegrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsymm</span> : <a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">norm</a> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/MeasureTheory/OuterMeasure/AE.html#MeasureTheory.ae">ae</a> <span class="fn">μ</span></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">norm</a> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <a href="../../.././Init/Prelude.html#Neg.neg">Neg.neg</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ho</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">=O[</a><a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a><a href="../../.././Mathlib/Analysis/Asymptotics/Defs.html#Asymptotics.IsBigO">]</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableAtFilter">IntegrableAtFilter</a> <span class="fn">g</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span></div></div><p>If <code>f</code> is locally integrable, <code>‖f(-x)‖ = ‖f(x)‖</code>, and <code>f =O[atTop] g</code>, for some
+<code>g</code> integrable at <code>atTop</code>, then <code>f</code> is integrable.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

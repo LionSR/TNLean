@@ -1,0 +1,87 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Tactic.Cases</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Tactic.Cases";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">Cases</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/Cases.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Init.html">Mathlib.Init</a></li><li><a href="../.././Batteries/Lean/Expr.html">Batteries.Lean.Expr</a></li><li><a href="../.././Batteries/Data/List/Basic.html">Batteries.Data.List.Basic</a></li><li><a href="../.././Lean/Elab/Tactic/Induction.html">Lean.Elab.Tactic.Induction</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Tactic.Cases" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Mathlib.Tactic.ElimApp.evalNames"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ElimApp</span>.<span class="name">evalNames</span></a></div><div class="nav_link"><a class="break_within" href="#Mathlib.Tactic.induction'"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">induction'</span></a></div><div class="nav_link"><a class="break_within" href="#Mathlib.Tactic.cases'"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">cases'</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Backward-compatible-implementation-of-lean-3-cases-tactic" class="markdown-heading">Backward compatible implementation of lean 3 <code>cases</code> tactic <a class="hover-link" href="#Backward-compatible-implementation-of-lean-3-cases-tactic">#</a></h1><p>This tactic is similar to the <code>cases</code> tactic in Lean 4 core, but the syntax for giving
+names is different:</p><pre><code>example (h : p ∨ q) : q ∨ p := by
+  cases h with
+  | inl hp =&gt; exact <a href="../.././Init/Prelude.html#Or.inr">Or.inr</a> hp
+  | inr hq =&gt; exact <a href="../.././Init/Prelude.html#Or.inl">Or.inl</a> hq
+
+example (h : p ∨ q) : q ∨ p := by
+  <a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.cases'">cases'</a> h with hp hq
+  · exact <a href="../.././Init/Prelude.html#Or.inr">Or.inr</a> hp
+  · exact <a href="../.././Init/Prelude.html#Or.inl">Or.inl</a> hq
+
+example (h : p ∨ q) : q ∨ p := by
+  rcases h with hp | hq
+  · exact <a href="../.././Init/Prelude.html#Or.inr">Or.inr</a> hp
+  · exact <a href="../.././Init/Prelude.html#Or.inl">Or.inl</a> hq
+</code></pre><p>Prefer <code>cases</code> or <code>rcases</code> when possible, because these tactics promote structured proofs.</p></div><div class="decl" id="Mathlib.Tactic.ElimApp.evalNames"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/Cases.lean#L51-L73">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.ElimApp.evalNames"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ElimApp</span>.<span class="name">evalNames</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">elimInfo</span> : <a href="../.././Lean/Meta/Tactic/ElimInfo.html#Lean.Meta.ElimInfo">Lean.Meta.ElimInfo</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">alts</span> : <span class="fn"><a href="../.././Init/Prelude.html#Array">Array</a> <a href="../.././Lean/Elab/Tactic/Induction.html#Lean.Elab.Tactic.ElimApp.Alt">Lean.Elab.Tactic.ElimApp.Alt</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">withArg</span> : <a href="../.././Init/Prelude.html#Lean.Syntax">Lean.Syntax</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">numEqs</span> : <a href="../.././Init/Prelude.html#Nat">Nat</a> := <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">generalized </span><span class="fn">toClear</span> : <span class="fn"><a href="../.././Init/Prelude.html#Array">Array</a> <a href="../.././Lean/Expr.html#Lean.FVarId">Lean.FVarId</a></span> := <a href="../.././Init/Prelude.html#List.toArray">#[</a><a href="../.././Init/Prelude.html#List.toArray">]</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">toTag</span> : <span class="fn"><a href="../.././Init/Prelude.html#Array">Array</a> (<a href="../.././Init/Meta/Defs.html#Lean.Syntax.Ident">Lean.Ident</a> <a href="../.././Init/Prelude.html#Prod">×</a> <a href="../.././Lean/Expr.html#Lean.FVarId">Lean.FVarId</a>)</span> := <a href="../.././Init/Prelude.html#List.toArray">#[</a><a href="../.././Init/Prelude.html#List.toArray">]</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Lean/Elab/Term/TermElabM.html#Lean.Elab.Term.TermElabM">Lean.Elab.TermElabM</a> <span class="fn">(<a href="../.././Init/Prelude.html#Array">Array</a> <a href="../.././Lean/Expr.html#Lean.MVarId">Lean.MVarId</a>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Tactic.ElimApp.evalNames" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Mathlib.Tactic.induction'"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/Cases.lean#L75-L149">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.induction'"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">induction'</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Lean.ParserDescr">Lean.ParserDescr</a></div></div><p><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.induction'">induction'</a> x</code> applies induction on the variable <code>x</code> of the inductive type <code>t</code> to the main goal,
+producing one goal for each constructor of <code>t</code>, in which <code>x</code> is replaced by that constructor
+applied to newly introduced variables. <code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.induction'">induction'</a></code> adds an inductive hypothesis for
+each recursive argument to the constructor. This is a backwards-compatible variant of the
+<code>induction</code> tactic in Lean 4 core.</p><p>Prefer <code>induction</code> when possible, because it promotes structured proofs.</p><ul><li><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.induction'">induction'</a> x with n1 n2 ...</code> names the introduced hypotheses: arguments to constructors and
+inductive hypotheses. This is the main difference with <code>induction</code> in core Lean.</li><li><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.induction'">induction'</a> e</code>, where <code>e</code> is an expression instead of a variable, generalizes <code>e</code> in the goal,
+and then performs induction on the resulting variable.</li><li><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.induction'">induction'</a> h : e</code>, where <code>e</code> is an expression instead of a variable, generalizes <code>e</code> in the goal,
+and then performs induction on the resulting variable, adding to each goal the hypothesis
+<code>h : e = _</code> where <code>_</code> is the constructor instance.</li><li><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.induction'">induction'</a> x using r</code> uses <code>r</code> as the principle of induction. Here <code>r</code> should be a term whose
+result type is of the form <code>C t1 t2 ...</code>, where <code>C</code> is a bound variable and <code>t1</code>, <code>t2</code>, ... (if
+present) are bound variables.</li><li><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.induction'">induction'</a> x generalizing z1 z2 ...</code> generalizes over the local variables <code>z1</code>, <code>z2</code>, ... in the
+inductive hypothesis.</li></ul><p>Example:</p><pre><code>open <a href="../.././Init/Prelude.html#Nat">Nat</a>
+
+example (n : ℕ) : 0 &lt; factorial n := by
+  <a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.induction'">induction'</a> n with n ih
+  · rw [factorial_zero]
+    simp
+  · rw [factorial_succ]
+    apply <a href="../.././Mathlib/Algebra/Order/GroupWithZero/Unbundled/Basic.html#mul_pos">mul_pos</a> (succ_pos n) ih
+
+-- Though the following equivalent spellings should be preferred
+example (n : ℕ) : 0 &lt; factorial n := by
+  induction n
+  case zero =&gt;
+    rw [factorial_zero]
+    simp
+  case succ n ih =&gt;
+    rw [factorial_succ]
+    apply <a href="../.././Mathlib/Algebra/Order/GroupWithZero/Unbundled/Basic.html#mul_pos">mul_pos</a> (succ_pos n) ih
+</code></pre><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Tactic.induction'" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Mathlib.Tactic.cases'"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/Cases.lean#L151-L207">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.cases'"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">cases'</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Lean.ParserDescr">Lean.ParserDescr</a></div></div><p><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.cases'">cases'</a> x</code>, where the variable <code>x</code> has inductive type <code>t</code>, splits the main goal,
+producing one goal for each constructor of <code>t</code>, in which <code>x</code> is replaced by that constructor
+applied to newly introduced variables. This is a backwards-compatible variant of the
+<code>cases</code> tactic in Lean 4 core.</p><p>Prefer <code>cases</code>, <code>rcases</code>, or <code>obtain</code> when possible, because these tactics promote
+structured proofs.</p><ul><li><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.cases'">cases'</a> x with n1 n2 ...</code> names the arguments to the constructors. This is the main difference
+with <code>cases</code> in core Lean.</li><li><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.cases'">cases'</a> e</code>, where <code>e</code> is an expression instead of a variable, generalizes <code>e</code> in the goal,
+and then performs induction on the resulting variable.</li><li><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.cases'">cases'</a> h : e</code>, where <code>e</code> is an expression instead of a variable, generalizes <code>e</code> in the goal,
+and then splits by cases on the resulting variable, adding to each goal the hypothesis
+<code>h : e = _</code> where <code>_</code> is the constructor instance.</li><li><code><a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.cases'">cases'</a> x using r</code> uses <code>r</code> as the case matching rule. Here <code>r</code> should be a term whose result type
+is of the form <code>C t1 t2 ...</code>, where <code>C</code> is a bound variable and <code>t1</code>, <code>t2</code>, ... (if present) are
+bound variables.</li></ul><p>Example:</p><pre><code>example (h : p ∨ q) : q ∨ p := by
+  <a href="../.././Mathlib/Tactic/Cases.html#Mathlib.Tactic.cases'">cases'</a> h with hp hq
+  · exact <a href="../.././Init/Prelude.html#Or.inr">Or.inr</a> hp
+  · exact <a href="../.././Init/Prelude.html#Or.inl">Or.inl</a> hq
+
+-- Though the following equivalent spellings should be preferred
+example (h : p ∨ q) : q ∨ p := by
+  cases h with
+  | inl hp =&gt; exact <a href="../.././Init/Prelude.html#Or.inr">Or.inr</a> hp
+  | inr hq =&gt; exact <a href="../.././Init/Prelude.html#Or.inl">Or.inl</a> hq
+
+example (h : p ∨ q) : q ∨ p := by
+  rcases h with hp | hq
+  · exact <a href="../.././Init/Prelude.html#Or.inr">Or.inr</a> hp
+  · exact <a href="../.././Init/Prelude.html#Or.inl">Or.inl</a> hq
+</code></pre><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Tactic.cases'" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

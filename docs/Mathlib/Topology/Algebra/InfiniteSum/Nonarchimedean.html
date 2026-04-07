@@ -1,0 +1,235 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.Algebra.InfiniteSum.Nonarchimedean</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.Algebra.InfiniteSum.Nonarchimedean";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">Algebra</span>.<span class="name">InfiniteSum</span>.<span class="name">Nonarchimedean</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Finite.html">Mathlib.Algebra.Group.Subgroup.Finite</a></li><li><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/GroupCompletion.html">Mathlib.Topology.Algebra.InfiniteSum.GroupCompletion</a></li><li><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Ring.html">Mathlib.Topology.Algebra.InfiniteSum.Ring</a></li><li><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Completion.html">Mathlib.Topology.Algebra.Nonarchimedean.Completion</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.Algebra.InfiniteSum.Nonarchimedean" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#NonarchimedeanGroup.cauchySeq_prod_of_tendsto_cofinite_one"><span class="name">NonarchimedeanGroup</span>.<span class="name">cauchySeq_prod_of_tendsto_cofinite_one</span></a></div><div class="nav_link"><a class="break_within" href="#NonarchimedeanAddGroup.cauchySeq_sum_of_tendsto_cofinite_zero"><span class="name">NonarchimedeanAddGroup</span>.<span class="name">cauchySeq_sum_of_tendsto_cofinite_zero</span></a></div><div class="nav_link"><a class="break_within" href="#NonarchimedeanGroup.cauchySeq_of_tendsto_div_nhds_one"><span class="name">NonarchimedeanGroup</span>.<span class="name">cauchySeq_of_tendsto_div_nhds_one</span></a></div><div class="nav_link"><a class="break_within" href="#NonarchimedeanAddGroup.cauchySeq_of_tendsto_sub_nhds_zero"><span class="name">NonarchimedeanAddGroup</span>.<span class="name">cauchySeq_of_tendsto_sub_nhds_zero</span></a></div><div class="nav_link"><a class="break_within" href="#NonarchimedeanGroup.multipliable_of_tendsto_cofinite_one"><span class="name">NonarchimedeanGroup</span>.<span class="name">multipliable_of_tendsto_cofinite_one</span></a></div><div class="nav_link"><a class="break_within" href="#NonarchimedeanAddGroup.summable_of_tendsto_cofinite_zero"><span class="name">NonarchimedeanAddGroup</span>.<span class="name">summable_of_tendsto_cofinite_zero</span></a></div><div class="nav_link"><a class="break_within" href="#NonarchimedeanGroup.multipliable_iff_tendsto_cofinite_one"><span class="name">NonarchimedeanGroup</span>.<span class="name">multipliable_iff_tendsto_cofinite_one</span></a></div><div class="nav_link"><a class="break_within" href="#NonarchimedeanAddGroup.summable_iff_tendsto_cofinite_zero"><span class="name">NonarchimedeanAddGroup</span>.<span class="name">summable_iff_tendsto_cofinite_zero</span></a></div><div class="nav_link"><a class="break_within" href="#HasSum.mul_of_nonarchimedean"><span class="name">HasSum</span>.<span class="name">mul_of_nonarchimedean</span></a></div><div class="nav_link"><a class="break_within" href="#Summable.mul_of_nonarchimedean"><span class="name">Summable</span>.<span class="name">mul_of_nonarchimedean</span></a></div><div class="nav_link"><a class="break_within" href="#tsum_mul_tsum_of_nonarchimedean"><span class="name">tsum_mul_tsum_of_nonarchimedean</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Infinite-sums-and-products-in-nonarchimedean-abelian-groups" class="markdown-heading">Infinite sums and products in nonarchimedean abelian groups <a class="hover-link" href="#Infinite-sums-and-products-in-nonarchimedean-abelian-groups">#</a></h1><p>Let <code>G</code> be a complete nonarchimedean abelian group and let <code>f : α → G</code> be a function. We prove that
+<code>f</code> is unconditionally summable if and only if <code>f a</code> tends to zero on the cofinite filter on <code>α</code>
+(<code><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#NonarchimedeanAddGroup.summable_iff_tendsto_cofinite_zero">NonarchimedeanAddGroup.summable_iff_tendsto_cofinite_zero</a></code>). We also prove the analogous result in
+the multiplicative setting (<code><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#NonarchimedeanGroup.multipliable_iff_tendsto_cofinite_one">NonarchimedeanGroup.multipliable_iff_tendsto_cofinite_one</a></code>).</p><p>We also prove that multiplication distributes over arbitrarily indexed sums in a nonarchimedean
+ring. That is, let <code>R</code> be a nonarchimedean ring, let <code>f : α → R</code> be a function that sums to <code>a : R</code>,
+and let <code>g : β → R</code> be a function that sums to <code>b : R</code>. Then <code>fun (i : α × β) ↦ (f i.1) * (g i.2)</code>
+sums to <code>a * b</code> (<code><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#HasSum.mul_of_nonarchimedean">HasSum.mul_of_nonarchimedean</a></code>).</p></div><div class="decl" id="NonarchimedeanGroup.cauchySeq_prod_of_tendsto_cofinite_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L37-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#NonarchimedeanGroup.cauchySeq_prod_of_tendsto_cofinite_one"><span class="name">NonarchimedeanGroup</span>.<span class="name">cauchySeq_prod_of_tendsto_cofinite_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformGroup">IsUniformGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanGroup">NonarchimedeanGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">f</span> <a href="../../../.././Mathlib/Order/Filter/Cofinite.html#Filter.cofinite">Filter.cofinite</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">1</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CauchySeq">CauchySeq</a> <span class="fn">fun (<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>) =&gt; <span class="fn">∏ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></span></span></span></div></div><p>Let <code>G</code> be a nonarchimedean multiplicative abelian group, and let <code>f : α → G</code> be a function that
+tends to one on the filter of cofinite sets. For each finite subset of <code>α</code>, consider the partial
+product of <code>f</code> on that subset. These partial products form a Cauchy filter.</p></div></div><div class="decl" id="NonarchimedeanAddGroup.cauchySeq_sum_of_tendsto_cofinite_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L40-L42">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#NonarchimedeanAddGroup.cauchySeq_sum_of_tendsto_cofinite_zero"><span class="name">NonarchimedeanAddGroup</span>.<span class="name">cauchySeq_sum_of_tendsto_cofinite_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanAddGroup">NonarchimedeanAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">f</span> <a href="../../../.././Mathlib/Order/Filter/Cofinite.html#Filter.cofinite">Filter.cofinite</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CauchySeq">CauchySeq</a> <span class="fn">fun (<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">α</span></span>) =&gt; <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></span></span></span></div></div><p>Let <code>G</code> be a nonarchimedean additive abelian group, and let <code>f : α → G</code> be a
+function that tends to zero on the filter of cofinite sets. For each finite subset of <code>α</code>, consider
+the partial sum of <code>f</code> on that subset. These partial sums form a Cauchy filter.</p></div></div><div class="decl" id="NonarchimedeanGroup.cauchySeq_of_tendsto_div_nhds_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L62-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#NonarchimedeanGroup.cauchySeq_of_tendsto_div_nhds_one"><span class="name">NonarchimedeanGroup</span>.<span class="name">cauchySeq_of_tendsto_div_nhds_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformGroup">IsUniformGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanGroup">NonarchimedeanGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">f</span> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span> <a href="../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><span class="fn">f</span> <span class="fn">n</span></span>)</span> <a href="../../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">1</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CauchySeq">CauchySeq</a> <span class="fn">f</span></span></div></div><p>Let <code>G</code> be a nonarchimedean abelian group, and let <code>f : ℕ → G</code> be a function
+such that the quotients <code>f (n + 1) / f n</code> tend to one. Then the function is a Cauchy sequence.</p></div></div><div class="decl" id="NonarchimedeanAddGroup.cauchySeq_of_tendsto_sub_nhds_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L64-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#NonarchimedeanAddGroup.cauchySeq_of_tendsto_sub_nhds_zero"><span class="name">NonarchimedeanAddGroup</span>.<span class="name">cauchySeq_of_tendsto_sub_nhds_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanAddGroup">NonarchimedeanAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">f</span> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">n</span></span>)</span> <a href="../../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CauchySeq">CauchySeq</a> <span class="fn">f</span></span></div></div><p>Let <code>G</code> be a nonarchimedean additive abelian group, and let <code>f : ℕ → G</code> be a
+function such that the differences <code>f (n + 1) - f n</code> tend to zero.
+Then the function is a Cauchy sequence.</p></div></div><div class="decl" id="NonarchimedeanGroup.multipliable_of_tendsto_cofinite_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L88-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#NonarchimedeanGroup.multipliable_of_tendsto_cofinite_one"><span class="name">NonarchimedeanGroup</span>.<span class="name">multipliable_of_tendsto_cofinite_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformGroup">IsUniformGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanGroup">NonarchimedeanGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">f</span> <a href="../../../.././Mathlib/Order/Filter/Cofinite.html#Filter.cofinite">Filter.cofinite</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">1</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#Multipliable">Multipliable</a> <span class="fn">f</span></span></div></div><p>Let <code>G</code> be a complete nonarchimedean multiplicative abelian group, and let <code>f : α → G</code> be a
+function that tends to one on the filter of cofinite sets. Then <code>f</code> is unconditionally
+multipliable.</p></div></div><div class="decl" id="NonarchimedeanAddGroup.summable_of_tendsto_cofinite_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L91-L93">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#NonarchimedeanAddGroup.summable_of_tendsto_cofinite_zero"><span class="name">NonarchimedeanAddGroup</span>.<span class="name">summable_of_tendsto_cofinite_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanAddGroup">NonarchimedeanAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">f</span> <a href="../../../.././Mathlib/Order/Filter/Cofinite.html#Filter.cofinite">Filter.cofinite</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#Summable">Summable</a> <span class="fn">f</span></span></div></div><p>Let <code>G</code> be a complete nonarchimedean additive abelian group, and let <code>f : α → G</code>
+be a function that tends to zero on the filter of cofinite sets. Then <code>f</code> is unconditionally
+summable.</p></div></div><div class="decl" id="NonarchimedeanGroup.multipliable_iff_tendsto_cofinite_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L98-L105">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#NonarchimedeanGroup.multipliable_iff_tendsto_cofinite_one"><span class="name">NonarchimedeanGroup</span>.<span class="name">multipliable_iff_tendsto_cofinite_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformGroup">IsUniformGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanGroup">NonarchimedeanGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#Multipliable">Multipliable</a> <span class="fn">f</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">f</span> <a href="../../../.././Mathlib/Order/Filter/Cofinite.html#Filter.cofinite">Filter.cofinite</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">1</span>)</span></span></div></div><p>Let <code>G</code> be a complete nonarchimedean multiplicative abelian group. Then a function <code>f : α → G</code>
+is unconditionally multipliable if and only if it tends to one on the filter of cofinite sets.</p></div></div><div class="decl" id="NonarchimedeanAddGroup.summable_iff_tendsto_cofinite_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L100-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#NonarchimedeanAddGroup.summable_iff_tendsto_cofinite_zero"><span class="name">NonarchimedeanAddGroup</span>.<span class="name">summable_iff_tendsto_cofinite_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanAddGroup">NonarchimedeanAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#Summable">Summable</a> <span class="fn">f</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">f</span> <a href="../../../.././Mathlib/Order/Filter/Cofinite.html#Filter.cofinite">Filter.cofinite</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span></span></div></div><p>Let <code>G</code> be a complete nonarchimedean additive abelian group. Then a function
+<code>f : α → G</code> is unconditionally summable if and only if it tends to zero on the filter of cofinite
+sets.</p></div></div><div class="decl" id="HasSum.mul_of_nonarchimedean"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L122-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#HasSum.mul_of_nonarchimedean"><span class="name">HasSum</span>.<span class="name">mul_of_nonarchimedean</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanRing">NonarchimedeanRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasSum">HasSum</a> <span class="fn">f</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasSum">HasSum</a> <span class="fn">g</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasSum">HasSum</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">α</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn"><span class="fn">i</span>.1</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">g</span> <span class="fn"><span class="fn">i</span>.2</span></span>)</span> (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span>)</span></div></div><p>Let <code>R</code> be a nonarchimedean ring, let <code>f : α → R</code> be a function that sums to <code>a : R</code>,
+and let <code>g : β → R</code> be a function that sums to <code>b : R</code>. Then <code>fun i : α × β ↦ f i.1 * g i.2</code>
+sums to <code>a * b</code>.</p></div></div><div class="decl" id="Summable.mul_of_nonarchimedean"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L132-L136">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#Summable.mul_of_nonarchimedean"><span class="name">Summable</span>.<span class="name">mul_of_nonarchimedean</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanRing">NonarchimedeanRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#Summable">Summable</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#Summable">Summable</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#Summable">Summable</a> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">α</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn"><span class="fn">i</span>.1</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">g</span> <span class="fn"><span class="fn">i</span>.2</span></span></span></span></div></div><p>Let <code>R</code> be a nonarchimedean ring. If functions <code>f : α → R</code> and <code>g : β → R</code> are summable, then
+so is <code>fun i : α × β ↦ f i.1 * g i.2</code>.</p></div></div><div class="decl" id="tsum_mul_tsum_of_nonarchimedean"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.lean#L138-L140">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Nonarchimedean.html#tsum_mul_tsum_of_nonarchimedean"><span class="name">tsum_mul_tsum_of_nonarchimedean</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Nonarchimedean/Basic.html#NonarchimedeanRing">NonarchimedeanRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Basic.html#T0Space">T0Space</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#Summable">Summable</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#Summable">Summable</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#tsum">∑'</a> (<span class="fn">i</span> : <span class="fn">α</span>)<a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#tsum">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#tsum">∑'</a> (<span class="fn">i</span> : <span class="fn">β</span>)<a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#tsum">,</a> <span class="fn"><span class="fn">g</span> <span class="fn">i</span></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#tsum">∑'</a> (<span class="fn">i</span> : <span class="fn">α</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span>)<a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#tsum">,</a> <span class="fn"><span class="fn">f</span> <span class="fn"><span class="fn">i</span>.1</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">g</span> <span class="fn"><span class="fn">i</span>.2</span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

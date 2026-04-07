@@ -1,0 +1,554 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../../.././style.css"></link><link rel="icon" href="../../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.Limits.Preserves.Shapes.Zero</title><script defer="true" src="../../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.Limits.Preserves.Shapes.Zero";</script><script type="module" src="../../../../.././jump-src.js"></script><script type="module" src="../../../../.././search.js"></script><script type="module" src="../../../../.././expand-nav.js"></script><script type="module" src="../../../../.././how-about.js"></script><script type="module" src="../../../../.././instances.js"></script><script type="module" src="../../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">Limits</span>.<span class="name">Preserves</span>.<span class="name">Shapes</span>.<span class="name">Zero</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../../.././Init.html">Init</a></li><li><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html">Mathlib.CategoryTheory.Limits.Shapes.ZeroMorphisms</a></li><li><a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Terminal.html">Mathlib.CategoryTheory.Limits.Preserves.Shapes.Terminal</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.Limits.Preserves.Shapes.Zero" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.PreservesZeroMorphisms"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">PreservesZeroMorphisms</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.map_zero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">map_zero</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.map_isZero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">map_isZero</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.zero_of_map_zero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">zero_of_map_zero</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.map_eq_zero_iff"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">map_eq_zero_iff</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesZeroMorphisms_of_isLeftAdjoint"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_isLeftAdjoint</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesZeroMorphisms_of_isRightAdjoint"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_isRightAdjoint</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesZeroMorphisms_of_full"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_full</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesZeroMorphisms_comp"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_comp</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesZeroMorphisms_of_iso"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_iso</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesZeroMorphisms_evaluation_obj"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_evaluation_obj</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.instPreservesZeroMorphismsFlipOfObj"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">instPreservesZeroMorphismsFlipOfObj</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.instPreservesZeroMorphismsObjFlip"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">instPreservesZeroMorphismsObjFlip</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.whiskerRight_zero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">whiskerRight_zero</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.FullyFaithful.preservesZeroMorphisms"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">FullyFaithful</span>.<span class="name">preservesZeroMorphisms</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.mapZeroObject"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">mapZeroObject</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.mapZeroObject_hom"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">mapZeroObject_hom</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.mapZeroObject_inv"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">mapZeroObject_inv</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesZeroMorphisms_of_map_zero_object"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_map_zero_object</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesZeroMorphisms_of_preserves_initial_object"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_preserves_initial_object</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesZeroMorphisms_of_preserves_terminal_object"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_preserves_terminal_object</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesTerminalObject_of_preservesZeroMorphisms"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesTerminalObject_of_preservesZeroMorphisms</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesInitialObject_of_preservesZeroMorphisms"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesInitialObject_of_preservesZeroMorphisms</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesLimitsOfShape_of_isZero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesLimitsOfShape_of_isZero</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesColimitsOfShape_of_isZero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesColimitsOfShape_of_isZero</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesLimitsOfSize_of_isZero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesLimitsOfSize_of_isZero</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.preservesColimitsOfSize_of_isZero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesColimitsOfSize_of_isZero</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Preservation-of-zero-objects-and-zero-morphisms" class="markdown-heading">Preservation of zero objects and zero morphisms <a class="hover-link" href="#Preservation-of-zero-objects-and-zero-morphisms">#</a></h1><p>We define the class <code><a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></code> and show basic properties.</p><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><p>We provide the following results:</p><ul><li>Left adjoints and right adjoints preserve zero morphisms;</li><li>full functors preserve zero morphisms;</li><li>if both categories involved have a zero object, then a functor preserves zero morphisms if and
+only if it preserves the zero object;</li><li>functors which preserve initial or terminal objects preserve zero morphisms.</li></ul></div><div class="decl" id="CategoryTheory.Functor.PreservesZeroMorphisms"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L47-L50">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">PreservesZeroMorphisms</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../../.././foundational_types.html">Prop</a></div></div><p>A functor preserves zero morphisms if it sends zero morphisms to zero morphisms.</p><ul class="structure_fields" id="CategoryTheory.Functor.PreservesZeroMorphisms.mk"><li id="CategoryTheory.Functor.PreservesZeroMorphisms.map_zero" class="structure_field"><div class="structure_field_info">map_zero<span class="decl_args">
+<span class="fn">(<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>)</span></span>
+ : <span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">0</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div><div class="structure_field_doc"><p>For any pair objects <code>F (0: X ⟶ Y) = (0 : F X ⟶ F Y)</code></p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-CategoryTheory.Functor.PreservesZeroMorphisms" class="instances-list"></ul></details></div></div><div class="decl" id="CategoryTheory.Functor.map_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L52-L55">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.map_zero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">map_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">0</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.map_isZero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L57-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.map_isZero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">map_isZero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hX</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.IsZero">Limits.IsZero</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.IsZero">Limits.IsZero</a> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.zero_of_map_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L62-L64">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.zero_of_map_zero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">zero_of_map_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/FullyFaithful.html#CategoryTheory.Functor.Faithful">Faithful</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">X</span> <a href="../../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">f</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.map_eq_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L66-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.map_eq_zero_iff"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">map_eq_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/FullyFaithful.html#CategoryTheory.Functor.Faithful">Faithful</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">X</span> <a href="../../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">f</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../../../.././Init/Core.html#Iff">↔</a> <span class="fn">f</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.preservesZeroMorphisms_of_isLeftAdjoint"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L73-L84">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesZeroMorphisms_of_isLeftAdjoint"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_isLeftAdjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsLeftAdjoint">IsLeftAdjoint</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.preservesZeroMorphisms_of_isRightAdjoint"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L87-L97">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesZeroMorphisms_of_isRightAdjoint"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_isRightAdjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">G</span>.<a href="../../../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">G</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.preservesZeroMorphisms_of_full"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L99-L104">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesZeroMorphisms_of_full"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_full</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/FullyFaithful.html#CategoryTheory.Functor.Full">Full</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.preservesZeroMorphisms_comp"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L107-L109">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesZeroMorphisms_comp"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">G</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">G</span>)</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.preservesZeroMorphisms_of_iso"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L111-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesZeroMorphisms_of_iso"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_iso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁ </span><span class="fn">F₂</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F₁</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">F₁</span> <a href="../../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">F₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">F₂</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.preservesZeroMorphisms_evaluation_obj"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L116-L117">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesZeroMorphisms_evaluation_obj"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_evaluation_obj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">j</span> : <span class="fn">D</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/CategoryTheory/Products/Basic.html#CategoryTheory.evaluation">evaluation</a> <span class="fn">D</span> <span class="fn">C</span>)</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">j</span>)</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.instPreservesZeroMorphismsFlipOfObj"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L119-L120">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.instPreservesZeroMorphismsFlipOfObj"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">instPreservesZeroMorphismsFlipOfObj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">(<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">X</span> : <span class="fn">C</span>), <span class="fn"><span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X</span>)</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.instPreservesZeroMorphismsObjFlip"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L122-L123">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.instPreservesZeroMorphismsObjFlip"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">instPreservesZeroMorphismsObjFlip</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">(<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Y</span> : <span class="fn">D</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span>)</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.whiskerRight_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L126-L127">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.whiskerRight_zero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">whiskerRight_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F </span><span class="fn">G</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskerRight">whiskerRight</a> <span class="fn">0</span> <span class="fn">H</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.FullyFaithful.preservesZeroMorphisms"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L130-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.FullyFaithful.preservesZeroMorphisms"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">FullyFaithful</span>.<span class="name">preservesZeroMorphisms</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/FullyFaithful.html#CategoryTheory.Functor.FullyFaithful">FullyFaithful</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.mapZeroObject"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L146-L152">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.mapZeroObject"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">mapZeroObject</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">0</span></span> <a href="../../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">0</span></div></div><p>A functor that preserves zero morphisms also preserves the zero object.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.mapZeroObject">mapZeroObject</a></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.mk">{</a> <span class="fn">hom</span> := <span class="fn">0</span>, <span class="fn">inv</span> := <span class="fn">0</span>, <span class="fn">hom_inv_id</span> := <span class="fn">⋯</span>, <span class="fn">inv_hom_id</span> := <span class="fn">⋯</span> <a href="../../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.mk">}</a></li></ul></details><details id="instances-for-list-CategoryTheory.Functor.mapZeroObject" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Functor.mapZeroObject_hom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L147-L147">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.mapZeroObject_hom"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">mapZeroObject_hom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.mapZeroObject">mapZeroObject</a></span>.<a href="../../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.mapZeroObject_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L147-L147">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.mapZeroObject_inv"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">mapZeroObject_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.mapZeroObject">mapZeroObject</a></span>.<a href="../../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.preservesZeroMorphisms_of_map_zero_object"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L156-L161">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesZeroMorphisms_of_map_zero_object"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_map_zero_object</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">0</span></span> <a href="../../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.preservesZeroMorphisms_of_preserves_initial_object"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L163-L167">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesZeroMorphisms_of_preserves_initial_object"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_preserves_initial_object</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesColimit">Limits.PreservesColimit</a> <span class="fn">(<a href="../../../../.././Mathlib/CategoryTheory/PEmpty.html#CategoryTheory.Functor.empty">empty</a> <span class="fn">C</span>)</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.preservesZeroMorphisms_of_preserves_terminal_object"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L169-L173">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesZeroMorphisms_of_preserves_terminal_object"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesZeroMorphisms_of_preserves_terminal_object</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesLimit">Limits.PreservesLimit</a> <span class="fn">(<a href="../../../../.././Mathlib/CategoryTheory/PEmpty.html#CategoryTheory.Functor.empty">empty</a> <span class="fn">C</span>)</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.preservesTerminalObject_of_preservesZeroMorphisms"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L177-L181">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesTerminalObject_of_preservesZeroMorphisms"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesTerminalObject_of_preservesZeroMorphisms</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesLimit">Limits.PreservesLimit</a> <span class="fn">(<a href="../../../../.././Mathlib/CategoryTheory/PEmpty.html#CategoryTheory.Functor.empty">empty</a> <span class="fn">C</span>)</span> <span class="fn">F</span></span></div></div><p>Preserving zero morphisms implies preserving terminal objects.</p></div></div><div class="decl" id="CategoryTheory.Functor.preservesInitialObject_of_preservesZeroMorphisms"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L183-L188">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesInitialObject_of_preservesZeroMorphisms"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesInitialObject_of_preservesZeroMorphisms</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.PreservesZeroMorphisms">PreservesZeroMorphisms</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesColimit">Limits.PreservesColimit</a> <span class="fn">(<a href="../../../../.././Mathlib/CategoryTheory/PEmpty.html#CategoryTheory.Functor.empty">empty</a> <span class="fn">C</span>)</span> <span class="fn">F</span></span></div></div><p>Preserving zero morphisms implies preserving terminal objects.</p></div></div><div class="decl" id="CategoryTheory.Functor.preservesLimitsOfShape_of_isZero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L199-L203">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesLimitsOfShape_of_isZero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesLimitsOfShape_of_isZero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hG</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.IsZero">Limits.IsZero</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">J</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">J</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesLimitsOfShape">Limits.PreservesLimitsOfShape</a> <span class="fn">J</span> <span class="fn">G</span></span></div></div><p>A zero functor preserves limits.</p></div></div><div class="decl" id="CategoryTheory.Functor.preservesColimitsOfShape_of_isZero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L205-L209">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesColimitsOfShape_of_isZero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesColimitsOfShape_of_isZero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hG</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.IsZero">Limits.IsZero</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">J</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">J</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesColimitsOfShape">Limits.PreservesColimitsOfShape</a> <span class="fn">J</span> <span class="fn">G</span></span></div></div><p>A zero functor preserves colimits.</p></div></div><div class="decl" id="CategoryTheory.Functor.preservesLimitsOfSize_of_isZero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L211-L213">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesLimitsOfSize_of_isZero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesLimitsOfSize_of_isZero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hG</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.IsZero">Limits.IsZero</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesLimitsOfSize">Limits.PreservesLimitsOfSize.{v, u, v₁, v₂, u₁, u₂}</a> <span class="fn">G</span></span></div></div><p>A zero functor preserves limits.</p></div></div><div class="decl" id="CategoryTheory.Functor.preservesColimitsOfSize_of_isZero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.lean#L215-L217">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Shapes/Zero.html#CategoryTheory.Functor.preservesColimitsOfSize_of_isZero"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">preservesColimitsOfSize_of_isZero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.HasZeroObject">Limits.HasZeroObject</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroMorphisms.html#CategoryTheory.Limits.HasZeroMorphisms">Limits.HasZeroMorphisms</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hG</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Shapes/ZeroObjects.html#CategoryTheory.Limits.IsZero">Limits.IsZero</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesColimitsOfSize">Limits.PreservesColimitsOfSize.{v, u, v₁, v₂, u₁, u₂}</a> <span class="fn">G</span></span></div></div><p>A zero functor preserves colimits.</p></div></div></main>
+<nav class="nav"><iframe src="../../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

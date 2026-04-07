@@ -1,0 +1,504 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.AbsoluteValue.Equivalence</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.AbsoluteValue.Equivalence";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">AbsoluteValue</span>.<span class="name">Equivalence</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Analysis/Normed/Field/WithAbs.html">Mathlib.Analysis.Normed.Field.WithAbs</a></li><li><a href="../../.././Mathlib/Analysis/SpecialFunctions/Pow/Real.html">Mathlib.Analysis.SpecialFunctions.Pow.Real</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.AbsoluteValue.Equivalence" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.refl"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">refl</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.rfl"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">rfl</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.symm"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">symm</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.trans"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">trans</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.instSetoid"><span class="name">AbsoluteValue</span>.<span class="name">instSetoid</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.le_iff_le"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">le_iff_le</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.lt_iff_lt"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">lt_iff_lt</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.eq_iff_eq"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">eq_iff_eq</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.lt_one_iff"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">lt_one_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.one_lt_iff"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">one_lt_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.le_one_iff"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">le_one_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.one_le_iff"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">one_le_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.eq_one_iff"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">eq_one_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.isNontrivial_congr"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">isNontrivial_congr</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.isNontrivial"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">isNontrivial</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.isEquiv_trivial_iff_eq_trivial"><span class="name">AbsoluteValue</span>.<span class="name">isEquiv_trivial_iff_eq_trivial</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.isEquiv_iff_lt_one_iff"><span class="name">AbsoluteValue</span>.<span class="name">isEquiv_iff_lt_one_iff</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.isEquiv_of_lt_one_imp"><span class="name">AbsoluteValue</span>.<span class="name">isEquiv_of_lt_one_imp</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.exists_lt_one_one_le_of_not_isEquiv"><span class="name">AbsoluteValue</span>.<span class="name">exists_lt_one_one_le_of_not_isEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.exists_one_lt_lt_one_of_not_isEquiv"><span class="name">AbsoluteValue</span>.<span class="name">exists_one_lt_lt_one_of_not_isEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.exists_one_lt_lt_one_pi_of_not_isEquiv"><span class="name">AbsoluteValue</span>.<span class="name">exists_one_lt_lt_one_pi_of_not_isEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.log_div_log_pos"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">log_div_log_pos</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.log_div_log_eq_log_div_log"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">log_div_log_eq_log_div_log</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.isEquiv_iff_exists_rpow_eq"><span class="name">AbsoluteValue</span>.<span class="name">isEquiv_iff_exists_rpow_eq</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.equivWithAbs_image_mem_nhds_zero"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">equivWithAbs_image_mem_nhds_zero</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.IsEquiv.isEmbedding_equivWithAbs"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">isEmbedding_equivWithAbs</span></a></div><div class="nav_link"><a class="break_within" href="#AbsoluteValue.isEquiv_iff_isHomeomorph"><span class="name">AbsoluteValue</span>.<span class="name">isEquiv_iff_isHomeomorph</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Equivalence-of-real-valued-absolute-values" class="markdown-heading">Equivalence of real-valued absolute values <a class="hover-link" href="#Equivalence-of-real-valued-absolute-values">#</a></h1><p>Two absolute values <code>v₁, v₂ : <a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> R ℝ</code> are <em>equivalent</em> if there exists a
+positive real number <code>c</code> such that <code>v₁ x ^ c = v₂ x</code> for all <code>x : R</code>.</p></div><div class="decl" id="AbsoluteValue.IsEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L27-L33">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>Two absolute values <code>v</code> and <code>w</code> are <em>equivalent</em> if <code>v x ≤ v y</code> precisely when
+<code>w x ≤ w y</code>.</p><p>Note that for real absolute values this condition is equivalent to the existence of a positive
+real number <code>c</code> such that <code>v x ^ c = w x</code> for all <code>x</code>. See
+<code><a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.isEquiv_iff_exists_rpow_eq">AbsoluteValue.isEquiv_iff_exists_rpow_eq</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">R</span>), <span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">v</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">w</span> <span class="fn">y</span></span></span></li></ul></details><details id="instances-for-list-AbsoluteValue.IsEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="AbsoluteValue.IsEquiv.refl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L35-L35">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.refl"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">refl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">v</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.rfl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L39-L39">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.rfl"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">rfl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">v</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L41-L41">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.symm"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">v</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.trans"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L43-L44">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.trans"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">trans</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w </span><span class="fn">u</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">u</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">u</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.instSetoid"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L46-L52">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.instSetoid"><span class="name">AbsoluteValue</span>.<span class="name">instSetoid</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Core.html#Setoid">Setoid</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.instSetoid">AbsoluteValue.instSetoid</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Core.html#Setoid.mk">{</a> <span class="fn">r</span> := <a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">AbsoluteValue.IsEquiv</a>, <span class="fn">iseqv</span> := <span class="fn">⋯</span> <a href="../../.././Init/Core.html#Setoid.mk">}</a></li></ul></details></div></div><div class="decl" id="AbsoluteValue.IsEquiv.le_iff_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L54-L54">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.le_iff_le"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">le_iff_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">v</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">w</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.lt_iff_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L56-L57">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.lt_iff_lt"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">lt_iff_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">v</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">w</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.eq_iff_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L59-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.eq_iff_eq"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">eq_iff_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">v</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">w</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.lt_one_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L64-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.lt_one_iff"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">lt_one_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.one_lt_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L68-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.one_lt_iff"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">one_lt_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">1</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">1</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.le_one_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L72-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.le_one_iff"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">le_one_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">1</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.one_le_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L76-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.one_le_iff"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">one_le_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.eq_one_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L80-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.eq_one_iff"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">eq_one_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.isNontrivial_congr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L83-L85">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.isNontrivial_congr"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">isNontrivial_congr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.IsNontrivial">IsNontrivial</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.IsNontrivial">IsNontrivial</a></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.isNontrivial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L87-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.isNontrivial"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">isNontrivial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.IsNontrivial">IsNontrivial</a></span> → <span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.IsNontrivial">IsNontrivial</a></span></span></div></div><p><strong>Alias</strong> of the forward direction of <code><a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.isNontrivial_congr">AbsoluteValue.IsEquiv.isNontrivial_congr</a></code>.</p></div></div><div class="decl" id="AbsoluteValue.isEquiv_trivial_iff_eq_trivial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L95-L100">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.isEquiv_trivial_iff_eq_trivial"><span class="name">AbsoluteValue</span>.<span class="name">isEquiv_trivial_iff_eq_trivial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Semifield">Semifield</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidablePred">DecidablePred</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">R</span>) =&gt; <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#NoZeroDivisors">NoZeroDivisors</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.trivial">AbsoluteValue.trivial</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">f</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.trivial">AbsoluteValue.trivial</a></div></div><p>An absolute value is equivalent to the trivial iff it is trivial itself.</p></div></div><div class="decl" id="AbsoluteValue.isEquiv_iff_lt_one_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L104-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.isEquiv_iff_lt_one_iff"><span class="name">AbsoluteValue</span>.<span class="name">isEquiv_iff_lt_one_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Semifield">Semifield</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">R</span>), <span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.isEquiv_of_lt_one_imp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L115-L128">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.isEquiv_of_lt_one_imp"><span class="name">AbsoluteValue</span>.<span class="name">isEquiv_of_lt_one_imp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Semifield">Semifield</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#Archimedean">Archimedean</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/ExistsOfLE.html#ExistsAddOfLE">ExistsAddOfLE</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.IsNontrivial">IsNontrivial</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">R</span>), <span class="fn"><span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span> → <span class="fn"><span class="fn">w</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.exists_lt_one_one_le_of_not_isEquiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L130-L137">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.exists_lt_one_one_le_of_not_isEquiv"><span class="name">AbsoluteValue</span>.<span class="name">exists_lt_one_one_le_of_not_isEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Semifield">Semifield</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#Archimedean">Archimedean</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/ExistsOfLE.html#ExistsAddOfLE">ExistsAddOfLE</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.IsNontrivial">IsNontrivial</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">R</span>), <span class="fn"><span class="fn">v</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">w</span> <span class="fn">a</span></span></span></div></div><p>If <code>v</code> and <code>w</code> are inequivalent absolute values and <code>v</code> is non-trivial, then we can find an <code>a : R</code>
+such that <code>v a &lt; 1</code> while <code>1 ≤ w a</code>.</p></div></div><div class="decl" id="AbsoluteValue.exists_one_lt_lt_one_of_not_isEquiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L139-L149">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.exists_one_lt_lt_one_of_not_isEquiv"><span class="name">AbsoluteValue</span>.<span class="name">exists_one_lt_lt_one_of_not_isEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Semifield">Semifield</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#Archimedean">Archimedean</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/ExistsOfLE.html#ExistsAddOfLE">ExistsAddOfLE</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.IsNontrivial">IsNontrivial</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hw</span> : <span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.IsNontrivial">IsNontrivial</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">R</span>), <span class="fn">1</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">v</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">w</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span></span></div></div><p>If <code>v</code> and <code>w</code> are two non-trivial and inequivalent absolute values then we can find an <code>a : R</code>
+such that <code>1 &lt; v a</code> while <code>w a &lt; 1</code>.</p></div></div><div class="decl" id="AbsoluteValue.exists_one_lt_lt_one_pi_of_not_isEquiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L232-L279">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.exists_one_lt_lt_one_pi_of_not_isEquiv"><span class="name">AbsoluteValue</span>.<span class="name">exists_one_lt_lt_one_pi_of_not_isEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Archimedean/Basic.html#Archimedean">Archimedean</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Order/Basic.html#OrderTopology">OrderTopology</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">R</span> <span class="fn">S</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">(<span class="fn">v</span> <span class="fn">i</span>)</span>.<a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue.IsNontrivial">IsNontrivial</a></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Pairwise.html#Pairwise">Pairwise</a> <span class="fn">fun (<span class="fn">i</span> <span class="fn">j</span> : <span class="fn">ι</span>) =&gt; <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn"><span class="fn">(<span class="fn">v</span> <span class="fn">i</span>)</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">(<span class="fn">v</span> <span class="fn">j</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">a</span> : <span class="fn">R</span>), <span class="fn">1</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">(<span class="fn">v</span> <span class="fn">i</span>)</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ (<span class="fn">j</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">j</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">i</span> → <span class="fn"><span class="fn">(<span class="fn">v</span> <span class="fn">j</span>)</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">1</span></span></span></span></div></div><p>If <code>v : ι → <a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> R S</code> is a finite collection of non-trivial and pairwise inequivalent
+absolute values, then for any <code>i</code> there is some <code>a : R</code> such that <code>1 &lt; v i a</code> and
+<code>v j a &lt; 1</code> for all <code>j ≠ i</code>.</p></div></div><div class="decl" id="AbsoluteValue.IsEquiv.log_div_log_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L289-L294">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.log_div_log_pos"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">log_div_log_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">F</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha₀</span> : <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha₁</span> : <span class="fn"><span class="fn">w</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><a href="../../.././Mathlib/Analysis/SpecialFunctions/Log/Basic.html#Real.log">Real.log</a> <span class="fn">(<span class="fn">w</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><a href="../../.././Mathlib/Analysis/SpecialFunctions/Log/Basic.html#Real.log">Real.log</a> <span class="fn">(<span class="fn">v</span> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.log_div_log_eq_log_div_log"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L296-L325">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.log_div_log_eq_log_div_log"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">log_div_log_eq_log_div_log</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">F</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha₀</span> : <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha₁</span> : <span class="fn"><span class="fn">v</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hb₀</span> : <span class="fn">b</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb₁</span> : <span class="fn"><span class="fn">v</span> <span class="fn">b</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/SpecialFunctions/Log/Basic.html#Real.log">Real.log</a> <span class="fn">(<span class="fn">v</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><a href="../../.././Mathlib/Analysis/SpecialFunctions/Log/Basic.html#Real.log">Real.log</a> <span class="fn">(<span class="fn">w</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/SpecialFunctions/Log/Basic.html#Real.log">Real.log</a> <span class="fn">(<span class="fn">v</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><a href="../../.././Mathlib/Analysis/SpecialFunctions/Log/Basic.html#Real.log">Real.log</a> <span class="fn">(<span class="fn">w</span> <span class="fn">a</span>)</span></span></div></div><p>If $v$ and $w$ are two real absolute values on a field $F$, equivalent in the sense that
+$v(x) \leq v(y)$ if and only if $w(x) \leq w(y)$, then $\frac{\log (v(a))}{\log (w(a))}$ is
+constant for all $0 \neq a\in F$ with $v(a) \neq 1$.</p></div></div><div class="decl" id="AbsoluteValue.isEquiv_iff_exists_rpow_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L327-L345">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.isEquiv_iff_exists_rpow_eq"><span class="name">AbsoluteValue</span>.<span class="name">isEquiv_iff_exists_rpow_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">F</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">c</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>), <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">F</span>) =&gt; <span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">c</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">w</span></span></span></div></div><p>If <code>v</code> and <code>w</code> are two real absolute values on a field <code>F</code>, then <code>v</code> and <code>w</code> are equivalent if
+and only if there exists a positive real constant <code>c</code> such that for all <code>x : R</code>, <code>(f x)^c = g x</code>.</p></div></div><div class="decl" id="AbsoluteValue.IsEquiv.equivWithAbs_image_mem_nhds_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L347-L357">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.equivWithAbs_image_mem_nhds_zero"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">equivWithAbs_image_mem_nhds_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">F</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Ring/WithAbs.html#WithAbs">WithAbs</a> <span class="fn">v</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hU</span> : <span class="fn">U</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Ring/WithAbs.html#WithAbs.congr">WithAbs.congr</a> <span class="fn">v</span> <span class="fn">w</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Ring/Equiv.html#RingEquiv.refl">RingEquiv.refl</a> <span class="fn">F</span>)</span>)</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">U</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span></span></div></div></div></div><div class="decl" id="AbsoluteValue.IsEquiv.isEmbedding_equivWithAbs"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L360-L369">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv.isEmbedding_equivWithAbs"><span class="name">AbsoluteValue</span>.<span class="name">IsEquiv</span>.<span class="name">isEmbedding_equivWithAbs</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">F</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsEmbedding">Topology.IsEmbedding</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Ring/WithAbs.html#WithAbs.congr">WithAbs.congr</a> <span class="fn">v</span> <span class="fn">w</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Ring/Equiv.html#RingEquiv.refl">RingEquiv.refl</a> <span class="fn">F</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="AbsoluteValue.isEquiv_iff_isHomeomorph"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/AbsoluteValue/Equivalence.lean#L371-L382">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.isEquiv_iff_isHomeomorph"><span class="name">AbsoluteValue</span>.<span class="name">isEquiv_iff_isHomeomorph</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v </span><span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Order/AbsoluteValue/Basic.html#AbsoluteValue">AbsoluteValue</a> <span class="fn">F</span> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">v</span>.<a href="../../.././Mathlib/Analysis/AbsoluteValue/Equivalence.html#AbsoluteValue.IsEquiv">IsEquiv</a></span> <span class="fn">w</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Topology/Homeomorph/Defs.html#IsHomeomorph">IsHomeomorph</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Ring/WithAbs.html#WithAbs.congr">WithAbs.congr</a> <span class="fn">v</span> <span class="fn">w</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Ring/Equiv.html#RingEquiv.refl">RingEquiv.refl</a> <span class="fn">F</span>)</span>)</span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

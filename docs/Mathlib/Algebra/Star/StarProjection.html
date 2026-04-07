@@ -1,0 +1,269 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Star.StarProjection</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Star.StarProjection";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Star</span>.<span class="name">StarProjection</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/Group/Idempotent.html">Mathlib.Algebra.Group.Idempotent</a></li><li><a href="../../.././Mathlib/Algebra/Ring/Idempotent.html">Mathlib.Algebra.Ring.Idempotent</a></li><li><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html">Mathlib.Algebra.Star.SelfAdjoint</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Star.StarProjection" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsStarProjection"><span class="name">IsStarProjection</span></a></div><div class="nav_link"><a class="break_within" href="#isStarProjection_iff"><span class="name">isStarProjection_iff</span></a></div><div class="nav_link"><a class="break_within" href="#isStarProjection_iff'"><span class="name">isStarProjection_iff'</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.isStarNormal"><span class="name">IsStarProjection</span>.<span class="name">isStarNormal</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.map"><span class="name">IsStarProjection</span>.<span class="name">map</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.zero"><span class="name">IsStarProjection</span>.<span class="name">zero</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.one"><span class="name">IsStarProjection</span>.<span class="name">one</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.pow_eq"><span class="name">IsStarProjection</span>.<span class="name">pow_eq</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.pow_succ_eq"><span class="name">IsStarProjection</span>.<span class="name">pow_succ_eq</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.one_sub"><span class="name">IsStarProjection</span>.<span class="name">one_sub</span></a></div><div class="nav_link"><a class="break_within" href="#isStarProjection_one_sub_iff"><span class="name">isStarProjection_one_sub_iff</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.of_one_sub"><span class="name">IsStarProjection</span>.<span class="name">of_one_sub</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.mul_one_sub_self"><span class="name">IsStarProjection</span>.<span class="name">mul_one_sub_self</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.one_sub_mul_self"><span class="name">IsStarProjection</span>.<span class="name">one_sub_mul_self</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.add"><span class="name">IsStarProjection</span>.<span class="name">add</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.mul"><span class="name">IsStarProjection</span>.<span class="name">mul</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.sub_of_mul_eq_left"><span class="name">IsStarProjection</span>.<span class="name">sub_of_mul_eq_left</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.sub_of_mul_eq_right"><span class="name">IsStarProjection</span>.<span class="name">sub_of_mul_eq_right</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.sub_iff_mul_eq_left"><span class="name">IsStarProjection</span>.<span class="name">sub_iff_mul_eq_left</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.sub_iff_mul_eq_right"><span class="name">IsStarProjection</span>.<span class="name">sub_iff_mul_eq_right</span></a></div><div class="nav_link"><a class="break_within" href="#IsStarProjection.add_sub_mul_of_commute"><span class="name">IsStarProjection</span>.<span class="name">add_sub_mul_of_commute</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Star-projections" class="markdown-heading">Star projections <a class="hover-link" href="#Star-projections">#</a></h1><p>This file defines star projections, which are self-adjoint idempotents.</p><p>In star-ordered rings, star projections are non-negative.
+(See <code><a href="../../.././Mathlib/Algebra/Order/Star/Basic.html#IsStarProjection.nonneg">IsStarProjection.nonneg</a></code> in <code><a href="../../.././Mathlib/Algebra/Order/Star/Basic.html">Mathlib/Algebra/Order/Star/Basic.lean</a></code>.)</p></div><div class="decl" id="IsStarProjection"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L25-L29">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection"><span class="name">IsStarProjection</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Mul">Mul</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A star projection is a self-adjoint idempotent.</p><ul class="structure_fields" id="IsStarProjection.mk"><li id="IsStarProjection.isIdempotentElem" class="structure_field"><div class="structure_field_info">isIdempotentElem : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Idempotent.html#IsIdempotentElem">IsIdempotentElem</a> <span class="fn">p</span></span></div></li><li id="IsStarProjection.isSelfAdjoint" class="structure_field"><div class="structure_field_info">isSelfAdjoint : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <span class="fn">p</span></span></div></li></ul><details id="instances-for-list-IsStarProjection" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="isStarProjection_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L26-L26">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#isStarProjection_iff"><span class="name">isStarProjection_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Mul">Mul</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Idempotent.html#IsIdempotentElem">IsIdempotentElem</a> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsSelfAdjoint">IsSelfAdjoint</a> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="isStarProjection_iff'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L38-L40">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#isStarProjection_iff'"><span class="name">isStarProjection_iff'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Mul">Mul</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span></div></div></div></div><div class="decl" id="IsStarProjection.isStarNormal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L42-L44">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.isStarNormal"><span class="name">IsStarProjection</span>.<span class="name">isStarNormal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Mul">Mul</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/SelfAdjoint.html#IsStarNormal">IsStarNormal</a> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="IsStarProjection.map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L46-L50">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.map"><span class="name">IsStarProjection</span>.<span class="name">map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Mul">Mul</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Mul">Mul</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarHomClass">StarHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MulHomClass">MulHomClass</a> <span class="fn">F</span> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="IsStarProjection.zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L53-L55">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.zero"><span class="name">IsStarProjection</span>.<span class="name">zero</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalNonAssocSemiring">NonUnitalNonAssocSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarAddMonoid">StarAddMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">0</span></span></div></div></div></div><div class="decl" id="IsStarProjection.one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L58-L60">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.one"><span class="name">IsStarProjection</span>.<span class="name">one</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#MulOneClass">MulOneClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarMul">StarMul</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">1</span></span></div></div></div></div><div class="decl" id="IsStarProjection.pow_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L62-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.pow_eq"><span class="name">IsStarProjection</span>.<span class="name">pow_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">n</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span></div></div></div></div><div class="decl" id="IsStarProjection.pow_succ_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L65-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.pow_succ_eq"><span class="name">IsStarProjection</span>.<span class="name">pow_succ_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">n</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>) <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span></div></div></div></div><div class="decl" id="IsStarProjection.one_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L71-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.one_sub"><span class="name">IsStarProjection</span>.<span class="name">one_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonAssocRing">NonAssocRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">p</span>)</span></div></div></div></div><div class="decl" id="isStarProjection_one_sub_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L75-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#isStarProjection_one_sub_iff"><span class="name">isStarProjection_one_sub_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonAssocRing">NonAssocRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">p</span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="IsStarProjection.of_one_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L79-L79">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.of_one_sub"><span class="name">IsStarProjection</span>.<span class="name">of_one_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonAssocRing">NonAssocRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">p</span>)</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span></span></div></div><p><strong>Alias</strong> of the forward direction of <code><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#isStarProjection_one_sub_iff">isStarProjection_one_sub_iff</a></code>.</p></div></div><div class="decl" id="IsStarProjection.mul_one_sub_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L81-L82">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.mul_one_sub_self"><span class="name">IsStarProjection</span>.<span class="name">mul_one_sub_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonAssocRing">NonAssocRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> (<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">p</span>) <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="IsStarProjection.one_sub_mul_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L84-L85">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.one_sub_mul_self"><span class="name">IsStarProjection</span>.<span class="name">one_sub_mul_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonAssocRing">NonAssocRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#Star">Star</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">1</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">p</span>) <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="IsStarProjection.add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L89-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.add"><span class="name">IsStarProjection</span>.<span class="name">add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalNonAssocSemiring">NonUnitalNonAssocSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq</span> : <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">q</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">q</span>)</span></div></div><p>The sum of star projections is a star projection if their product is <code>0</code>.</p></div></div><div class="decl" id="IsStarProjection.mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L98-L103">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.mul"><span class="name">IsStarProjection</span>.<span class="name">mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalSemiring">NonUnitalSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Commute/Defs.html#Commute">Commute</a> <span class="fn">p</span> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">q</span>)</span></div></div><p>The product of star projections is a star projection if they commute.</p></div></div><div class="decl" id="IsStarProjection.sub_of_mul_eq_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L105-L112">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.sub_of_mul_eq_left"><span class="name">IsStarProjection</span>.<span class="name">sub_of_mul_eq_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalNonAssocRing">NonUnitalNonAssocRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq</span> : <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">q</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> (<span class="fn">q</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">p</span>)</span></div></div><p><code>q - p</code> is a star projection when <code>p * q = p</code>.</p></div></div><div class="decl" id="IsStarProjection.sub_of_mul_eq_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L114-L118">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.sub_of_mul_eq_right"><span class="name">IsStarProjection</span>.<span class="name">sub_of_mul_eq_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalNonAssocRing">NonUnitalNonAssocRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hqp</span> : <span class="fn">q</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> (<span class="fn">q</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">p</span>)</span></div></div><p><code>q - p</code> is a star projection when <code>q * p = p</code>.</p></div></div><div class="decl" id="IsStarProjection.sub_iff_mul_eq_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L120-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.sub_iff_mul_eq_left"><span class="name">IsStarProjection</span>.<span class="name">sub_iff_mul_eq_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalRing">NonUnitalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#IsAddTorsionFree">IsAddTorsionFree</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> (<span class="fn">q</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">p</span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">q</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span></div></div><p><code>q - p</code> is a star projection iff <code>p * q = p</code>.</p></div></div><div class="decl" id="IsStarProjection.sub_iff_mul_eq_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L131-L137">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.sub_iff_mul_eq_right"><span class="name">IsStarProjection</span>.<span class="name">sub_iff_mul_eq_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalRing">NonUnitalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#IsAddTorsionFree">IsAddTorsionFree</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> (<span class="fn">q</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">p</span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">q</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span></div></div><p><code>q - p</code> is a star projection iff <code>q * p = p</code>.</p></div></div><div class="decl" id="IsStarProjection.add_sub_mul_of_commute"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Star/StarProjection.lean#L139-L144">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection.add_sub_mul_of_commute"><span class="name">IsStarProjection</span>.<span class="name">add_sub_mul_of_commute</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#NonUnitalRing">NonUnitalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hpq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Commute/Defs.html#Commute">Commute</a> <span class="fn">p</span> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Star/StarProjection.html#IsStarProjection">IsStarProjection</a> (<span class="fn">p</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">q</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">q</span>)</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

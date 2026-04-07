@@ -1,0 +1,961 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.InnerProductSpace.GramSchmidtOrtho</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.InnerProductSpace.GramSchmidtOrtho";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">InnerProductSpace</span>.<span class="name">GramSchmidtOrtho</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Analysis/InnerProductSpace/PiL2.html">Mathlib.Analysis.InnerProductSpace.PiL2</a></li><li><a href="../../.././Mathlib/LinearAlgebra/Matrix/Block.html">Mathlib.LinearAlgebra.Matrix.Block</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.InnerProductSpace.GramSchmidtOrtho" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_def"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_def</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_def'"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_def'</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_def''"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_def''</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_bot"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_bot</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_zero"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_zero</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_orthogonal"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_orthogonal</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_pairwise_orthogonal"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_pairwise_orthogonal</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_inv_triangular"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_inv_triangular</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.mem_span_gramSchmidt"><span class="name">InnerProductSpace</span>.<span class="name">mem_span_gramSchmidt</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_mem_span"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_mem_span</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.span_gramSchmidt_Iic"><span class="name">InnerProductSpace</span>.<span class="name">span_gramSchmidt_Iic</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.span_gramSchmidt_Iio"><span class="name">InnerProductSpace</span>.<span class="name">span_gramSchmidt_Iio</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.span_gramSchmidt"><span class="name">InnerProductSpace</span>.<span class="name">span_gramSchmidt</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_of_orthogonal"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_of_orthogonal</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_ne_zero_coe"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_ne_zero_coe</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_ne_zero"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_triangular"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_triangular</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidt_linearIndependent"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_linearIndependent</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtBasis"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtBasis</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.coe_gramSchmidtBasis"><span class="name">InnerProductSpace</span>.<span class="name">coe_gramSchmidtBasis</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtNormed"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtNormed_unit_length_coe"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_unit_length_coe</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtNormed_unit_length"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_unit_length</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtNormed_unit_length'"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_unit_length'</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtNormed_orthonormal"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_orthonormal</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtNormed_orthonormal'"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_orthonormal'</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.span_gramSchmidtNormed"><span class="name">InnerProductSpace</span>.<span class="name">span_gramSchmidtNormed</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.span_gramSchmidtNormed_range"><span class="name">InnerProductSpace</span>.<span class="name">span_gramSchmidtNormed_range</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtNormed_linearIndependent"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_linearIndependent</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtOrthonormalBasis"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtOrthonormalBasis_apply"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_apply</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtOrthonormalBasis_apply_of_orthogonal"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_apply_of_orthogonal</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.inner_gramSchmidtOrthonormalBasis_eq_zero"><span class="name">InnerProductSpace</span>.<span class="name">inner_gramSchmidtOrthonormalBasis_eq_zero</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtOrthonormalBasis_inv_triangular"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_inv_triangular</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtOrthonormalBasis_inv_triangular'"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_inv_triangular'</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtOrthonormalBasis_inv_blockTriangular"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_inv_blockTriangular</span></a></div><div class="nav_link"><a class="break_within" href="#InnerProductSpace.gramSchmidtOrthonormalBasis_det"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_det</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Gram-Schmidt-Orthogonalization-and-Orthonormalization" class="markdown-heading">Gram-Schmidt Orthogonalization and Orthonormalization <a class="hover-link" href="#Gram-Schmidt-Orthogonalization-and-Orthonormalization">#</a></h1><p>In this file we introduce Gram-Schmidt Orthogonalization and Orthonormalization.</p><p>The Gram-Schmidt process takes a set of vectors as input
+and outputs a set of orthogonal vectors which have the same span.</p><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code>: the Gram-Schmidt process</li><li><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_orthogonal">gramSchmidt_orthogonal</a></code>: <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> produces an orthogonal system of vectors.</li><li><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.span_gramSchmidt">span_gramSchmidt</a></code>: <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> preserves span of vectors.</li><li><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_linearIndependent">gramSchmidt_linearIndependent</a></code>: if the input vectors of <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> are linearly independent,
+then so are the output vectors.</li><li><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_ne_zero">gramSchmidt_ne_zero</a></code>: if the input vectors of <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> are linearly independent,
+then the output vectors are non-zero.</li><li><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtBasis">gramSchmidtBasis</a></code>: the basis produced by the Gram-Schmidt process when given a basis as input</li><li><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a></code>:
+the normalized <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> process, i.e each vector in <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a></code> has unit length</li><li><code>gramSchmidt_orthonormal</code>: <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a></code> produces an orthonormal system of vectors.</li><li><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">gramSchmidtOrthonormalBasis</a></code>: orthonormal basis constructed by the Gram-Schmidt process from
+an indexed set of vectors of the right size</li></ul></div><div class="decl" id="InnerProductSpace.gramSchmidt"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L50-L55">source</a></div><div class="attributes">@[irreducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">E</span></div></div><p>The Gram-Schmidt process takes a set of vectors as input
+and outputs a set of orthogonal vectors which have the same span.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">InnerProductSpace.gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">∑ <span class="fn">i</span> : <span class="fn">↥<span class="fn">(<a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#Finset.Iio">Finset.Iio</a> <span class="fn">n</span>)</span></span>, <span class="fn"><span class="fn">(<span class="fn">𝕜</span> <a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">∙</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">InnerProductSpace.gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">↑<span class="fn">i</span></span></span>).<a href="../../.././Mathlib/Analysis/InnerProductSpace/Projection/Basic.html#Submodule.starProjection">starProjection</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">n</span>)</span></span></span></li></ul></details><details id="instances-for-list-InnerProductSpace.gramSchmidt" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L57-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_def"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_def</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#Finset.Iio">Finset.Iio</a> <span class="fn">n</span></span>, <span class="fn"><span class="fn">(<span class="fn">𝕜</span> <a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">∙</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">i</span></span>).<a href="../../.././Mathlib/Analysis/InnerProductSpace/Projection/Basic.html#Submodule.starProjection">starProjection</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">n</span>)</span></span></span></div></div><p>This lemma uses <code>∑ i in</code> instead of <code>∑ i :</code>.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_def'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L62-L64">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_def'"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_def'</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#Finset.Iio">Finset.Iio</a> <span class="fn">n</span></span>, <span class="fn"><span class="fn">(<span class="fn">𝕜</span> <a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">∙</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">i</span></span>).<a href="../../.././Mathlib/Analysis/InnerProductSpace/Projection/Basic.html#Submodule.starProjection">starProjection</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">n</span>)</span></span></span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_def''"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L66-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_def''"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_def''</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a>     <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#Finset.Iio">Finset.Iio</a> <span class="fn">n</span></span>, (<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">n</span>)</span></span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">↑<a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">i</span></span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span>) <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">i</span></span></span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L71-L74">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_bot"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_bot</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrder">LocallyFiniteOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L76-L77">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_zero"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_zero</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">0</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_orthogonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L79-L106">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_orthogonal"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_orthogonal</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">a</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div><p><strong>Gram-Schmidt Orthogonalisation</strong>:
+<code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> produces an orthogonal system of vectors.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_pairwise_orthogonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L108-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_pairwise_orthogonal"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_pairwise_orthogonal</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/Pairwise.html#Pairwise">Pairwise</a> <span class="fn">fun (<span class="fn">a</span> <span class="fn">b</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">a</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></span></div></div><p>This is another version of <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_orthogonal">gramSchmidt_orthogonal</a></code> using <code><a href="../../.././Mathlib/Logic/Pairwise.html#Pairwise">Pairwise</a></code> instead.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_inv_triangular"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L113-L124">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_inv_triangular"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_inv_triangular</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hij</span> : <span class="fn">i</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">j</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">v</span> <span class="fn">j</span>)</span> <span class="fn">(<span class="fn">v</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="InnerProductSpace.mem_span_gramSchmidt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L128-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.mem_span_gramSchmidt"><span class="name">InnerProductSpace</span>.<span class="name">mem_span_gramSchmidt</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hij</span> : <span class="fn">i</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">j</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">j</span></span>)</span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_mem_span"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L136-L146">source</a></div><div class="attributes">@[irreducible]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_mem_span"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_mem_span</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">j </span><span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">i</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">j</span> → <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> (<span class="fn">f</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">j</span></span>)</span></span></div></div></div></div><div class="decl" id="InnerProductSpace.span_gramSchmidt_Iic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L148-L151">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.span_gramSchmidt_Iic"><span class="name">InnerProductSpace</span>.<span class="name">span_gramSchmidt_Iic</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">c</span></span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> (<span class="fn">f</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">c</span></span>)</span></div></div></div></div><div class="decl" id="InnerProductSpace.span_gramSchmidt_Iio"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L153-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.span_gramSchmidt_Iio"><span class="name">InnerProductSpace</span>.<span class="name">span_gramSchmidt_Iio</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iio">Set.Iio</a> <span class="fn">c</span></span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> (<span class="fn">f</span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iio">Set.Iio</a> <span class="fn">c</span></span>)</span></div></div></div></div><div class="decl" id="InnerProductSpace.span_gramSchmidt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L160-L165">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.span_gramSchmidt"><span class="name">InnerProductSpace</span>.<span class="name">span_gramSchmidt</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span>)</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">f</span>)</span></span></div></div><p><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> preserves span of vectors.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_of_orthogonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L167-L185">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_of_orthogonal"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_of_orthogonal</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Pairwise.html#Pairwise">Pairwise</a> <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x1</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x2</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div><p>If given an orthogonal set of vectors, <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> fixes its input.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_ne_zero_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L189-L205">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_ne_zero_coe"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_ne_zero_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">𝕜</span> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <a href="../../.././Init/Prelude.html#Subtype.val">Subtype.val</a>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L207-L211">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_ne_zero"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">𝕜</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></div></div><p>If the input vectors of <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> are linearly independent,
+then the output vectors are non-zero.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_triangular"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L213-L221">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_triangular"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_triangular</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hij</span> : <span class="fn">i</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">j</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">𝕜</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">b</span>.<a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.repr">repr</a></span> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">(⇑<span class="fn">b</span>)</span> <span class="fn">i</span>)</span>)</span> <span class="fn">j</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div><p><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> produces a triangular matrix of vectors when given a basis.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidt_linearIndependent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L223-L227">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt_linearIndependent"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidt_linearIndependent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">𝕜</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span>)</span></span></div></div><p><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> produces linearly independent vectors when given linearly independent vectors.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidtBasis"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L229-L232">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtBasis"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtBasis</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">𝕜</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">𝕜</span> <span class="fn">E</span></span></div></div><p>When given a basis, <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> produces a basis.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtBasis">InnerProductSpace.gramSchmidtBasis</a> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Basic.html#Module.Basis.mk">Module.Basis.mk</a> <span class="fn">⋯</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-InnerProductSpace.gramSchmidtBasis" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="InnerProductSpace.coe_gramSchmidtBasis"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L234-L235">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.coe_gramSchmidtBasis"><span class="name">InnerProductSpace</span>.<span class="name">coe_gramSchmidtBasis</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">𝕜</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtBasis">gramSchmidtBasis</a> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">⇑<span class="fn">b</span></span></span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidtNormed"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L238-L240">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">E</span></div></div><p>the normalized <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a></code> (i.e each vector in <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a></code> has unit length.)</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">InnerProductSpace.gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">(↑<a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">InnerProductSpace.gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a>)</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">InnerProductSpace.gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span></li></ul></details><details id="instances-for-list-InnerProductSpace.gramSchmidtNormed" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="InnerProductSpace.gramSchmidtNormed_unit_length_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L242-L245">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed_unit_length_coe"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_unit_length_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">𝕜</span> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <a href="../../.././Init/Prelude.html#Subtype.val">Subtype.val</a>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidtNormed_unit_length"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L247-L249">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed_unit_length"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_unit_length</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">𝕜</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidtNormed_unit_length'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L251-L255">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed_unit_length'"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_unit_length'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">n</span></span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidtNormed_orthonormal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L257-L269">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed_orthonormal"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_orthonormal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">𝕜</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Orthonormal.html#Orthonormal">Orthonormal</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span>)</span></span></div></div><p><strong>Gram-Schmidt Orthonormalization</strong>:
+<code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a></code> applied to a linearly independent set of vectors produces an orthonormal
+system of vectors.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidtNormed_orthonormal'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L271-L279">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed_orthonormal'"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_orthonormal'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Orthonormal.html#Orthonormal">Orthonormal</a> <span class="fn">𝕜</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">↑<a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">i</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">i</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">↑<span class="fn">i</span></span></span></span></span></div></div><p><strong>Gram-Schmidt Orthonormalization</strong>:
+<code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a></code> produces an orthonormal system of vectors after removing the vectors which
+become zero in the process.</p></div></div><div class="decl" id="InnerProductSpace.span_gramSchmidtNormed"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L283-L293">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.span_gramSchmidtNormed"><span class="name">InnerProductSpace</span>.<span class="name">span_gramSchmidtNormed</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span></span> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="InnerProductSpace.span_gramSchmidtNormed_range"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L295-L297">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.span_gramSchmidtNormed_range"><span class="name">InnerProductSpace</span>.<span class="name">span_gramSchmidtNormed_range</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span>)</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidt">gramSchmidt</a> <span class="fn">𝕜</span> <span class="fn">f</span>)</span>)</span></span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidtNormed_linearIndependent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L299-L307">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed_linearIndependent"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtNormed_linearIndependent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">𝕜</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span>)</span></span></div></div><p><code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a></code> produces linearly independent vectors when given linearly independent
+vectors.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidtOrthonormalBasis"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L313-L319">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">𝕜</span> <span class="fn">E</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/PiL2.html#OrthonormalBasis">OrthonormalBasis</a> <span class="fn">ι</span> <span class="fn">𝕜</span> <span class="fn">E</span></span></div></div><p>Given an indexed family <code>f : ι → E</code> of vectors in an inner product space <code>E</code>, for which the
+size of the index set is the dimension of <code>E</code>, produce an orthonormal basis for <code>E</code> which agrees
+with the orthonormal set produced by the Gram-Schmidt orthonormalization process on the elements of
+<code>ι</code> for which this process gives a nonzero number.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">InnerProductSpace.gramSchmidtOrthonormalBasis</a> <span class="fn">h</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">⋯</span>.<a href="../../.././Init/Classical.html#Exists.choose">choose</a></span></li></ul></details><details id="instances-for-list-InnerProductSpace.gramSchmidtOrthonormalBasis" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="InnerProductSpace.gramSchmidtOrthonormalBasis_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L321-L324">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis_apply"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">𝕜</span> <span class="fn">E</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">i</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">gramSchmidtOrthonormalBasis</a> <span class="fn">h</span> <span class="fn">f</span>)</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidtOrthonormalBasis_apply_of_orthogonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L326-L332">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis_apply_of_orthogonal"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_apply_of_orthogonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">𝕜</span> <span class="fn">E</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Pairwise.html#Pairwise">Pairwise</a> <span class="fn">fun (<span class="fn">i</span> <span class="fn">j</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">j</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">gramSchmidtOrthonormalBasis</a> <span class="fn">h</span> <span class="fn">f</span>)</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(↑<a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">f</span> <span class="fn">i</span></span><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a>)</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="InnerProductSpace.inner_gramSchmidtOrthonormalBasis_eq_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L334-L349">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.inner_gramSchmidtOrthonormalBasis_eq_zero"><span class="name">InnerProductSpace</span>.<span class="name">inner_gramSchmidtOrthonormalBasis_eq_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">𝕜</span> <span class="fn">E</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">ι</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtNormed">gramSchmidtNormed</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">j</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">gramSchmidtOrthonormalBasis</a> <span class="fn">h</span> <span class="fn">f</span>)</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">j</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidtOrthonormalBasis_inv_triangular"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L351-L356">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis_inv_triangular"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_inv_triangular</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">𝕜</span> <span class="fn">E</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hij</span> : <span class="fn">i</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">j</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">gramSchmidtOrthonormalBasis</a> <span class="fn">h</span> <span class="fn">f</span>)</span> <span class="fn">j</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidtOrthonormalBasis_inv_triangular'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L358-L360">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis_inv_triangular'"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_inv_triangular'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">𝕜</span> <span class="fn">E</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hij</span> : <span class="fn">i</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">j</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">gramSchmidtOrthonormalBasis</a> <span class="fn">h</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Analysis/InnerProductSpace/PiL2.html#OrthonormalBasis.repr">repr</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span>)</span>.<a href="../../.././Mathlib/Analysis/Normed/Lp/WithLp.html#WithLp.ofLp">ofLp</a></span> <span class="fn">j</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="InnerProductSpace.gramSchmidtOrthonormalBasis_inv_blockTriangular"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L362-L367">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis_inv_blockTriangular"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_inv_blockTriangular</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">𝕜</span> <span class="fn">E</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">gramSchmidtOrthonormalBasis</a> <span class="fn">h</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Analysis/InnerProductSpace/PiL2.html#OrthonormalBasis.toBasis">toBasis</a></span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Basis.html#Module.Basis.toMatrix">toMatrix</a></span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Matrix/Block.html#Matrix.BlockTriangular">BlockTriangular</a></span> <a href="../../.././Init/Prelude.html#id">id</a></span></div></div><p>Given an indexed family <code>f : ι → E</code> of vectors in an inner product space <code>E</code>, for which the
+size of the index set is the dimension of <code>E</code>, the matrix of coefficients of <code>f</code> with respect to the
+orthonormal basis <code><a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">gramSchmidtOrthonormalBasis</a></code> constructed from <code>f</code> is upper-triangular.</p></div></div><div class="decl" id="InnerProductSpace.gramSchmidtOrthonormalBasis_det"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.lean#L369-L373">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis_det"><span class="name">InnerProductSpace</span>.<span class="name">gramSchmidtOrthonormalBasis_det</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Interval/Finset/Defs.html#LocallyFiniteOrderBot">LocallyFiniteOrderBot</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">𝕜</span> <span class="fn">E</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">gramSchmidtOrthonormalBasis</a> <span class="fn">h</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Analysis/InnerProductSpace/PiL2.html#OrthonormalBasis.toBasis">toBasis</a></span>.<a href="../../.././Mathlib/LinearAlgebra/Determinant.html#Module.Basis.det">det</a></span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∏ <span class="fn">i</span> : <span class="fn">ι</span>, <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">𝕜</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Analysis/InnerProductSpace/GramSchmidtOrtho.html#InnerProductSpace.gramSchmidtOrthonormalBasis">gramSchmidtOrthonormalBasis</a> <span class="fn">h</span> <span class="fn">f</span>)</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

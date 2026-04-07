@@ -1,0 +1,575 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.MetricSpace.BundledFun</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.MetricSpace.BundledFun";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">MetricSpace</span>.<span class="name">BundledFun</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Data/Rel.html">Mathlib.Data.Rel</a></li><li><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html">Mathlib.Algebra.Order.Monoid.Defs</a></li><li><a href="../../.././Mathlib/Data/Finset/Lattice/Fold.html">Mathlib.Data.Finset.Lattice.Fold</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.MetricSpace.BundledFun" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#PseudoMetric"><span class="name">PseudoMetric</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.ext"><span class="name">PseudoMetric</span>.<span class="name">ext</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.ext_iff"><span class="name">PseudoMetric</span>.<span class="name">ext_iff</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.instFunLikeForall"><span class="name">PseudoMetric</span>.<span class="name">instFunLikeForall</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.coe_mk"><span class="name">PseudoMetric</span>.<span class="name">coe_mk</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.mk_apply"><span class="name">PseudoMetric</span>.<span class="name">mk_apply</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.refl"><span class="name">PseudoMetric</span>.<span class="name">refl</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.symm"><span class="name">PseudoMetric</span>.<span class="name">symm</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.triangle"><span class="name">PseudoMetric</span>.<span class="name">triangle</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.instLE"><span class="name">PseudoMetric</span>.<span class="name">instLE</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.coe_le_coe"><span class="name">PseudoMetric</span>.<span class="name">coe_le_coe</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.instPartialOrder"><span class="name">PseudoMetric</span>.<span class="name">instPartialOrder</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.instBot"><span class="name">PseudoMetric</span>.<span class="name">instBot</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.coe_bot"><span class="name">PseudoMetric</span>.<span class="name">coe_bot</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.bot_apply"><span class="name">PseudoMetric</span>.<span class="name">bot_apply</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.instMaxOfAddLeftMonoOfAddRightMono"><span class="name">PseudoMetric</span>.<span class="name">instMaxOfAddLeftMonoOfAddRightMono</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.coe_sup"><span class="name">PseudoMetric</span>.<span class="name">coe_sup</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.sup_apply"><span class="name">PseudoMetric</span>.<span class="name">sup_apply</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.instSemilatticeSupOfAddLeftMonoOfAddRightMono"><span class="name">PseudoMetric</span>.<span class="name">instSemilatticeSupOfAddLeftMonoOfAddRightMono</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.nonneg"><span class="name">PseudoMetric</span>.<span class="name">nonneg</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.instOrderBot"><span class="name">PseudoMetric</span>.<span class="name">instOrderBot</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.coe_finsetSup"><span class="name">PseudoMetric</span>.<span class="name">coe_finsetSup</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.finsetSup_apply"><span class="name">PseudoMetric</span>.<span class="name">finsetSup_apply</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.IsUltra"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.IsUltra.le_sup"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">le_sup</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.IsUltra.bot"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">bot</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.IsUltra.sup"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">sup</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.IsUltra.finsetSup"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">finsetSup</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.isSymm_ball"><span class="name">PseudoMetric</span>.<span class="name">isSymm_ball</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.isSymmetricRel_ball"><span class="name">PseudoMetric</span>.<span class="name">isSymmetricRel_ball</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.isSymm_closedBall"><span class="name">PseudoMetric</span>.<span class="name">isSymm_closedBall</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.isSymmetricRel_closedBall"><span class="name">PseudoMetric</span>.<span class="name">isSymmetricRel_closedBall</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.IsUltra.isTrans_ball"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">isTrans_ball</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.IsUltra.isTransitiveRel_ball"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">isTransitiveRel_ball</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.IsUltra.isTrans_closedBall"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">isTrans_closedBall</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoMetric.IsUltra.isTransitiveRel_closedBall"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">isTransitiveRel_closedBall</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Pseudometrics-as-bundled-functions" class="markdown-heading">Pseudometrics as bundled functions <a class="hover-link" href="#Pseudometrics-as-bundled-functions">#</a></h1><p>This file defines a pseudometric as a bundled function.
+This allows one to define a semilattice on them, and to construct families of pseudometrics.</p><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>The <code><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a></code> definition is made as general as possible without any required axioms
+for the codomain. The axioms come into play only in proofs and further constructions
+like the <code><a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a></code> instance. This allows one to talk about functions mapping into
+something like <code>{ fuel: ℕ, time: ℕ }</code> even though there is no linear order.</p><p>In most cases, the codomain will be a linear ordered additive monoid like
+<code>ℝ</code>, <code>ℝ≥0</code>, <code>ℝ≥0∞</code>, in which all of the axioms below are satisfied.</p></div><div class="decl" id="PseudoMetric"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L35-L45">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric"><span class="name">PseudoMetric</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Type</a> (max u_1 u_2)</div></div><p>A pseudometric as a bundled function.</p><ul class="structure_fields" id="PseudoMetric.mk"><li id="PseudoMetric.toFun" class="structure_field"><div class="structure_field_info">toFun : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span> → <span class="fn">R</span></span></div><div class="structure_field_doc"><p>The underlying binary function mapping into a linearly ordered additive monoid.</p></div></li><li id="PseudoMetric.refl'" class="structure_field"><div class="structure_field_info">refl'<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">X</span>)</span></span>
+ : <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">toFun</a></span> <span class="fn">x</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div><div class="structure_field_doc"><p>A pseudometric must take identical elements to 0.</p></div></li><li id="PseudoMetric.symm'" class="structure_field"><div class="structure_field_info">symm'<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+ : <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">toFun</a></span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">toFun</a></span> <span class="fn">y</span> <span class="fn">x</span></span></div><div class="structure_field_doc"><p>A pseudometric must be symmetric.</p></div></li><li id="PseudoMetric.triangle'" class="structure_field"><div class="structure_field_info">triangle'<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">X</span>)</span></span>
+ : <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">toFun</a></span> <span class="fn">x</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">toFun</a></span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">toFun</a></span> <span class="fn">y</span> <span class="fn">z</span></span></div><div class="structure_field_doc"><p>A pseudometric must respect the triangle inequality.</p></div></li></ul><details id="instances-for-list-PseudoMetric" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="PseudoMetric.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L36-L36">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.ext"><span class="name">PseudoMetric</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">inst✝</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">inst✝¹</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">inst✝²</span> : <span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">toFun</span> : <span class="fn"><span class="fn">x</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">toFun</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">y</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">toFun</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span></div></div></div></div><div class="decl" id="PseudoMetric.ext_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L36-L36">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.ext_iff"><span class="name">PseudoMetric</span>.<span class="name">ext_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">inst✝</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">inst✝¹</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">inst✝²</span> : <span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">x</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">toFun</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">y</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">toFun</a></span></div></div></div></div><div class="decl" id="PseudoMetric.instFunLikeForall"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L53-L55">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instFunLikeForall"><span class="name">PseudoMetric</span>.<span class="name">instFunLikeForall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">(<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span>)</span> <span class="fn">X</span> <span class="fn">(<span class="fn">X</span> → <span class="fn">R</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instFunLikeForall">PseudoMetric.instFunLikeForall</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.mk">{</a> <span class="fn">coe</span> := <a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.toFun">PseudoMetric.toFun</a>, <span class="fn">coe_injective'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.mk">}</a></li></ul></details></div></div><div class="decl" id="PseudoMetric.coe_mk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L57-L58">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.coe_mk"><span class="name">PseudoMetric</span>.<span class="name">coe_mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">refl</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">X</span>), <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">symm</span> : <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>), <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">d</span> <span class="fn">y</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">triangle</span> : <span class="fn">∀ (<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">X</span>), <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">d</span> <span class="fn">y</span> <span class="fn">z</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.mk">{</a> <span class="fn">toFun</span> := <span class="fn">d</span>, <span class="fn">refl'</span> := <span class="fn">refl</span>, <span class="fn">symm'</span> := <span class="fn">symm</span>, <span class="fn">triangle'</span> := <span class="fn">triangle</span> <a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.mk">}</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">d</span></div></div></div></div><div class="decl" id="PseudoMetric.mk_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L60-L62">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.mk_apply"><span class="name">PseudoMetric</span>.<span class="name">mk_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">refl</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">X</span>), <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">symm</span> : <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>), <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">d</span> <span class="fn">y</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">triangle</span> : <span class="fn">∀ (<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">X</span>), <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">d</span> <span class="fn">y</span> <span class="fn">z</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.mk">{</a> <span class="fn">toFun</span> := <span class="fn">d</span>, <span class="fn">refl'</span> := <span class="fn">refl</span>, <span class="fn">symm'</span> := <span class="fn">symm</span>, <span class="fn">triangle'</span> := <span class="fn">triangle</span> <a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.mk">}</a> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="PseudoMetric.refl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L64-L65">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.refl"><span class="name">PseudoMetric</span>.<span class="name">refl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="PseudoMetric.symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L66-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.symm"><span class="name">PseudoMetric</span>.<span class="name">symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">d</span> <span class="fn">y</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="PseudoMetric.triangle"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L67-L67">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.triangle"><span class="name">PseudoMetric</span>.<span class="name">triangle</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">d</span> <span class="fn">y</span> <span class="fn">z</span></span></div></div></div></div><div class="decl" id="PseudoMetric.instLE"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L69-L69">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instLE"><span class="name">PseudoMetric</span>.<span class="name">instLE</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">(<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instLE">PseudoMetric.instLE</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#LE.mk">{</a> <span class="fn">le</span> := <span class="fn">fun (<span class="fn">d</span> <span class="fn">d'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>) =&gt; <span class="fn">⇑<span class="fn">d</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">⇑<span class="fn">d'</span></span></span> <a href="../../.././Init/Prelude.html#LE.mk">}</a></li></ul></details></div></div><div class="decl" id="PseudoMetric.coe_le_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L71-L74">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.coe_le_coe"><span class="name">PseudoMetric</span>.<span class="name">coe_le_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d </span><span class="fn">d'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">d</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">⇑<span class="fn">d'</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">d</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d'</span></div></div></div></div><div class="decl" id="PseudoMetric.instPartialOrder"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L78-L79">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instPartialOrder"><span class="name">PseudoMetric</span>.<span class="name">instPartialOrder</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">(<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instPartialOrder">PseudoMetric.instPartialOrder</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Order/Basic.html#PartialOrder.lift">PartialOrder.lift</a> <span class="fn">(fun (<span class="fn">f</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>) =&gt; <span class="fn">⇑<span class="fn">f</span></span>)</span> <span class="fn">⋯</span></span></li></ul></details></div></div><div class="decl" id="PseudoMetric.instBot"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L81-L85">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instBot"><span class="name">PseudoMetric</span>.<span class="name">instBot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddZeroClass">AddZeroClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Notation.html#Bot">Bot</a> <span class="fn">(<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instBot">PseudoMetric.instBot</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.mk">{</a> <span class="fn">bot</span> := <a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.mk">{</a> <span class="fn">toFun</span> := <span class="fn">0</span>, <span class="fn">refl'</span> := <span class="fn">⋯</span>, <span class="fn">symm'</span> := <span class="fn">⋯</span>, <span class="fn">triangle'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.mk">}</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.mk">}</a></li></ul></details></div></div><div class="decl" id="PseudoMetric.coe_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L87-L88">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.coe_bot"><span class="name">PseudoMetric</span>.<span class="name">coe_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddZeroClass">AddZeroClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="PseudoMetric.bot_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L90-L93">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.bot_apply"><span class="name">PseudoMetric</span>.<span class="name">bot_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddZeroClass">AddZeroClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="PseudoMetric.instMaxOfAddLeftMonoOfAddRightMono"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L95-L106">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instMaxOfAddLeftMonoOfAddRightMono"><span class="name">PseudoMetric</span>.<span class="name">instMaxOfAddLeftMonoOfAddRightMono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddZeroClass">AddZeroClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Max">Max</a> <span class="fn">(<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instMaxOfAddLeftMonoOfAddRightMono">PseudoMetric.instMaxOfAddLeftMonoOfAddRightMono</a> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Init/Prelude.html#Max.mk">{</a>     <span class="fn">max</span> := <span class="fn">fun (<span class="fn">d</span> <span class="fn">d'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>) =&gt;
+      <a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">x</span> <span class="fn">y</span> : <span class="fn">X</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span> ⊔ <span class="fn"><span class="fn">d'</span> <span class="fn">x</span> <span class="fn">y</span></span></span></span>, <span class="fn">refl'</span> := <span class="fn">⋯</span>, <span class="fn">symm'</span> := <span class="fn">⋯</span>, <span class="fn">triangle'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.mk">}</a></span> <a href="../../.././Init/Prelude.html#Max.mk">}</a></li></ul></details></div></div><div class="decl" id="PseudoMetric.coe_sup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L108-L111">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.coe_sup"><span class="name">PseudoMetric</span>.<span class="name">coe_sup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddZeroClass">AddZeroClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d </span><span class="fn">d'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<span class="fn">d</span> ⊔ <span class="fn">d'</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">⇑<span class="fn">d</span></span> ⊔ <span class="fn">⇑<span class="fn">d'</span></span></span></div></div></div></div><div class="decl" id="PseudoMetric.sup_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L113-L117">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.sup_apply"><span class="name">PseudoMetric</span>.<span class="name">sup_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddZeroClass">AddZeroClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d </span><span class="fn">d'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">d</span> ⊔ <span class="fn">d'</span>)</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span> ⊔ <span class="fn"><span class="fn">d'</span> <span class="fn">x</span> <span class="fn">y</span></span></span></div></div></div></div><div class="decl" id="PseudoMetric.instSemilatticeSupOfAddLeftMonoOfAddRightMono"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L119-L124">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instSemilatticeSupOfAddLeftMonoOfAddRightMono"><span class="name">PseudoMetric</span>.<span class="name">instSemilatticeSupOfAddLeftMonoOfAddRightMono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddZeroClass">AddZeroClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">(<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instSemilatticeSupOfAddLeftMonoOfAddRightMono">PseudoMetric.instSemilatticeSupOfAddLeftMonoOfAddRightMono</a> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup.mk">{</a> <span class="fn">toPartialOrder</span> := <a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instPartialOrder">PseudoMetric.instPartialOrder</a>, <span class="fn">sup</span> := <a href="../../.././Init/Prelude.html#Max.max">max</a>, <span class="fn">le_sup_left</span> := <span class="fn">⋯</span>, <span class="fn">le_sup_right</span> := <span class="fn">⋯</span>, <span class="fn">sup_le</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup.mk">}</a></li></ul></details></div></div><div class="decl" id="PseudoMetric.nonneg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L130-L136">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.nonneg"><span class="name">PseudoMetric</span>.<span class="name">nonneg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftStrictMono">AddLeftStrictMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="PseudoMetric.instOrderBot"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L138-L139">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instOrderBot"><span class="name">PseudoMetric</span>.<span class="name">instOrderBot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftStrictMono">AddLeftStrictMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">(<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instOrderBot">PseudoMetric.instOrderBot</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot.mk">{</a> <span class="fn">toBot</span> := <a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.instBot">PseudoMetric.instBot</a>, <span class="fn">bot_le</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot.mk">}</a></li></ul></details></div></div><div class="decl" id="PseudoMetric.coe_finsetSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L141-L145">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.coe_finsetSup"><span class="name">PseudoMetric</span>.<span class="name">coe_finsetSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftStrictMono">AddLeftStrictMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup'">sup'</a></span> <span class="fn">hs</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">Y</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span>)</span></span></div></div></div></div><div class="decl" id="PseudoMetric.finsetSup_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L147-L152">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.finsetSup_apply"><span class="name">PseudoMetric</span>.<span class="name">finsetSup_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftStrictMono">AddLeftStrictMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Empty.html#Finset.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup'">sup'</a></span> <span class="fn">hs</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">Y</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">x</span> <span class="fn">y</span></span></span></span></div></div></div></div><div class="decl" id="PseudoMetric.IsUltra"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L158-L162">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Max">Max</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A pseudometric can be nonarchimedean (or ultrametric), with a stronger triangle
+inequality such that <code>d x z ≤ max (d x y) (d y z)</code>.</p><ul class="structure_fields" id="PseudoMetric.IsUltra.mk"><li id="PseudoMetric.IsUltra.le_sup'" class="structure_field"><div class="structure_field_info">le_sup'<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">X</span>)</span></span>
+ : <span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span> ⊔ <span class="fn"><span class="fn">d</span> <span class="fn">y</span> <span class="fn">z</span></span></span></div><div class="structure_field_doc"><p>Strong triangle inequality of an ultrametric.</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-PseudoMetric.IsUltra" class="instances-list"></ul></details></div></div><div class="decl" id="PseudoMetric.IsUltra.le_sup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L164-L166">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra.le_sup"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">le_sup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Max">Max</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hd</span> : <span class="fn"><span class="fn">d</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">X</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn"><span class="fn">d</span> <span class="fn">x</span> <span class="fn">y</span></span> ⊔ <span class="fn"><span class="fn">d</span> <span class="fn">y</span> <span class="fn">z</span></span></span></div></div></div></div><div class="decl" id="PseudoMetric.IsUltra.bot"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L168-L170">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra.bot"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddZeroClass">AddZeroClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span></div></div></div></div><div class="decl" id="PseudoMetric.IsUltra.sup"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L172-L178">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra.sup"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">sup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddZeroClass">AddZeroClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddRightMono">AddRightMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d </span><span class="fn">d'</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">d</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">d'</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">d</span> ⊔ <span class="fn">d'</span>)</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span></div></div></div></div><div class="decl" id="PseudoMetric.IsUltra.finsetSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L180-L195">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra.finsetSup"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">finsetSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftStrictMono">AddLeftStrictMono</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">d</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">d</span>)</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span></div></div></div></div><div class="decl" id="PseudoMetric.isSymm_ball"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L201-L203">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.isSymm_ball"><span class="name">PseudoMetric</span>.<span class="name">isSymm_ball</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel.IsSymm">SetRel.IsSymm</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">xy</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">X</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">d</span> <span class="fn"><span class="fn">xy</span>.1</span> <span class="fn"><span class="fn">xy</span>.2</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">ε</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="PseudoMetric.isSymmetricRel_ball"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L205-L205">source</a></div><div class="attributes">@[deprecated PseudoMetric.isSymm_ball (since := &quot;2025-10-17&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.isSymmetricRel_ball"><span class="name">PseudoMetric</span>.<span class="name">isSymmetricRel_ball</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel.IsSymm">SetRel.IsSymm</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">xy</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">X</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">d</span> <span class="fn"><span class="fn">xy</span>.1</span> <span class="fn"><span class="fn">xy</span>.2</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">ε</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div><p><strong>Alias</strong> of <code><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.isSymm_ball">PseudoMetric.isSymm_ball</a></code>.</p></div></div><div class="decl" id="PseudoMetric.isSymm_closedBall"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L207-L209">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.isSymm_closedBall"><span class="name">PseudoMetric</span>.<span class="name">isSymm_closedBall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel.IsSymm">SetRel.IsSymm</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">xy</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">X</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">d</span> <span class="fn"><span class="fn">xy</span>.1</span> <span class="fn"><span class="fn">xy</span>.2</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">ε</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="PseudoMetric.isSymmetricRel_closedBall"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L211-L211">source</a></div><div class="attributes">@[deprecated PseudoMetric.isSymm_closedBall (since := &quot;2025-10-17&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.isSymmetricRel_closedBall"><span class="name">PseudoMetric</span>.<span class="name">isSymmetricRel_closedBall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel.IsSymm">SetRel.IsSymm</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">xy</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">X</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">d</span> <span class="fn"><span class="fn">xy</span>.1</span> <span class="fn"><span class="fn">xy</span>.2</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">ε</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div><p><strong>Alias</strong> of <code><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.isSymm_closedBall">PseudoMetric.isSymm_closedBall</a></code>.</p></div></div><div class="decl" id="PseudoMetric.IsUltra.isTrans_ball"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L213-L216">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra.isTrans_ball"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">isTrans_ball</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">d</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel.IsTrans">SetRel.IsTrans</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">xy</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">X</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">d</span> <span class="fn"><span class="fn">xy</span>.1</span> <span class="fn"><span class="fn">xy</span>.2</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">ε</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="PseudoMetric.IsUltra.isTransitiveRel_ball"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L218-L218">source</a></div><div class="attributes">@[deprecated PseudoMetric.IsUltra.isTrans_ball (since := &quot;2025-10-17&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra.isTransitiveRel_ball"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">isTransitiveRel_ball</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">d</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel.IsTrans">SetRel.IsTrans</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">xy</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">X</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">d</span> <span class="fn"><span class="fn">xy</span>.1</span> <span class="fn"><span class="fn">xy</span>.2</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">ε</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div><p><strong>Alias</strong> of <code><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra.isTrans_ball">PseudoMetric.IsUltra.isTrans_ball</a></code>.</p></div></div><div class="decl" id="PseudoMetric.IsUltra.isTrans_closedBall"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L220-L223">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra.isTrans_closedBall"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">isTrans_closedBall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">d</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel.IsTrans">SetRel.IsTrans</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">xy</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">X</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">d</span> <span class="fn"><span class="fn">xy</span>.1</span> <span class="fn"><span class="fn">xy</span>.2</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">ε</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="PseudoMetric.IsUltra.isTransitiveRel_closedBall"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/MetricSpace/BundledFun.lean#L225-L226">source</a></div><div class="attributes">@[deprecated PseudoMetric.IsUltra.isTrans_closedBall (since := &quot;2025-10-17&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra.isTransitiveRel_closedBall"><span class="name">PseudoMetric</span>.<span class="name">IsUltra</span>.<span class="name">isTransitiveRel_closedBall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Add">Add</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric">PseudoMetric</a> <span class="fn">X</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">d</span>.<a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra">IsUltra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ε</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Rel.html#SetRel.IsTrans">SetRel.IsTrans</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">xy</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">X</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">d</span> <span class="fn"><span class="fn">xy</span>.1</span> <span class="fn"><span class="fn">xy</span>.2</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">ε</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div><p><strong>Alias</strong> of <code><a href="../../.././Mathlib/Topology/MetricSpace/BundledFun.html#PseudoMetric.IsUltra.isTrans_closedBall">PseudoMetric.IsUltra.isTrans_closedBall</a></code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

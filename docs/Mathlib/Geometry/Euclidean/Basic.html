@@ -1,0 +1,212 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Geometry.Euclidean.Basic</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Geometry.Euclidean.Basic";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Geometry</span>.<span class="name">Euclidean</span>.<span class="name">Basic</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Basic.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/QuadraticDiscriminant.html">Mathlib.Algebra.QuadraticDiscriminant</a></li><li><a href="../../.././Mathlib/Geometry/Euclidean/PerpBisector.html">Mathlib.Geometry.Euclidean.PerpBisector</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Geometry.Euclidean.Basic" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.inner_weightedVSub"><span class="name">EuclideanGeometry</span>.<span class="name">inner_weightedVSub</span></a></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.dist_affineCombination"><span class="name">EuclideanGeometry</span>.<span class="name">dist_affineCombination</span></a></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.dist_smul_vadd_sq"><span class="name">EuclideanGeometry</span>.<span class="name">dist_smul_vadd_sq</span></a></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.dist_smul_vadd_eq_dist"><span class="name">EuclideanGeometry</span>.<span class="name">dist_smul_vadd_eq_dist</span></a></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two"><span class="name">EuclideanGeometry</span>.<span class="name">eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two</span></a></div><div class="nav_link"><a class="break_within" href="#EuclideanGeometry.eq_of_dist_eq_of_dist_eq_of_finrank_eq_two"><span class="name">EuclideanGeometry</span>.<span class="name">eq_of_dist_eq_of_dist_eq_of_finrank_eq_two</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Euclidean-spaces" class="markdown-heading">Euclidean spaces <a class="hover-link" href="#Euclidean-spaces">#</a></h1><p>This file makes some definitions and proves very basic geometrical
+results about real inner product spaces and Euclidean affine spaces.
+Results about real inner product spaces that involve the norm and
+inner product but not angles generally go in
+<code>Analysis.NormedSpace.InnerProduct</code>. Results with longer
+proofs or more geometrical content generally go in separate files.</p><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>To declare <code>P</code> as the type of points in a Euclidean affine space with
+<code>V</code> as the type of vectors, use
+<code>[NormedAddCommGroup V] [InnerProductSpace ℝ V] [MetricSpace P] [NormedAddTorsor V P]</code>.
+This works better with <code><a href="../../.././Init/Prelude.html#outParam">outParam</a></code> to make
+<code>V</code> implicit in most cases than having a separate type alias for
+Euclidean affine spaces.</p><p>Rather than requiring Euclidean affine spaces to be finite-dimensional
+(as in the definition on Wikipedia), this is specified only for those
+theorems that need it.</p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li><a href="https://en.wikipedia.org/wiki/Euclidean_space">https://en.wikipedia.org/wiki/Euclidean_space</a></li></ul></div><div class="mod_doc"><h3 id="Geometrical-results-on-Euclidean-affine-spaces" class="markdown-heading">Geometrical results on Euclidean affine spaces <a class="hover-link" href="#Geometrical-results-on-Euclidean-affine-spaces">#</a></h3><p>This section develops some geometrical definitions and results on
+Euclidean affine spaces.</p></div><div class="decl" id="EuclideanGeometry.inner_weightedVSub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Basic.lean#L60-L71">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Basic.html#EuclideanGeometry.inner_weightedVSub"><span class="name">EuclideanGeometry</span>.<span class="name">inner_weightedVSub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₁</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w₁</span> : <span class="fn"><span class="fn">ι₁</span> → <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p₁</span> : <span class="fn"><span class="fn">ι₁</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s₁</span>, <span class="fn"><span class="fn">w₁</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s₂</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w₂</span> : <span class="fn"><span class="fn">ι₂</span> → <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p₂</span> : <span class="fn"><span class="fn">ι₂</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s₂</span>, <span class="fn"><span class="fn">w₂</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">(<span class="fn">(<span class="fn"><span class="fn">s₁</span>.<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Combination.html#Finset.weightedVSub">weightedVSub</a></span> <span class="fn">p₁</span>)</span> <span class="fn">w₁</span>)</span> <span class="fn">(<span class="fn">(<span class="fn"><span class="fn">s₂</span>.<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Combination.html#Finset.weightedVSub">weightedVSub</a></span> <span class="fn">p₂</span>)</span> <span class="fn">w₂</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   (<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">∑ <span class="fn">i₁</span> ∈ <span class="fn">s₁</span>, <span class="fn">∑ <span class="fn">i₂</span> ∈ <span class="fn">s₂</span>, <span class="fn"><span class="fn">w₁</span> <span class="fn">i₁</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">w₂</span> <span class="fn">i₂</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> (<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">p₁</span> <span class="fn">i₁</span>)</span> <span class="fn">(<span class="fn">p₂</span> <span class="fn">i₂</span>)</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">p₁</span> <span class="fn">i₁</span>)</span> <span class="fn">(<span class="fn">p₂</span> <span class="fn">i₂</span>)</span></span>)</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">2</span></div></div><p>The inner product of two vectors given with <code>weightedVSub</code>, in
+terms of the pairwise distances.</p></div></div><div class="decl" id="EuclideanGeometry.dist_affineCombination"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Basic.lean#L73-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Basic.html#EuclideanGeometry.dist_affineCombination"><span class="name">EuclideanGeometry</span>.<span class="name">dist_affineCombination</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">w₁ </span><span class="fn">w₂</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">P</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">w₁</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">w₂</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">have <span class="fn">a₁</span> := <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Combination.html#Finset.affineCombination">Finset.affineCombination</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">s</span> <span class="fn">p</span>)</span> <span class="fn">w₁</span></span>;
+<span class="fn">have <span class="fn">a₂</span> := <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/Combination.html#Finset.affineCombination">Finset.affineCombination</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">s</span> <span class="fn">p</span>)</span> <span class="fn">w₂</span></span>;
+<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">a₁</span> <span class="fn">a₂</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">a₁</span> <span class="fn">a₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   (<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">∑ <span class="fn">i₁</span> ∈ <span class="fn">s</span>, <span class="fn">∑ <span class="fn">i₂</span> ∈ <span class="fn">s</span>, <span class="fn">(<span class="fn">w₁</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">w₂</span>) <span class="fn">i₁</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">(<span class="fn">w₁</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">w₂</span>) <span class="fn">i₂</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> (<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">p</span> <span class="fn">i₁</span>)</span> <span class="fn">(<span class="fn">p</span> <span class="fn">i₂</span>)</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">p</span> <span class="fn">i₁</span>)</span> <span class="fn">(<span class="fn">p</span> <span class="fn">i₂</span>)</span></span>)</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">2</span></span></span></div></div><p>The distance between two points given with <code>affineCombination</code>,
+in terms of the pairwise distances between the points in that
+combination.</p></div></div><div class="decl" id="EuclideanGeometry.dist_smul_vadd_sq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Basic.lean#L89-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Basic.html#EuclideanGeometry.dist_smul_vadd_sq"><span class="name">EuclideanGeometry</span>.<span class="name">dist_smul_vadd_sq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">V</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> (<span class="fn">r</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">v</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₁</span>) <span class="fn">p₂</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> (<span class="fn">r</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">v</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₁</span>) <span class="fn">p₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">v</span> <span class="fn">v</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">v</span> (<span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>)</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> (<span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>) (<span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>)</span></div></div><p>The squared distance between points on a line (expressed as a
+multiple of a fixed vector added to a point) and another point,
+expressed as a quadratic.</p></div></div><div class="decl" id="EuclideanGeometry.dist_smul_vadd_eq_dist"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Basic.lean#L99-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Basic.html#EuclideanGeometry.dist_smul_vadd_eq_dist"><span class="name">EuclideanGeometry</span>.<span class="name">dist_smul_vadd_eq_dist</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">V</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn">v</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> (<span class="fn">r</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">v</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">p₁</span>) <span class="fn">p₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p₁</span> <span class="fn">p₂</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">-<span class="fn">2</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">v</span> (<span class="fn">p₁</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#VSub.vsub">-ᵥ</a> <span class="fn">p₂</span>)</span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">v</span> <span class="fn">v</span></span></div></div><p>The condition for two points on a line to be equidistant from
+another point.</p></div></div><div class="decl" id="EuclideanGeometry.eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Basic.lean#L118-L171">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Basic.html#EuclideanGeometry.eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two"><span class="name">EuclideanGeometry</span>.<span class="name">eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/AffineSpace/AffineSubspace/Defs.html#AffineSubspace">AffineSubspace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">P</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">↥<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/AffineSubspace/Defs.html#AffineSubspace.direction">direction</a></span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">↥<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/LinearAlgebra/AffineSpace/AffineSubspace/Defs.html#AffineSubspace.direction">direction</a></span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">2</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c₁ </span><span class="fn">c₂ </span><span class="fn">p₁ </span><span class="fn">p₂ </span><span class="fn">p</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc₁s</span> : <span class="fn">c₁</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc₂s</span> : <span class="fn">c₂</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp₁s</span> : <span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp₂s</span> : <span class="fn">p₂</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hps</span> : <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₁ </span><span class="fn">r₂</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">c₁</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">c₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p₁</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">p₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp₁c₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p₁</span> <span class="fn">c₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp₂c₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p₂</span> <span class="fn">c₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpc₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p</span> <span class="fn">c₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp₁c₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p₁</span> <span class="fn">c₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp₂c₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p₂</span> <span class="fn">c₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpc₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p</span> <span class="fn">c₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₂</span></div></div><p>Distances <code>r₁</code> <code>r₂</code> of <code>p</code> from two different points <code>c₁</code> <code>c₂</code> determine at
+most two points <code>p₁</code> <code>p₂</code> in a two-dimensional subspace containing those points
+(two circles intersect in at most two points).</p></div></div><div class="decl" id="EuclideanGeometry.eq_of_dist_eq_of_dist_eq_of_finrank_eq_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Euclidean/Basic.lean#L173-L184">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Euclidean/Basic.html#EuclideanGeometry.eq_of_dist_eq_of_dist_eq_of_finrank_eq_two"><span class="name">EuclideanGeometry</span>.<span class="name">eq_of_dist_eq_of_dist_eq_of_finrank_eq_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Defs.html#MetricSpace">MetricSpace</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/AddTorsor.html#NormedAddTorsor">NormedAddTorsor</a> <span class="fn">V</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">V</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">2</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c₁ </span><span class="fn">c₂ </span><span class="fn">p₁ </span><span class="fn">p₂ </span><span class="fn">p</span> : <span class="fn">P</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r₁ </span><span class="fn">r₂</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn">c₁</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">c₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn">p₁</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">p₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp₁c₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p₁</span> <span class="fn">c₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp₂c₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p₂</span> <span class="fn">c₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpc₁</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p</span> <span class="fn">c₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp₁c₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p₁</span> <span class="fn">c₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp₂c₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p₂</span> <span class="fn">c₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpc₂</span> : <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">p</span> <span class="fn">c₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p₂</span></div></div><p>Distances <code>r₁</code> <code>r₂</code> of <code>p</code> from two different points <code>c₁</code> <code>c₂</code> determine at
+most two points <code>p₁</code> <code>p₂</code> in two-dimensional space (two circles intersect in at
+most two points).</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

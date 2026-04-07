@@ -1,0 +1,323 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Combinatorics.Additive.CovBySMul</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Combinatorics.Additive.CovBySMul";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Combinatorics</span>.<span class="name">Additive</span>.<span class="name">CovBySMul</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Data/Real/Basic.html">Mathlib.Data.Real.Basic</a></li><li><a href="../../.././Mathlib/Tactic/Positivity/Basic.html">Mathlib.Tactic.Positivity.Basic</a></li><li><a href="../../.././Mathlib/Algebra/Group/Pointwise/Finset/Basic.html">Mathlib.Algebra.Group.Pointwise.Finset.Basic</a></li><li><a href="../../.././Mathlib/Algebra/Group/Pointwise/Finset/Scalar.html">Mathlib.Algebra.Group.Pointwise.Finset.Scalar</a></li><li><a href="../../.././Mathlib/Algebra/Group/Action/Pointwise/Set/Basic.html">Mathlib.Algebra.Group.Action.Pointwise.Set.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Combinatorics.Additive.CovBySMul" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CovBySMul"><span class="name">CovBySMul</span></a></div><div class="nav_link"><a class="break_within" href="#CovByVAdd"><span class="name">CovByVAdd</span></a></div><div class="nav_link"><a class="break_within" href="#CovBySMul.rfl"><span class="name">CovBySMul</span>.<span class="name">rfl</span></a></div><div class="nav_link"><a class="break_within" href="#CovByVAdd.rfl"><span class="name">CovByVAdd</span>.<span class="name">rfl</span></a></div><div class="nav_link"><a class="break_within" href="#CovBySMul.of_subset"><span class="name">CovBySMul</span>.<span class="name">of_subset</span></a></div><div class="nav_link"><a class="break_within" href="#CovByVAdd.of_subset"><span class="name">CovByVAdd</span>.<span class="name">of_subset</span></a></div><div class="nav_link"><a class="break_within" href="#CovBySMul.nonneg"><span class="name">CovBySMul</span>.<span class="name">nonneg</span></a></div><div class="nav_link"><a class="break_within" href="#CovByVAdd.nonneg"><span class="name">CovByVAdd</span>.<span class="name">nonneg</span></a></div><div class="nav_link"><a class="break_within" href="#covBySMul_zero"><span class="name">covBySMul_zero</span></a></div><div class="nav_link"><a class="break_within" href="#covByVAdd_zero"><span class="name">covByVAdd_zero</span></a></div><div class="nav_link"><a class="break_within" href="#CovBySMul.mono"><span class="name">CovBySMul</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#CovByVAdd.mono"><span class="name">CovByVAdd</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#CovBySMul.trans"><span class="name">CovBySMul</span>.<span class="name">trans</span></a></div><div class="nav_link"><a class="break_within" href="#CovByVAdd.trans"><span class="name">CovByVAdd</span>.<span class="name">trans</span></a></div><div class="nav_link"><a class="break_within" href="#CovBySMul.subset_left"><span class="name">CovBySMul</span>.<span class="name">subset_left</span></a></div><div class="nav_link"><a class="break_within" href="#CovByVAdd.subset_left"><span class="name">CovByVAdd</span>.<span class="name">subset_left</span></a></div><div class="nav_link"><a class="break_within" href="#CovBySMul.subset_right"><span class="name">CovBySMul</span>.<span class="name">subset_right</span></a></div><div class="nav_link"><a class="break_within" href="#CovByVAdd.subset_right"><span class="name">CovByVAdd</span>.<span class="name">subset_right</span></a></div><div class="nav_link"><a class="break_within" href="#CovBySMul.subset"><span class="name">CovBySMul</span>.<span class="name">subset</span></a></div><div class="nav_link"><a class="break_within" href="#CovByVAdd.subset"><span class="name">CovByVAdd</span>.<span class="name">subset</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Relation-of-covering-by-cosets" class="markdown-heading">Relation of covering by cosets <a class="hover-link" href="#Relation-of-covering-by-cosets">#</a></h1><p>This file defines a predicate for a set to be covered by at most <code>K</code> cosets of another set.</p><p>This is a fundamental relation to study in additive combinatorics.</p></div><div class="decl" id="CovBySMul"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L30-L34">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul"><span class="name">CovBySMul</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>Predicate for a set <code>A</code> to be covered by at most <code>K</code> cosets of another set <code>B</code> under the action
+by the monoid <code>M</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∃ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">M</span></span>), <span class="fn">↑<span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">K</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">A</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">↑<span class="fn">F</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">B</span></span></li></ul></details><details id="instances-for-list-CovBySMul" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CovByVAdd"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L32-L33">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd"><span class="name">CovByVAdd</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>Predicate for a set <code>A</code> to be covered by at most <code>K</code> cosets of another set <code>B</code>
+under the action by the monoid <code>M</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∃ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">M</span></span>), <span class="fn">↑<span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/Data/Finset/Card.html#Finset.card">card</a></span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">K</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">A</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">↑<span class="fn">F</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">B</span></span></li></ul></details><details id="instances-for-list-CovByVAdd" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CovBySMul.rfl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L36-L37">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul.rfl"><span class="name">CovBySMul</span>.<span class="name">rfl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">1</span> <span class="fn">A</span> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="CovByVAdd.rfl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L36-L36">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd.rfl"><span class="name">CovByVAdd</span>.<span class="name">rfl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">1</span> <span class="fn">A</span> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="CovBySMul.of_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L39-L40">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul.of_subset"><span class="name">CovBySMul</span>.<span class="name">of_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hAB</span> : <span class="fn">A</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">1</span> <span class="fn">A</span> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="CovByVAdd.of_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L39-L39">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd.of_subset"><span class="name">CovByVAdd</span>.<span class="name">of_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hAB</span> : <span class="fn">A</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">1</span> <span class="fn">A</span> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="CovBySMul.nonneg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L42-L43">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul.nonneg"><span class="name">CovBySMul</span>.<span class="name">nonneg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B</span></span> → <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">K</span></span></div></div></div></div><div class="decl" id="CovByVAdd.nonneg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L42-L42">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd.nonneg"><span class="name">CovByVAdd</span>.<span class="name">nonneg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B</span></span> → <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">K</span></span></div></div></div></div><div class="decl" id="covBySMul_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L45-L46">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#covBySMul_zero"><span class="name">covBySMul_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">0</span> <span class="fn">A</span> <span class="fn">B</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">A</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a></div></div></div></div><div class="decl" id="covByVAdd_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L45-L45">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#covByVAdd_zero"><span class="name">covByVAdd_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">0</span> <span class="fn">A</span> <span class="fn">B</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">A</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a></div></div></div></div><div class="decl" id="CovBySMul.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L48-L50">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul.mono"><span class="name">CovBySMul</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K </span><span class="fn">L</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hKL</span> : <span class="fn">K</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">L</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B</span></span> → <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">L</span> <span class="fn">A</span> <span class="fn">B</span></span></span></div></div></div></div><div class="decl" id="CovByVAdd.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L48-L48">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd.mono"><span class="name">CovByVAdd</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K </span><span class="fn">L</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hKL</span> : <span class="fn">K</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">L</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B</span></span> → <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">L</span> <span class="fn">A</span> <span class="fn">B</span></span></span></div></div></div></div><div class="decl" id="CovBySMul.trans"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L52-L65">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul.trans"><span class="name">CovBySMul</span>.<span class="name">trans</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">N</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K </span><span class="fn">L</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">C</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">M</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">M</span> <span class="fn">N</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hAB</span> : <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hBC</span> : <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">N</span> <span class="fn">L</span> <span class="fn">B</span> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">N</span> (<span class="fn">K</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">L</span>) <span class="fn">A</span> <span class="fn">C</span></span></div></div></div></div><div class="decl" id="CovByVAdd.trans"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L52-L52">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd.trans"><span class="name">CovByVAdd</span>.<span class="name">trans</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">N</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K </span><span class="fn">L</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">C</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">M</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#VAddAssocClass">VAddAssocClass</a> <span class="fn">M</span> <span class="fn">N</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hAB</span> : <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hBC</span> : <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">N</span> <span class="fn">L</span> <span class="fn">B</span> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">N</span> (<span class="fn">K</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">L</span>) <span class="fn">A</span> <span class="fn">C</span></span></div></div></div></div><div class="decl" id="CovBySMul.subset_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L67-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul.subset_left"><span class="name">CovBySMul</span>.<span class="name">subset_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A₁ </span><span class="fn">A₂ </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn">A₁</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">A₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hAB</span> : <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A₂</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A₁</span> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="CovByVAdd.subset_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L67-L67">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd.subset_left"><span class="name">CovByVAdd</span>.<span class="name">subset_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A₁ </span><span class="fn">A₂ </span><span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn">A₁</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">A₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hAB</span> : <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A₂</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A₁</span> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="CovBySMul.subset_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L71-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul.subset_right"><span class="name">CovBySMul</span>.<span class="name">subset_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B₁ </span><span class="fn">B₂</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hB</span> : <span class="fn">B₁</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">B₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hAB</span> : <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B₁</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B₂</span></span></div></div></div></div><div class="decl" id="CovByVAdd.subset_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L71-L71">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd.subset_right"><span class="name">CovByVAdd</span>.<span class="name">subset_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B₁ </span><span class="fn">B₂</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hB</span> : <span class="fn">B₁</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">B₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hAB</span> : <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B₁</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A</span> <span class="fn">B₂</span></span></div></div></div></div><div class="decl" id="CovBySMul.subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L75-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul.subset"><span class="name">CovBySMul</span>.<span class="name">subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A₁ </span><span class="fn">A₂ </span><span class="fn">B₁ </span><span class="fn">B₂</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn">A₁</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">A₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hB</span> : <span class="fn">B₁</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">B₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hAB</span> : <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A₂</span> <span class="fn">B₁</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovBySMul">CovBySMul</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A₁</span> <span class="fn">B₂</span></span></div></div></div></div><div class="decl" id="CovByVAdd.subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Combinatorics/Additive/CovBySMul.lean#L75-L75">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd.subset"><span class="name">CovByVAdd</span>.<span class="name">subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A₁ </span><span class="fn">A₂ </span><span class="fn">B₁ </span><span class="fn">B₂</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn">A₁</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">A₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hB</span> : <span class="fn">B₁</span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">B₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hAB</span> : <span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A₂</span> <span class="fn">B₁</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Combinatorics/Additive/CovBySMul.html#CovByVAdd">CovByVAdd</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">A₁</span> <span class="fn">B₂</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

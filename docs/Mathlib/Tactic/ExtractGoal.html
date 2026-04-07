@@ -1,0 +1,76 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Tactic.ExtractGoal</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Tactic.ExtractGoal";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ExtractGoal</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/ExtractGoal.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Lean/PrettyPrinter.html">Lean.PrettyPrinter</a></li><li><a href="../.././Lean/Elab/Command.html">Lean.Elab.Command</a></li><li><a href="../.././Lean/Elab/Term.html">Lean.Elab.Term</a></li><li><a href="../.././Mathlib/Tactic/MinImports.html">Mathlib.Tactic.MinImports</a></li><li><a href="../.././Batteries/Lean/Meta/Inaccessible.html">Batteries.Lean.Meta.Inaccessible</a></li><li><a href="../.././Lean/Elab/Tactic/ElabTerm.html">Lean.Elab.Tactic.ElabTerm</a></li><li><a href="../.././Lean/Meta/Tactic/Cleanup.html">Lean.Meta.Tactic.Cleanup</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Tactic.ExtractGoal" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Mathlib.Tactic.ExtractGoal.star"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ExtractGoal</span>.<span class="name">star</span></a></div><div class="nav_link"><a class="break_within" href="#Mathlib.Tactic.ExtractGoal.config"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ExtractGoal</span>.<span class="name">config</span></a></div><div class="nav_link"><a class="break_within" href="#Mathlib.Tactic.ExtractGoal.extractGoal"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ExtractGoal</span>.<span class="name">extractGoal</span></a></div><div class="nav_link"><a class="break_within" href="#Mathlib.Tactic.ExtractGoal.goalSignature"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ExtractGoal</span>.<span class="name">goalSignature</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="extract-goal-Format-the-current-goal-as-a-stand-alone-example" class="markdown-heading"><code>extract_goal</code>: Format the current goal as a stand-alone example <a class="hover-link" href="#extract-goal-Format-the-current-goal-as-a-stand-alone-example">#</a></h1><p>Useful for testing tactics or creating
+<a href="https://leanprover-community.github.io/mwe.html">minimal working examples</a>.</p><pre><code class="language-lean">example (i j k : Nat) (h₀ : i ≤ j) (h₁ : j ≤ k) : i ≤ k := by
+  extract_goal
+
+/-
+theorem extracted_1 (i j k : Nat) (h₀ : i ≤ j) (h₁ : j ≤ k) : i ≤ k := sorry
+-/
+</code></pre><ul><li>TODO: Add tactic code actions?</li><li>Output may produce lines with more than 100 characters</li></ul><h3 id="Caveat" class="markdown-heading">Caveat <a class="hover-link" href="#Caveat">#</a></h3><p>Tl;dr: sometimes, using <code>set_option [your pp option] in extract_goal</code> may work where <code>extract_goal</code>
+does not.</p><p>The extracted goal may depend on imports and <code>pp</code> options, since it relies on delaboration.
+For this reason, the extracted goal may not be equivalent to the given goal.
+However, the tactic responds to pretty printing options.
+For example, calling <code>set_option pp.all true in extract_goal</code> in the examples below actually works.</p><pre><code class="language-lean">-- `theorem int_eq_nat` is the output of the `extract_goal` from the example below
+-- the type ascription is removed and the `↑` is replaced by `Int.ofNat`:
+-- <a href="../.././Lean.html">Lean</a> infers the correct (false) statement
+theorem int_eq_nat {z : Int} : ∃ n, <a href="../.././Init/Data/Int/Basic.html#Int.ofNat">Int.ofNat</a> n = z := sorry
+
+example {z : Int} : ∃ n : Nat, ↑n = z := by
+  extract_goal  -- produces `int_eq_nat`
+  apply int_eq_nat  -- works
+</code></pre><p>However, importing <code><a href="../.././Batteries/Classes/Cast.html">Batteries.Classes.Cast</a></code>, makes <code>extract_goal</code> produce a different theorem</p><pre><code class="language-lean">import <a href="../.././Batteries/Classes/Cast.html">Batteries.Classes.Cast</a>
+
+-- `theorem extracted_1` is the output of the `extract_goal` from the example below
+-- the type ascription is erased and the `↑` is untouched:
+-- <a href="../.././Lean.html">Lean</a> infers a different statement, since it fills in `↑` with `id` and uses `n : Int`
+theorem extracted_1 {z : Int} : ∃ n, ↑n = z := ⟨_, rfl⟩
+
+example {z : Int} : ∃ n : Nat, ↑n = z := by
+  extract_goal
+  apply extracted_1
+/-
+tactic 'apply' failed, failed to unify
+  ∃ n, n = ?z
+with
+  ∃ n, ↑n = z
+z: <a href="../.././Init/Data/Int/Basic.html#Int">Int</a>
+⊢ ∃ n, ↑n = z
+-/
+</code></pre><p>Similarly, the extracted goal may fail to type-check:</p><pre><code class="language-lean">example (a : α) : ∃ f : α → α, f a = a := by
+  extract_goal
+  exact ⟨id, rfl⟩
+
+theorem extracted_1.{u_1} {α : Sort u_1} (a : α) : ∃ f, f a = a := sorry
+-- `f` is uninterpreted: `⊢ ∃ f, <a href="../.././Init/Prelude.html#sorryAx">sorryAx</a> α true = a`
+</code></pre><p>and also</p><pre><code class="language-lean">import <a href="../.././Mathlib/Algebra/Polynomial/Basic.html">Mathlib.Algebra.Polynomial.Basic</a>
+
+--  The `extract_goal` below produces this statement:
+theorem extracted_1 : X = X := sorry
+-- Yet, <a href="../.././Lean.html">Lean</a> is unable to figure out what is the coefficients <a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> for `X`
+/-
+typeclass instance problem is stuck, it is often due to metavariables
+  <a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> ?m.28495
+-/
+
+example : (X : Nat[X]) = X := by
+  extract_goal
+</code></pre></div><div class="decl" id="Mathlib.Tactic.ExtractGoal.star"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/ExtractGoal.lean#L110-L111">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/ExtractGoal.html#Mathlib.Tactic.ExtractGoal.star"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ExtractGoal</span>.<span class="name">star</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Lean.ParserDescr">Lean.ParserDescr</a></div></div><p>Have <code>extract_goal</code> extract the full local context.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../.././Mathlib/Tactic/ExtractGoal.html#Mathlib.Tactic.ExtractGoal.star">Mathlib.Tactic.ExtractGoal.star</a> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././Init/Prelude.html#Lean.ParserDescr.nodeWithAntiquot">Lean.ParserDescr.nodeWithAntiquot</a> <span class="fn">&quot;star&quot;</span> <span class="fn">`Mathlib.Tactic.ExtractGoal.star</span> <span class="fn">(<a href="../.././Init/Prelude.html#Lean.ParserDescr.symbol">Lean.ParserDescr.symbol</a> <span class="fn">&quot;*&quot;</span>)</span></span></li></ul></details><details id="instances-for-list-Mathlib.Tactic.ExtractGoal.star" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Mathlib.Tactic.ExtractGoal.config"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/ExtractGoal.lean#L113-L114">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/ExtractGoal.html#Mathlib.Tactic.ExtractGoal.config"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ExtractGoal</span>.<span class="name">config</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Lean.ParserDescr">Lean.ParserDescr</a></div></div><p>Configuration for <code>extract_goal</code> for which variables from the context to include.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Tactic.ExtractGoal.config" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Mathlib.Tactic.ExtractGoal.extractGoal"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/ExtractGoal.lean#L116-L137">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/ExtractGoal.html#Mathlib.Tactic.ExtractGoal.extractGoal"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ExtractGoal</span>.<span class="name">extractGoal</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Lean.ParserDescr">Lean.ParserDescr</a></div></div><p><code>extract_goal</code> formats the current goal as a stand-alone theorem or definition after
+cleaning up the local context of irrelevant variables.</p><p>A variable is <em>relevant</em> if (1) it occurs in the target type, (2) there is a relevant variable
+that depends on it, or (3) the type of the variable is a proposition that depends on a
+relevant variable.
+If the target is <code><a href="../.././Init/Prelude.html#False">False</a></code>, then for convenience <code>extract_goal</code> includes all variables.</p><p>The tactic tries to produce an output that can be copy-pasted and just work,
+but its success depends on whether the expressions are amenable
+to being unambiguously pretty printed.
+The tactic responds to pretty printing options.
+For example, <code>set_option pp.all true in extract_goal</code> gives the <code>pp.all</code> form.</p><ul><li><code>extract_goal *</code> formats the current goal without cleaning up the local context.</li><li><code>extract_goal a b c ...</code> formats the current goal after removing everything that the given
+variables <code>a</code>, <code>b</code>, <code>c</code>, ... do not depend on.</li><li><code>extract_goal ... using name</code> uses the name <code>name</code> for the theorem or definition rather than
+the autogenerated name.</li></ul><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Tactic.ExtractGoal.extractGoal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Mathlib.Tactic.ExtractGoal.goalSignature"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/ExtractGoal.lean#L139-L192">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/ExtractGoal.html#Mathlib.Tactic.ExtractGoal.goalSignature"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">ExtractGoal</span>.<span class="name">goalSignature</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">name</span> : <a href="../.././Init/Prelude.html#Lean.Name">Lean.Name</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <a href="../.././Lean/Expr.html#Lean.MVarId">Lean.MVarId</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Lean/Elab/Term/TermElabM.html#Lean.Elab.Term.TermElabM">Lean.Elab.TermElabM</a> (<a href="../.././Lean/Message.html#Lean.MessageData">Lean.MessageData</a> <a href="../.././Init/Prelude.html#Prod">×</a> <a href="../.././Lean/Expr.html#Lean.Expr">Lean.Expr</a> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn"><a href="../.././Init/Prelude.html#Array">Array</a> <a href="../.././Init/Prelude.html#Lean.Name">Lean.Name</a></span> <a href="../.././Init/Prelude.html#Prod">×</a> <a href="../.././Init/Prelude.html#Bool">Bool</a>)</span></div></div><p>Format a goal into a type signature for a declaration named <code>name</code>.</p><p>Example output: <code>myTheorem (a b : Nat) : a + b = b + a</code>.</p><p>The return values are:</p><ul><li>A formatted piece of <code>MessageData</code>, like <code>m!&quot;myTheorem (a b : Nat) : a + b = b + a&quot;</code>.</li><li>The full type of the declaration, like <code>∀ a b, a + b = b + a</code>.</li><li>The imports needed to state this declaration, as an array of module names.</li><li>A boolean indicating whether the original goal type had top-level foralls.</li></ul><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Tactic.ExtractGoal.goalSignature" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

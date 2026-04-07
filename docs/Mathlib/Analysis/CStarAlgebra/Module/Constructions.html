@@ -1,0 +1,751 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.CStarAlgebra.Module.Constructions</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.CStarAlgebra.Module.Constructions";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">CStarAlgebra</span>.<span class="name">Module</span>.<span class="name">Constructions</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Basic.html">Mathlib.Analysis.InnerProductSpace.Basic</a></li><li><a href="../../../.././Mathlib/Topology/MetricSpace/Bilipschitz.html">Mathlib.Topology.MetricSpace.Bilipschitz</a></li><li><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Order.html">Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order</a></li><li><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html">Mathlib.Analysis.CStarAlgebra.Module.Defs</a></li><li><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html">Mathlib.Analysis.CStarAlgebra.Module.Synonym</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.CStarAlgebra.Module.Constructions" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.instCStarModule"><span class="name">WithCStarModule</span>.<span class="name">instCStarModule</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.inner_def"><span class="name">WithCStarModule</span>.<span class="name">inner_def</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.instNormProd"><span class="name">WithCStarModule</span>.<span class="name">instNormProd</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.prod_norm"><span class="name">WithCStarModule</span>.<span class="name">prod_norm</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.prod_norm_sq"><span class="name">WithCStarModule</span>.<span class="name">prod_norm_sq</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.prod_norm_le_norm_add"><span class="name">WithCStarModule</span>.<span class="name">prod_norm_le_norm_add</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.instCStarModuleProd"><span class="name">WithCStarModule</span>.<span class="name">instCStarModuleProd</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.prod_inner"><span class="name">WithCStarModule</span>.<span class="name">prod_inner</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.max_le_prod_norm"><span class="name">WithCStarModule</span>.<span class="name">max_le_prod_norm</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.norm_equiv_le_norm_prod"><span class="name">WithCStarModule</span>.<span class="name">norm_equiv_le_norm_prod</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.normedAddCommGroupProdAux"><span class="name">WithCStarModule</span>.<span class="name">normedAddCommGroupProdAux</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.instNormedAddCommGroupProd"><span class="name">WithCStarModule</span>.<span class="name">instNormedAddCommGroupProd</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.instNormedSpaceComplexProd"><span class="name">WithCStarModule</span>.<span class="name">instNormedSpaceComplexProd</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.instNormForall"><span class="name">WithCStarModule</span>.<span class="name">instNormForall</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.pi_norm"><span class="name">WithCStarModule</span>.<span class="name">pi_norm</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.pi_norm_sq"><span class="name">WithCStarModule</span>.<span class="name">pi_norm_sq</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.pi_norm_le_sum_norm"><span class="name">WithCStarModule</span>.<span class="name">pi_norm_le_sum_norm</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.instCStarModuleForall"><span class="name">WithCStarModule</span>.<span class="name">instCStarModuleForall</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.pi_inner"><span class="name">WithCStarModule</span>.<span class="name">pi_inner</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.inner_single_left"><span class="name">WithCStarModule</span>.<span class="name">inner_single_left</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.inner_single_right"><span class="name">WithCStarModule</span>.<span class="name">inner_single_right</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.norm_single"><span class="name">WithCStarModule</span>.<span class="name">norm_single</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.norm_apply_le_norm"><span class="name">WithCStarModule</span>.<span class="name">norm_apply_le_norm</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.norm_equiv_le_norm_pi"><span class="name">WithCStarModule</span>.<span class="name">norm_equiv_le_norm_pi</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.normedAddCommGroupPiAux"><span class="name">WithCStarModule</span>.<span class="name">normedAddCommGroupPiAux</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.instNormedAddCommGroupForall"><span class="name">WithCStarModule</span>.<span class="name">instNormedAddCommGroupForall</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.instNormedSpaceComplexForall"><span class="name">WithCStarModule</span>.<span class="name">instNormedSpaceComplexForall</span></a></div><div class="nav_link"><a class="break_within" href="#WithCStarModule.instCStarModuleComplex"><span class="name">WithCStarModule</span>.<span class="name">instCStarModuleComplex</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Constructions-of-Hilbert-C⋆-modules" class="markdown-heading">Constructions of Hilbert C⋆-modules <a class="hover-link" href="#Constructions-of-Hilbert-C⋆-modules">#</a></h1><p>In this file we define the following constructions of <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code>s where <code>A</code> denotes a C⋆-algebra.
+For some of the types listed below, the instance is declared on the type synonym <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> E</code>
+(with the notation <code>C⋆ᵐᵒᵈ E</code>), instead of on <code>E</code> itself; we explain the reasoning behind each
+decision below.</p><ol><li><code>A</code> as a <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code> over itself.</li><li><code>C⋆ᵐᵒᵈ(A, E × F)</code> as a <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code> over <code>A</code>, when <code>E</code> and <code>F</code> are themselves <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code>s
+over <code>A</code>.</li><li><code>C⋆ᵐᵒᵈ (A, Π i : ι, E i)</code> as a <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code> over <code>A</code>, when each <code>E i</code> is a <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code> over
+<code>A</code> and <code>ι</code> is a <code><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code>.</li><li><code>E</code> as a <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code> over <code>ℂ</code>, when <code>E</code> is an <code><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a></code> over <code>ℂ</code>.</li></ol><p>For <code>E × F</code> and <code>Π i : ι, E i</code>, we are required to declare the instance on a type synonym rather
+than on the product or pi-type itself because the existing norm on these types does not agree with
+the one induced by the C⋆-module structure. Moreover, the norm induced by the C⋆-module structure
+doesn't agree with any other natural norm on these types (e.g., <code><a href="../../../.././Mathlib/Analysis/Normed/Lp/WithLp.html#WithLp">WithLp</a> 2 (E × F)</code> unless <code>A := ℂ</code>),
+so we need a new synonym.</p><p>On <code>A</code> (a C⋆-algebra) and <code>E</code> (an inner product space), we declare the instances on the types
+themselves to ease the use of the C⋆-module structure. This does have the potential to cause
+inconvenience (as sometimes Lean will see terms of type <code>A</code> and apply lemmas pertaining to
+C⋆-modules to those terms, when the lemmas were actually intended for terms of some other
+C⋆-module in context, say <code>F</code>, in which case the arguments must be provided explicitly; see for
+instance the application of <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule.norm_eq_sqrt_norm_inner_self">CStarModule.norm_eq_sqrt_norm_inner_self</a></code> in the proof of
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.max_le_prod_norm">WithCStarModule.max_le_prod_norm</a></code> below). However, we believe that this, hopefully rare,
+inconvenience is outweighed by avoiding translating between type synonyms where possible.</p><p>For more details on the importance of the <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a></code> type synonym, see the module
+documentation for <code>Analysis.CStarAlgebra.Module.Synonym</code>.</p><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>When <code>A := ℂ</code> and <code>E := ℂ</code>, then <code>ℂ</code> is both a C⋆-algebra (so it inherits a <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code> instance
+via (1) above) and an inner product space (so it inherits a <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code> instance via (4) above).
+We provide a sanity check ensuring that these two instances are definitionally equal. We also ensure
+that the <code><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner">Inner</a> ℂ ℂ</code> instance from <code><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a></code> is definitionally equal to the one inherited
+from the <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code> instances.</p><p>Note that <code>C⋆ᵐᵒᵈ(A, E)</code> is <em>already</em> equipped with a bornology and uniformity whenever <code>E</code> is
+(namely, the pullback of the respective structures through <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule.equiv">WithCStarModule.equiv</a></code>), so in each of
+the above cases, it is necessary to temporarily instantiate <code>C⋆ᵐᵒᵈ(A, E)</code> with
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule.normedAddCommGroup">CStarModule.normedAddCommGroup</a></code>, show the resulting type is bilipschitz equivalent to <code>E</code> via
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule.equiv">WithCStarModule.equiv</a></code> (in the first and last case, this map is actually trivially an isometry),
+and then replace the uniformity and bornology with the correct ones.</p></div><div class="mod_doc"><h2 id="A-C⋆-algebra-as-a-C⋆-module-over-itself" class="markdown-heading">A C⋆-algebra as a C⋆-module over itself <a class="hover-link" href="#A-C⋆-algebra-as-a-C⋆-module-over-itself">#</a></h2></div><div class="decl" id="WithCStarModule.instCStarModule"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L77-L88">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instCStarModule"><span class="name">WithCStarModule</span>.<span class="name">instCStarModule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">A</span></span></div></div><p>Reinterpret a C⋆-algebra <code>A</code> as a <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code> over itself.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="WithCStarModule.inner_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L91-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.inner_def"><span class="name">WithCStarModule</span>.<span class="name">inner_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Notation/Defs.html#Star.star">star</a> <span class="fn">x</span></span></div></div></div></div><div class="mod_doc"><h2 id="Products-of-C⋆-modules" class="markdown-heading">Products of C⋆-modules <a class="hover-link" href="#Products-of-C⋆-modules">#</a></h2></div><div class="decl" id="WithCStarModule.instNormProd"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L106-L107">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormProd"><span class="name">WithCStarModule</span>.<span class="name">instNormProd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm">Norm</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>))</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormProd">WithCStarModule.instNormProd</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.mk">{</a> <span class="fn">norm</span> := <span class="fn">fun (<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>)</span>) =&gt; <a href="../../../.././Mathlib/Data/Real/Sqrt.html#Real.sqrt">√</a><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn"><span class="fn">x</span>.1</span> <span class="fn"><span class="fn">x</span>.1</span></span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn"><span class="fn">x</span>.2</span> <span class="fn"><span class="fn">x</span>.2</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></span> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.mk">}</a></li></ul></details></div></div><div class="decl" id="WithCStarModule.prod_norm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L109-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.prod_norm"><span class="name">WithCStarModule</span>.<span class="name">prod_norm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Data/Real/Sqrt.html#Real.sqrt">√</a><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn"><span class="fn">x</span>.1</span> <span class="fn"><span class="fn">x</span>.1</span></span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn"><span class="fn">x</span>.2</span> <span class="fn"><span class="fn">x</span>.2</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="WithCStarModule.prod_norm_sq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L111-L112">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.prod_norm_sq"><span class="name">WithCStarModule</span>.<span class="name">prod_norm_sq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn"><span class="fn">x</span>.1</span> <span class="fn"><span class="fn">x</span>.1</span></span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn"><span class="fn">x</span>.2</span> <span class="fn"><span class="fn">x</span>.2</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="WithCStarModule.prod_norm_le_norm_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L114-L119">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.prod_norm_le_norm_add"><span class="name">WithCStarModule</span>.<span class="name">prod_norm_le_norm_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">x</span>.1</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">x</span>.2</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="WithCStarModule.instCStarModuleProd"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L123-L138">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instCStarModuleProd"><span class="name">WithCStarModule</span>.<span class="name">instCStarModuleProd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>))</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="WithCStarModule.prod_inner"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L140-L140">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.prod_inner"><span class="name">WithCStarModule</span>.<span class="name">prod_inner</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn"><span class="fn">x</span>.1</span> <span class="fn"><span class="fn">y</span>.1</span></span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn"><span class="fn">x</span>.2</span> <span class="fn"><span class="fn">y</span>.2</span></span></div></div></div></div><div class="decl" id="WithCStarModule.max_le_prod_norm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L142-L151">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.max_le_prod_norm"><span class="name">WithCStarModule</span>.<span class="name">max_le_prod_norm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Prelude.html#Max.max">max</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">x</span>.1</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">x</span>.2</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="WithCStarModule.norm_equiv_le_norm_prod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L153-L154">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.norm_equiv_le_norm_prod"><span class="name">WithCStarModule</span>.<span class="name">norm_equiv_le_norm_prod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule.equiv">equiv</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>))</span> <span class="fn">x</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="WithCStarModule.normedAddCommGroupProdAux"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L162-L167">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.normedAddCommGroupProdAux"><span class="name">WithCStarModule</span>.<span class="name">normedAddCommGroupProdAux</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>))</span></span></div></div><p>A normed additive commutative group structure on <code>C⋆ᵐᵒᵈ(A, E × F)</code> with the wrong topology,
+uniformity and bornology. This is only used to build the instance with the correct forgetful
+inheritance data.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.normedAddCommGroupProdAux">WithCStarModule.normedAddCommGroupProdAux</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAddCommGroup.ofCore">NormedAddCommGroup.ofCore</a> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-WithCStarModule.normedAddCommGroupProdAux" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="WithCStarModule.instNormedAddCommGroupProd"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L200-L201">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormedAddCommGroupProd"><span class="name">WithCStarModule</span>.<span class="name">instNormedAddCommGroupProd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>))</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormedAddCommGroupProd">WithCStarModule.instNormedAddCommGroupProd</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAddCommGroup.ofCoreReplaceAll">NormedAddCommGroup.ofCoreReplaceAll</a> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">⋯</span></span></li></ul></details></div></div><div class="decl" id="WithCStarModule.instNormedSpaceComplexProd"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L203-L203">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormedSpaceComplexProd"><span class="name">WithCStarModule</span>.<span class="name">instNormedSpaceComplexProd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> (<span class="fn">E</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">F</span>))</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormedSpaceComplexProd">WithCStarModule.instNormedSpaceComplexProd</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace.ofCore">NormedSpace.ofCore</a> <span class="fn">⋯</span></span></li></ul></details></div></div><div class="mod_doc"><h2 id="Pi-types-of-C⋆-modules" class="markdown-heading">Pi-types of C⋆-modules <a class="hover-link" href="#Pi-types-of-C⋆-modules">#</a></h2></div><div class="decl" id="WithCStarModule.instNormForall"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L217-L218">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormForall"><span class="name">WithCStarModule</span>.<span class="name">instNormForall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm">Norm</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormForall">WithCStarModule.instNormForall</a> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.mk">{</a> <span class="fn">norm</span> := <span class="fn">fun (<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>) =&gt; <a href="../../../.././Mathlib/Data/Real/Sqrt.html#Real.sqrt">√</a><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">∑ <span class="fn">i</span> : <span class="fn">ι</span>, <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></span> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.mk">}</a></li></ul></details></div></div><div class="decl" id="WithCStarModule.pi_norm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L220-L221">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.pi_norm"><span class="name">WithCStarModule</span>.<span class="name">pi_norm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Data/Real/Sqrt.html#Real.sqrt">√</a><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">∑ <span class="fn">i</span> : <span class="fn">ι</span>, <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="WithCStarModule.pi_norm_sq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L223-L224">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.pi_norm_sq"><span class="name">WithCStarModule</span>.<span class="name">pi_norm_sq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">∑ <span class="fn">i</span> : <span class="fn">ι</span>, <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="WithCStarModule.pi_norm_le_sum_norm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L227-L231">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.pi_norm_le_sum_norm"><span class="name">WithCStarModule</span>.<span class="name">pi_norm_le_sum_norm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">∑ <span class="fn">i</span> : <span class="fn">ι</span>, <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">x</span> <span class="fn">i</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></span></div></div></div></div><div class="decl" id="WithCStarModule.instCStarModuleForall"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L236-L248">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instCStarModuleForall"><span class="name">WithCStarModule</span>.<span class="name">instCStarModuleForall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="WithCStarModule.pi_inner"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L250-L250">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.pi_inner"><span class="name">WithCStarModule</span>.<span class="name">pi_inner</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">x</span> <span class="fn">y</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∑ <span class="fn">i</span> : <span class="fn">ι</span>, <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">y</span> <span class="fn">i</span>)</span></span></span></div></div></div></div><div class="decl" id="WithCStarModule.inner_single_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L252-L257">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.inner_single_left"><span class="name">WithCStarModule</span>.<span class="name">inner_single_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule.equiv">equiv</a> <span class="fn">A</span> <span class="fn">((<span class="fn">j</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">j</span></span>)</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Notation/Pi/Basic.html#Pi.single">Pi.single</a> <span class="fn">i</span> <span class="fn">y</span>)</span>)</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">y</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span></span></div></div></div></div><div class="decl" id="WithCStarModule.inner_single_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L259-L264">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.inner_single_right"><span class="name">WithCStarModule</span>.<span class="name">inner_single_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">x</span> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule.equiv">equiv</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Notation/Pi/Basic.html#Pi.single">Pi.single</a> <span class="fn">i</span> <span class="fn">y</span>)</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#Inner.inner">inner</a> <span class="fn">A</span> <span class="fn">(<span class="fn">x</span> <span class="fn">i</span>)</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="WithCStarModule.norm_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L266-L271">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.norm_single"><span class="name">WithCStarModule</span>.<span class="name">norm_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">y</span> : <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule.equiv">equiv</a> <span class="fn">A</span> <span class="fn">((<span class="fn">j</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">j</span></span>)</span>)</span>.<a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Notation/Pi/Basic.html#Pi.single">Pi.single</a> <span class="fn">i</span> <span class="fn">y</span>)</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">y</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="WithCStarModule.norm_apply_le_norm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L273-L278">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.norm_apply_le_norm"><span class="name">WithCStarModule</span>.<span class="name">norm_apply_le_norm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">x</span> <span class="fn">i</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="WithCStarModule.norm_equiv_le_norm_pi"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L281-L284">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.norm_equiv_le_norm_pi"><span class="name">WithCStarModule</span>.<span class="name">norm_equiv_le_norm_pi</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule.equiv">equiv</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span>)</span> <span class="fn">x</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="WithCStarModule.normedAddCommGroupPiAux"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L292-L297">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.normedAddCommGroupPiAux"><span class="name">WithCStarModule</span>.<span class="name">normedAddCommGroupPiAux</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span>)</span></span></div></div><p>A normed additive commutative group structure on <code>C⋆ᵐᵒᵈ(A, Π i, E i)</code> with the wrong topology,
+uniformity and bornology. This is only used to build the instance with the correct forgetful
+inheritance data.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.normedAddCommGroupPiAux">WithCStarModule.normedAddCommGroupPiAux</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAddCommGroup.ofCore">NormedAddCommGroup.ofCore</a> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-WithCStarModule.normedAddCommGroupPiAux" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="WithCStarModule.instNormedAddCommGroupForall"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L329-L330">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormedAddCommGroupForall"><span class="name">WithCStarModule</span>.<span class="name">instNormedAddCommGroupForall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormedAddCommGroupForall">WithCStarModule.instNormedAddCommGroupForall</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAddCommGroup.ofCoreReplaceAll">NormedAddCommGroup.ofCoreReplaceAll</a> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">⋯</span></span></li></ul></details></div></div><div class="decl" id="WithCStarModule.instNormedSpaceComplexForall"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L332-L332">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormedSpaceComplexForall"><span class="name">WithCStarModule</span>.<span class="name">instNormedSpaceComplexForall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Classes.html#NonUnitalCStarAlgebra">NonUnitalCStarAlgebra</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../../.././foundational_types.html">Type</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <span class="fn">A</span> <span class="fn">(<span class="fn">E</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Order/Star/Basic.html#StarOrderedRing">StarOrderedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Synonym.html#WithCStarModule">WithCStarModule</a> <span class="fn">A</span> <span class="fn">((<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">E</span> <span class="fn">i</span></span>)</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instNormedSpaceComplexForall">WithCStarModule.instNormedSpaceComplexForall</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace.ofCore">NormedSpace.ofCore</a> <span class="fn">⋯</span></span></li></ul></details></div></div><div class="mod_doc"><h2 id="Inner-product-spaces-as-C⋆-modules" class="markdown-heading">Inner product spaces as C⋆-modules <a class="hover-link" href="#Inner-product-spaces-as-C⋆-modules">#</a></h2></div><div class="decl" id="WithCStarModule.instCStarModuleComplex"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/Module/Constructions.lean#L346-L363">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Constructions.html#WithCStarModule.instCStarModuleComplex"><span class="name">WithCStarModule</span>.<span class="name">instCStarModuleComplex</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/InnerProductSpace/Defs.html#InnerProductSpace">InnerProductSpace</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a> <a href="../../../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">E</span></span></div></div><p>Reinterpret an inner product space <code>E</code> over <code>ℂ</code> as a <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/Module/Defs.html#CStarModule">CStarModule</a></code> over <code>ℂ</code>.</p><p>Note: this instance requires <code><a href="../../../.././Init/Prelude.html#SMul">SMul</a> ℂᵐᵒᵖ E</code> and <code><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsCentralScalar">IsCentralScalar</a> ℂ E</code> instances to exist on <code>E</code>,
+which is unlikely to occur in practice. However, in practice one could either add those instances
+to the type <code>E</code> in question, or else supply them to this instance manually, which is reason behind
+the naming of these two instance arguments.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

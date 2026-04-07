@@ -1,0 +1,636 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RepresentationTheory.Equiv</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.RepresentationTheory.Equiv";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RepresentationTheory</span>.<span class="name">Equiv</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/RepresentationTheory/Intertwining.html">Mathlib.RepresentationTheory.Intertwining</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RepresentationTheory.Equiv" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Representation.ofMulActionSubsingletonEquivTrivial"><span class="name">Representation</span>.<span class="name">ofMulActionSubsingletonEquivTrivial</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.ofMulActionSubsingletonEquivTrivial_apply"><span class="name">Representation</span>.<span class="name">ofMulActionSubsingletonEquivTrivial_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.ofMulActionSubsingletonEquivTrivial_symm_apply"><span class="name">Representation</span>.<span class="name">ofMulActionSubsingletonEquivTrivial_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.diagonalOneEquivLeftRegular"><span class="name">Representation</span>.<span class="name">diagonalOneEquivLeftRegular</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.diagonalOneEquivLeftRegular_apply_single"><span class="name">Representation</span>.<span class="name">diagonalOneEquivLeftRegular_apply_single</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.diagonalOneEquivLeftRegular_symm_apply_single"><span class="name">Representation</span>.<span class="name">diagonalOneEquivLeftRegular_symm_apply_single</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.freeLift"><span class="name">Representation</span>.<span class="name">freeLift</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.freeLift_toLinearMap"><span class="name">Representation</span>.<span class="name">freeLift_toLinearMap</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.freeLift_single_single"><span class="name">Representation</span>.<span class="name">freeLift_single_single</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.freeLiftLEquiv"><span class="name">Representation</span>.<span class="name">freeLiftLEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.freeLiftLEquiv_symm_apply"><span class="name">Representation</span>.<span class="name">freeLiftLEquiv_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.freeLiftLEquiv_apply"><span class="name">Representation</span>.<span class="name">freeLiftLEquiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.finsuppTensorLeft"><span class="name">Representation</span>.<span class="name">finsuppTensorLeft</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.finsuppTensorLeft_apply_tmul"><span class="name">Representation</span>.<span class="name">finsuppTensorLeft_apply_tmul</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.finsuppTensorLeft_apply_tmul_apply"><span class="name">Representation</span>.<span class="name">finsuppTensorLeft_apply_tmul_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.finsuppTensorLeft_symm_apply_single"><span class="name">Representation</span>.<span class="name">finsuppTensorLeft_symm_apply_single</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.finsuppTensorRight"><span class="name">Representation</span>.<span class="name">finsuppTensorRight</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.finsuppTensorRight_apply_tmul"><span class="name">Representation</span>.<span class="name">finsuppTensorRight_apply_tmul</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.finsuppTensorRight_apply_tmul_apply"><span class="name">Representation</span>.<span class="name">finsuppTensorRight_apply_tmul_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.finsuppTensorRight_symm_apply_single"><span class="name">Representation</span>.<span class="name">finsuppTensorRight_symm_apply_single</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.leftRegularTensorTrivialIsoFree"><span class="name">Representation</span>.<span class="name">leftRegularTensorTrivialIsoFree</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.leftRegularTensorTrivialIsoFree_apply_single_tmul_single"><span class="name">Representation</span>.<span class="name">leftRegularTensorTrivialIsoFree_apply_single_tmul_single</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.leftRegularTensorTrivialIsoFree_symm_apply_single_single"><span class="name">Representation</span>.<span class="name">leftRegularTensorTrivialIsoFree_symm_apply_single_single</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.leftRegularMapEquiv"><span class="name">Representation</span>.<span class="name">leftRegularMapEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.leftRegularMapEquiv_apply"><span class="name">Representation</span>.<span class="name">leftRegularMapEquiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.leftRegularMapEquiv_symm_apply_toFun"><span class="name">Representation</span>.<span class="name">leftRegularMapEquiv_symm_apply_toFun</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.leftRegularMapEquiv_symm_single"><span class="name">Representation</span>.<span class="name">leftRegularMapEquiv_symm_single</span></a></div></nav><main>
+<div class="mod_doc"><h2 id="Main-purpose" class="markdown-heading">Main purpose <a class="hover-link" href="#Main-purpose">#</a></h2><p>This file is a preliminary file for the <code>Iso</code>s in <code><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a></code>, we build all the isomorphisms from
+representation level to avoid abusing defeq.</p><p>TODO (Edison) : refactor <code><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a></code> into a two-field structure (bundled <code><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a></code>) and rebuild
+all the <code>Iso</code>s in <code><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a></code> using the equivs in this file.</p></div><div class="decl" id="Representation.ofMulActionSubsingletonEquivTrivial"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L34-L39">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.ofMulActionSubsingletonEquivTrivial"><span class="name">Representation</span>.<span class="name">ofMulActionSubsingletonEquivTrivial</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#MulOneClass">MulOneClass</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.ofMulAction">ofMulAction</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">H</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv">Equiv</a></span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.trivial">trivial</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">k</span>)</span></span></div></div><p>If there exists <code>G</code>-action on a trivial monoid <code>H</code> then the induced representation
+on <code>k[H]</code> is equivalent to the trivial representation.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.ofMulActionSubsingletonEquivTrivial">Representation.ofMulActionSubsingletonEquivTrivial</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">H</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv.mk">Representation.Equiv.mk</a> <span class="fn">(<a href="../.././Mathlib/LinearAlgebra/Finsupp/Pi.html#Finsupp.LinearEquiv.finsuppUnique">Finsupp.LinearEquiv.finsuppUnique</a> <span class="fn">k</span> <span class="fn">k</span> <span class="fn">H</span>)</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-Representation.ofMulActionSubsingletonEquivTrivial" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.ofMulActionSubsingletonEquivTrivial_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L41-L43">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.ofMulActionSubsingletonEquivTrivial_apply"><span class="name">Representation</span>.<span class="name">ofMulActionSubsingletonEquivTrivial_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#MulOneClass">MulOneClass</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">H</span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.ofMulActionSubsingletonEquivTrivial">ofMulActionSubsingletonEquivTrivial</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">H</span>)</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.toLinearMap">toLinearMap</a></span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">1</span></span></div></div></div></div><div class="decl" id="Representation.ofMulActionSubsingletonEquivTrivial_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L45-L50">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.ofMulActionSubsingletonEquivTrivial_symm_apply"><span class="name">Representation</span>.<span class="name">ofMulActionSubsingletonEquivTrivial_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#MulOneClass">MulOneClass</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(↑<span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.ofMulActionSubsingletonEquivTrivial">ofMulActionSubsingletonEquivTrivial</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">H</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv.symm">symm</a></span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.toLinearMap">toLinearMap</a></span> <span class="fn">r</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">1</span> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="Representation.diagonalOneEquivLeftRegular"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L53-L55">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.diagonalOneEquivLeftRegular"><span class="name">Representation</span>.<span class="name">diagonalOneEquivLeftRegular</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.diagonal">diagonal</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">1</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv">Equiv</a></span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.leftRegular">leftRegular</a> <span class="fn">k</span> <span class="fn">G</span>)</span></span></div></div><p>The equivalence of representations between <code>(Fin 1 → G) →₀ k</code> and <code>G →₀ k</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.diagonalOneEquivLeftRegular">Representation.diagonalOneEquivLeftRegular</a> <span class="fn">k</span> <span class="fn">G</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv.mk">Representation.Equiv.mk</a> <span class="fn">(<a href="../.././Mathlib/LinearAlgebra/Finsupp/LSum.html#Finsupp.domLCongr">Finsupp.domLCongr</a> <span class="fn">(<a href="../.././Mathlib/Logic/Equiv/Defs.html#Equiv.funUnique">Equiv.funUnique</a> <span class="fn">(<a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">1</span>)</span> <span class="fn">G</span>)</span>)</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-Representation.diagonalOneEquivLeftRegular" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.diagonalOneEquivLeftRegular_apply_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L57-L61">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.diagonalOneEquivLeftRegular_apply_single"><span class="name">Representation</span>.<span class="name">diagonalOneEquivLeftRegular_apply_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">1</span></span> → <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.diagonalOneEquivLeftRegular">diagonalOneEquivLeftRegular</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">f</span> <span class="fn">r</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">(<span class="fn">f</span> <span class="fn">0</span>)</span> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="Representation.diagonalOneEquivLeftRegular_symm_apply_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L63-L67">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.diagonalOneEquivLeftRegular_symm_apply_single"><span class="name">Representation</span>.<span class="name">diagonalOneEquivLeftRegular_symm_apply_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.diagonalOneEquivLeftRegular">diagonalOneEquivLeftRegular</a> <span class="fn">k</span> <span class="fn">G</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv.symm">symm</a></span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">g</span> <span class="fn">r</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">(<a href="../.././Mathlib/Logic/Unique.html#uniqueElim">uniqueElim</a> <span class="fn">g</span>)</span> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="Representation.freeLift"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L78-L83">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLift"><span class="name">Representation</span>.<span class="name">freeLift</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">V</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.free">free</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">α</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">σ</span></span></div></div><p>Every <code>f : α → V</code> can induce an intertwining map between <code>(α →₀ G →₀ k)</code> and <code>V</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLift">freeLift</a></span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.mk">{</a>     <span class="fn">toLinearMap</span> :=
+      <span class="fn"><span class="fn">(<a href="../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">k</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn">G</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">σ</span> <span class="fn"><span class="fn">x</span>.2</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn"><span class="fn">x</span>.1</span>)</span></span></span>)</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.comp">∘ₗ</a> <span class="fn">↑<span class="fn"><span class="fn">(<a href="../.././Mathlib/LinearAlgebra/Finsupp/Defs.html#Finsupp.curryLinearEquiv">Finsupp.curryLinearEquiv</a> <span class="fn">k</span>)</span>.<a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span></span></span>,
+    <span class="fn">isIntertwining'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.mk">}</a></li></ul></details><details id="instances-for-list-Representation.freeLift" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.freeLift_toLinearMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L79-L79">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLift_toLinearMap"><span class="name">Representation</span>.<span class="name">freeLift_toLinearMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">V</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLift">freeLift</a></span> <span class="fn">f</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.toLinearMap">toLinearMap</a></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<a href="../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">k</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn">G</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">σ</span> <span class="fn"><span class="fn">x</span>.2</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn"><span class="fn">x</span>.1</span>)</span></span></span>)</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.comp">∘ₗ</a> <span class="fn">↑<span class="fn"><span class="fn">(<a href="../.././Mathlib/LinearAlgebra/Finsupp/Defs.html#Finsupp.curryLinearEquiv">Finsupp.curryLinearEquiv</a> <span class="fn">k</span>)</span>.<a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span></span></span></div></div></div></div><div class="decl" id="Representation.freeLift_single_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L85-L88">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLift_single_single"><span class="name">Representation</span>.<span class="name">freeLift_single_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">k</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">V</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLift">freeLift</a></span> <span class="fn">f</span>)</span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">g</span> <span class="fn">r</span>)</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">(<span class="fn">σ</span> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></div></div></div></div><div class="decl" id="Representation.freeLiftLEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L92-L100">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLiftLEquiv"><span class="name">Representation</span>.<span class="name">freeLiftLEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w')</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.free">free</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">α</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">σ</span></span> <a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">k</span><a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn"><span class="fn">α</span> → <span class="fn">V</span></span></div></div><p>Equiv between the intertwining map module <code>(α →₀ G →₀ k) → V</code> and the function space <code>α → V</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Representation.freeLiftLEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.freeLiftLEquiv_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L93-L93">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLiftLEquiv_symm_apply"><span class="name">Representation</span>.<span class="name">freeLiftLEquiv_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w')</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">V</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLiftLEquiv">freeLiftLEquiv</a></span> <span class="fn">α</span>)</span>.<a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLift">freeLift</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Representation.freeLiftLEquiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L93-L93">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLiftLEquiv_apply"><span class="name">Representation</span>.<span class="name">freeLiftLEquiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w')</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.free">free</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">α</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">σ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.freeLiftLEquiv">freeLiftLEquiv</a></span> <span class="fn">α</span>)</span> <span class="fn">f</span> <span class="fn">i</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">1</span> <span class="fn">1</span>)</span>)</span></span></div></div></div></div><div class="decl" id="Representation.finsuppTensorLeft"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L102-L107">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorLeft"><span class="name">Representation</span>.<span class="name">finsuppTensorLeft</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w')</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.finsupp">finsupp</a></span> <span class="fn">α</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.tprod">tprod</a></span> <span class="fn">ρ</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv">Equiv</a></span> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.tprod">tprod</a></span> <span class="fn">ρ</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.finsupp">finsupp</a></span> <span class="fn">α</span>)</span></span></div></div><p>Equiv between representations induced by linear equiv between <code>(α →₀ V) ⊗[k] W</code> and
+<code>α →₀ (V ⊗[k] W)</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorLeft">finsuppTensorLeft</a></span> <span class="fn">ρ</span> <span class="fn">α</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv.mk">Representation.Equiv.mk</a> <span class="fn">(<a href="../.././Mathlib/LinearAlgebra/DirectSum/Finsupp.html#TensorProduct.finsuppLeft">TensorProduct.finsuppLeft</a> <span class="fn">k</span> <span class="fn">k</span> <span class="fn">V</span> <span class="fn">W</span> <span class="fn">α</span>)</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-Representation.finsuppTensorLeft" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.finsuppTensorLeft_apply_tmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L109-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorLeft_apply_tmul"><span class="name">Representation</span>.<span class="name">finsuppTensorLeft_apply_tmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">V</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn">W</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorLeft">finsuppTensorLeft</a></span> <span class="fn">ρ</span> <span class="fn">α</span>)</span> (<span class="fn">f</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">w</span>)</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/Algebra/BigOperators/Finsupp/Basic.html#Finsupp.sum">sum</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">α</span>) (<span class="fn">v</span> : <span class="fn">V</span>) =&gt; <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> (<span class="fn">v</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">w</span>)</span></span></span></div></div></div></div><div class="decl" id="Representation.finsuppTensorLeft_apply_tmul_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L113-L116">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorLeft_apply_tmul_apply"><span class="name">Representation</span>.<span class="name">finsuppTensorLeft_apply_tmul_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">V</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn">W</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorLeft">finsuppTensorLeft</a></span> <span class="fn">ρ</span> <span class="fn">α</span>)</span> (<span class="fn">f</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">w</span>))</span> <span class="fn">i</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">w</span></div></div></div></div><div class="decl" id="Representation.finsuppTensorLeft_symm_apply_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L118-L121">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorLeft_symm_apply_single"><span class="name">Representation</span>.<span class="name">finsuppTensorLeft_symm_apply_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">V</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn">W</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorLeft">finsuppTensorLeft</a></span> <span class="fn">ρ</span> <span class="fn">α</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv.symm">symm</a></span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> (<span class="fn">v</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">w</span>))</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> <span class="fn">v</span></span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">w</span></div></div></div></div><div class="decl" id="Representation.finsuppTensorRight"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L123-L128">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorRight"><span class="name">Representation</span>.<span class="name">finsuppTensorRight</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w')</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.tprod">tprod</a></span> <span class="fn">(<span class="fn"><span class="fn">ρ</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.finsupp">finsupp</a></span> <span class="fn">α</span>)</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv">Equiv</a></span> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.tprod">tprod</a></span> <span class="fn">ρ</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.finsupp">finsupp</a></span> <span class="fn">α</span>)</span></span></div></div><p>Equiv between representations induced by linear equiv between <code>V ⊗[k] (α →₀ W)</code> and
+<code>α →₀ (V ⊗[k] W)</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorRight">finsuppTensorRight</a></span> <span class="fn">ρ</span> <span class="fn">α</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv.mk">Representation.Equiv.mk</a> <span class="fn">(<a href="../.././Mathlib/LinearAlgebra/DirectSum/Finsupp.html#TensorProduct.finsuppRight">TensorProduct.finsuppRight</a> <span class="fn">k</span> <span class="fn">k</span> <span class="fn">V</span> <span class="fn">W</span> <span class="fn">α</span>)</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-Representation.finsuppTensorRight" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.finsuppTensorRight_apply_tmul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L130-L132">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorRight_apply_tmul"><span class="name">Representation</span>.<span class="name">finsuppTensorRight_apply_tmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">V</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">W</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorRight">finsuppTensorRight</a></span> <span class="fn">ρ</span> <span class="fn">α</span>)</span> (<span class="fn">v</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">f</span>)</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/Algebra/BigOperators/Finsupp/Basic.html#Finsupp.sum">sum</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">α</span>) (<span class="fn">w</span> : <span class="fn">W</span>) =&gt; <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> (<span class="fn">v</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">w</span>)</span></span></span></div></div></div></div><div class="decl" id="Representation.finsuppTensorRight_apply_tmul_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L134-L137">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorRight_apply_tmul_apply"><span class="name">Representation</span>.<span class="name">finsuppTensorRight_apply_tmul_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">V</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">W</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorRight">finsuppTensorRight</a></span> <span class="fn">ρ</span> <span class="fn">α</span>)</span> (<span class="fn">v</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">f</span>))</span> <span class="fn">i</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">v</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="Representation.finsuppTensorRight_symm_apply_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L139-L142">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorRight_symm_apply_single"><span class="name">Representation</span>.<span class="name">finsuppTensorRight_symm_apply_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">W</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">V</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn">W</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.finsuppTensorRight">finsuppTensorRight</a></span> <span class="fn">ρ</span> <span class="fn">α</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv.symm">symm</a></span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> (<span class="fn">v</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">w</span>))</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">v</span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> <span class="fn">w</span></span></div></div></div></div><div class="decl" id="Representation.leftRegularTensorTrivialIsoFree"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L144-L149">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularTensorTrivialIsoFree"><span class="name">Representation</span>.<span class="name">leftRegularTensorTrivialIsoFree</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w')</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.leftRegular">leftRegular</a> <span class="fn">k</span> <span class="fn">G</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.tprod">tprod</a></span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.trivial">trivial</a> <span class="fn">k</span> <span class="fn">G</span> (<span class="fn">α</span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">k</span>))</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv">Equiv</a></span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.free">free</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">α</span>)</span></span></div></div><p>Equiv between representations induced by linear equiv between <code>(G →₀ k) ⊗[k] (α →₀ k)</code> and
+<code>α →₀ G →₀ k</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Representation.leftRegularTensorTrivialIsoFree" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.leftRegularTensorTrivialIsoFree_apply_single_tmul_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L151-L155">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularTensorTrivialIsoFree_apply_single_tmul_single"><span class="name">Representation</span>.<span class="name">leftRegularTensorTrivialIsoFree_apply_single_tmul_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r </span><span class="fn">s</span> : <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularTensorTrivialIsoFree">leftRegularTensorTrivialIsoFree</a> <span class="fn">α</span>)</span> (<span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">g</span> <span class="fn">r</span></span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> <span class="fn">s</span></span>)</span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">g</span> (<span class="fn">r</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">s</span>))</span></span></div></div></div></div><div class="decl" id="Representation.leftRegularTensorTrivialIsoFree_symm_apply_single_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L157-L161">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularTensorTrivialIsoFree_symm_apply_single_single"><span class="name">Representation</span>.<span class="name">leftRegularTensorTrivialIsoFree_symm_apply_single_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> w'}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularTensorTrivialIsoFree">leftRegularTensorTrivialIsoFree</a> <span class="fn">α</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv.symm">symm</a></span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">g</span> <span class="fn">r</span>)</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">g</span> <span class="fn">1</span></span> <a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">k</span><a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn"><a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">i</span> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="Representation.leftRegularMapEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L165-L173">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularMapEquiv"><span class="name">Representation</span>.<span class="name">leftRegularMapEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.leftRegular">leftRegular</a> <span class="fn">k</span> <span class="fn">G</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">σ</span></span> <a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">k</span><a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn">V</span></div></div><p>The linear equiv between the hom module <code>k[G] ⟶ᵍ V</code> and <code>V</code> itself.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Representation.leftRegularMapEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.leftRegularMapEquiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L166-L166">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularMapEquiv_apply"><span class="name">Representation</span>.<span class="name">leftRegularMapEquiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation.leftRegular">leftRegular</a> <span class="fn">k</span> <span class="fn">G</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">σ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularMapEquiv">leftRegularMapEquiv</a></span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">1</span> <span class="fn">1</span>)</span></span></div></div></div></div><div class="decl" id="Representation.leftRegularMapEquiv_symm_apply_toFun"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L166-L166">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularMapEquiv_symm_apply_toFun"><span class="name">Representation</span>.<span class="name">leftRegularMapEquiv_symm_apply_toFun</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">V</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn">G</span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularMapEquiv">leftRegularMapEquiv</a></span>.<a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">v</span>)</span> <span class="fn">d</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">d</span>.<a href="../.././Mathlib/Algebra/BigOperators/Finsupp/Basic.html#Finsupp.sum">sum</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">G</span>) (<span class="fn">c</span> : <span class="fn">k</span>) =&gt; <span class="fn">c</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">(<span class="fn">σ</span> <span class="fn">i</span>)</span> <span class="fn">v</span></span></span></span></div></div></div></div><div class="decl" id="Representation.leftRegularMapEquiv_symm_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Equiv.lean#L175-L177">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularMapEquiv_symm_single"><span class="name">Representation</span>.<span class="name">leftRegularMapEquiv_symm_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">V</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Equiv.html#Representation.leftRegularMapEquiv">leftRegularMapEquiv</a></span>.<a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">v</span>)</span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">g</span> <span class="fn">1</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">σ</span> <span class="fn">g</span>)</span> <span class="fn">v</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

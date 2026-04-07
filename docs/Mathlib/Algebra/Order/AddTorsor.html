@@ -1,0 +1,380 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Order.AddTorsor</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Order.AddTorsor";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Order</span>.<span class="name">AddTorsor</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html">Mathlib.Algebra.Group.Action.Defs</a></li><li><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html">Mathlib.Algebra.Order.Monoid.Defs</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Order.AddTorsor" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsOrderedVAdd"><span class="name">IsOrderedVAdd</span></a></div><div class="nav_link"><a class="break_within" href="#IsOrderedSMul"><span class="name">IsOrderedSMul</span></a></div><div class="nav_link"><a class="break_within" href="#instCovariantClassHSMulLeOfIsOrderedSMul"><span class="name">instCovariantClassHSMulLeOfIsOrderedSMul</span></a></div><div class="nav_link"><a class="break_within" href="#instCovariantClassHVAddLeOfIsOrderedVAdd"><span class="name">instCovariantClassHVAddLeOfIsOrderedVAdd</span></a></div><div class="nav_link"><a class="break_within" href="#instIsOrderedSMulOfIsOrderedMonoid"><span class="name">instIsOrderedSMulOfIsOrderedMonoid</span></a></div><div class="nav_link"><a class="break_within" href="#instIsOrderedVAddOfIsOrderedAddMonoid"><span class="name">instIsOrderedVAddOfIsOrderedAddMonoid</span></a></div><div class="nav_link"><a class="break_within" href="#IsOrderedSMul.smul_le_smul"><span class="name">IsOrderedSMul</span>.<span class="name">smul_le_smul</span></a></div><div class="nav_link"><a class="break_within" href="#IsOrderedVAdd.vadd_le_vadd"><span class="name">IsOrderedVAdd</span>.<span class="name">vadd_le_vadd</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.smul"><span class="name">Monotone</span>.<span class="name">smul</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.vadd"><span class="name">Monotone</span>.<span class="name">vadd</span></a></div><div class="nav_link"><a class="break_within" href="#IsOrderedCancelVAdd"><span class="name">IsOrderedCancelVAdd</span></a></div><div class="nav_link"><a class="break_within" href="#IsOrderedCancelSMul"><span class="name">IsOrderedCancelSMul</span></a></div><div class="nav_link"><a class="break_within" href="#instIsCancelSMulOfIsOrderedCancelSMul"><span class="name">instIsCancelSMulOfIsOrderedCancelSMul</span></a></div><div class="nav_link"><a class="break_within" href="#instIsCancelVAddOfIsOrderedCancelVAdd"><span class="name">instIsCancelVAddOfIsOrderedCancelVAdd</span></a></div><div class="nav_link"><a class="break_within" href="#instIsOrderedCancelSMulOfIsOrderedCancelMonoid"><span class="name">instIsOrderedCancelSMulOfIsOrderedCancelMonoid</span></a></div><div class="nav_link"><a class="break_within" href="#instIsOrderedCancelVAddOfIsOrderedAddCancelMonoid"><span class="name">instIsOrderedCancelVAddOfIsOrderedAddCancelMonoid</span></a></div><div class="nav_link"><a class="break_within" href="#instContravariantClassHSMulLeOfIsOrderedCancelSMul"><span class="name">instContravariantClassHSMulLeOfIsOrderedCancelSMul</span></a></div><div class="nav_link"><a class="break_within" href="#instContravariantClassHVAddLeOfIsOrderedCancelVAdd"><span class="name">instContravariantClassHVAddLeOfIsOrderedCancelVAdd</span></a></div><div class="nav_link"><a class="break_within" href="#SMul.smul_lt_smul_of_le_of_lt"><span class="name">SMul</span>.<span class="name">smul_lt_smul_of_le_of_lt</span></a></div><div class="nav_link"><a class="break_within" href="#VAdd.vadd_lt_vadd_of_le_of_lt"><span class="name">VAdd</span>.<span class="name">vadd_lt_vadd_of_le_of_lt</span></a></div><div class="nav_link"><a class="break_within" href="#SMul.smul_lt_smul_of_lt_of_le"><span class="name">SMul</span>.<span class="name">smul_lt_smul_of_lt_of_le</span></a></div><div class="nav_link"><a class="break_within" href="#VAdd.vadd_lt_vadd_of_lt_of_le"><span class="name">VAdd</span>.<span class="name">vadd_lt_vadd_of_lt_of_le</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Ordered-scalar-multiplication-and-vector-addition" class="markdown-heading">Ordered scalar multiplication and vector addition <a class="hover-link" href="#Ordered-scalar-multiplication-and-vector-addition">#</a></h1><p>This file defines ordered scalar multiplication and vector addition, and proves some properties.
+In the additive case, a motivating example is given by the additive action of <code>ℤ</code> on subsets of
+reals that are closed under integer translation.  The order compatibility allows for a treatment of
+the <code>R((z))</code>-module structure on <code>(z ^ s) V((z))</code> for an <code>R</code>-module <code>V</code>, using the formalism of Hahn
+series.  In the multiplicative case, a standard example is the action of non-negative rationals on
+an ordered field.</p><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><ul><li>Because these classes mix the algebra and order hierarchies, we write them as <code>Prop</code>-valued
+mixins.</li><li>Despite the file name, Ordered AddTorsors are not defined as a separate class.  To implement them,
+combine <code>[AddTorsor G P]</code> with <code>[IsOrderedCancelVAdd G P]</code></li></ul><h2 id="Definitions" class="markdown-heading">Definitions <a class="hover-link" href="#Definitions">#</a></h2><ul><li>IsOrderedSMul : inequalities are preserved by scalar multiplication.</li><li>IsOrderedVAdd : inequalities are preserved by translation.</li><li>IsCancelSMul : the scalar multiplication version of cancellative multiplication</li><li>IsCancelVAdd : the vector addition version of cancellative addition</li><li>IsOrderedCancelSMul : inequalities are preserved and reflected by scalar multiplication.</li><li>IsOrderedCancelVAdd : inequalities are preserved and reflected by translation.</li></ul><h2 id="Instances" class="markdown-heading">Instances <a class="hover-link" href="#Instances">#</a></h2><ul><li>OrderedCommMonoid.toIsOrderedSMul</li><li>OrderedAddCommMonoid.toIsOrderedVAdd</li><li>IsOrderedSMul.toCovariantClassLeft</li><li>IsOrderedVAdd.toCovariantClassLeft</li><li>IsOrderedCancelSMul.toCancelSMul</li><li>IsOrderedCancelVAdd.toCancelVAdd</li><li>OrderedCancelCommMonoid.toIsOrderedCancelSMul</li><li>OrderedCancelAddCommMonoid.toIsOrderedCancelVAdd</li><li>IsOrderedCancelSMul.toContravariantClassLeft</li><li>IsOrderedCancelVAdd.toContravariantClassLeft</li></ul><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li>(lex) prod instances</li><li>Pi instances</li><li>WithTop (in a different file?)</li></ul></div><div class="decl" id="IsOrderedVAdd"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L58-L61">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd"><span class="name">IsOrderedVAdd</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>An ordered vector addition is a bi-monotone vector addition.</p><ul class="structure_fields" id="IsOrderedVAdd.mk"><li id="IsOrderedVAdd.vadd_le_vadd_left" class="structure_field"><div class="structure_field_info">vadd_le_vadd_left<span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn">P</span>)</span></span>
+ : <span class="fn"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <span class="fn">∀ (<span class="fn">c</span> : <span class="fn">G</span>), <span class="fn">c</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">b</span></span></span></div></li><li id="IsOrderedVAdd.vadd_le_vadd_right" class="structure_field"><div class="structure_field_info">vadd_le_vadd_right<span class="decl_args">
+<span class="fn">(<span class="fn">c </span><span class="fn">d</span> : <span class="fn">G</span>)</span></span>
+ : <span class="fn"><span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span> → <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">P</span>), <span class="fn">c</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-IsOrderedVAdd" class="instances-list"></ul></details></div></div><div class="decl" id="IsOrderedSMul"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L63-L69">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul"><span class="name">IsOrderedSMul</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>An ordered scalar multiplication is a bi-monotone scalar multiplication. Note that this is
+different from <code><a href="../../.././Mathlib/Algebra/Order/Module/Defs.html#IsOrderedModule">IsOrderedModule</a></code> whose defining conditions are restricted to nonnegative elements.</p><ul class="structure_fields" id="IsOrderedSMul.mk"><li id="IsOrderedSMul.smul_le_smul_left" class="structure_field"><div class="structure_field_info">smul_le_smul_left<span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn">P</span>)</span></span>
+ : <span class="fn"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <span class="fn">∀ (<span class="fn">c</span> : <span class="fn">G</span>), <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span></span></span></div></li><li id="IsOrderedSMul.smul_le_smul_right" class="structure_field"><div class="structure_field_info">smul_le_smul_right<span class="decl_args">
+<span class="fn">(<span class="fn">c </span><span class="fn">d</span> : <span class="fn">G</span>)</span></span>
+ : <span class="fn"><span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span> → <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">P</span>), <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-IsOrderedSMul" class="instances-list"></ul></details></div></div><div class="decl" id="instCovariantClassHSMulLeOfIsOrderedSMul"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L71-L73">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#instCovariantClassHSMulLeOfIsOrderedSMul"><span class="name">instCovariantClassHSMulLeOfIsOrderedSMul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul">IsOrderedSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#CovariantClass">CovariantClass</a> <span class="fn">G</span> <span class="fn">P</span> <span class="fn">(fun (<span class="fn">x1</span> : <span class="fn">G</span>) (<span class="fn">x2</span> : <span class="fn">P</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x2</span>)</span> <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">P</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x2</span></span></span></div></div></div></div><div class="decl" id="instCovariantClassHVAddLeOfIsOrderedVAdd"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L71-L71">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#instCovariantClassHVAddLeOfIsOrderedVAdd"><span class="name">instCovariantClassHVAddLeOfIsOrderedVAdd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd">IsOrderedVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#CovariantClass">CovariantClass</a> <span class="fn">G</span> <span class="fn">P</span> <span class="fn">(fun (<span class="fn">x1</span> : <span class="fn">G</span>) (<span class="fn">x2</span> : <span class="fn">P</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">x2</span>)</span> <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">P</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x2</span></span></span></div></div></div></div><div class="decl" id="instIsOrderedSMulOfIsOrderedMonoid"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L75-L78">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#instIsOrderedSMulOfIsOrderedMonoid"><span class="name">instIsOrderedSMulOfIsOrderedMonoid</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#CommMonoid">CommMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedMonoid">IsOrderedMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul">IsOrderedSMul</a> <span class="fn">G</span> <span class="fn">G</span></span></div></div></div></div><div class="decl" id="instIsOrderedVAddOfIsOrderedAddMonoid"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L75-L75">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#instIsOrderedVAddOfIsOrderedAddMonoid"><span class="name">instIsOrderedVAddOfIsOrderedAddMonoid</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedAddMonoid">IsOrderedAddMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd">IsOrderedVAdd</a> <span class="fn">G</span> <span class="fn">G</span></span></div></div></div></div><div class="decl" id="IsOrderedSMul.smul_le_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L80-L83">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul.smul_le_smul"><span class="name">IsOrderedSMul</span>.<span class="name">smul_le_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul">IsOrderedSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">G</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c </span><span class="fn">d</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hab</span> : <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hcd</span> : <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">d</span></div></div></div></div><div class="decl" id="IsOrderedVAdd.vadd_le_vadd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L80-L80">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd.vadd_le_vadd"><span class="name">IsOrderedVAdd</span>.<span class="name">vadd_le_vadd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd">IsOrderedVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">G</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c </span><span class="fn">d</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hab</span> : <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hcd</span> : <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">d</span></div></div></div></div><div class="decl" id="Monotone.smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L85-L90">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#Monotone.smul"><span class="name">Monotone</span>.<span class="name">smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul">IsOrderedSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">γ</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></span></span></div></div></div></div><div class="decl" id="Monotone.vadd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L85-L85">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#Monotone.vadd"><span class="name">Monotone</span>.<span class="name">vadd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd">IsOrderedVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">γ</span> → <span class="fn">P</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">γ</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></span></span></div></div></div></div><div class="decl" id="IsOrderedCancelVAdd"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L92-L96">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd"><span class="name">IsOrderedCancelVAdd</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="IsOrderedCancelVAdd.toIsOrderedVAdd"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd">IsOrderedVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>An ordered cancellative vector addition is an ordered vector addition that is cancellative.</p><ul class="structure_fields" id="IsOrderedCancelVAdd.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd.vadd_le_vadd_left">vadd_le_vadd_left</a><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn">P</span>)</span></span>
+ : <span class="fn"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <span class="fn">∀ (<span class="fn">c</span> : <span class="fn">G</span>), <span class="fn">c</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">b</span></span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedVAdd.vadd_le_vadd_right">vadd_le_vadd_right</a><span class="decl_args">
+<span class="fn">(<span class="fn">c </span><span class="fn">d</span> : <span class="fn">G</span>)</span></span>
+ : <span class="fn"><span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span> → <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">P</span>), <span class="fn">c</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">a</span></span></span></div></li><li id="IsOrderedCancelVAdd.le_of_vadd_le_vadd_left" class="structure_field"><div class="structure_field_info">le_of_vadd_le_vadd_left<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b </span><span class="fn">c</span> : <span class="fn">P</span>)</span></span>
+ : <span class="fn"><span class="fn">a</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">c</span> → <span class="fn">b</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span></span></div></li><li id="IsOrderedCancelVAdd.le_of_vadd_le_vadd_right" class="structure_field"><div class="structure_field_info">le_of_vadd_le_vadd_right<span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">P</span>)</span></span>
+ : <span class="fn"><span class="fn">a</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">c</span> → <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-IsOrderedCancelVAdd" class="instances-list"></ul></details></div></div><div class="decl" id="IsOrderedCancelSMul"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L98-L104">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul"><span class="name">IsOrderedCancelSMul</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="IsOrderedCancelSMul.toIsOrderedSMul"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul">IsOrderedSMul</a> <span class="fn">G</span> <span class="fn">P</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>An ordered cancellative scalar multiplication is an ordered scalar multiplication that is
+cancellative.</p><ul class="structure_fields" id="IsOrderedCancelSMul.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul.smul_le_smul_left">smul_le_smul_left</a><span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn">P</span>)</span></span>
+ : <span class="fn"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <span class="fn">∀ (<span class="fn">c</span> : <span class="fn">G</span>), <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span></span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedSMul.smul_le_smul_right">smul_le_smul_right</a><span class="decl_args">
+<span class="fn">(<span class="fn">c </span><span class="fn">d</span> : <span class="fn">G</span>)</span></span>
+ : <span class="fn"><span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span> → <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">P</span>), <span class="fn">c</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">a</span></span></span></div></li><li id="IsOrderedCancelSMul.le_of_smul_le_smul_left" class="structure_field"><div class="structure_field_info">le_of_smul_le_smul_left<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b </span><span class="fn">c</span> : <span class="fn">P</span>)</span></span>
+ : <span class="fn"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">c</span> → <span class="fn">b</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span></span></div></li><li id="IsOrderedCancelSMul.le_of_smul_le_smul_right" class="structure_field"><div class="structure_field_info">le_of_smul_le_smul_right<span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">P</span>)</span></span>
+ : <span class="fn"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">c</span> → <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-IsOrderedCancelSMul" class="instances-list"></ul></details></div></div><div class="decl" id="instIsCancelSMulOfIsOrderedCancelSMul"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L106-L112">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#instIsCancelSMulOfIsOrderedCancelSMul"><span class="name">instIsCancelSMulOfIsOrderedCancelSMul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsCancelSMul">IsCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="instIsCancelVAddOfIsOrderedCancelVAdd"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L106-L106">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#instIsCancelVAddOfIsOrderedCancelVAdd"><span class="name">instIsCancelVAddOfIsOrderedCancelVAdd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsCancelVAdd">IsCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span></div></div></div></div><div class="decl" id="instIsOrderedCancelSMulOfIsOrderedCancelMonoid"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L114-L117">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#instIsOrderedCancelSMulOfIsOrderedCancelMonoid"><span class="name">instIsOrderedCancelSMulOfIsOrderedCancelMonoid</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#CommMonoid">CommMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelMonoid">IsOrderedCancelMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">G</span></span></div></div></div></div><div class="decl" id="instIsOrderedCancelVAddOfIsOrderedAddCancelMonoid"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L114-L114">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#instIsOrderedCancelVAddOfIsOrderedAddCancelMonoid"><span class="name">instIsOrderedCancelVAddOfIsOrderedAddCancelMonoid</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Defs.html#IsOrderedCancelAddMonoid">IsOrderedCancelAddMonoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">G</span></span></div></div></div></div><div class="decl" id="instContravariantClassHSMulLeOfIsOrderedCancelSMul"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L119-L122">source</a></div><div class="attributes">@[instance 200]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#instContravariantClassHSMulLeOfIsOrderedCancelSMul"><span class="name">instContravariantClassHSMulLeOfIsOrderedCancelSMul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#ContravariantClass">ContravariantClass</a> <span class="fn">G</span> <span class="fn">P</span> <span class="fn">(fun (<span class="fn">x1</span> : <span class="fn">G</span>) (<span class="fn">x2</span> : <span class="fn">P</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x2</span>)</span> <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">P</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x2</span></span></span></div></div></div></div><div class="decl" id="instContravariantClassHVAddLeOfIsOrderedCancelVAdd"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L119-L119">source</a></div><div class="attributes">@[instance 200]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#instContravariantClassHVAddLeOfIsOrderedCancelVAdd"><span class="name">instContravariantClassHVAddLeOfIsOrderedCancelVAdd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#ContravariantClass">ContravariantClass</a> <span class="fn">G</span> <span class="fn">P</span> <span class="fn">(fun (<span class="fn">x1</span> : <span class="fn">G</span>) (<span class="fn">x2</span> : <span class="fn">P</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">x2</span>)</span> <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">P</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x2</span></span></span></div></div></div></div><div class="decl" id="SMul.smul_lt_smul_of_le_of_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L126-L135">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#SMul.smul_lt_smul_of_le_of_lt"><span class="name">SMul</span>.<span class="name">smul_lt_smul_of_le_of_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">G</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c </span><span class="fn">d</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">d</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">d</span></div></div></div></div><div class="decl" id="VAdd.vadd_lt_vadd_of_le_of_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L126-L126">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#VAdd.vadd_lt_vadd_of_le_of_lt"><span class="name">VAdd</span>.<span class="name">vadd_lt_vadd_of_le_of_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LE">LE</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">G</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c </span><span class="fn">d</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">d</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">d</span></div></div></div></div><div class="decl" id="SMul.smul_lt_smul_of_lt_of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L137-L145">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#SMul.smul_lt_smul_of_lt_of_le"><span class="name">SMul</span>.<span class="name">smul_lt_smul_of_lt_of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelSMul">IsOrderedCancelSMul</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">G</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c </span><span class="fn">d</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">d</span></div></div></div></div><div class="decl" id="VAdd.vadd_lt_vadd_of_lt_of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Order/AddTorsor.lean#L137-L137">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Order/AddTorsor.html#VAdd.vadd_lt_vadd_of_lt_of_le"><span class="name">VAdd</span>.<span class="name">vadd_lt_vadd_of_lt_of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/AddTorsor.html#IsOrderedCancelVAdd">IsOrderedCancelVAdd</a> <span class="fn">G</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">G</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c </span><span class="fn">d</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">a</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">d</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">c</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">b</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">d</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

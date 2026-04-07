@@ -1,0 +1,655 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Lie.Weights.IsSimple</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Lie.Weights.IsSimple";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Lie</span>.<span class="name">Weights</span>.<span class="name">IsSimple</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html">Mathlib.Algebra.Lie.Weights.RootSystem</a></li><li><a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Finite/Lemmas.html">Mathlib.LinearAlgebra.RootSystem.Finite.Lemmas</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Lie.Weights.IsSimple" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#LieIdeal.corootSubmodule_le"><span class="name">LieIdeal</span>.<span class="name">corootSubmodule_le</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.rootSet"><span class="name">LieIdeal</span>.<span class="name">rootSet</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.mem_rootSet"><span class="name">LieIdeal</span>.<span class="name">mem_rootSet</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.rootSpan"><span class="name">LieIdeal</span>.<span class="name">rootSpan</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.rootSpace_le_of_apply_coroot_ne_zero"><span class="name">LieIdeal</span>.<span class="name">rootSpace_le_of_apply_coroot_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.reflectionPerm_mem_rootSet_iff"><span class="name">LieIdeal</span>.<span class="name">reflectionPerm_mem_rootSet_iff</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.rootSpan_mem_invtRootSubmodule"><span class="name">LieIdeal</span>.<span class="name">rootSpan_mem_invtRootSubmodule</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.toInvtRootSubmodule"><span class="name">LieIdeal</span>.<span class="name">toInvtRootSubmodule</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.toInvtRootSubmodule_mono"><span class="name">LieIdeal</span>.<span class="name">toInvtRootSubmodule_mono</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.root_apply_eq_zero_of_notMem_rootSet"><span class="name">LieIdeal</span>.<span class="name">root_apply_eq_zero_of_notMem_rootSet</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.rootSet_apply_coroot_eq_zero_of_notMem_rootSet"><span class="name">LieIdeal</span>.<span class="name">rootSet_apply_coroot_eq_zero_of_notMem_rootSet</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.restr_inf_cartan_eq_biSup_corootSubmodule"><span class="name">LieIdeal</span>.<span class="name">restr_inf_cartan_eq_biSup_corootSubmodule</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.mem_rootSet_of_mem_rootSpan"><span class="name">LieIdeal</span>.<span class="name">mem_rootSet_of_mem_rootSpan</span></a></div><div class="nav_link"><a class="break_within" href="#LieIdeal.restr_eq_iSup_sl2SubmoduleOfRoot"><span class="name">LieIdeal</span>.<span class="name">restr_eq_iSup_sl2SubmoduleOfRoot</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">invtSubmoduleToLieIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.coe_invtSubmoduleToLieIdeal_eq_iSup"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">coe_invtSubmoduleToLieIdeal_eq_iSup</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.restr_invtSubmoduleToLieIdeal_eq_iSup"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">restr_invtSubmoduleToLieIdeal_eq_iSup</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.mem_rootSet_invtSubmoduleToLieIdeal"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">mem_rootSet_invtSubmoduleToLieIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal_mono"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">invtSubmoduleToLieIdeal_mono</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.lieIdealOrderIso_left_inv"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">lieIdealOrderIso_left_inv</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.lieIdealOrderIso_right_inv"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">lieIdealOrderIso_right_inv</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.lieIdealOrderIso"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">lieIdealOrderIso</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.isSimple_iff_isIrreducible"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">isSimple_iff_isIrreducible</span></a></div><div class="nav_link"><a class="break_within" href="#LieAlgebra.IsKilling.instIsIrreducibleSubtypeWeightMemLieSubalgebraFinsetRootDualRootSystemOfIsSimple"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">instIsIrreducibleSubtypeWeightMemLieSubalgebraFinsetRootDualRootSystemOfIsSimple</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Lie-ideals-invariant-root-submodules-and-simple-Lie-algebras" class="markdown-heading">Lie ideals, invariant root submodules, and simple Lie algebras <a class="hover-link" href="#Lie-ideals-invariant-root-submodules-and-simple-Lie-algebras">#</a></h1><p>Given a semisimple Lie algebra, the lattice of ideals is order isomorphic to the lattice of
+Weyl-group-invariant submodules of the corresponding root system. In this file we provide
+<code><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.toInvtRootSubmodule">LieIdeal.toInvtRootSubmodule</a></code>, which constructs the invariant submodule associated to an ideal,
+and <code><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal">LieAlgebra.IsKilling.invtSubmoduleToLieIdeal</a></code>, which constructs the ideal associated to an
+invariant submodule.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">LieIdeal.rootSet</a></code>: the set of roots whose root space is contained in a given Lie ideal.</li><li><code><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSpan">LieIdeal.rootSpan</a></code>: the submodule of <code>Dual K H</code> spanned by <code><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">LieIdeal.rootSet</a></code>.</li><li><code><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.toInvtRootSubmodule">LieIdeal.toInvtRootSubmodule</a></code>: the invariant root submodule associated to an ideal.</li><li><code><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal">LieAlgebra.IsKilling.invtSubmoduleToLieIdeal</a></code>: constructs a Lie ideal from an invariant
+submodule of the dual space.</li><li><code><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.lieIdealOrderIso">LieAlgebra.IsKilling.lieIdealOrderIso</a></code>: the order isomorphism between Lie ideals and
+invariant root submodules.</li></ul><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code>LieAlgebra.IsKilling.restr_inf_cartan_eq_iSup_corootSubmodule</code>: the intersection of a Lie ideal
+and a Cartan subalgebra is the span of the coroots whose roots have root spaces in the ideal.</li><li><code><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.isSimple_iff_isIrreducible">LieAlgebra.IsKilling.isSimple_iff_isIrreducible</a></code>: a Killing Lie algebra is simple if and only
+if its root system is irreducible.</li></ul></div><div class="decl" id="LieIdeal.corootSubmodule_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L45-L54">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.corootSubmodule_le"><span class="name">LieIdeal</span>.<span class="name">corootSubmodule_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">LieModule.Weight</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hα</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Cartan.html#LieAlgebra.rootSpace">LieAlgebra.rootSpace</a> <span class="fn">H</span> <span class="fn">⇑<span class="fn">α</span></span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubmodule.restr">LieSubmodule.restr</a> <span class="fn">I</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieAlgebra.IsKilling.corootSubmodule">LieAlgebra.IsKilling.corootSubmodule</a> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubmodule.restr">LieSubmodule.restr</a> <span class="fn">I</span> <span class="fn">H</span></span></div></div></div></div><div class="decl" id="LieIdeal.rootSet"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L56-L57">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet"><span class="name">LieIdeal</span>.<span class="name">rootSet</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span></span></div></div><p>The set of roots whose root space is contained in a given Lie ideal.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">α</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Cartan.html#LieAlgebra.rootSpace">LieAlgebra.rootSpace</a> <span class="fn">H</span> <span class="fn">⇑<span class="fn">↑<span class="fn">α</span></span></span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubmodule.restr">LieSubmodule.restr</a> <span class="fn">I</span> <span class="fn">H</span></span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></li></ul></details><details id="instances-for-list-LieIdeal.rootSet" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieIdeal.mem_rootSet"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L59-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.mem_rootSet"><span class="name">LieIdeal</span>.<span class="name">mem_rootSet</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">α</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Cartan.html#LieAlgebra.rootSpace">LieAlgebra.rootSpace</a> <span class="fn">H</span> <span class="fn">⇑<span class="fn">↑<span class="fn">α</span></span></span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubmodule.restr">LieSubmodule.restr</a> <span class="fn">I</span> <span class="fn">H</span></span></div></div></div></div><div class="decl" id="LieIdeal.rootSpan"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L64-L66">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSpan"><span class="name">LieIdeal</span>.<span class="name">rootSpan</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">K</span> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Dual/Defs.html#Module.Dual">Module.Dual</a> <span class="fn">K</span> <span class="fn">↥<span class="fn">H</span></span>)</span></span></div></div><p>The submodule of <code>Dual K H</code> spanned by the roots associated to a Lie ideal.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSpan">rootSpan</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">Submodule.span</a> <span class="fn">K</span> (<span class="fn">⇑<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">LieAlgebra.IsKilling.rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.root">root</a></span></span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span>)</span></li></ul></details><details id="instances-for-list-LieIdeal.rootSpan" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieIdeal.rootSpace_le_of_apply_coroot_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L68-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSpace_le_of_apply_coroot_ne_zero"><span class="name">LieIdeal</span>.<span class="name">rootSpace_le_of_apply_coroot_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">LieModule.Weight</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hα</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Cartan.html#LieAlgebra.rootSpace">LieAlgebra.rootSpace</a> <span class="fn">H</span> <span class="fn">⇑<span class="fn">α</span></span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubmodule.restr">LieSubmodule.restr</a> <span class="fn">I</span> <span class="fn">H</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><span class="fn">↥<span class="fn">H</span></span> → <span class="fn">K</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hγ_ne</span> : <span class="fn"><span class="fn">γ</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieAlgebra.IsKilling.coroot">LieAlgebra.IsKilling.coroot</a> <span class="fn">α</span>)</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Cartan.html#LieAlgebra.rootSpace">LieAlgebra.rootSpace</a> <span class="fn">H</span> <span class="fn">γ</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubmodule.restr">LieSubmodule.restr</a> <span class="fn">I</span> <span class="fn">H</span></span></div></div></div></div><div class="decl" id="LieIdeal.reflectionPerm_mem_rootSet_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L79-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.reflectionPerm_mem_rootSet_iff"><span class="name">LieIdeal</span>.<span class="name">reflectionPerm_mem_rootSet_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α </span><span class="fn">β</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">LieAlgebra.IsKilling.rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.reflectionPerm">reflectionPerm</a></span> <span class="fn">β</span>)</span> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">α</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span></div></div></div></div><div class="decl" id="LieIdeal.rootSpan_mem_invtRootSubmodule"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L94-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSpan_mem_invtRootSubmodule"><span class="name">LieIdeal</span>.<span class="name">rootSpan_mem_invtRootSubmodule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSpan">rootSpan</a></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">LieAlgebra.IsKilling.rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Irreducible.html#RootPairing.invtRootSubmodule">invtRootSubmodule</a></span></div></div><p>The submodule spanned by roots of a Lie ideal is invariant under all root reflections.</p></div></div><div class="decl" id="LieIdeal.toInvtRootSubmodule"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L104-L110">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.toInvtRootSubmodule"><span class="name">LieIdeal</span>.<span class="name">toInvtRootSubmodule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↥<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">LieAlgebra.IsKilling.rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Irreducible.html#RootPairing.invtRootSubmodule">invtRootSubmodule</a></span></span></div></div><p>The invariant root submodule corresponding to a Lie ideal.</p><p>Given a Lie ideal <code>I</code>, this produces an invariant root submodule by taking the span of all
+roots whose root spaces are contained in <code>I</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.toInvtRootSubmodule">toInvtRootSubmodule</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSpan">rootSpan</a></span>, <span class="fn">⋯</span><a href="../../../.././Init/Prelude.html#Subtype.mk">⟩</a></li></ul></details><details id="instances-for-list-LieIdeal.toInvtRootSubmodule" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieIdeal.toInvtRootSubmodule_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L112-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.toInvtRootSubmodule_mono"><span class="name">LieIdeal</span>.<span class="name">toInvtRootSubmodule_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">I</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">J</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.toInvtRootSubmodule">toInvtRootSubmodule</a></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">J</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.toInvtRootSubmodule">toInvtRootSubmodule</a></span></div></div></div></div><div class="decl" id="LieIdeal.root_apply_eq_zero_of_notMem_rootSet"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L118-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.root_apply_eq_zero_of_notMem_rootSet"><span class="name">LieIdeal</span>.<span class="name">root_apply_eq_zero_of_notMem_rootSet</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">↥<span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hI</span> : <span class="fn">↑<span class="fn">h</span></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">I</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hβ</span> : <span class="fn"><span class="fn">β</span> ∉ <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">↑<span class="fn">β</span></span> <span class="fn">h</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="LieIdeal.rootSet_apply_coroot_eq_zero_of_notMem_rootSet"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L129-L139">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet_apply_coroot_eq_zero_of_notMem_rootSet"><span class="name">LieIdeal</span>.<span class="name">rootSet_apply_coroot_eq_zero_of_notMem_rootSet</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hα</span> : <span class="fn">α</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hβ</span> : <span class="fn"><span class="fn">β</span> ∉ <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">↑<span class="fn">α</span></span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieAlgebra.IsKilling.coroot">LieAlgebra.IsKilling.coroot</a> <span class="fn">↑<span class="fn">β</span></span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="LieIdeal.restr_inf_cartan_eq_biSup_corootSubmodule"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L141-L189">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.restr_inf_cartan_eq_biSup_corootSubmodule"><span class="name">LieIdeal</span>.<span class="name">restr_inf_cartan_eq_biSup_corootSubmodule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubmodule.restr">LieSubmodule.restr</a> <span class="fn">I</span> <span class="fn">H</span></span> ⊓ <span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubalgebra.toLieSubmodule">toLieSubmodule</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⨆ <span class="fn">α</span> ∈ <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span>, <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieAlgebra.IsKilling.corootSubmodule">LieAlgebra.IsKilling.corootSubmodule</a> <span class="fn">↑<span class="fn">α</span></span></span></span></div></div><p>The intersection of a Lie ideal and a Cartan subalgebra is the span of the coroots whose roots
+have root spaces in the ideal.</p></div></div><div class="decl" id="LieIdeal.mem_rootSet_of_mem_rootSpan"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L191-L203">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.mem_rootSet_of_mem_rootSpan"><span class="name">LieIdeal</span>.<span class="name">mem_rootSet_of_mem_rootSpan</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hα_span</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear">LieModule.Weight.toLinear</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span> <span class="fn">↑<span class="fn">α</span></span></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSpan">rootSpan</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">α</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span></div></div></div></div><div class="decl" id="LieIdeal.restr_eq_iSup_sl2SubmoduleOfRoot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L205-L221">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.restr_eq_iSup_sl2SubmoduleOfRoot"><span class="name">LieIdeal</span>.<span class="name">restr_eq_iSup_sl2SubmoduleOfRoot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">LieAlgebra.IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubmodule.restr">LieSubmodule.restr</a> <span class="fn">I</span> <span class="fn">H</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⨆ <span class="fn">α</span> ∈ <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span>, <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieAlgebra.IsKilling.sl2SubmoduleOfRoot">LieAlgebra.IsKilling.sl2SubmoduleOfRoot</a> <span class="fn">⋯</span></span></span></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.invtSubmoduleToLieIdeal"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L435-L460">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">invtSubmoduleToLieIdeal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">K</span> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Dual/Defs.html#Module.Dual">Module.Dual</a> <span class="fn">K</span> <span class="fn">↥<span class="fn">H</span></span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>), <span class="fn">q</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Invariant.html#Module.End.invtSubmodule">Module.End.invtSubmodule</a> <span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.reflection">reflection</a></span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span></div></div><p>Constructs a Lie ideal from an invariant submodule of the dual space of a Cartan subalgebra.</p><p>Given a submodule <code>q</code> of the dual space <code>Dual K H</code> that is invariant under all root reflections,
+this produces a Lie ideal by taking the sum of all <code>sl₂</code> subalgebras corresponding to roots
+whose linear forms lie in <code>q</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-LieAlgebra.IsKilling.invtSubmoduleToLieIdeal" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieAlgebra.IsKilling.coe_invtSubmoduleToLieIdeal_eq_iSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L462-L466">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.coe_invtSubmoduleToLieIdeal_eq_iSup"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">coe_invtSubmoduleToLieIdeal_eq_iSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">K</span> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Dual/Defs.html#Module.Dual">Module.Dual</a> <span class="fn">K</span> <span class="fn">↥<span class="fn">H</span></span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>), <span class="fn">q</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Invariant.html#Module.End.invtSubmodule">Module.End.invtSubmodule</a> <span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.reflection">reflection</a></span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal">invtSubmoduleToLieIdeal</a> <span class="fn">q</span> <span class="fn">hq</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">↑<span class="fn">(⨆ (<span class="fn">α</span> : <a href="../../../.././Init/Prelude.html#Subtype">{</a> <span class="fn">α</span> <a href="../../../.././Init/Prelude.html#Subtype">:</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">LieModule.Weight</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span> <a href="../../../.././Init/Prelude.html#Subtype">//</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear">LieModule.Weight.toLinear</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">q</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">α</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight.IsNonZero">IsNonZero</a></span> <a href="../../../.././Init/Prelude.html#Subtype">}</a>),
+      <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieAlgebra.IsKilling.sl2SubmoduleOfRoot">sl2SubmoduleOfRoot</a> <span class="fn">⋯</span></span>)</span></span></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.restr_invtSubmoduleToLieIdeal_eq_iSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L468-L473">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.restr_invtSubmoduleToLieIdeal_eq_iSup"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">restr_invtSubmoduleToLieIdeal_eq_iSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">K</span> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Dual/Defs.html#Module.Dual">Module.Dual</a> <span class="fn">K</span> <span class="fn">↥<span class="fn">H</span></span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>), <span class="fn">q</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Invariant.html#Module.End.invtSubmodule">Module.End.invtSubmodule</a> <span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.reflection">reflection</a></span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Submodule.html#LieSubmodule.restr">LieSubmodule.restr</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal">invtSubmoduleToLieIdeal</a> <span class="fn">q</span> <span class="fn">hq</span>)</span> <span class="fn">H</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">⨆ (<span class="fn">α</span> : <a href="../../../.././Init/Prelude.html#Subtype">{</a> <span class="fn">α</span> <a href="../../../.././Init/Prelude.html#Subtype">:</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight">LieModule.Weight</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span> <a href="../../../.././Init/Prelude.html#Subtype">//</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Linear.html#LieModule.Weight.toLinear">LieModule.Weight.toLinear</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">q</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">α</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.Weight.IsNonZero">IsNonZero</a></span> <a href="../../../.././Init/Prelude.html#Subtype">}</a>),
+    <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieAlgebra.IsKilling.sl2SubmoduleOfRoot">sl2SubmoduleOfRoot</a> <span class="fn">⋯</span></span></span></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.mem_rootSet_invtSubmoduleToLieIdeal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L475-L502">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.mem_rootSet_invtSubmoduleToLieIdeal"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">mem_rootSet_invtSubmoduleToLieIdeal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">K</span> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Dual/Defs.html#Module.Dual">Module.Dual</a> <span class="fn">K</span> <span class="fn">↥<span class="fn">H</span></span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>), <span class="fn">q</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Invariant.html#Module.End.invtSubmodule">Module.End.invtSubmodule</a> <span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.reflection">reflection</a></span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">α</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal">invtSubmoduleToLieIdeal</a> <span class="fn">q</span> <span class="fn">hq</span>)</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSet">rootSet</a></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.root">root</a></span> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">q</span></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.invtSubmoduleToLieIdeal_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L504-L511">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal_mono"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">invtSubmoduleToLieIdeal_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">q₁ </span><span class="fn">q₂</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">K</span> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Dual/Defs.html#Module.Dual">Module.Dual</a> <span class="fn">K</span> <span class="fn">↥<span class="fn">H</span></span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hq₁</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>), <span class="fn">q₁</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Invariant.html#Module.End.invtSubmodule">Module.End.invtSubmodule</a> <span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.reflection">reflection</a></span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq₂</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>), <span class="fn">q₂</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Invariant.html#Module.End.invtSubmodule">Module.End.invtSubmodule</a> <span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.reflection">reflection</a></span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">q₁</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">q₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal">invtSubmoduleToLieIdeal</a> <span class="fn">q₁</span> <span class="fn">hq₁</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal">invtSubmoduleToLieIdeal</a> <span class="fn">q₂</span> <span class="fn">hq₂</span></span></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.lieIdealOrderIso_left_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L513-L528">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.lieIdealOrderIso_left_inv"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">lieIdealOrderIso_left_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hI</span> : <span class="fn">∀ (<span class="fn">α</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>), <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSpan">rootSpan</a></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Invariant.html#Module.End.invtSubmodule">Module.End.invtSubmodule</a> <span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.reflection">reflection</a></span> <span class="fn">α</span>)</span></span></span></span> := <span class="fn">⋯</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal">invtSubmoduleToLieIdeal</a> <span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.rootSpan">rootSpan</a></span> <span class="fn">hI</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">I</span></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.lieIdealOrderIso_right_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L530-L537">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.lieIdealOrderIso_right_inv"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">lieIdealOrderIso_right_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">q</span> : <span class="fn">↥<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Irreducible.html#RootPairing.invtRootSubmodule">invtRootSubmodule</a></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn">∀ (<span class="fn">α</span> : <span class="fn">↥<a href="../../../.././Mathlib/Algebra/Lie/Weights/Killing.html#LieSubalgebra.root">LieSubalgebra.root</a></span>), <span class="fn">↑<span class="fn">q</span></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Invariant.html#Module.End.invtSubmodule">Module.End.invtSubmodule</a> <span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Defs.html#RootPairing.reflection">reflection</a></span> <span class="fn">α</span>)</span></span></span></span> := <span class="fn">⋯</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.invtSubmoduleToLieIdeal">invtSubmoduleToLieIdeal</a> <span class="fn">(↑<span class="fn">q</span>)</span> <span class="fn">hq</span>)</span>.<a href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieIdeal.toInvtRootSubmodule">toInvtRootSubmodule</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">q</span></div></div></div></div><div class="decl" id="LieAlgebra.IsKilling.lieIdealOrderIso"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L540-L550">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.lieIdealOrderIso"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">lieIdealOrderIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Ideal.html#LieIdeal">LieIdeal</a> <span class="fn">K</span> <span class="fn">L</span></span> <a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">↥<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Irreducible.html#RootPairing.invtRootSubmodule">invtRootSubmodule</a></span></span></div></div><p>The order isomorphism between Lie ideals and invariant root submodules.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-LieAlgebra.IsKilling.lieIdealOrderIso" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LieAlgebra.IsKilling.isSimple_iff_isIrreducible"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L552-L558">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.isSimple_iff_isIrreducible"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">isSimple_iff_isIrreducible</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Irreducible.html#RootPairing.IsIrreducible">IsIrreducible</a></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Semisimple/Defs.html#LieAlgebra.IsSimple">IsSimple</a> <span class="fn">K</span> <span class="fn">L</span></span></div></div><p>A Killing Lie algebra is simple if and only if its root system is irreducible.</p></div></div><div class="decl" id="LieAlgebra.IsKilling.instIsIrreducibleSubtypeWeightMemLieSubalgebraFinsetRootDualRootSystemOfIsSimple"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Lie/Weights/IsSimple.lean#L560-L561">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Algebra/Lie/Weights/IsSimple.html#LieAlgebra.IsKilling.instIsIrreducibleSubtypeWeightMemLieSubalgebraFinsetRootDualRootSystemOfIsSimple"><span class="name">LieAlgebra</span>.<span class="name">IsKilling</span>.<span class="name">instIsIrreducibleSubtypeWeightMemLieSubalgebraFinsetRootDualRootSystemOfIsSimple</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieRing">LieRing</a> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Basic.html#LieAlgebra">LieAlgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Subalgebra.html#LieSubalgebra">LieSubalgebra</a> <span class="fn">K</span> <span class="fn">L</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">H</span>.<a href="../../../.././Mathlib/Algebra/Lie/CartanSubalgebra.html#LieSubalgebra.IsCartanSubalgebra">IsCartanSubalgebra</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Killing.html#LieAlgebra.IsKilling">IsKilling</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Weights/Basic.html#LieModule.IsTriangularizable">LieModule.IsTriangularizable</a> <span class="fn">K</span> <span class="fn">(↥<span class="fn">H</span>)</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Lie/Semisimple/Defs.html#LieAlgebra.IsSimple">IsSimple</a> <span class="fn">K</span> <span class="fn">L</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Lie/Weights/RootSystem.html#LieAlgebra.IsKilling.rootSystem">rootSystem</a> <span class="fn">H</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/RootSystem/Irreducible.html#RootPairing.IsIrreducible">IsIrreducible</a></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

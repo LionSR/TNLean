@@ -1,0 +1,133 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Geometry.Manifold.Algebra.Structures</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Geometry.Manifold.Algebra.Structures";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Geometry</span>.<span class="name">Manifold</span>.<span class="name">Algebra</span>.<span class="name">Structures</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Algebra/Structures.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Geometry/Manifold/Notation.html">Mathlib.Geometry.Manifold.Notation</a></li><li><a href="../../../.././Mathlib/Geometry/Manifold/Algebra/LieGroup.html">Mathlib.Geometry.Manifold.Algebra.LieGroup</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Geometry.Manifold.Algebra.Structures" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#ContMDiffRing"><span class="name">ContMDiffRing</span></a></div><div class="nav_link"><a class="break_within" href="#ContMDiffRing.toContMDiffMul"><span class="name">ContMDiffRing</span>.<span class="name">toContMDiffMul</span></a></div><div class="nav_link"><a class="break_within" href="#ContMDiffRing.toLieAddGroup"><span class="name">ContMDiffRing</span>.<span class="name">toLieAddGroup</span></a></div><div class="nav_link"><a class="break_within" href="#instFieldContMDiffRing"><span class="name">instFieldContMDiffRing</span></a></div><div class="nav_link"><a class="break_within" href="#topologicalSemiring_of_contMDiffRing"><span class="name">topologicalSemiring_of_contMDiffRing</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="C^n-structures" class="markdown-heading"><code>C^n</code> structures <a class="hover-link" href="#C^n-structures">#</a></h1><p>In this file we define <code>C^n</code> structures that build on Lie groups. We prefer using the
+term <code><a href="../../../.././Mathlib/Geometry/Manifold/Algebra/Structures.html#ContMDiffRing">ContMDiffRing</a></code> instead of Lie mainly because Lie ring has currently another use
+in mathematics.</p></div><div class="decl" id="ContMDiffRing"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Algebra/Structures.lean#L29-L34">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/Algebra/Structures.html#ContMDiffRing"><span class="name">ContMDiffRing</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="ContMDiffRing.toContMDiffAdd"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/Algebra/Monoid.html#ContMDiffAdd">ContMDiffAdd</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">R</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Prop</a></div></div><p>A <code>C^n</code> (semi)ring is a (semi)ring <code>R</code> where addition and multiplication are <code>C^n</code>.
+If <code>R</code> is a ring, then negation is automatically <code>C^n</code>, as it is multiplication with <code>-1</code>.</p><ul class="structure_fields" id="ContMDiffRing.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Geometry/Manifold/HasGroupoid.html#HasGroupoid.compatible">compatible</a><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e </span><span class="fn">e'</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph">OpenPartialHomeomorph</a> <span class="fn">R</span> <span class="fn">H</span></span>}</span></span>
+</span> : <span class="fn"><span class="fn">e</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#atlas">atlas</a> <span class="fn">H</span> <span class="fn">R</span></span> → <span class="fn"><span class="fn">e'</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#atlas">atlas</a> <span class="fn">H</span> <span class="fn">R</span></span> → <span class="fn"><span class="fn"><span class="fn"><span class="fn">e</span>.<a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Defs.html#OpenPartialHomeomorph.symm">symm</a></span>.<a href="../../../.././Mathlib/Topology/OpenPartialHomeomorph/Composition.html#OpenPartialHomeomorph.trans">trans</a></span> <span class="fn">e'</span></span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#contDiffGroupoid">contDiffGroupoid</a> <span class="fn">n</span> <span class="fn">I</span></span></span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Geometry/Manifold/Algebra/Monoid.html#ContMDiffAdd.contMDiff_add">contMDiff_add</a> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiff">ContMDiff</a> <span class="fn">(<span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners.prod">prod</a></span> <span class="fn">I</span>)</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">fun (<span class="fn">p</span> : <span class="fn">R</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">R</span>) =&gt; <span class="fn"><span class="fn">p</span>.1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">p</span>.2</span></span></span></div></li><li id="ContMDiffRing.contMDiff_mul" class="structure_field"><div class="structure_field_info">contMDiff_mul : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ContMDiff/Defs.html#ContMDiff">ContMDiff</a> <span class="fn">(<span class="fn"><span class="fn">I</span>.<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners.prod">prod</a></span> <span class="fn">I</span>)</span> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">fun (<span class="fn">p</span> : <span class="fn">R</span> <a href="../../../.././Init/Prelude.html#Prod">×</a> <span class="fn">R</span>) =&gt; <span class="fn"><span class="fn">p</span>.1</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">p</span>.2</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-ContMDiffRing" class="instances-list"></ul></details></div></div><div class="decl" id="ContMDiffRing.toContMDiffMul"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Algebra/Structures.lean#L37-L40">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/Algebra/Structures.html#ContMDiffRing.toContMDiffMul"><span class="name">ContMDiffRing</span>.<span class="name">toContMDiffMul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/Algebra/Structures.html#ContMDiffRing">ContMDiffRing</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/Algebra/Monoid.html#ContMDiffMul">ContMDiffMul</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">R</span></span></div></div></div></div><div class="decl" id="ContMDiffRing.toLieAddGroup"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Algebra/Structures.lean#L43-L47">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/Algebra/Structures.html#ContMDiffRing.toLieAddGroup"><span class="name">ContMDiffRing</span>.<span class="name">toLieAddGroup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/Algebra/Structures.html#ContMDiffRing">ContMDiffRing</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/Algebra/LieGroup.html#LieAddGroup">LieAddGroup</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">R</span></span></div></div></div></div><div class="decl" id="instFieldContMDiffRing"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Algebra/Structures.lean#L53-L62">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/Algebra/Structures.html#instFieldContMDiffRing"><span class="name">instFieldContMDiffRing</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/Algebra/Structures.html#ContMDiffRing">ContMDiffRing</a> <span class="fn">(<a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#modelWithCornersSelf">modelWithCornersSelf</a> <span class="fn">𝕜</span> <span class="fn">𝕜</span>)</span> <span class="fn">n</span> <span class="fn">𝕜</span></span></div></div></div></div><div class="decl" id="topologicalSemiring_of_contMDiffRing"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Algebra/Structures.lean#L68-L72">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/Algebra/Structures.html#topologicalSemiring_of_contMDiffRing"><span class="name">topologicalSemiring_of_contMDiffRing</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <span class="fn"><a href="../../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/Algebra/Structures.html#ContMDiffRing">ContMDiffRing</a> <span class="fn">I</span> <span class="fn">n</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalSemiring">IsTopologicalSemiring</a> <span class="fn">R</span></span></div></div><p>A <code>C^n</code> (semi)ring is a topological (semi)ring. This is not an instance for technical reasons,
+see note [Design choices about smooth algebraic structures].</p></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,577 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Order.OrdContinuous</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Order.OrdContinuous";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Order</span>.<span class="name">OrdContinuous</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Basic.html">Mathlib.Order.ConditionallyCompleteLattice.Basic</a></li><li><a href="../.././Mathlib/Order/RelIso/Basic.html">Mathlib.Order.RelIso.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Order.OrdContinuous" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous"><span class="name">LeftOrdContinuous</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous"><span class="name">RightOrdContinuous</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.id"><span class="name">LeftOrdContinuous</span>.<span class="name">id</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.rightOrdContinuous_dual"><span class="name">LeftOrdContinuous</span>.<span class="name">rightOrdContinuous_dual</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.map_isGreatest"><span class="name">LeftOrdContinuous</span>.<span class="name">map_isGreatest</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.mono"><span class="name">LeftOrdContinuous</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.comp"><span class="name">LeftOrdContinuous</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.iterate"><span class="name">LeftOrdContinuous</span>.<span class="name">iterate</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.map_sup"><span class="name">LeftOrdContinuous</span>.<span class="name">map_sup</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.le_iff"><span class="name">LeftOrdContinuous</span>.<span class="name">le_iff</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.lt_iff"><span class="name">LeftOrdContinuous</span>.<span class="name">lt_iff</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.toOrderEmbedding"><span class="name">LeftOrdContinuous</span>.<span class="name">toOrderEmbedding</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.coe_toOrderEmbedding"><span class="name">LeftOrdContinuous</span>.<span class="name">coe_toOrderEmbedding</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.map_sSup'"><span class="name">LeftOrdContinuous</span>.<span class="name">map_sSup'</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.map_sSup"><span class="name">LeftOrdContinuous</span>.<span class="name">map_sSup</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.map_iSup"><span class="name">LeftOrdContinuous</span>.<span class="name">map_iSup</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.map_csSup"><span class="name">LeftOrdContinuous</span>.<span class="name">map_csSup</span></a></div><div class="nav_link"><a class="break_within" href="#LeftOrdContinuous.map_ciSup"><span class="name">LeftOrdContinuous</span>.<span class="name">map_ciSup</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.id"><span class="name">RightOrdContinuous</span>.<span class="name">id</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.orderDual"><span class="name">RightOrdContinuous</span>.<span class="name">orderDual</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.map_isLeast"><span class="name">RightOrdContinuous</span>.<span class="name">map_isLeast</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.mono"><span class="name">RightOrdContinuous</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.comp"><span class="name">RightOrdContinuous</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.iterate"><span class="name">RightOrdContinuous</span>.<span class="name">iterate</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.map_inf"><span class="name">RightOrdContinuous</span>.<span class="name">map_inf</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.le_iff"><span class="name">RightOrdContinuous</span>.<span class="name">le_iff</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.lt_iff"><span class="name">RightOrdContinuous</span>.<span class="name">lt_iff</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.toOrderEmbedding"><span class="name">RightOrdContinuous</span>.<span class="name">toOrderEmbedding</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.coe_toOrderEmbedding"><span class="name">RightOrdContinuous</span>.<span class="name">coe_toOrderEmbedding</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.map_sInf'"><span class="name">RightOrdContinuous</span>.<span class="name">map_sInf'</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.map_sInf"><span class="name">RightOrdContinuous</span>.<span class="name">map_sInf</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.map_iInf"><span class="name">RightOrdContinuous</span>.<span class="name">map_iInf</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.map_csInf"><span class="name">RightOrdContinuous</span>.<span class="name">map_csInf</span></a></div><div class="nav_link"><a class="break_within" href="#RightOrdContinuous.map_ciInf"><span class="name">RightOrdContinuous</span>.<span class="name">map_ciInf</span></a></div><div class="nav_link"><a class="break_within" href="#GaloisConnection.leftOrdContinuous"><span class="name">GaloisConnection</span>.<span class="name">leftOrdContinuous</span></a></div><div class="nav_link"><a class="break_within" href="#GaloisConnection.rightOrdContinuous"><span class="name">GaloisConnection</span>.<span class="name">rightOrdContinuous</span></a></div><div class="nav_link"><a class="break_within" href="#OrderIso.leftOrdContinuous"><span class="name">OrderIso</span>.<span class="name">leftOrdContinuous</span></a></div><div class="nav_link"><a class="break_within" href="#OrderIso.rightOrdContinuous"><span class="name">OrderIso</span>.<span class="name">rightOrdContinuous</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Order-continuity" class="markdown-heading">Order continuity <a class="hover-link" href="#Order-continuity">#</a></h1><p>We say that a function is <em>left order continuous</em> if it sends all least upper bounds
+to least upper bounds. The order dual notion is called <em>right order continuity</em>.</p><p>For monotone functions <code>ℝ → ℝ</code> these notions correspond to the usual left and right continuity.</p><p>We prove some basic lemmas (<code><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.map_sup">map_sup</a></code>, <code><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.map_sSup">map_sSup</a></code> etc) and prove that a <code><a href="../.././Mathlib/Order/RelIso/Basic.html#RelIso">RelIso</a></code> is both left
+and right order continuous.</p></div><div class="mod_doc"><h3 id="Definitions" class="markdown-heading">Definitions <a class="hover-link" href="#Definitions">#</a></h3></div><div class="decl" id="LeftOrdContinuous"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L37-L41">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous"><span class="name">LeftOrdContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A function <code>f</code> between preorders is left order continuous if it preserves all suprema.  We
+define it using <code><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a></code> instead of <code>sSup</code> so that the proof works both for complete lattices and
+conditionally complete lattices.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ ⦃<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>⦄ ⦃<span class="fn">x</span> : <span class="fn">α</span>⦄, <span class="fn"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> <span class="fn">s</span> <span class="fn">x</span></span> → <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>) <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span></span></li></ul></details><details id="instances-for-list-LeftOrdContinuous" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="RightOrdContinuous"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L43-L47">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous"><span class="name">RightOrdContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A function <code>f</code> between preorders is right order continuous if it preserves all infima.  We
+define it using <code><a href="../.././Mathlib/Order/Bounds/Defs.html#IsGLB">IsGLB</a></code> instead of <code>sInf</code> so that the proof works both for complete lattices and
+conditionally complete lattices.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ ⦃<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>⦄ ⦃<span class="fn">x</span> : <span class="fn">α</span>⦄, <span class="fn"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsGLB">IsGLB</a> <span class="fn">s</span> <span class="fn">x</span></span> → <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsGLB">IsGLB</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>) <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span></span></li></ul></details><details id="instances-for-list-RightOrdContinuous" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LeftOrdContinuous.id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L55-L56">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.id"><span class="name">LeftOrdContinuous</span>.<span class="name">id</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <a href="../.././Init/Prelude.html#id">id</a></span></div></div></div></div><div class="decl" id="LeftOrdContinuous.rightOrdContinuous_dual"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L60-L62">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.rightOrdContinuous_dual"><span class="name">LeftOrdContinuous</span>.<span class="name">rightOrdContinuous_dual</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span> → <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> (<span class="fn">⇑<a href="../.././Mathlib/Order/OrderDual.html#OrderDual.toDual">OrderDual.toDual</a></span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<a href="../.././Mathlib/Order/OrderDual.html#OrderDual.ofDual">OrderDual.ofDual</a></span>)</span></span></div></div></div></div><div class="decl" id="LeftOrdContinuous.map_isGreatest"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L64-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.map_isGreatest"><span class="name">LeftOrdContinuous</span>.<span class="name">map_isGreatest</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsGreatest">IsGreatest</a> <span class="fn">s</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsGreatest">IsGreatest</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>) <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="LeftOrdContinuous.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L68-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.mono"><span class="name">LeftOrdContinuous</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="LeftOrdContinuous.comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L72-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.comp"><span class="name">LeftOrdContinuous</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> (<span class="fn">g</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="LeftOrdContinuous.iterate"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L75-L79">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.iterate"><span class="name">LeftOrdContinuous</span>.<span class="name">iterate</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a></span></div></div></div></div><div class="decl" id="LeftOrdContinuous.map_sup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L87-L88">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.map_sup"><span class="name">LeftOrdContinuous</span>.<span class="name">map_sup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">x</span> ⊔ <span class="fn">y</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> ⊔ <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span></span></div></div></div></div><div class="decl" id="LeftOrdContinuous.le_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L90-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.le_iff"><span class="name">LeftOrdContinuous</span>.<span class="name">le_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span></div></div></div></div><div class="decl" id="LeftOrdContinuous.lt_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L93-L94">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.lt_iff"><span class="name">LeftOrdContinuous</span>.<span class="name">lt_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span></div></div></div></div><div class="decl" id="LeftOrdContinuous.toOrderEmbedding"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L98-L100">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.toOrderEmbedding"><span class="name">LeftOrdContinuous</span>.<span class="name">toOrderEmbedding</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderEmbedding">↪o</a> <span class="fn">β</span></div></div><p>Convert an injective left order continuous function to an order embedding.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.toOrderEmbedding">LeftOrdContinuous.toOrderEmbedding</a> <span class="fn">f</span> <span class="fn">hf</span> <span class="fn">h</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/RelIso/Basic.html#RelEmbedding.mk">{</a> <span class="fn">toFun</span> := <span class="fn">f</span>, <span class="fn">inj'</span> := <span class="fn">h</span>, <span class="fn">map_rel_iff'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Order/RelIso/Basic.html#RelEmbedding.mk">}</a></li></ul></details><details id="instances-for-list-LeftOrdContinuous.toOrderEmbedding" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="LeftOrdContinuous.coe_toOrderEmbedding"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L104-L107">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.coe_toOrderEmbedding"><span class="name">LeftOrdContinuous</span>.<span class="name">coe_toOrderEmbedding</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.toOrderEmbedding">toOrderEmbedding</a> <span class="fn">f</span> <span class="fn">hf</span> <span class="fn">h</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="LeftOrdContinuous.map_sSup'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L115-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.map_sSup'"><span class="name">LeftOrdContinuous</span>.<span class="name">map_sSup'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="LeftOrdContinuous.map_sSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L118-L119">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.map_sSup"><span class="name">LeftOrdContinuous</span>.<span class="name">map_sSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">⨆ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span></div></div></div></div><div class="decl" id="LeftOrdContinuous.map_iSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L121-L123">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.map_iSup"><span class="name">LeftOrdContinuous</span>.<span class="name">map_iSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> x}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(⨆ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">g</span> <span class="fn">i</span></span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">⨆ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span></span></span></div></div></div></div><div class="decl" id="LeftOrdContinuous.map_csSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L131-L133">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.map_csSup"><span class="name">LeftOrdContinuous</span>.<span class="name">map_csSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sne</span> : <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sbdd</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">s</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="LeftOrdContinuous.map_ciSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L135-L138">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous.map_ciSup"><span class="name">LeftOrdContinuous</span>.<span class="name">map_ciSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> x}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">g</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(⨆ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">g</span> <span class="fn">i</span></span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">⨆ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span></span></span></div></div></div></div><div class="decl" id="RightOrdContinuous.id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L150-L151">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.id"><span class="name">RightOrdContinuous</span>.<span class="name">id</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <a href="../.././Init/Prelude.html#id">id</a></span></div></div></div></div><div class="decl" id="RightOrdContinuous.orderDual"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L155-L156">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.orderDual"><span class="name">RightOrdContinuous</span>.<span class="name">orderDual</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span> → <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> (<span class="fn">⇑<a href="../.././Mathlib/Order/OrderDual.html#OrderDual.toDual">OrderDual.toDual</a></span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<a href="../.././Mathlib/Order/OrderDual.html#OrderDual.ofDual">OrderDual.ofDual</a></span>)</span></span></div></div></div></div><div class="decl" id="RightOrdContinuous.map_isLeast"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L158-L160">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.map_isLeast"><span class="name">RightOrdContinuous</span>.<span class="name">map_isLeast</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLeast">IsLeast</a> <span class="fn">s</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLeast">IsLeast</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>) <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="RightOrdContinuous.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L162-L163">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.mono"><span class="name">RightOrdContinuous</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="RightOrdContinuous.comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L165-L166">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.comp"><span class="name">RightOrdContinuous</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> (<span class="fn">g</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="RightOrdContinuous.iterate"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L168-L170">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.iterate"><span class="name">RightOrdContinuous</span>.<span class="name">iterate</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a></span></div></div></div></div><div class="decl" id="RightOrdContinuous.map_inf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L178-L179">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.map_inf"><span class="name">RightOrdContinuous</span>.<span class="name">map_inf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeInf">SemilatticeInf</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeInf">SemilatticeInf</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">x</span> ⊓ <span class="fn">y</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> ⊓ <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span></span></div></div></div></div><div class="decl" id="RightOrdContinuous.le_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L181-L182">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.le_iff"><span class="name">RightOrdContinuous</span>.<span class="name">le_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeInf">SemilatticeInf</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeInf">SemilatticeInf</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span></div></div></div></div><div class="decl" id="RightOrdContinuous.lt_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L184-L185">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.lt_iff"><span class="name">RightOrdContinuous</span>.<span class="name">lt_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeInf">SemilatticeInf</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeInf">SemilatticeInf</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span></div></div></div></div><div class="decl" id="RightOrdContinuous.toOrderEmbedding"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L189-L191">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.toOrderEmbedding"><span class="name">RightOrdContinuous</span>.<span class="name">toOrderEmbedding</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeInf">SemilatticeInf</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeInf">SemilatticeInf</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderEmbedding">↪o</a> <span class="fn">β</span></div></div><p>Convert an injective left order continuous function to an <code><a href="../.././Mathlib/Order/Hom/Basic.html#OrderEmbedding">OrderEmbedding</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.toOrderEmbedding">RightOrdContinuous.toOrderEmbedding</a> <span class="fn">f</span> <span class="fn">hf</span> <span class="fn">h</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/RelIso/Basic.html#RelEmbedding.mk">{</a> <span class="fn">toFun</span> := <span class="fn">f</span>, <span class="fn">inj'</span> := <span class="fn">h</span>, <span class="fn">map_rel_iff'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Order/RelIso/Basic.html#RelEmbedding.mk">}</a></li></ul></details><details id="instances-for-list-RightOrdContinuous.toOrderEmbedding" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="RightOrdContinuous.coe_toOrderEmbedding"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L195-L198">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.coe_toOrderEmbedding"><span class="name">RightOrdContinuous</span>.<span class="name">coe_toOrderEmbedding</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeInf">SemilatticeInf</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeInf">SemilatticeInf</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.toOrderEmbedding">toOrderEmbedding</a> <span class="fn">f</span> <span class="fn">hf</span> <span class="fn">h</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="RightOrdContinuous.map_sInf'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L206-L207">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.map_sInf'"><span class="name">RightOrdContinuous</span>.<span class="name">map_sInf'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="RightOrdContinuous.map_sInf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L209-L210">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.map_sInf"><span class="name">RightOrdContinuous</span>.<span class="name">map_sInf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">⨅ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span></span></div></div></div></div><div class="decl" id="RightOrdContinuous.map_iInf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L212-L213">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.map_iInf"><span class="name">RightOrdContinuous</span>.<span class="name">map_iInf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> x}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(⨅ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">g</span> <span class="fn">i</span></span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">⨅ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span></span></span></div></div></div></div><div class="decl" id="RightOrdContinuous.map_csInf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L221-L223">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.map_csInf"><span class="name">RightOrdContinuous</span>.<span class="name">map_csInf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sne</span> : <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sbdd</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> <span class="fn">s</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Order/SetNotation.html#InfSet.sInf">sInf</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="RightOrdContinuous.map_ciInf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L225-L227">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous.map_ciInf"><span class="name">RightOrdContinuous</span>.<span class="name">map_ciInf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> x}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddBelow">BddBelow</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">g</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">(⨅ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">g</span> <span class="fn">i</span></span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">⨅ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span></span></span></div></div></div></div><div class="decl" id="GaloisConnection.leftOrdContinuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L236-L238">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#GaloisConnection.leftOrdContinuous"><span class="name">GaloisConnection</span>.<span class="name">leftOrdContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">gc</span> : <span class="fn"><a href="../.././Mathlib/Order/GaloisConnection/Defs.html#GaloisConnection">GaloisConnection</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">f</span></span></div></div><p>A left adjoint in a Galois connection is left-continuous in the order-theoretic sense.</p></div></div><div class="decl" id="GaloisConnection.rightOrdContinuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L240-L242">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#GaloisConnection.rightOrdContinuous"><span class="name">GaloisConnection</span>.<span class="name">rightOrdContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">gc</span> : <span class="fn"><a href="../.././Mathlib/Order/GaloisConnection/Defs.html#GaloisConnection">GaloisConnection</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">g</span></span></div></div><p>A right adjoint in a Galois connection is right-continuous in the order-theoretic sense.</p></div></div><div class="decl" id="OrderIso.leftOrdContinuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L249-L249">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#OrderIso.leftOrdContinuous"><span class="name">OrderIso</span>.<span class="name">leftOrdContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#LeftOrdContinuous">LeftOrdContinuous</a> <span class="fn">⇑<span class="fn">e</span></span></span></div></div></div></div><div class="decl" id="OrderIso.rightOrdContinuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/OrdContinuous.lean#L251-L252">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/OrdContinuous.html#OrderIso.rightOrdContinuous"><span class="name">OrderIso</span>.<span class="name">rightOrdContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/OrdContinuous.html#RightOrdContinuous">RightOrdContinuous</a> <span class="fn">⇑<span class="fn">e</span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

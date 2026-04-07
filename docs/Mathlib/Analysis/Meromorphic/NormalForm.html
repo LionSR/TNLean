@@ -1,0 +1,899 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.Meromorphic.NormalForm</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.Meromorphic.NormalForm";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">Meromorphic</span>.<span class="name">NormalForm</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Analysis/Meromorphic/Divisor.html">Mathlib.Analysis.Meromorphic.Divisor</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.Meromorphic.NormalForm" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFAt"><span class="name">MeromorphicNFAt</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFAt_iff_analyticAt_or"><span class="name">meromorphicNFAt_iff_analyticAt_or</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFAt.meromorphicAt"><span class="name">MeromorphicNFAt</span>.<span class="name">meromorphicAt</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFAt.meromorphicOrderAt_nonneg_iff_analyticAt"><span class="name">MeromorphicNFAt</span>.<span class="name">meromorphicOrderAt_nonneg_iff_analyticAt</span></a></div><div class="nav_link"><a class="break_within" href="#AnalyticAt.meromorphicNFAt"><span class="name">AnalyticAt</span>.<span class="name">meromorphicNFAt</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicOn.meromorphicNFAt_mem_codiscreteWithin"><span class="name">MeromorphicOn</span>.<span class="name">meromorphicNFAt_mem_codiscreteWithin</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFAt.meromorphicOrderAt_eq_zero_iff"><span class="name">MeromorphicNFAt</span>.<span class="name">meromorphicOrderAt_eq_zero_iff</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFAt.eventuallyEq_nhdsNE_iff_eventuallyEq_nhds"><span class="name">MeromorphicNFAt</span>.<span class="name">eventuallyEq_nhdsNE_iff_eventuallyEq_nhds</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFAt_congr"><span class="name">meromorphicNFAt_congr</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFAt.smul_analytic"><span class="name">MeromorphicNFAt</span>.<span class="name">smul_analytic</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFAt_smul_iff_right_of_analyticAt"><span class="name">meromorphicNFAt_smul_iff_right_of_analyticAt</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFAt_mul_iff_right"><span class="name">meromorphicNFAt_mul_iff_right</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFAt_mul_iff_left"><span class="name">meromorphicNFAt_mul_iff_left</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFAt_prod"><span class="name">meromorphicNFAt_prod</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFAt_fun_prod"><span class="name">meromorphicNFAt_fun_prod</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFAt_finprod"><span class="name">meromorphicNFAt_finprod</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFAt.zpow"><span class="name">MeromorphicNFAt</span>.<span class="name">zpow</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFAt.fun_zpow"><span class="name">MeromorphicNFAt</span>.<span class="name">fun_zpow</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFAt.inv"><span class="name">MeromorphicNFAt</span>.<span class="name">inv</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFAt_inv"><span class="name">meromorphicNFAt_inv</span></a></div><div class="nav_link"><a class="break_within" href="#toMeromorphicNFAt"><span class="name">toMeromorphicNFAt</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicAt.eqOn_compl_singleton_toMeromorphicNFAt"><span class="name">MeromorphicAt</span>.<span class="name">eqOn_compl_singleton_toMeromorphicNFAt</span></a></div><div class="nav_link"><a class="break_within" href="#toMeromorphicNFAt_of_not_meromorphicAt"><span class="name">toMeromorphicNFAt_of_not_meromorphicAt</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicAt.eq_nhdsNE_toMeromorphicNFAt"><span class="name">MeromorphicAt</span>.<span class="name">eq_nhdsNE_toMeromorphicNFAt</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFAt_toMeromorphicNFAt"><span class="name">meromorphicNFAt_toMeromorphicNFAt</span></a></div><div class="nav_link"><a class="break_within" href="#toMeromorphicNFAt_eq_self"><span class="name">toMeromorphicNFAt_eq_self</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFOn"><span class="name">MeromorphicNFOn</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFOn.meromorphicOn"><span class="name">MeromorphicNFOn</span>.<span class="name">meromorphicOn</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFOn.divisor_nonneg_iff_analyticOnNhd"><span class="name">MeromorphicNFOn</span>.<span class="name">divisor_nonneg_iff_analyticOnNhd</span></a></div><div class="nav_link"><a class="break_within" href="#AnalyticOnNhd.meromorphicNFOn"><span class="name">AnalyticOnNhd</span>.<span class="name">meromorphicNFOn</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFOn.zero_set_eq_divisor_support"><span class="name">MeromorphicNFOn</span>.<span class="name">zero_set_eq_divisor_support</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFOn_smul_iff_right_of_analyticOnNhd"><span class="name">meromorphicNFOn_smul_iff_right_of_analyticOnNhd</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFOn_mul_iff_right_of_analyticOnNhd"><span class="name">meromorphicNFOn_mul_iff_right_of_analyticOnNhd</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFOn_mul_iff_left_of_analyticOnNhd"><span class="name">meromorphicNFOn_mul_iff_left_of_analyticOnNhd</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFOn_prod"><span class="name">meromorphicNFOn_prod</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFOn_fun_prod"><span class="name">meromorphicNFOn_fun_prod</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFOn_finprod"><span class="name">meromorphicNFOn_finprod</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFOn.zpow"><span class="name">MeromorphicNFOn</span>.<span class="name">zpow</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicNFOn.fun_zpow"><span class="name">MeromorphicNFOn</span>.<span class="name">fun_zpow</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFOn_inv"><span class="name">meromorphicNFOn_inv</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFOn_fun_inv"><span class="name">meromorphicNFOn_fun_inv</span></a></div><div class="nav_link"><a class="break_within" href="#toMeromorphicNFOn"><span class="name">toMeromorphicNFOn</span></a></div><div class="nav_link"><a class="break_within" href="#toMeromorphicNFOn_of_not_meromorphicOn"><span class="name">toMeromorphicNFOn_of_not_meromorphicOn</span></a></div><div class="nav_link"><a class="break_within" href="#toMeromorphicNFOn_eq_self_on_compl"><span class="name">toMeromorphicNFOn_eq_self_on_compl</span></a></div><div class="nav_link"><a class="break_within" href="#toMeromorphicNFOn_eqOn_codiscrete"><span class="name">toMeromorphicNFOn_eqOn_codiscrete</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicOn.toMeromorphicNFOn_eq_self_on_nhdsNE"><span class="name">MeromorphicOn</span>.<span class="name">toMeromorphicNFOn_eq_self_on_nhdsNE</span></a></div><div class="nav_link"><a class="break_within" href="#toMeromorphicNFOn_eq_toMeromorphicNFAt_on_nhds"><span class="name">toMeromorphicNFOn_eq_toMeromorphicNFAt_on_nhds</span></a></div><div class="nav_link"><a class="break_within" href="#toMeromorphicNFOn_eq_toMeromorphicNFAt"><span class="name">toMeromorphicNFOn_eq_toMeromorphicNFAt</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicNFOn_toMeromorphicNFOn"><span class="name">meromorphicNFOn_toMeromorphicNFOn</span></a></div><div class="nav_link"><a class="break_within" href="#toMeromorphicNFOn_eq_self"><span class="name">toMeromorphicNFOn_eq_self</span></a></div><div class="nav_link"><a class="break_within" href="#meromorphicOrderAt_toMeromorphicNFOn"><span class="name">meromorphicOrderAt_toMeromorphicNFOn</span></a></div><div class="nav_link"><a class="break_within" href="#MeromorphicOn.divisor_of_toMeromorphicNFOn"><span class="name">MeromorphicOn</span>.<span class="name">divisor_of_toMeromorphicNFOn</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Normal-form-of-meromorphic-functions-and-continuous-extension" class="markdown-heading">Normal form of meromorphic functions and continuous extension <a class="hover-link" href="#Normal-form-of-meromorphic-functions-and-continuous-extension">#</a></h1><p>If a function <code>f</code> is meromorphic on <code>U</code> and if <code>g</code> differs from <code>f</code> only along a set that is
+codiscrete within <code>U</code>, then <code>g</code> is likewise meromorphic. The set of meromorphic functions is
+therefore huge, and <code>=ᶠ[codiscreteWithin U]</code> defines an equivalence relation.</p><p>This file implements continuous extension to provide an API that allows picking the 'unique best'
+representative of any given equivalence class, where 'best' means that the representative can
+locally near any point <code>x</code> be written 'in normal form', as <code>f =ᶠ[𝓝 x] fun z ↦ (z - x) ^ n • g</code>
+where <code>g</code> is analytic and does not vanish at <code>x</code>.</p><p>The relevant notions are <code><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a></code> and <code><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a></code>; these guarantee normal
+form at a single point and along a set, respectively.</p></div><div class="mod_doc"><h2 id="Normal-form-of-meromorphic-functions-at-a-given-point" class="markdown-heading">Normal form of meromorphic functions at a given point <a class="hover-link" href="#Normal-form-of-meromorphic-functions-at-a-given-point">#</a></h2><h3 id="Definition-and-characterizations" class="markdown-heading">Definition and characterizations <a class="hover-link" href="#Definition-and-characterizations">#</a></h3></div><div class="decl" id="MeromorphicNFAt"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L44-L49">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt"><span class="name">MeromorphicNFAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A function is 'meromorphic in normal form' at <code>x</code> if it vanishes around <code>x</code>
+or if it can locally be written as <code>fun z ↦ (z - x) ^ n • g</code> where <code>g</code> is
+analytic and does not vanish at <code>x</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   (<span class="fn">f</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">∃ (<span class="fn">n</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>) (<span class="fn">g</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>), <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticAt">AnalyticAt</a> <span class="fn">𝕜</span> <span class="fn">g</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">f</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">(fun (<span class="fn">x_1</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn">x_1</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">g</span></span>)</li></ul></details><details id="instances-for-list-MeromorphicNFAt" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="meromorphicNFAt_iff_analyticAt_or"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L51-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFAt_iff_analyticAt_or"><span class="name">meromorphicNFAt_iff_analyticAt_or</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticAt">AnalyticAt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicAt">MeromorphicAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Order.html#meromorphicOrderAt">meromorphicOrderAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div><p>A meromorphic function has normal form at <code>x</code> iff it is either analytic
+there, or if it has a pole at <code>x</code> and takes the default value <code>0</code>.</p></div></div><div class="mod_doc"><h3 id="Relation-to-other-properties-of-functions" class="markdown-heading">Relation to other properties of functions <a class="hover-link" href="#Relation-to-other-properties-of-functions">#</a></h3></div><div class="decl" id="MeromorphicNFAt.meromorphicAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L103-L110">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt.meromorphicAt"><span class="name">MeromorphicNFAt</span>.<span class="name">meromorphicAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicAt">MeromorphicAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>If a function is meromorphic in normal form at <code>x</code>, then it is meromorphic at <code>x</code>.</p></div></div><div class="decl" id="MeromorphicNFAt.meromorphicOrderAt_nonneg_iff_analyticAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L112-L123">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt.meromorphicOrderAt_nonneg_iff_analyticAt"><span class="name">MeromorphicNFAt</span>.<span class="name">meromorphicOrderAt_nonneg_iff_analyticAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Order.html#meromorphicOrderAt">meromorphicOrderAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticAt">AnalyticAt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>If a function is meromorphic in normal form at <code>x</code>, then it has non-negative order iff it is
+analytic.</p></div></div><div class="decl" id="AnalyticAt.meromorphicNFAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L125-L128">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#AnalyticAt.meromorphicNFAt"><span class="name">AnalyticAt</span>.<span class="name">meromorphicNFAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticAt">AnalyticAt</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>Analytic functions are meromorphic in normal form.</p></div></div><div class="decl" id="MeromorphicOn.meromorphicNFAt_mem_codiscreteWithin"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L130-L136">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicOn.meromorphicNFAt_mem_codiscreteWithin"><span class="name">MeromorphicOn</span>.<span class="name">meromorphicNFAt_mem_codiscreteWithin</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">𝕜</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/DiscreteSubset.html#Filter.codiscreteWithin">Filter.codiscreteWithin</a> <span class="fn">U</span></span></div></div><p>Meromorphic functions have normal form outside of a discrete subset in the domain of
+meromorphicity.</p></div></div><div class="mod_doc"><h3 id="Vanishing-and-order" class="markdown-heading">Vanishing and order <a class="hover-link" href="#Vanishing-and-order">#</a></h3></div><div class="decl" id="MeromorphicNFAt.meromorphicOrderAt_eq_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L142-L166">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt.meromorphicOrderAt_eq_zero_iff"><span class="name">MeromorphicNFAt</span>.<span class="name">meromorphicOrderAt_eq_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Order.html#meromorphicOrderAt">meromorphicOrderAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></div></div><p>If <code>f</code> is meromorphic in normal form at <code>x</code>, then <code>f</code> has order zero iff it does not vanish at
+<code>x</code>.</p><p>See <code>AnalyticAt.order_eq_zero_iff</code> for an analogous statement about analytic functions.</p></div></div><div class="mod_doc"><h3 id="Local-nature-of-the-definition-and-local-identity-theorem" class="markdown-heading">Local nature of the definition and local identity theorem <a class="hover-link" href="#Local-nature-of-the-definition-and-local-identity-theorem">#</a></h3></div><div class="decl" id="MeromorphicNFAt.eventuallyEq_nhdsNE_iff_eventuallyEq_nhds"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L172-L196">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt.eventuallyEq_nhdsNE_iff_eventuallyEq_nhds"><span class="name">MeromorphicNFAt</span>.<span class="name">eventuallyEq_nhdsNE_iff_eventuallyEq_nhds</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">g</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhdsWithin">nhdsWithin</a> <span class="fn">x</span> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">g</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">f</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">g</span></div></div><p><strong>Local identity theorem</strong>: two meromorphic functions in normal form agree in a
+neighborhood iff they agree in a pointed neighborhood.</p><p>See <code><a href="../../.././Mathlib/Topology/Separation/Hausdorff.html#ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE">ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE</a></code> for the analogous
+statement for continuous functions.</p></div></div><div class="decl" id="meromorphicNFAt_congr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L198-L207">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFAt_congr"><span class="name">meromorphicNFAt_congr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hfg</span> : <span class="fn">f</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">g</span> <span class="fn">x</span></span></div></div><p>Meromorphicity in normal form is a local property.</p></div></div><div class="mod_doc"><h3 id="Criteria-to-guarantee-normal-form" class="markdown-heading">Criteria to guarantee normal form <a class="hover-link" href="#Criteria-to-guarantee-normal-form">#</a></h3></div><div class="decl" id="MeromorphicNFAt.smul_analytic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L213-L230">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt.smul_analytic"><span class="name">MeromorphicNFAt</span>.<span class="name">smul_analytic</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₁g</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticAt">AnalyticAt</a> <span class="fn">𝕜</span> <span class="fn">g</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂g</span> : <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>) <span class="fn">x</span></span></div></div><p>Helper lemma for <code>meromorphicNFAt_iff_meromorphicNFAt_of_smul_analytic</code>: if
+<code>f</code> is meromorphic in normal form at <code>x</code> and <code>g</code> is analytic without zero at
+<code>x</code>, then <code>g • f</code> is meromorphic in normal form at <code>x</code>.</p></div></div><div class="decl" id="meromorphicNFAt_smul_iff_right_of_analyticAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L232-L246">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFAt_smul_iff_right_of_analyticAt"><span class="name">meromorphicNFAt_smul_iff_right_of_analyticAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁g</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticAt">AnalyticAt</a> <span class="fn">𝕜</span> <span class="fn">g</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂g</span> : <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>) <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>If <code>f</code> is any function and <code>g</code> is analytic without zero at <code>z₀</code>, then <code>f</code> is meromorphic in
+normal form at <code>z₀</code> iff <code>g • f</code> is meromorphic in normal form at <code>z₀</code>.</p></div></div><div class="decl" id="meromorphicNFAt_mul_iff_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L248-L253">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFAt_mul_iff_right"><span class="name">meromorphicNFAt_mul_iff_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁g</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticAt">AnalyticAt</a> <span class="fn">𝕜</span> <span class="fn">g</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂g</span> : <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">f</span>) <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>If <code>f</code> is any function and <code>g</code> is analytic without zero at <code>z₀</code>, then <code>f</code> is meromorphic in
+normal form at <code>z₀</code> iff <code>g * f</code> is meromorphic in normal form at <code>z₀</code>.</p></div></div><div class="decl" id="meromorphicNFAt_mul_iff_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L255-L261">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFAt_mul_iff_left"><span class="name">meromorphicNFAt_mul_iff_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁g</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticAt">AnalyticAt</a> <span class="fn">𝕜</span> <span class="fn">g</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂g</span> : <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">g</span>) <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>If <code>f</code> is any function and <code>g</code> is analytic without zero at <code>z₀</code>, then <code>f</code> is meromorphic in
+normal form at <code>z₀</code> iff <code>f * g</code> is meromorphic in normal form at <code>z₀</code>.</p></div></div><div class="decl" id="meromorphicNFAt_prod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L263-L290">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFAt_prod"><span class="name">meromorphicNFAt_prod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁f</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂f</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">σ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">σ</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>.<a href="../../.././Mathlib/Data/Set/Subsingleton.html#Set.Subsingleton">Subsingleton</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">(∏ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span> <span class="fn">x</span></span></div></div><p>A product of meromorphic functions in normal form is in normal form if at most one of the factors
+vanishes.</p></div></div><div class="decl" id="meromorphicNFAt_fun_prod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L292-L301">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFAt_fun_prod"><span class="name">meromorphicNFAt_fun_prod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁f</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂f</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">σ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">σ</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>.<a href="../../.././Mathlib/Data/Set/Subsingleton.html#Set.Subsingleton">Subsingleton</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">(fun (<span class="fn">a</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn">∏ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span> <span class="fn">a</span></span></span>)</span> <span class="fn">x</span></span></div></div><p>A product of meromorphic functions in normal form is in normal form if at most one of the factors
+vanishes.</p></div></div><div class="decl" id="meromorphicNFAt_finprod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L303-L313">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFAt_finprod"><span class="name">meromorphicNFAt_finprod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁f</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂f</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">σ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">f</span> <span class="fn">σ</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>.<a href="../../.././Mathlib/Data/Set/Subsingleton.html#Set.Subsingleton">Subsingleton</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/BigOperators/Finprod.html#finprod">∏ᶠ</a> (<span class="fn">i</span> : <span class="fn">ι</span>)<a href="../../.././Mathlib/Algebra/BigOperators/Finprod.html#finprod">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span> <span class="fn">x</span></span></div></div><p>A finprod of meromorphic functions in normal form is in normal form if at most one of the factors
+vanishes.</p></div></div><div class="decl" id="MeromorphicNFAt.zpow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L315-L336">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt.zpow"><span class="name">MeromorphicNFAt</span>.<span class="name">zpow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>) <span class="fn">x</span></span></div></div><p>Integer powers of meromorphic functions in normal form are in normal form.</p></div></div><div class="decl" id="MeromorphicNFAt.fun_zpow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L318-L318">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt.fun_zpow"><span class="name">MeromorphicNFAt</span>.<span class="name">fun_zpow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>)</span> <span class="fn">x</span></span></div></div><p>Eta-expanded form of <code><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt.zpow">MeromorphicNFAt.zpow</a></code></p><hr>
+<p>Integer powers of meromorphic functions in normal form are in normal form.</p></div></div><div class="decl" id="MeromorphicNFAt.inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L338-L351">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt.inv"><span class="name">MeromorphicNFAt</span>.<span class="name">inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">x</span></span></div></div><p>If <code>f</code> is meromorphic in normal form, then so is its inverse.</p></div></div><div class="decl" id="meromorphicNFAt_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L353-L358">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFAt_inv"><span class="name">meromorphicNFAt_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>A function to 𝕜 is meromorphic in normal form at a point iff its inverse is.</p></div></div><div class="mod_doc"><h3 id="Continuous-extension-and-conversion-to-normal-form" class="markdown-heading">Continuous extension and conversion to normal form <a class="hover-link" href="#Continuous-extension-and-conversion-to-normal-form">#</a></h3></div><div class="decl" id="toMeromorphicNFAt"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L365-L376">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt"><span class="name">toMeromorphicNFAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝕜</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span></div></div><p>If <code>f</code> is meromorphic at <code>x</code>, convert <code>f</code> to normal form at <code>x</code> by changing its value at <code>x</code>.
+Otherwise, returns the 0 function.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt">toMeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">if hf : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicAt">MeromorphicAt</a> <span class="fn">f</span> <span class="fn">x</span></span> then
+    <span class="fn"><a href="../../.././Mathlib/Logic/Function/Basic.html#Function.update">Function.update</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">(if h₁f : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Order.html#meromorphicOrderAt">meromorphicOrderAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">0</span></span> then <span class="fn"><a href="../../.././Init/Classical.html#Classical.choose">Classical.choose</a> <span class="fn">⋯</span> <span class="fn">x</span></span> else <span class="fn">0</span>)</span></span>
+  else <span class="fn">0</span></span></li></ul></details><details id="instances-for-list-toMeromorphicNFAt" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MeromorphicAt.eqOn_compl_singleton_toMeromorphicNFAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L378-L381">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicAt.eqOn_compl_singleton_toMeromorphicNFAt"><span class="name">MeromorphicAt</span>.<span class="name">eqOn_compl_singleton_toMeromorphicNFAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicAt">MeromorphicAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> <span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt">toMeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span>)</span> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a></span></div></div><p>Conversion to normal form at <code>x</code> changes the value only at x.</p></div></div><div class="decl" id="toMeromorphicNFAt_of_not_meromorphicAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L383-L386">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt_of_not_meromorphicAt"><span class="name">toMeromorphicNFAt_of_not_meromorphicAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicAt">MeromorphicAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt">toMeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div><p>If <code>f</code> is not meromorphic, conversion to normal form at <code>x</code> maps the function to <code>0</code>.</p></div></div><div class="decl" id="MeromorphicAt.eq_nhdsNE_toMeromorphicNFAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L388-L391">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicAt.eq_nhdsNE_toMeromorphicNFAt"><span class="name">MeromorphicAt</span>.<span class="name">eq_nhdsNE_toMeromorphicNFAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicAt">MeromorphicAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhdsWithin">nhdsWithin</a> <span class="fn">x</span> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt">toMeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>Conversion to normal form at <code>x</code> changes the value only at x.</p></div></div><div class="decl" id="meromorphicNFAt_toMeromorphicNFAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L393-L421">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFAt_toMeromorphicNFAt"><span class="name">meromorphicNFAt_toMeromorphicNFAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt">toMeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">x</span></span></div></div><p>After conversion to normal form at <code>x</code>, the function has normal form.</p></div></div><div class="decl" id="toMeromorphicNFAt_eq_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L423-L469">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt_eq_self"><span class="name">toMeromorphicNFAt_eq_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt">toMeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>If <code>f</code> has normal form at <code>x</code>, then <code>f</code> equals <code>f.toNF</code>.</p></div></div><div class="mod_doc"><h2 id="Normal-form-of-meromorphic-functions-on-a-given-set" class="markdown-heading">Normal form of meromorphic functions on a given set <a class="hover-link" href="#Normal-form-of-meromorphic-functions-on-a-given-set">#</a></h2><h3 id="Definition" class="markdown-heading">Definition <a class="hover-link" href="#Definition">#</a></h3></div><div class="decl" id="MeromorphicNFOn"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L477-L481">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn"><span class="name">MeromorphicNFOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A function is 'meromorphic in normal form' on <code>U</code> if has normal form at every
+point of <code>U</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ ⦃<span class="fn">z</span> : <span class="fn">𝕜</span>⦄, <span class="fn"><span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">U</span> → <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFAt">MeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">z</span></span></span></span></li></ul></details><details id="instances-for-list-MeromorphicNFOn" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="mod_doc"><h3 id="Relation-to-other-properties-of-functions" class="markdown-heading">Relation to other properties of functions <a class="hover-link" href="#Relation-to-other-properties-of-functions">#</a></h3></div><div class="decl" id="MeromorphicNFOn.meromorphicOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L487-L492">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn.meromorphicOn"><span class="name">MeromorphicNFOn</span>.<span class="name">meromorphicOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>If a function is meromorphic in normal form on <code>U</code>, then it is meromorphic on
+<code>U</code>.</p></div></div><div class="decl" id="MeromorphicNFOn.divisor_nonneg_iff_analyticOnNhd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L494-L512">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn.divisor_nonneg_iff_analyticOnNhd"><span class="name">MeromorphicNFOn</span>.<span class="name">divisor_nonneg_iff_analyticOnNhd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">0</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Divisor.html#MeromorphicOn.divisor">MeromorphicOn.divisor</a> <span class="fn">f</span> <span class="fn">U</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticOnNhd">AnalyticOnNhd</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>If a function is meromorphic in normal form on <code>U</code>, then its divisor is
+non-negative iff it is analytic.</p></div></div><div class="decl" id="AnalyticOnNhd.meromorphicNFOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L514-L516">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#AnalyticOnNhd.meromorphicNFOn"><span class="name">AnalyticOnNhd</span>.<span class="name">meromorphicNFOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticOnNhd">AnalyticOnNhd</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>Analytic functions are meromorphic in normal form.</p></div></div><div class="mod_doc"><h3 id="Divisors-and-zeros-of-meromorphic-functions-in-normal-form" class="markdown-heading">Divisors and zeros of meromorphic functions in normal form. <a class="hover-link" href="#Divisors-and-zeros-of-meromorphic-functions-in-normal-form">#</a></h3></div><div class="decl" id="MeromorphicNFOn.zero_set_eq_divisor_support"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L522-L543">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn.zero_set_eq_divisor_support"><span class="name">MeromorphicNFOn</span>.<span class="name">zero_set_eq_divisor_support</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁f</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂f</span> : <span class="fn">∀ (<span class="fn">u</span> : <span class="fn">↑<span class="fn">U</span></span>), <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Order.html#meromorphicOrderAt">meromorphicOrderAt</a> <span class="fn">f</span> <span class="fn">↑<span class="fn">u</span></span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">U</span> <a href="../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">f</span> <a href="../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">0</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Support.html#Function.support">Function.support</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Analysis/Meromorphic/Divisor.html#MeromorphicOn.divisor">MeromorphicOn.divisor</a> <span class="fn">f</span> <span class="fn">U</span>)</span></span></span></div></div><p>If <code>f</code> is meromorphic in normal form on <code>U</code> and nowhere locally constant zero,
+then its zero set equals the support of the associated divisor.</p></div></div><div class="mod_doc"><h3 id="Criteria-to-guarantee-normal-form" class="markdown-heading">Criteria to guarantee normal form <a class="hover-link" href="#Criteria-to-guarantee-normal-form">#</a></h3></div><div class="decl" id="meromorphicNFOn_smul_iff_right_of_analyticOnNhd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L549-L561">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFOn_smul_iff_right_of_analyticOnNhd"><span class="name">meromorphicNFOn_smul_iff_right_of_analyticOnNhd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁g</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticOnNhd">AnalyticOnNhd</a> <span class="fn">𝕜</span> <span class="fn">g</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂g</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn">U</span>, <span class="fn"><span class="fn">g</span> <span class="fn">u</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>) <span class="fn">U</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>If <code>f</code> is any function and <code>g</code> is analytic without zero on <code>U</code>, then <code>f</code> is
+meromorphic in normal form on <code>U</code> iff <code>g • f</code> is meromorphic in normal form on
+<code>U</code>.</p></div></div><div class="decl" id="meromorphicNFOn_mul_iff_right_of_analyticOnNhd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L563-L572">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFOn_mul_iff_right_of_analyticOnNhd"><span class="name">meromorphicNFOn_mul_iff_right_of_analyticOnNhd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁g</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticOnNhd">AnalyticOnNhd</a> <span class="fn">𝕜</span> <span class="fn">g</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂g</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn">U</span>, <span class="fn"><span class="fn">g</span> <span class="fn">u</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">f</span>) <span class="fn">U</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>If <code>f</code> is any function and <code>g</code> is analytic without zero in <code>U</code>, then <code>f</code> is
+meromorphic in normal form on <code>U</code> iff <code>g * f</code> is meromorphic in normal form on
+<code>U</code>.</p></div></div><div class="decl" id="meromorphicNFOn_mul_iff_left_of_analyticOnNhd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L574-L583">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFOn_mul_iff_left_of_analyticOnNhd"><span class="name">meromorphicNFOn_mul_iff_left_of_analyticOnNhd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁g</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Analytic/Basic.html#AnalyticOnNhd">AnalyticOnNhd</a> <span class="fn">𝕜</span> <span class="fn">g</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂g</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn">U</span>, <span class="fn"><span class="fn">g</span> <span class="fn">u</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">g</span>) <span class="fn">U</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>If <code>f</code> is any function and <code>g</code> is analytic without zero in <code>U</code>, then <code>f</code> is
+meromorphic in normal form on <code>U</code> iff <code>f * g</code> is meromorphic in normal form on
+<code>U</code>.</p></div></div><div class="decl" id="meromorphicNFOn_prod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L585-L593">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFOn_prod"><span class="name">meromorphicNFOn_prod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁f</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">U</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂f</span> : <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn">U</span>, <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">σ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">σ</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>.<a href="../../.././Mathlib/Data/Set/Subsingleton.html#Set.Subsingleton">Subsingleton</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">(∏ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span> <span class="fn">U</span></span></div></div><p>A product of meromorphic functions in normal form is in normal form if at most one of the factors
+vanishes.</p></div></div><div class="decl" id="meromorphicNFOn_fun_prod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L595-L604">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFOn_fun_prod"><span class="name">meromorphicNFOn_fun_prod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁f</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">U</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂f</span> : <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn">U</span>, <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">σ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">σ</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>.<a href="../../.././Mathlib/Data/Set/Subsingleton.html#Set.Subsingleton">Subsingleton</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn">∏ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span> <span class="fn">x</span></span></span>)</span> <span class="fn">U</span></span></div></div><p>A product of meromorphic functions in normal form is in normal form if at most one of the factors
+vanishes.</p></div></div><div class="decl" id="meromorphicNFOn_finprod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L606-L613">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFOn_finprod"><span class="name">meromorphicNFOn_finprod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁f</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">U</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂f</span> : <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn">U</span>, <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">σ</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">f</span> <span class="fn">σ</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a>.<a href="../../.././Mathlib/Data/Set/Subsingleton.html#Set.Subsingleton">Subsingleton</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/BigOperators/Finprod.html#finprod">∏ᶠ</a> (<span class="fn">i</span> : <span class="fn">ι</span>)<a href="../../.././Mathlib/Algebra/BigOperators/Finprod.html#finprod">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span> <span class="fn">U</span></span></div></div><p>A finprod of meromorphic functions in normal form is in normal form if at most one of the factors
+vanishes.</p></div></div><div class="decl" id="MeromorphicNFOn.zpow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L615-L620">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn.zpow"><span class="name">MeromorphicNFOn</span>.<span class="name">zpow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>) <span class="fn">U</span></span></div></div><p>Integer powers of meromorphic functions in normal form are in normal form.</p></div></div><div class="decl" id="MeromorphicNFOn.fun_zpow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L618-L618">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn.fun_zpow"><span class="name">MeromorphicNFOn</span>.<span class="name">fun_zpow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>)</span> <span class="fn">U</span></span></div></div><p>Eta-expanded form of <code><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn.zpow">MeromorphicNFOn.zpow</a></code></p><hr>
+<p>Integer powers of meromorphic functions in normal form are in normal form.</p></div></div><div class="decl" id="meromorphicNFOn_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L622-L628">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFOn_inv"><span class="name">meromorphicNFOn_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">U</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>A function to 𝕜 is meromorphic in normal form on <code>U</code> iff its inverse is.</p></div></div><div class="decl" id="meromorphicNFOn_fun_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L630-L635">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFOn_fun_inv"><span class="name">meromorphicNFOn_fun_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span><a href="../../.././Init/Prelude.html#Inv.inv">⁻¹</a>)</span> <span class="fn">U</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>A function to 𝕜 is meromorphic in normal form on <code>U</code> iff its inverse is.</p></div></div><div class="mod_doc"><h3 id="Continuous-extension-and-conversion-to-normal-form" class="markdown-heading">Continuous extension and conversion to normal form <a class="hover-link" href="#Continuous-extension-and-conversion-to-normal-form">#</a></h3></div><div class="decl" id="toMeromorphicNFOn"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L642-L653">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn"><span class="name">toMeromorphicNFOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span></div></div><p>If <code>f</code> is meromorphic on <code>U</code>, convert <code>f</code> to normal form on <code>U</code> by changing its
+values along a discrete subset within <code>U</code>. Otherwise, returns the 0 function.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">if h₁f : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span> then <span class="fn">fun (<span class="fn">z</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn">if hz : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">U</span> then <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt">toMeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">z</span> <span class="fn">z</span></span> else <span class="fn"><span class="fn">f</span> <span class="fn">z</span></span></span></span> else <span class="fn">0</span></span></li></ul></details><details id="instances-for-list-toMeromorphicNFOn" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="toMeromorphicNFOn_of_not_meromorphicOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L655-L661">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn_of_not_meromorphicOn"><span class="name">toMeromorphicNFOn_of_not_meromorphicOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div><p>If <code>f</code> is not meromorphic on <code>U</code>, conversion to normal form maps the function
+to <code>0</code>.</p></div></div><div class="decl" id="toMeromorphicNFOn_eq_self_on_compl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L663-L669">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn_eq_self_on_compl"><span class="name">toMeromorphicNFOn_eq_self_on_compl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.EqOn">Set.EqOn</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span>)</span> <span class="fn">f</span> <span class="fn">U</span><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a></span></div></div><p>Conversion to normal form on <code>U</code> does not change values outside of <code>U</code>.</p></div></div><div class="decl" id="toMeromorphicNFOn_eqOn_codiscrete"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L671-L679">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn_eqOn_codiscrete"><span class="name">toMeromorphicNFOn_eqOn_codiscrete</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/Topology/DiscreteSubset.html#Filter.codiscreteWithin">Filter.codiscreteWithin</a> <span class="fn">U</span></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>Conversion to normal form on <code>U</code> changes the value only along a discrete subset
+of <code>U</code>.</p></div></div><div class="decl" id="MeromorphicOn.toMeromorphicNFOn_eq_self_on_nhdsNE"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L681-L692">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicOn.toMeromorphicNFOn_eq_self_on_nhdsNE"><span class="name">MeromorphicOn</span>.<span class="name">toMeromorphicNFOn_eq_self_on_nhdsNE</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhdsWithin">nhdsWithin</a> <span class="fn">x</span> <a href="../../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../../.././Init/Core.html#Singleton.singleton">}</a><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn">f</span></div></div><p>If <code>f</code> is meromorphic on <code>U</code> and <code>x ∈ U</code>, then <code>f</code> and its conversion to normal
+form on <code>U</code> agree in a punctured neighborhood of <code>x</code>.</p></div></div><div class="decl" id="toMeromorphicNFOn_eq_toMeromorphicNFAt_on_nhds"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L694-L703">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn_eq_toMeromorphicNFAt_on_nhds"><span class="name">toMeromorphicNFOn_eq_toMeromorphicNFAt_on_nhds</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span> <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">=ᶠ[</a><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.EventuallyEq">]</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt">toMeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>If <code>f</code> is meromorphic on <code>U</code> and <code>x ∈ U</code>, then conversion to normal form at <code>x</code>
+and conversion to normal form on <code>U</code> agree in a neighborhood of <code>x</code>.</p></div></div><div class="decl" id="toMeromorphicNFOn_eq_toMeromorphicNFAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L705-L713">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn_eq_toMeromorphicNFAt"><span class="name">toMeromorphicNFOn_eq_toMeromorphicNFAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFAt">toMeromorphicNFAt</a> <span class="fn">f</span> <span class="fn">x</span> <span class="fn">x</span></span></div></div><p>If <code>f</code> is meromorphic on <code>U</code> and <code>x ∈ U</code>, then conversion to normal form at <code>x</code>
+and conversion to normal form on <code>U</code> agree at <code>x</code>.</p></div></div><div class="decl" id="meromorphicNFOn_toMeromorphicNFOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L716-L725">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicNFOn_toMeromorphicNFOn"><span class="name">meromorphicNFOn_toMeromorphicNFOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span>)</span> <span class="fn">U</span></span></div></div><p>After conversion to normal form on <code>U</code>, the function has normal form.</p></div></div><div class="decl" id="toMeromorphicNFOn_eq_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L727-L739">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn_eq_self"><span class="name">toMeromorphicNFOn_eq_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicNFOn">MeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>If <code>f</code> has normal form on <code>U</code>, then <code>f</code> equals <code><a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> f U</code>.</p></div></div><div class="decl" id="meromorphicOrderAt_toMeromorphicNFOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L741-L747">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#meromorphicOrderAt_toMeromorphicNFOn"><span class="name">meromorphicOrderAt_toMeromorphicNFOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">U</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Order.html#meromorphicOrderAt">meromorphicOrderAt</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Order.html#meromorphicOrderAt">meromorphicOrderAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>Conversion of normal form does not affect orders.</p></div></div><div class="decl" id="MeromorphicOn.divisor_of_toMeromorphicNFOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Meromorphic/NormalForm.lean#L749-L755">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#MeromorphicOn.divisor_of_toMeromorphicNFOn"><span class="name">MeromorphicOn</span>.<span class="name">divisor_of_toMeromorphicNFOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">U</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Basic.html#MeromorphicOn">MeromorphicOn</a> <span class="fn">f</span> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Divisor.html#MeromorphicOn.divisor">divisor</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Meromorphic/NormalForm.html#toMeromorphicNFOn">toMeromorphicNFOn</a> <span class="fn">f</span> <span class="fn">U</span>)</span> <span class="fn">U</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Meromorphic/Divisor.html#MeromorphicOn.divisor">divisor</a> <span class="fn">f</span> <span class="fn">U</span></span></div></div><p>Conversion of normal form does not affect divisors.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

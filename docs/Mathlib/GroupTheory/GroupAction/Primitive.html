@@ -1,0 +1,586 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.GroupTheory.GroupAction.Primitive</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.GroupTheory.GroupAction.Primitive";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">GroupTheory</span>.<span class="name">GroupAction</span>.<span class="name">Primitive</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/BigOperators/Finprod.html">Mathlib.Algebra.BigOperators.Finprod</a></li><li><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html">Mathlib.GroupTheory.GroupAction.Blocks</a></li><li><a href="../../.././Mathlib/GroupTheory/GroupAction/Transitive.html">Mathlib.GroupTheory.GroupAction.Transitive</a></li><li><a href="../../.././Mathlib/Data/Nat/Prime/Basic.html">Mathlib.Data.Nat.Prime.Basic</a></li><li><a href="../../.././Mathlib/Data/Setoid/Partition/Card.html">Mathlib.Data.Setoid.Partition.Card</a></li><li><a href="../../.././Mathlib/Algebra/Order/BigOperators/Group/Finset.html">Mathlib.Algebra.Order.BigOperators.Group.Finset</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.GroupTheory.GroupAction.Primitive" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsQuasiPreprimitive"><span class="name">AddAction</span>.<span class="name">IsQuasiPreprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsQuasiPreprimitive"><span class="name">MulAction</span>.<span class="name">IsQuasiPreprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsBlock.subsingleton_or_eq_univ"><span class="name">MulAction</span>.<span class="name">IsBlock</span>.<span class="name">subsingleton_or_eq_univ</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsBlock.subsingleton_or_eq_univ"><span class="name">AddAction</span>.<span class="name">IsBlock</span>.<span class="name">subsingleton_or_eq_univ</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive.of_subsingleton"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_subsingleton</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive.of_subsingleton"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_subsingleton</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.isTrivialBlock_of_card_le_two"><span class="name">MulAction</span>.<span class="name">isTrivialBlock_of_card_le_two</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive.of_isTrivialBlock_base"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_isTrivialBlock_base</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive.of_isTrivialBlock_base"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_isTrivialBlock_base</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive.of_isTrivialBlock_of_notMem_fixedPoints"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_isTrivialBlock_of_notMem_fixedPoints</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive.of_isTrivialBlock_of_notMem_fixedPoints"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_isTrivialBlock_of_notMem_fixedPoints</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive.mk'"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">mk'</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive.mk'"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">mk'</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive.of_surjective"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive.of_surjective"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.isPreprimitive_congr"><span class="name">MulAction</span>.<span class="name">isPreprimitive_congr</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.isPreprimitive_congr"><span class="name">AddAction</span>.<span class="name">isPreprimitive_congr</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.isSimpleOrder_blockMem_iff_isPreprimitive"><span class="name">MulAction</span>.<span class="name">isSimpleOrder_blockMem_iff_isPreprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.isSimpleOrder_blockMem_iff_isPreprimitive"><span class="name">AddAction</span>.<span class="name">isSimpleOrder_blockMem_iff_isPreprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.isCoatom_stabilizer_iff_preprimitive"><span class="name">MulAction</span>.<span class="name">isCoatom_stabilizer_iff_preprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.isCoatom_stabilizer_iff_preprimitive"><span class="name">AddAction</span>.<span class="name">isCoatom_stabilizer_iff_preprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">isCoatom_stabilizer_of_isPreprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">isCoatom_stabilizer_of_isPreprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive.isQuasiPreprimitive"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">isQuasiPreprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive.isQuasiPreprimitive"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">isQuasiPreprimitive</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive.of_prime_card"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_prime_card</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive.of_prime_card"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_prime_card</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive.of_card_lt"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_card_lt</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive.of_card_lt"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_card_lt</span></a></div><div class="nav_link"><a class="break_within" href="#MulAction.IsPreprimitive.exists_mem_smul_and_notMem_smul"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">exists_mem_smul_and_notMem_smul</span></a></div><div class="nav_link"><a class="break_within" href="#AddAction.IsPreprimitive.exists_mem_vadd_and_notMem_vadd"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">exists_mem_vadd_and_notMem_vadd</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Primitive-actions" class="markdown-heading">Primitive actions <a class="hover-link" href="#Primitive-actions">#</a></h1><h2 id="Definitions" class="markdown-heading">Definitions <a class="hover-link" href="#Definitions">#</a></h2><ul><li><p><code><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">MulAction.IsPreprimitive</a> G X</code>
+A structure that says that the action of a type <code>G</code> on a type <code>X</code>
+(defined by an instance <code><a href="../../.././Init/Prelude.html#SMul">SMul</a> G X</code>) is <em>preprimitive</em>,
+namely, it is pretransitive and the only blocks are ⊤ and subsingletons.
+(The pretransitivity assumption is essentially trivial,
+because orbits are blocks, unless the action itself is trivial.)</p><p>The notion which is introduced in classical books on group theory
+is restricted to group actions.
+In fact, it may be irrelevant if the action is degenerate,
+when “trivial blocks” might not be blocks.
+Moreover, the classical notion is <em>primitive</em>,
+which further assumes that <code>X</code> is not empty.</p></li><li><p><code><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsQuasiPreprimitive">MulAction.IsQuasiPreprimitive</a> G X</code>
+A structure that says that the action of the group <code>G</code> on the type <code>X</code> is <em>quasipreprimitive</em>,
+namely, normal subgroups of <code>G</code> which act nontrivially act pretransitively.</p></li><li><p>We prove some straightforward theorems that relate preprimitivity
+under equivariant maps, for images and preimages.</p></li></ul><h2 id="Relation-with-stabilizers" class="markdown-heading">Relation with stabilizers <a class="hover-link" href="#Relation-with-stabilizers">#</a></h2><ul><li><p><code>MulAction.isSimpleOrderBlockMem_iff_isPreprimitive</code>
+relates primitivity and the fact that the inclusion order on blocks containing is simple.</p></li><li><p><code><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.isCoatom_stabilizer_iff_preprimitive">MulAction.isCoatom_stabilizer_iff_preprimitive</a></code>
+An action is preprimitive iff the stabilizers of points are maximal subgroups.</p></li><li><p><code><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive">MulAction.IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive</a></code>
+Stabilizers of points under a preprimitive action are maximal subgroups.</p></li></ul><h2 id="Relation-with-normal-subgroups" class="markdown-heading">Relation with normal subgroups <a class="hover-link" href="#Relation-with-normal-subgroups">#</a></h2><ul><li><code>MulAction.IsPreprimitive.isQuasipreprimitive</code>
+Preprimitive actions are quasipreprimitive.</li></ul><h2 id="Particular-results-for-actions-on-finite-types" class="markdown-heading">Particular results for actions on finite types <a class="hover-link" href="#Particular-results-for-actions-on-finite-types">#</a></h2><ul><li><p><code><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.of_prime_card">MulAction.IsPreprimitive.of_prime_card</a></code> :
+A pretransitive action on a finite type of prime cardinal is preprimitive.</p></li><li><p><code><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.of_card_lt">MulAction.IsPreprimitive.of_card_lt</a></code>
+Given an equivariant map from a preprimitive action,
+if the image is at least twice the codomain, then the codomain is preprimitive.</p></li><li><p><code><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.exists_mem_smul_and_notMem_smul">MulAction.IsPreprimitive.exists_mem_smul_and_notMem_smul</a></code> : <strong>Theorem of Rudio</strong>.
+For a preprimitive action, a subset which is neither empty nor full has a translate
+which contains a given point and avoids another one.</p></li></ul></div><div class="decl" id="AddAction.IsPreprimitive"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L81-L86">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="AddAction.IsPreprimitive.toIsPretransitive"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#AddAction.IsPretransitive">AddAction.IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>An additive action is preprimitive if it is pretransitive and
+the only blocks are the trivial ones</p><ul class="structure_fields" id="AddAction.IsPreprimitive.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#AddAction.IsPretransitive.exists_vadd_eq">exists_vadd_eq</a><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+ : <span class="fn">∃ (<span class="fn">g</span> : <span class="fn">G</span>), <span class="fn">g</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span></span></div></li><li id="AddAction.IsPreprimitive.isTrivialBlock_of_isBlock" class="structure_field"><div class="structure_field_info">isTrivialBlock_of_isBlock<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span> : <span class="fn"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#AddAction.IsBlock">IsBlock</a> <span class="fn">G</span> <span class="fn">B</span></span> → <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#AddAction.IsTrivialBlock">IsTrivialBlock</a> <span class="fn">B</span></span></span></div><div class="structure_field_doc"><p>An action is preprimitive if it is pretransitive and
+the only blocks are the trivial ones</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-AddAction.IsPreprimitive" class="instances-list"></ul></details></div></div><div class="decl" id="MulAction.IsPreprimitive"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L88-L94">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="MulAction.IsPreprimitive.toIsPretransitive"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#MulAction.IsPretransitive">MulAction.IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>An action is preprimitive if it is pretransitive and
+the only blocks are the trivial ones</p><ul class="structure_fields" id="MulAction.IsPreprimitive.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#MulAction.IsPretransitive.exists_smul_eq">exists_smul_eq</a><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+ : <span class="fn">∃ (<span class="fn">g</span> : <span class="fn">G</span>), <span class="fn">g</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span></span></div></li><li id="MulAction.IsPreprimitive.isTrivialBlock_of_isBlock" class="structure_field"><div class="structure_field_info">isTrivialBlock_of_isBlock<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span> : <span class="fn"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.IsBlock">IsBlock</a> <span class="fn">G</span> <span class="fn">B</span></span> → <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.IsTrivialBlock">IsTrivialBlock</a> <span class="fn">B</span></span></span></div><div class="structure_field_doc"><p>An action is preprimitive if it is pretransitive and
+the only blocks are the trivial ones</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-MulAction.IsPreprimitive" class="instances-list"></ul></details></div></div><div class="decl" id="AddAction.IsQuasiPreprimitive"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L98-L104">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsQuasiPreprimitive"><span class="name">AddAction</span>.<span class="name">IsQuasiPreprimitive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="AddAction.IsQuasiPreprimitive.toIsPretransitive"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#AddAction.IsPretransitive">AddAction.IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>An additive action of an additive group is quasipreprimitive if any normal subgroup
+that has no fixed point acts pretransitively</p><ul class="structure_fields" id="AddAction.IsQuasiPreprimitive.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#AddAction.IsPretransitive.exists_vadd_eq">exists_vadd_eq</a><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+ : <span class="fn">∃ (<span class="fn">g</span> : <span class="fn">G</span>), <span class="fn">g</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span></span></div></li><li id="AddAction.IsQuasiPreprimitive.isPretransitive_of_normal" class="structure_field"><div class="structure_field_info">isPretransitive_of_normal<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">N</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.Normal">Normal</a></span>]</span></span>
+</span> : <span class="fn"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#AddAction.fixedPoints">fixedPoints</a> <span class="fn">(↥<span class="fn">N</span>)</span> <span class="fn">X</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#AddAction.IsPretransitive">IsPretransitive</a> <span class="fn">(↥<span class="fn">N</span>)</span> <span class="fn">X</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-AddAction.IsQuasiPreprimitive" class="instances-list"></ul></details></div></div><div class="decl" id="MulAction.IsQuasiPreprimitive"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L106-L111">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsQuasiPreprimitive"><span class="name">MulAction</span>.<span class="name">IsQuasiPreprimitive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="MulAction.IsQuasiPreprimitive.toIsPretransitive"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#MulAction.IsPretransitive">MulAction.IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>An action of a group is quasipreprimitive if any normal subgroup
+that has no fixed point acts pretransitively</p><ul class="structure_fields" id="MulAction.IsQuasiPreprimitive.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#MulAction.IsPretransitive.exists_smul_eq">exists_smul_eq</a><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">X</span>)</span></span>
+ : <span class="fn">∃ (<span class="fn">g</span> : <span class="fn">G</span>), <span class="fn">g</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span></span></div></li><li id="MulAction.IsQuasiPreprimitive.isPretransitive_of_normal" class="structure_field"><div class="structure_field_info">isPretransitive_of_normal<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">N</span>.<a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.Normal">Normal</a></span>]</span></span>
+</span> : <span class="fn"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#MulAction.fixedPoints">fixedPoints</a> <span class="fn">(↥<span class="fn">N</span>)</span> <span class="fn">X</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#MulAction.IsPretransitive">IsPretransitive</a> <span class="fn">(↥<span class="fn">N</span>)</span> <span class="fn">X</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-MulAction.IsQuasiPreprimitive" class="instances-list"></ul></details></div></div><div class="decl" id="MulAction.IsBlock.subsingleton_or_eq_univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L115-L119">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsBlock.subsingleton_or_eq_univ"><span class="name">MulAction</span>.<span class="name">IsBlock</span>.<span class="name">subsingleton_or_eq_univ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hB</span> : <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.IsBlock">IsBlock</a> <span class="fn">G</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/Data/Set/Subsingleton.html#Set.Subsingleton">Subsingleton</a></span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">B</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a></div></div></div></div><div class="decl" id="AddAction.IsBlock.subsingleton_or_eq_univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L115-L115">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsBlock.subsingleton_or_eq_univ"><span class="name">AddAction</span>.<span class="name">IsBlock</span>.<span class="name">subsingleton_or_eq_univ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hB</span> : <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#AddAction.IsBlock">IsBlock</a> <span class="fn">G</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/Data/Set/Subsingleton.html#Set.Subsingleton">Subsingleton</a></span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">B</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a></div></div></div></div><div class="decl" id="MulAction.IsPreprimitive.of_subsingleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L121-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.of_subsingleton"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_subsingleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#SMul">SMul</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div></div></div><div class="decl" id="AddAction.IsPreprimitive.of_subsingleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L121-L121">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive.of_subsingleton"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_subsingleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Notation/Defs.html#VAdd">VAdd</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div></div></div><div class="decl" id="MulAction.isTrivialBlock_of_card_le_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L132-L137">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.isTrivialBlock_of_card_le_two"><span class="name">MulAction</span>.<span class="name">isTrivialBlock_of_card_le_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hX</span> : <span class="fn"><a href="../../.././Mathlib/SetTheory/Cardinal/Finite.html#Nat.card">Nat.card</a> <span class="fn">X</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.IsTrivialBlock">IsTrivialBlock</a> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="MulAction.IsPreprimitive.of_isTrivialBlock_base"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L143-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.of_isTrivialBlock_base"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_isTrivialBlock_base</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#MulAction.IsPretransitive">IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ {<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}, <span class="fn"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">B</span> → <span class="fn"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.IsBlock">IsBlock</a> <span class="fn">G</span> <span class="fn">B</span></span> → <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.IsTrivialBlock">IsTrivialBlock</a> <span class="fn">B</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>If the action is pretransitive, then the trivial blocks condition implies preprimitivity
+(based condition)</p></div></div><div class="decl" id="AddAction.IsPreprimitive.of_isTrivialBlock_base"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L145-L147">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive.of_isTrivialBlock_base"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_isTrivialBlock_base</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#AddAction.IsPretransitive">IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ {<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}, <span class="fn"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">B</span> → <span class="fn"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#AddAction.IsBlock">IsBlock</a> <span class="fn">G</span> <span class="fn">B</span></span> → <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#AddAction.IsTrivialBlock">IsTrivialBlock</a> <span class="fn">B</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>If the action is pretransitive, then the trivial blocks condition implies preprimitivity
+(based condition)</p></div></div><div class="decl" id="MulAction.IsPreprimitive.of_isTrivialBlock_of_notMem_fixedPoints"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L160-L183">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.of_isTrivialBlock_of_notMem_fixedPoints"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_isTrivialBlock_of_notMem_fixedPoints</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">X</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">a</span> ∉ <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#MulAction.fixedPoints">fixedPoints</a> <span class="fn">G</span> <span class="fn">X</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ ⦃<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>⦄, <span class="fn"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">B</span> → <span class="fn"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.IsBlock">IsBlock</a> <span class="fn">G</span> <span class="fn">B</span></span> → <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.IsTrivialBlock">IsTrivialBlock</a> <span class="fn">B</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>If the action is not trivial, then the trivial blocks condition implies preprimitivity
+(pretransitivity is automatic) (based condition)</p></div></div><div class="decl" id="AddAction.IsPreprimitive.of_isTrivialBlock_of_notMem_fixedPoints"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L162-L164">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive.of_isTrivialBlock_of_notMem_fixedPoints"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_isTrivialBlock_of_notMem_fixedPoints</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">X</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">a</span> ∉ <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#AddAction.fixedPoints">fixedPoints</a> <span class="fn">G</span> <span class="fn">X</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ ⦃<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>⦄, <span class="fn"><span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">B</span> → <span class="fn"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#AddAction.IsBlock">IsBlock</a> <span class="fn">G</span> <span class="fn">B</span></span> → <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#AddAction.IsTrivialBlock">IsTrivialBlock</a> <span class="fn">B</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>If the action is not trivial, then the trivial blocks condition implies preprimitivity
+(pretransitivity is automatic) (based condition)</p></div></div><div class="decl" id="MulAction.IsPreprimitive.mk'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L185-L195">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.mk'"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">mk'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Hnt</span> : <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#MulAction.fixedPoints">fixedPoints</a> <span class="fn">G</span> <span class="fn">X</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ {<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}, <span class="fn"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.IsBlock">IsBlock</a> <span class="fn">G</span> <span class="fn">B</span></span> → <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.IsTrivialBlock">IsTrivialBlock</a> <span class="fn">B</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>If the action is not trivial, then the trivial blocks condition implies preprimitivity
+(pretransitivity is automatic)</p></div></div><div class="decl" id="AddAction.IsPreprimitive.mk'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L187-L189">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive.mk'"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">mk'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Hnt</span> : <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#AddAction.fixedPoints">fixedPoints</a> <span class="fn">G</span> <span class="fn">X</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ {<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}, <span class="fn"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#AddAction.IsBlock">IsBlock</a> <span class="fn">G</span> <span class="fn">B</span></span> → <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#AddAction.IsTrivialBlock">IsTrivialBlock</a> <span class="fn">B</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>If the action is not trivial, then the trivial blocks condition implies preprimitivity
+(pretransitivity is automatic)</p></div></div><div class="decl" id="MulAction.IsPreprimitive.of_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L203-L210">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.of_surjective"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">N</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">M</span> → <span class="fn">N</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">α</span> <a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#MulActionHom">→ₑ[</a><span class="fn">φ</span><a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#MulActionHom">]</a> <span class="fn">β</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">N</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="AddAction.IsPreprimitive.of_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L203-L203">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive.of_surjective"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">N</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">M</span> → <span class="fn">N</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">α</span> <a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#AddActionHom">→ₑ[</a><span class="fn">φ</span><a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#AddActionHom">]</a> <span class="fn">β</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">N</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="MulAction.isPreprimitive_congr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L212-L224">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.isPreprimitive_congr"><span class="name">MulAction</span>.<span class="name">isPreprimitive_congr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">N</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">M</span> → <span class="fn">N</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">α</span> <a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#MulActionHom">→ₑ[</a><span class="fn">φ</span><a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#MulActionHom">]</a> <span class="fn">β</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">M</span> <span class="fn">α</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">N</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="AddAction.isPreprimitive_congr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L212-L212">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.isPreprimitive_congr"><span class="name">AddAction</span>.<span class="name">isPreprimitive_congr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">N</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">M</span> → <span class="fn">N</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">α</span> <a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#AddActionHom">→ₑ[</a><span class="fn">φ</span><a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#AddActionHom">]</a> <span class="fn">β</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">M</span> <span class="fn">α</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">N</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="MulAction.isSimpleOrder_blockMem_iff_isPreprimitive"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L234-L256">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.isSimpleOrder_blockMem_iff_isPreprimitive"><span class="name">MulAction</span>.<span class="name">isSimpleOrder_blockMem_iff_isPreprimitive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#MulAction.IsPretransitive">IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Atoms.html#IsSimpleOrder">IsSimpleOrder</a> <span class="fn">(<a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#MulAction.BlockMem">BlockMem</a> <span class="fn">G</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>A pretransitive action on a nontrivial type is preprimitive iff
+the set of blocks containing a given element is a simple order</p></div></div><div class="decl" id="AddAction.isSimpleOrder_blockMem_iff_isPreprimitive"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L236-L238">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.isSimpleOrder_blockMem_iff_isPreprimitive"><span class="name">AddAction</span>.<span class="name">isSimpleOrder_blockMem_iff_isPreprimitive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#AddAction.IsPretransitive">IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Atoms.html#IsSimpleOrder">IsSimpleOrder</a> <span class="fn">(<a href="../../.././Mathlib/GroupTheory/GroupAction/Blocks.html#AddAction.BlockMem">BlockMem</a> <span class="fn">G</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>A pretransitive action on a nontrivial type is preprimitive iff
+the set of blocks containing a given element is a simple order</p></div></div><div class="decl" id="MulAction.isCoatom_stabilizer_iff_preprimitive"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L258-L267">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.isCoatom_stabilizer_iff_preprimitive"><span class="name">MulAction</span>.<span class="name">isCoatom_stabilizer_iff_preprimitive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#MulAction.IsPretransitive">IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Atoms.html#IsCoatom">IsCoatom</a> <span class="fn">(<a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#MulAction.stabilizer">stabilizer</a> <span class="fn">G</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>A pretransitive action is preprimitive
+iff the stabilizer of any point is a maximal subgroup (Wielandt, th. 7.5)</p></div></div><div class="decl" id="AddAction.isCoatom_stabilizer_iff_preprimitive"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L260-L262">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.isCoatom_stabilizer_iff_preprimitive"><span class="name">AddAction</span>.<span class="name">isCoatom_stabilizer_iff_preprimitive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#AddAction.IsPretransitive">IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Atoms.html#IsCoatom">IsCoatom</a> <span class="fn">(<a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#AddAction.stabilizer">stabilizer</a> <span class="fn">G</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>A pretransitive action is preprimitive
+iff the stabilizer of any point is a maximal subgroup (Wielandt, th. 7.5)</p></div></div><div class="decl" id="MulAction.IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L269-L274">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">isCoatom_stabilizer_of_isPreprimitive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Atoms.html#IsCoatom">IsCoatom</a> <span class="fn">(<a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#MulAction.stabilizer">stabilizer</a> <span class="fn">G</span> <span class="fn">a</span>)</span></span></div></div><p>In a preprimitive action, stabilizers are maximal subgroups</p></div></div><div class="decl" id="AddAction.IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L270-L270">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">isCoatom_stabilizer_of_isPreprimitive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Atoms.html#IsCoatom">IsCoatom</a> <span class="fn">(<a href="../../.././Mathlib/GroupTheory/GroupAction/Defs.html#AddAction.stabilizer">stabilizer</a> <span class="fn">G</span> <span class="fn">a</span>)</span></span></div></div><p>In a preprimitive action, stabilizers are maximal subgroups.</p></div></div><div class="decl" id="MulAction.IsPreprimitive.isQuasiPreprimitive"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L282-L301">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.isQuasiPreprimitive"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">isQuasiPreprimitive</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsQuasiPreprimitive">IsQuasiPreprimitive</a> <span class="fn">M</span> <span class="fn">α</span></span></div></div><p>In a preprimitive action, any normal subgroup that acts nontrivially is pretransitive
+(Wielandt, th. 7.1).</p></div></div><div class="decl" id="AddAction.IsPreprimitive.isQuasiPreprimitive"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L284-L285">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive.isQuasiPreprimitive"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">isQuasiPreprimitive</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">M</span> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsQuasiPreprimitive">IsQuasiPreprimitive</a> <span class="fn">M</span> <span class="fn">α</span></span></div></div><p>In a preprimitive additive action,
+any normal subgroup that acts nontrivially is pretransitive (Wielandt, th. 7.1).</p></div></div><div class="decl" id="MulAction.IsPreprimitive.of_prime_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L311-L318">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.of_prime_card"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_prime_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hGX</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#MulAction.IsPretransitive">IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">(<a href="../../.././Mathlib/SetTheory/Cardinal/Finite.html#Nat.card">Nat.card</a> <span class="fn">X</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>A pretransitive action on a set of prime order is preprimitive</p></div></div><div class="decl" id="AddAction.IsPreprimitive.of_prime_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L312-L312">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive.of_prime_card"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_prime_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hGX</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#AddAction.IsPretransitive">IsPretransitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">(<a href="../../.././Mathlib/SetTheory/Cardinal/Finite.html#Nat.card">Nat.card</a> <span class="fn">X</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span></div></div><p>A pretransitive action on a set of prime order is preprimitive</p></div></div><div class="decl" id="MulAction.IsPreprimitive.of_card_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L322-L360">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.of_card_lt"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_card_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">H</span> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">G</span> → <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">X</span> <a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#MulActionHom">→ₑ[</a><span class="fn">φ</span><a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#MulActionHom">]</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#MulAction.IsPretransitive">IsPretransitive</a> <span class="fn">H</span> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf'</span> : <span class="fn"><a href="../../.././Mathlib/SetTheory/Cardinal/Finite.html#Nat.card">Nat.card</a> <span class="fn">Y</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">f</span></span>)</span>.<a href="../../.././Mathlib/Data/Set/Card.html#Set.ncard">ncard</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">H</span> <span class="fn">Y</span></span></div></div><p>The codomain of an equivariant map of large image is preprimitive if the domain is.</p></div></div><div class="decl" id="AddAction.IsPreprimitive.of_card_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L323-L324">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive.of_card_lt"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">of_card_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">H</span> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">G</span> → <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">X</span> <a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#AddActionHom">→ₑ[</a><span class="fn">φ</span><a href="../../.././Mathlib/GroupTheory/GroupAction/Hom.html#AddActionHom">]</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Pretransitive.html#AddAction.IsPretransitive">IsPretransitive</a> <span class="fn">H</span> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf'</span> : <span class="fn"><a href="../../.././Mathlib/SetTheory/Cardinal/Finite.html#Nat.card">Nat.card</a> <span class="fn">Y</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">2</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">⇑<span class="fn">f</span></span>)</span>.<a href="../../.././Mathlib/Data/Set/Card.html#Set.ncard">ncard</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">H</span> <span class="fn">Y</span></span></div></div><p>The codomain of an equivariant map of large image is preprimitive if the domain is.</p></div></div><div class="decl" id="MulAction.IsPreprimitive.exists_mem_smul_and_notMem_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L365-L397">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive.exists_mem_smul_and_notMem_smul"><span class="name">MulAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">exists_mem_smul_and_notMem_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#MulAction">MulAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#MulAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hfA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA'</span> : <span class="fn">A</span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">X</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">g</span> : <span class="fn">G</span>), <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">g</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">A</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">b</span> ∉ <span class="fn">g</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">A</span></span></span></div></div><p>Theorem of Rudio (Wielandt, 1964, Th. 8.1)</p><p>For a preprimitive action, a subset which is neither empty nor full has a translate
+which contains a given point and avoids another one.</p></div></div><div class="decl" id="AddAction.IsPreprimitive.exists_mem_vadd_and_notMem_vadd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/GroupTheory/GroupAction/Primitive.lean#L369-L372">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive.exists_mem_vadd_and_notMem_vadd"><span class="name">AddAction</span>.<span class="name">IsPreprimitive</span>.<span class="name">exists_mem_vadd_and_notMem_vadd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/GroupTheory/GroupAction/Primitive.html#AddAction.IsPreprimitive">IsPreprimitive</a> <span class="fn">G</span> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hfA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA</span> : <span class="fn"><span class="fn">A</span>.<a href="../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hA'</span> : <span class="fn">A</span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">X</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">g</span> : <span class="fn">G</span>), <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">g</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">A</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">b</span> ∉ <span class="fn">g</span> <a href="../../.././Mathlib/Algebra/Notation/Defs.html#HVAdd.hVAdd">+ᵥ</a> <span class="fn">A</span></span></span></div></div><p>Theorem of Rudio (Wielandt, 1964, Th. 8.1)</p><p>For a preprimitive additive action, a subset which is neither empty nor full has a translate
+which contains a given point and avoids another one.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

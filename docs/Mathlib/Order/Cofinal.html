@@ -1,0 +1,290 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Order.Cofinal</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Order.Cofinal";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Order</span>.<span class="name">Cofinal</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Order/WellFounded.html">Mathlib.Order.WellFounded</a></li><li><a href="../.././Mathlib/Data/Set/Lattice.html">Mathlib.Data.Set.Lattice</a></li><li><a href="../.././Mathlib/Order/GaloisConnection/Basic.html">Mathlib.Order.GaloisConnection.Basic</a></li><li><a href="../.././Mathlib/Order/Interval/Set/Basic.html">Mathlib.Order.Interval.Set.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Order.Cofinal" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsCofinal.of_isEmpty"><span class="name">IsCofinal</span>.<span class="name">of_isEmpty</span></a></div><div class="nav_link"><a class="break_within" href="#isCofinal_empty_iff"><span class="name">isCofinal_empty_iff</span></a></div><div class="nav_link"><a class="break_within" href="#isCofinal_singleton_iff"><span class="name">isCofinal_singleton_iff</span></a></div><div class="nav_link"><a class="break_within" href="#IsCofinal.singleton_top"><span class="name">IsCofinal</span>.<span class="name">singleton_top</span></a></div><div class="nav_link"><a class="break_within" href="#IsCofinal.mono"><span class="name">IsCofinal</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#IsCofinal.univ"><span class="name">IsCofinal</span>.<span class="name">univ</span></a></div><div class="nav_link"><a class="break_within" href="#instInhabitedSubtypeSetIsCofinal"><span class="name">instInhabitedSubtypeSetIsCofinal</span></a></div><div class="nav_link"><a class="break_within" href="#IsCofinal.image"><span class="name">IsCofinal</span>.<span class="name">image</span></a></div><div class="nav_link"><a class="break_within" href="#IsCofinal.trans"><span class="name">IsCofinal</span>.<span class="name">trans</span></a></div><div class="nav_link"><a class="break_within" href="#GaloisConnection.isCofinal_range"><span class="name">GaloisConnection</span>.<span class="name">isCofinal_range</span></a></div><div class="nav_link"><a class="break_within" href="#GaloisConnection.map_isCofinal"><span class="name">GaloisConnection</span>.<span class="name">map_isCofinal</span></a></div><div class="nav_link"><a class="break_within" href="#GaloisConnection.map_cofinal"><span class="name">GaloisConnection</span>.<span class="name">map_cofinal</span></a></div><div class="nav_link"><a class="break_within" href="#OrderIso.map_isCofinal"><span class="name">OrderIso</span>.<span class="name">map_isCofinal</span></a></div><div class="nav_link"><a class="break_within" href="#OrderIso.map_isCofinal_iff"><span class="name">OrderIso</span>.<span class="name">map_isCofinal_iff</span></a></div><div class="nav_link"><a class="break_within" href="#OrderIso.map_cofinal"><span class="name">OrderIso</span>.<span class="name">map_cofinal</span></a></div><div class="nav_link"><a class="break_within" href="#isCofinal_iff_iUnion_Iic_eq_univ"><span class="name">isCofinal_iff_iUnion_Iic_eq_univ</span></a></div><div class="nav_link"><a class="break_within" href="#isCofinal_iff_iUnion_Iio_eq_univ"><span class="name">isCofinal_iff_iUnion_Iio_eq_univ</span></a></div><div class="nav_link"><a class="break_within" href="#IsCofinal.mem_of_isMax"><span class="name">IsCofinal</span>.<span class="name">mem_of_isMax</span></a></div><div class="nav_link"><a class="break_within" href="#IsCofinal.top_mem"><span class="name">IsCofinal</span>.<span class="name">top_mem</span></a></div><div class="nav_link"><a class="break_within" href="#isCofinal_iff_top_mem"><span class="name">isCofinal_iff_top_mem</span></a></div><div class="nav_link"><a class="break_within" href="#not_isCofinal_iff"><span class="name">not_isCofinal_iff</span></a></div><div class="nav_link"><a class="break_within" href="#BddAbove.of_not_isCofinal"><span class="name">BddAbove</span>.<span class="name">of_not_isCofinal</span></a></div><div class="nav_link"><a class="break_within" href="#IsCofinal.of_not_bddAbove"><span class="name">IsCofinal</span>.<span class="name">of_not_bddAbove</span></a></div><div class="nav_link"><a class="break_within" href="#not_isCofinal_iff_bddAbove"><span class="name">not_isCofinal_iff_bddAbove</span></a></div><div class="nav_link"><a class="break_within" href="#not_bddAbove_iff_isCofinal"><span class="name">not_bddAbove_iff_isCofinal</span></a></div><div class="nav_link"><a class="break_within" href="#isCofinal_setOf_imp_lt"><span class="name">isCofinal_setOf_imp_lt</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Cofinal-sets" class="markdown-heading">Cofinal sets <a class="hover-link" href="#Cofinal-sets">#</a></h1><p>A set <code>s</code> in an ordered type <code>α</code> is cofinal when for every <code>a : α</code> there exists an element of <code>s</code>
+greater or equal to it. This file provides a basic API for the <code><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a></code> predicate.</p><p>For the cofinality of a set as a cardinal, see <code><a href="../.././Mathlib/SetTheory/Cardinal/Cofinality.html">Mathlib/SetTheory/Cardinal/Cofinality.lean</a></code>.</p><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li>Define <code><a href="../.././Mathlib/SetTheory/Cardinal/Cofinality.html#Order.cof">Order.cof</a></code> in terms of <code>Cofinal</code>.</li><li>Deprecate <code><a href="../.././Mathlib/Order/Ideal.html#Order.Cofinal">Order.Cofinal</a></code> in favor of this predicate.</li></ul></div><div class="decl" id="IsCofinal.of_isEmpty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L37-L38">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#IsCofinal.of_isEmpty"><span class="name">IsCofinal</span>.<span class="name">of_isEmpty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#LE">LE</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="isCofinal_empty_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L40-L42">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#isCofinal_empty_iff"><span class="name">isCofinal_empty_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#LE">LE</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn">α</span></span></div></div></div></div><div class="decl" id="isCofinal_singleton_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L44-L46">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#isCofinal_singleton_iff"><span class="name">isCofinal_singleton_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#LE">LE</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">x</span><a href="../.././Init/Core.html#Singleton.singleton">}</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Max.html#IsTop">IsTop</a> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="IsCofinal.singleton_top"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L48-L49">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#IsCofinal.singleton_top"><span class="name">IsCofinal</span>.<span class="name">singleton_top</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#LE">LE</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderTop">OrderTop</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <a href="../.././Init/Core.html#Singleton.singleton">{</a><a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a><a href="../.././Init/Core.html#Singleton.singleton">}</a></span></div></div></div></div><div class="decl" id="IsCofinal.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L51-L54">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#IsCofinal.mono"><span class="name">IsCofinal</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#LE">LE</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">s</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">t</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="IsCofinal.univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L61-L63">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#IsCofinal.univ"><span class="name">IsCofinal</span>.<span class="name">univ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <a href="../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a></span></div></div></div></div><div class="decl" id="instInhabitedSubtypeSetIsCofinal"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L65-L66">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#instInhabitedSubtypeSetIsCofinal"><span class="name">instInhabitedSubtypeSetIsCofinal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Prelude.html#Inhabited">Inhabited</a> <a href="../.././Init/Prelude.html#Subtype">{</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#Subtype">:</a> <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> <a href="../.././Init/Prelude.html#Subtype">//</a> <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#Subtype">}</a></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../.././Mathlib/Order/Cofinal.html#instInhabitedSubtypeSetIsCofinal">instInhabitedSubtypeSetIsCofinal</a> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Inhabited.mk">{</a> <span class="fn">default</span> := <a href="../.././Init/Prelude.html#Subtype.mk">⟨</a><a href="../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a>, <span class="fn">⋯</span><a href="../.././Init/Prelude.html#Subtype.mk">⟩</a> <a href="../.././Init/Prelude.html#Inhabited.mk">}</a></li></ul></details></div></div><div class="decl" id="IsCofinal.image"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L68-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#IsCofinal.image"><span class="name">IsCofinal</span>.<span class="name">image</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf'</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">f</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="IsCofinal.trans"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L75-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#IsCofinal.trans"><span class="name">IsCofinal</span>.<span class="name">trans</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">↑<span class="fn">s</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> (<a href="../.././Init/Prelude.html#Subtype.val">Subtype.val</a> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">t</span>)</span></div></div><p>A cofinal subset of a cofinal subset is cofinal.</p></div></div><div class="decl" id="GaloisConnection.isCofinal_range"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L80-L82">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#GaloisConnection.isCofinal_range"><span class="name">GaloisConnection</span>.<span class="name">isCofinal_range</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/GaloisConnection/Defs.html#GaloisConnection">GaloisConnection</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">g</span>)</span></span></div></div></div></div><div class="decl" id="GaloisConnection.map_isCofinal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L84-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#GaloisConnection.map_isCofinal"><span class="name">GaloisConnection</span>.<span class="name">map_isCofinal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/GaloisConnection/Defs.html#GaloisConnection">GaloisConnection</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> (<span class="fn">g</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="GaloisConnection.map_cofinal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L88-L89">source</a></div><div class="attributes">@[deprecated GaloisConnection.map_isCofinal (since := &quot;2026-03-15&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#GaloisConnection.map_cofinal"><span class="name">GaloisConnection</span>.<span class="name">map_cofinal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/GaloisConnection/Defs.html#GaloisConnection">GaloisConnection</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> (<span class="fn">g</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/Order/Cofinal.html#GaloisConnection.map_isCofinal">GaloisConnection.map_isCofinal</a></code>.</p></div></div><div class="decl" id="OrderIso.map_isCofinal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L91-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#OrderIso.map_isCofinal"><span class="name">OrderIso</span>.<span class="name">map_isCofinal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">β</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> (<span class="fn">⇑<span class="fn">e</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div></div></div><div class="decl" id="OrderIso.map_isCofinal_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L94-L96">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#OrderIso.map_isCofinal_iff"><span class="name">OrderIso</span>.<span class="name">map_isCofinal_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">β</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> (<span class="fn">⇑<span class="fn">e</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="OrderIso.map_cofinal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L98-L99">source</a></div><div class="attributes">@[deprecated OrderIso.map_isCofinal (since := &quot;2026-03-15&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#OrderIso.map_cofinal"><span class="name">OrderIso</span>.<span class="name">map_cofinal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">β</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> (<span class="fn">⇑<span class="fn">e</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/Order/Cofinal.html#OrderIso.map_isCofinal">OrderIso.map_isCofinal</a></code>.</p></div></div><div class="decl" id="isCofinal_iff_iUnion_Iic_eq_univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L101-L103">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#isCofinal_iff_iUnion_Iic_eq_univ"><span class="name">isCofinal_iff_iUnion_Iic_eq_univ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">⋃ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">i</span></span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a></div></div></div></div><div class="decl" id="isCofinal_iff_iUnion_Iio_eq_univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L105-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#isCofinal_iff_iUnion_Iio_eq_univ"><span class="name">isCofinal_iff_iUnion_Iio_eq_univ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">⋃ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iio">Set.Iio</a> <span class="fn">i</span></span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a></div></div></div></div><div class="decl" id="IsCofinal.mem_of_isMax"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L123-L125">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#IsCofinal.mem_of_isMax"><span class="name">IsCofinal</span>.<span class="name">mem_of_isMax</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Order/Max.html#IsMax">IsMax</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">a</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></div></div></div></div><div class="decl" id="IsCofinal.top_mem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L127-L128">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#IsCofinal.top_mem"><span class="name">IsCofinal</span>.<span class="name">top_mem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderTop">OrderTop</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></div></div></div></div><div class="decl" id="isCofinal_iff_top_mem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L130-L132">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#isCofinal_iff_top_mem"><span class="name">isCofinal_iff_top_mem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderTop">OrderTop</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></div></div></div></div><div class="decl" id="not_isCofinal_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L139-L140">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#not_isCofinal_iff"><span class="name">not_isCofinal_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn">∀ <span class="fn">y</span> ∈ <span class="fn">s</span>, <span class="fn">y</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">x</span></span></span></div></div></div></div><div class="decl" id="BddAbove.of_not_isCofinal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L142-L145">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#BddAbove.of_not_isCofinal"><span class="name">BddAbove</span>.<span class="name">of_not_isCofinal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <a href="../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="IsCofinal.of_not_bddAbove"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L147-L149">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#IsCofinal.of_not_bddAbove"><span class="name">IsCofinal</span>.<span class="name">of_not_bddAbove</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <a href="../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="not_isCofinal_iff_bddAbove"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L151-L157">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#not_isCofinal_iff_bddAbove"><span class="name">not_isCofinal_iff_bddAbove</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span></div></div><p>In a linear order with no maximum, cofinal sets are the same as unbounded sets.</p></div></div><div class="decl" id="not_bddAbove_iff_isCofinal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L159-L161">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#not_bddAbove_iff_isCofinal"><span class="name">not_bddAbove_iff_isCofinal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Max.html#NoMaxOrder">NoMaxOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <span class="fn">s</span></span></div></div><p>In a linear order with no maximum, cofinal sets are the same as unbounded sets.</p></div></div><div class="decl" id="isCofinal_setOf_imp_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Cofinal.lean#L163-L171">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Cofinal.html#isCofinal_setOf_imp_lt"><span class="name">isCofinal_setOf_imp_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/RelClasses.html#IsWellFounded">IsWellFounded</a> <span class="fn">α</span> <span class="fn">r</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsCofinal">IsCofinal</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">a</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">α</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">∀ (<span class="fn">b</span> : <span class="fn">α</span>), <span class="fn"><span class="fn"><span class="fn">r</span> <span class="fn">b</span> <span class="fn">a</span></span> → <span class="fn">b</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">a</span></span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div><p>The set of &quot;records&quot; (the smallest inputs yielding the highest values) with respect to a
+well-ordering of <code>α</code> is a cofinal set.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

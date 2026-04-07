@@ -1,0 +1,839 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.MvPolynomial.Rename</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.MvPolynomial.Rename";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">MvPolynomial</span>.<span class="name">Rename</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html">Mathlib.Algebra.MvPolynomial.Eval</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.MvPolynomial.Rename" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename"><span class="name">MvPolynomial</span>.<span class="name">rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_C"><span class="name">MvPolynomial</span>.<span class="name">rename_C</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_X"><span class="name">MvPolynomial</span>.<span class="name">rename_X</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_zero"><span class="name">MvPolynomial</span>.<span class="name">rename_zero</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.map_rename"><span class="name">MvPolynomial</span>.<span class="name">map_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.map_comp_rename"><span class="name">MvPolynomial</span>.<span class="name">map_comp_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_rename"><span class="name">MvPolynomial</span>.<span class="name">rename_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_comp_rename"><span class="name">MvPolynomial</span>.<span class="name">rename_comp_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_id"><span class="name">MvPolynomial</span>.<span class="name">rename_id</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_id_apply"><span class="name">MvPolynomial</span>.<span class="name">rename_id_apply</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_monomial"><span class="name">MvPolynomial</span>.<span class="name">rename_monomial</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_eq"><span class="name">MvPolynomial</span>.<span class="name">rename_eq</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_injective"><span class="name">MvPolynomial</span>.<span class="name">rename_injective</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_eq_zero_iff_of_injective"><span class="name">MvPolynomial</span>.<span class="name">rename_eq_zero_iff_of_injective</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_leftInverse"><span class="name">MvPolynomial</span>.<span class="name">rename_leftInverse</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_rightInverse"><span class="name">MvPolynomial</span>.<span class="name">rename_rightInverse</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_surjective"><span class="name">MvPolynomial</span>.<span class="name">rename_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.killCompl"><span class="name">MvPolynomial</span>.<span class="name">killCompl</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.killCompl_C"><span class="name">MvPolynomial</span>.<span class="name">killCompl_C</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.killCompl_comp_rename"><span class="name">MvPolynomial</span>.<span class="name">killCompl_comp_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.killCompl_rename_app"><span class="name">MvPolynomial</span>.<span class="name">killCompl_rename_app</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.killCompl_map"><span class="name">MvPolynomial</span>.<span class="name">killCompl_map</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.killCompl_monomial_mapDomain"><span class="name">MvPolynomial</span>.<span class="name">killCompl_monomial_mapDomain</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.killCompl_monomial_eq_zero_of_notMem_range"><span class="name">MvPolynomial</span>.<span class="name">killCompl_monomial_eq_zero_of_notMem_range</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.killCompl_monomial_eq_zero_of_not_subset"><span class="name">MvPolynomial</span>.<span class="name">killCompl_monomial_eq_zero_of_not_subset</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.killCompl_monomial_eq_monomial_comapDomain_of_subset"><span class="name">MvPolynomial</span>.<span class="name">killCompl_monomial_eq_monomial_comapDomain_of_subset</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.killCompl_monomial"><span class="name">MvPolynomial</span>.<span class="name">killCompl_monomial</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.coeff_killCompl"><span class="name">MvPolynomial</span>.<span class="name">coeff_killCompl</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.support_killCompl"><span class="name">MvPolynomial</span>.<span class="name">support_killCompl</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.renameEquiv"><span class="name">MvPolynomial</span>.<span class="name">renameEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.renameEquiv_apply"><span class="name">MvPolynomial</span>.<span class="name">renameEquiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.renameEquiv_refl"><span class="name">MvPolynomial</span>.<span class="name">renameEquiv_refl</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.renameEquiv_symm"><span class="name">MvPolynomial</span>.<span class="name">renameEquiv_symm</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.renameEquiv_trans"><span class="name">MvPolynomial</span>.<span class="name">renameEquiv_trans</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.eval₂_rename"><span class="name">MvPolynomial</span>.<span class="name">eval₂_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.eval_rename"><span class="name">MvPolynomial</span>.<span class="name">eval_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.eval₂Hom_rename"><span class="name">MvPolynomial</span>.<span class="name">eval₂Hom_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.aeval_rename"><span class="name">MvPolynomial</span>.<span class="name">aeval_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.aeval_comp_rename"><span class="name">MvPolynomial</span>.<span class="name">aeval_comp_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_eval₂"><span class="name">MvPolynomial</span>.<span class="name">rename_eval₂</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.rename_prod_mk_eval₂"><span class="name">MvPolynomial</span>.<span class="name">rename_prod_mk_eval₂</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.eval₂_rename_prod_mk"><span class="name">MvPolynomial</span>.<span class="name">eval₂_rename_prod_mk</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.eval_rename_prod_mk"><span class="name">MvPolynomial</span>.<span class="name">eval_rename_prod_mk</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.exists_finset_rename"><span class="name">MvPolynomial</span>.<span class="name">exists_finset_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.exists_finset_rename₂"><span class="name">MvPolynomial</span>.<span class="name">exists_finset_rename₂</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.exists_fin_rename"><span class="name">MvPolynomial</span>.<span class="name">exists_fin_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.eval₂_cast_comp"><span class="name">MvPolynomial</span>.<span class="name">eval₂_cast_comp</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.coeff_rename_mapDomain"><span class="name">MvPolynomial</span>.<span class="name">coeff_rename_mapDomain</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.coeff_rename_embDomain"><span class="name">MvPolynomial</span>.<span class="name">coeff_rename_embDomain</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.coeff_rename_eq_zero"><span class="name">MvPolynomial</span>.<span class="name">coeff_rename_eq_zero</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.coeff_rename_ne_zero"><span class="name">MvPolynomial</span>.<span class="name">coeff_rename_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.constantCoeff_rename"><span class="name">MvPolynomial</span>.<span class="name">constantCoeff_rename</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.support_rename_of_injective"><span class="name">MvPolynomial</span>.<span class="name">support_rename_of_injective</span></a></div><div class="nav_link"><a class="break_within" href="#MvPolynomial.support_rename_killCompl_subset"><span class="name">MvPolynomial</span>.<span class="name">support_rename_killCompl_subset</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Renaming-variables-of-polynomials" class="markdown-heading">Renaming variables of polynomials <a class="hover-link" href="#Renaming-variables-of-polynomials">#</a></h1><p>This file establishes the <code><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a></code> operation on multivariate polynomials,
+which modifies the set of variables.</p><h2 id="Main-declarations" class="markdown-heading">Main declarations <a class="hover-link" href="#Main-declarations">#</a></h2><ul><li><code><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">MvPolynomial.rename</a></code></li><li><code><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv">MvPolynomial.renameEquiv</a></code></li></ul><h2 id="Notation" class="markdown-heading">Notation <a class="hover-link" href="#Notation">#</a></h2><p>As in other polynomial files, we typically use the notation:</p><ul><li><p><code>σ τ α : Type*</code> (indexing the variables)</p></li><li><p><code>R S : Type*</code> <code>[CommSemiring R]</code> <code>[CommSemiring S]</code> (the coefficients)</p></li><li><p><code>s : σ →₀ ℕ</code>, a function from <code>σ</code> to <code>ℕ</code> which is zero away from a finite set.
+This will give rise to a monomial in <code><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> σ R</code> which mathematicians might call <code>X^s</code>.</p></li><li><p><code>r : R</code> elements of the coefficient ring</p></li><li><p><code>i : σ</code>, with corresponding monomial <code>X i</code>, often denoted <code>X_i</code> by mathematicians</p></li><li><p><code>p : <a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> σ α</code></p></li></ul></div><div class="decl" id="MvPolynomial.rename"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L53-L55">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename"><span class="name">MvPolynomial</span>.<span class="name">rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">τ</span> <span class="fn">R</span></span></div></div><p>Rename all the variables in a multivariable polynomial.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">MvPolynomial.rename</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">MvPolynomial.aeval</a> (<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.X">MvPolynomial.X</a> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></li></ul></details><details id="instances-for-list-MvPolynomial.rename" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MvPolynomial.rename_C"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L57-L58">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_C"><span class="name">MvPolynomial</span>.<span class="name">rename_C</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.C">C</a> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.C">C</a> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_X"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L60-L62">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_X"><span class="name">MvPolynomial</span>.<span class="name">rename_X</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">σ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.X">X</a> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.X">X</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L64-L65">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_zero"><span class="name">MvPolynomial</span>.<span class="name">rename_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="MvPolynomial.map_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L67-L72">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.map_rename"><span class="name">MvPolynomial</span>.<span class="name">map_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.map">map</a> <span class="fn">f</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">g</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.map">map</a> <span class="fn">f</span>)</span> <span class="fn">p</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.map_comp_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L74-L76">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.map_comp_rename"><span class="name">MvPolynomial</span>.<span class="name">map_comp_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.map">map</a> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">g</span>)</span>.<a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.toRingHom">toRingHom</a></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">g</span>)</span>.<a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.map">map</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L78-L86">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_rename"><span class="name">MvPolynomial</span>.<span class="name">rename_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>))</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_comp_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L88-L90">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_comp_rename"><span class="name">MvPolynomial</span>.<span class="name">rename_comp_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">g</span>)</span>.<a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="MvPolynomial.rename_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L92-L94">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_id"><span class="name">MvPolynomial</span>.<span class="name">rename_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <a href="../../.././Init/Prelude.html#id">id</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.id">AlgHom.id</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_id_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L96-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_id_apply"><span class="name">MvPolynomial</span>.<span class="name">rename_id_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <a href="../../.././Init/Prelude.html#id">id</a>)</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span></div></div></div></div><div class="decl" id="MvPolynomial.rename_monomial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L99-L105">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_monomial"><span class="name">MvPolynomial</span>.<span class="name">rename_monomial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.monomial">monomial</a> <span class="fn">d</span>)</span> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.monomial">monomial</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.mapDomain">Finsupp.mapDomain</a> <span class="fn">f</span> <span class="fn">d</span>)</span>)</span> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L108-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_eq"><span class="name">MvPolynomial</span>.<span class="name">rename_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.mapDomain">Finsupp.mapDomain</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.mapDomain">Finsupp.mapDomain</a> <span class="fn">f</span>)</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L113-L119">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_injective"><span class="name">MvPolynomial</span>.<span class="name">rename_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span></span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_eq_zero_iff_of_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L121-L124">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_eq_zero_iff_of_injective"><span class="name">MvPolynomial</span>.<span class="name">rename_eq_zero_iff_of_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="MvPolynomial.rename_leftInverse"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L126-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_leftInverse"><span class="name">MvPolynomial</span>.<span class="name">rename_leftInverse</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.LeftInverse">Function.LeftInverse</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.LeftInverse">Function.LeftInverse</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span></span> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">g</span>)</span></span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_rightInverse"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L131-L133">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_rightInverse"><span class="name">MvPolynomial</span>.<span class="name">rename_rightInverse</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.RightInverse">Function.RightInverse</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.RightInverse">Function.RightInverse</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span></span> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">g</span>)</span></span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L135-L137">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_surjective"><span class="name">MvPolynomial</span>.<span class="name">rename_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span></span></span></div></div></div></div><div class="decl" id="MvPolynomial.killCompl"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L144-L148">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl"><span class="name">MvPolynomial</span>.<span class="name">killCompl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">τ</span> <span class="fn">R</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span></div></div><p>Given a function between sets of variables <code>f : σ → τ</code> that is injective with proof <code>hf</code>,
+<code><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">MvPolynomial.killCompl</a> hf</code> is the <code><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">AlgHom</a></code> from <code>R[τ]</code> to <code>R[σ]</code> that is left inverse to
+<code><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> f : R[σ] → R[τ]</code> and sends the variables in the complement of the range of <code>f</code> to <code>0</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">MvPolynomial.killCompl</a> <span class="fn">hf</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">MvPolynomial.aeval</a> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">τ</span>) =&gt;
+    <span class="fn">if h : <span class="fn">i</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">f</span></span> then <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.X">MvPolynomial.X</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Logic/Equiv/Set.html#Equiv.ofInjective">Equiv.ofInjective</a> <span class="fn">f</span> <span class="fn">hf</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <a href="../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn">i</span>, <span class="fn">h</span><a href="../../.././Init/Prelude.html#Subtype.mk">⟩</a>)</span></span> else <span class="fn">0</span></span></span></span></li></ul></details><details id="instances-for-list-MvPolynomial.killCompl" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MvPolynomial.killCompl_C"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L150-L150">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl_C"><span class="name">MvPolynomial</span>.<span class="name">killCompl_C</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.C">C</a> <span class="fn">r</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.C">C</a> <span class="fn">r</span></span></div></div></div></div><div class="decl" id="MvPolynomial.killCompl_comp_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L152-L156">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl_comp_rename"><span class="name">MvPolynomial</span>.<span class="name">killCompl_comp_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span>.<a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.id">AlgHom.id</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.killCompl_rename_app"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L158-L160">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl_rename_app"><span class="name">MvPolynomial</span>.<span class="name">killCompl_rename_app</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span></div></div></div></div><div class="decl" id="MvPolynomial.killCompl_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L162-L168">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl_map"><span class="name">MvPolynomial</span>.<span class="name">killCompl_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">R</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">τ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.map">map</a> <span class="fn">φ</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.map">map</a> <span class="fn">φ</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">p</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.killCompl_monomial_mapDomain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L170-L173">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl_monomial_mapDomain"><span class="name">MvPolynomial</span>.<span class="name">killCompl_monomial_mapDomain</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.monomial">monomial</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.mapDomain">Finsupp.mapDomain</a> <span class="fn">f</span> <span class="fn">s</span>)</span>)</span> <span class="fn">c</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.monomial">monomial</a> <span class="fn">s</span>)</span> <span class="fn">c</span></span></div></div></div></div><div class="decl" id="MvPolynomial.killCompl_monomial_eq_zero_of_notMem_range"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L175-L181">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl_monomial_eq_zero_of_notMem_range"><span class="name">MvPolynomial</span>.<span class="name">killCompl_monomial_eq_zero_of_notMem_range</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">τ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">R</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">τ</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">a</span> ∉ <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.monomial">monomial</a> <span class="fn">s</span>)</span> <span class="fn">c</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="MvPolynomial.killCompl_monomial_eq_zero_of_not_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L183-L186">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl_monomial_eq_zero_of_not_subset"><span class="name">MvPolynomial</span>.<span class="name">killCompl_monomial_eq_zero_of_not_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">τ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.monomial">monomial</a> <span class="fn">s</span>)</span> <span class="fn">c</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="MvPolynomial.killCompl_monomial_eq_monomial_comapDomain_of_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L188-L191">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl_monomial_eq_monomial_comapDomain_of_subset"><span class="name">MvPolynomial</span>.<span class="name">killCompl_monomial_eq_monomial_comapDomain_of_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">τ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.monomial">monomial</a> <span class="fn">s</span>)</span> <span class="fn">c</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.monomial">monomial</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.comapDomain">Finsupp.comapDomain</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">⋯</span>)</span>)</span> <span class="fn">c</span></span></div></div></div></div><div class="decl" id="MvPolynomial.killCompl_monomial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L193-L198">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl_monomial"><span class="name">MvPolynomial</span>.<span class="name">killCompl_monomial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">τ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Decidable">Decidable</a> (<span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">f</span></span>)</span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.monomial">monomial</a> <span class="fn">s</span>)</span> <span class="fn">c</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#ite">if</a> <span class="fn">↑<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#ite">then</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.monomial">monomial</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.comapDomain">Finsupp.comapDomain</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">⋯</span>)</span>)</span> <span class="fn">c</span></span> <a href="../../.././Init/Prelude.html#ite">else</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="MvPolynomial.coeff_killCompl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L200-L213">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.coeff_killCompl"><span class="name">MvPolynomial</span>.<span class="name">coeff_killCompl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">τ</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.coeff">coeff</a> <span class="fn">s</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.coeff">coeff</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.mapDomain">Finsupp.mapDomain</a> <span class="fn">f</span> <span class="fn">s</span>)</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="MvPolynomial.support_killCompl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L215-L219">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.support_killCompl"><span class="name">MvPolynomial</span>.<span class="name">support_killCompl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">τ</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">p</span>)</span>.<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.support">support</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.support">support</a></span>.<a href="../../.././Mathlib/Data/Finset/Preimage.html#Finset.preimage">preimage</a></span> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.mapDomain">Finsupp.mapDomain</a> <span class="fn">f</span>)</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="MvPolynomial.renameEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L227-L234">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv"><span class="name">MvPolynomial</span>.<span class="name">renameEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">τ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span> <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">≃ₐ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">]</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">τ</span> <span class="fn">R</span></span></div></div><p><code><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">MvPolynomial.rename</a> e</code> is an equivalence when <code>e</code> is.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv">MvPolynomial.renameEquiv</a> <span class="fn">R</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv.mk">{</a> <span class="fn">toFun</span> := <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">MvPolynomial.rename</a> <span class="fn">⇑<span class="fn">f</span></span>)</span></span>, <span class="fn">invFun</span> := <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">MvPolynomial.rename</a> <span class="fn">⇑<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span></span>)</span></span>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>, <span class="fn">right_inv</span> := <span class="fn">⋯</span>,
+    <span class="fn">map_mul'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">commutes'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv.mk">}</a></li></ul></details><details id="instances-for-list-MvPolynomial.renameEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MvPolynomial.renameEquiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L228-L228">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv_apply"><span class="name">MvPolynomial</span>.<span class="name">renameEquiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">τ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv">renameEquiv</a> <span class="fn">R</span> <span class="fn">f</span>)</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">⇑<span class="fn">f</span></span>)</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="MvPolynomial.renameEquiv_refl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L236-L238">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv_refl"><span class="name">MvPolynomial</span>.<span class="name">renameEquiv_refl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv">renameEquiv</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.refl">Equiv.refl</a> <span class="fn">σ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv.refl">AlgEquiv.refl</a></div></div></div></div><div class="decl" id="MvPolynomial.renameEquiv_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L240-L242">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv_symm"><span class="name">MvPolynomial</span>.<span class="name">renameEquiv_symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">τ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv">renameEquiv</a> <span class="fn">R</span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv.symm">symm</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv">renameEquiv</a> <span class="fn">R</span> <span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span></span></div></div></div></div><div class="decl" id="MvPolynomial.renameEquiv_trans"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L244-L247">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv_trans"><span class="name">MvPolynomial</span>.<span class="name">renameEquiv_trans</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">τ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">τ</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv">renameEquiv</a> <span class="fn">R</span> <span class="fn">e</span>)</span>.<a href="../../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv.trans">trans</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv">renameEquiv</a> <span class="fn">R</span> <span class="fn">f</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.renameEquiv">renameEquiv</a> <span class="fn">R</span> <span class="fn">(<span class="fn"><span class="fn">e</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.trans">trans</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.eval₂_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L255-L258">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.eval₂_rename"><span class="name">MvPolynomial</span>.<span class="name">eval₂_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂">eval₂</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">k</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂">eval₂</a> <span class="fn">f</span> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">k</span>) <span class="fn">p</span></span></div></div></div></div><div class="decl" id="MvPolynomial.eval_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L260-L261">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.eval_rename"><span class="name">MvPolynomial</span>.<span class="name">eval_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval">eval</a> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">k</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval">eval</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">k</span>))</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="MvPolynomial.eval₂Hom_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L263-L264">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.eval₂Hom_rename"><span class="name">MvPolynomial</span>.<span class="name">eval₂Hom_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂Hom">eval₂Hom</a> <span class="fn">f</span> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">k</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂Hom">eval₂Hom</a> <span class="fn">f</span> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">k</span>))</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="MvPolynomial.aeval_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L266-L267">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.aeval_rename"><span class="name">MvPolynomial</span>.<span class="name">aeval_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">aeval</a> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">k</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">aeval</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">k</span>))</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="MvPolynomial.aeval_comp_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L269-L271">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.aeval_comp_rename"><span class="name">MvPolynomial</span>.<span class="name">aeval_comp_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn">S</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">aeval</a> <span class="fn">g</span>)</span>.<a href="../../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">k</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.aeval">aeval</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">k</span>)</span></div></div></div></div><div class="decl" id="MvPolynomial.rename_eval₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L273-L277">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_eval₂"><span class="name">MvPolynomial</span>.<span class="name">rename_eval₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">k</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂">eval₂</a> <a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.C">C</a> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">k</span>) <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂">eval₂</a> <a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.C">C</a> (<span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">k</span>)</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>) <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">k</span>)</span> <span class="fn">p</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.rename_prod_mk_eval₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L279-L283">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename_prod_mk_eval₂"><span class="name">MvPolynomial</span>.<span class="name">rename_prod_mk_eval₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">j</span> : <span class="fn">τ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">(<a href="../../.././Init/Prelude.html#Prod.mk">Prod.mk</a> <span class="fn">j</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂">eval₂</a> <a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.C">C</a> <span class="fn">g</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂">eval₂</a> <a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.C">C</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">σ</span>) =&gt; <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">(<a href="../../.././Init/Prelude.html#Prod.mk">Prod.mk</a> <span class="fn">j</span>)</span>)</span> <span class="fn">(<span class="fn">g</span> <span class="fn">x</span>)</span></span>)</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="MvPolynomial.eval₂_rename_prod_mk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L285-L289">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.eval₂_rename_prod_mk"><span class="name">MvPolynomial</span>.<span class="name">eval₂_rename_prod_mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">τ</span> → <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">σ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">τ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂">eval₂</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">(<a href="../../.././Init/Prelude.html#Prod.mk">Prod.mk</a> <span class="fn">i</span>)</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂">eval₂</a> <span class="fn">f</span> <span class="fn">(fun (<span class="fn">j</span> : <span class="fn">τ</span>) =&gt; <span class="fn"><span class="fn">g</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">i</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">j</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span>)</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="MvPolynomial.eval_rename_prod_mk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L291-L293">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.eval_rename_prod_mk"><span class="name">MvPolynomial</span>.<span class="name">eval_rename_prod_mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">σ</span> <a href="../../.././Init/Prelude.html#Prod">×</a> <span class="fn">τ</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">σ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">τ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval">eval</a> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">(<a href="../../.././Init/Prelude.html#Prod.mk">Prod.mk</a> <span class="fn">i</span>)</span>)</span> <span class="fn">p</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval">eval</a> <span class="fn">fun (<span class="fn">j</span> : <span class="fn">τ</span>) =&gt; <span class="fn"><span class="fn">g</span> <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">i</span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">j</span><a href="../../.././Init/Prelude.html#Prod.mk">)</a></span></span>)</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="MvPolynomial.exists_finset_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L297-L316">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.exists_finset_rename"><span class="name">MvPolynomial</span>.<span class="name">exists_finset_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">σ</span></span>) (<span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">(↥<span class="fn">s</span>)</span> <span class="fn">R</span></span>), <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <a href="../../.././Init/Prelude.html#Subtype.val">Subtype.val</a>)</span> <span class="fn">q</span></span></span></div></div><p>Every polynomial is a polynomial in finitely many variables.</p></div></div><div class="decl" id="MvPolynomial.exists_finset_rename₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L318-L330">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.exists_finset_rename₂"><span class="name">MvPolynomial</span>.<span class="name">exists_finset_rename₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p₁ </span><span class="fn">p₂</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">σ</span></span>) (<span class="fn">q₁</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">(↥<span class="fn">s</span>)</span> <span class="fn">R</span></span>) (<span class="fn">q₂</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">(↥<span class="fn">s</span>)</span> <span class="fn">R</span></span>),
+  <span class="fn">p₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <a href="../../.././Init/Prelude.html#Subtype.val">Subtype.val</a>)</span> <span class="fn">q₁</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">p₂</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <a href="../../.././Init/Prelude.html#Subtype.val">Subtype.val</a>)</span> <span class="fn">q₂</span></span></span></div></div><p><code><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.exists_finset_rename">exists_finset_rename</a></code> for two polynomials at once: for any two polynomials <code>p₁</code>, <code>p₂</code> in a
+polynomial semiring <code>R[σ]</code> of possibly infinitely many variables, <code><a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.exists_finset_rename₂">exists_finset_rename₂</a></code> yields
+a finite subset <code>s</code> of <code>σ</code> such that both <code>p₁</code> and <code>p₂</code> are contained in the polynomial semiring
+<code>R[s]</code> of finitely many variables.</p></div></div><div class="decl" id="MvPolynomial.exists_fin_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L332-L340">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.exists_fin_rename"><span class="name">MvPolynomial</span>.<span class="name">exists_fin_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) (<span class="fn">f</span> : <span class="fn"><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span> → <span class="fn">σ</span></span>) (_ : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>) (<span class="fn">q</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">(<a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span>)</span> <span class="fn">R</span></span>), <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">q</span></span></span></div></div><p>Every polynomial is a polynomial in finitely many variables.</p></div></div><div class="decl" id="MvPolynomial.eval₂_cast_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L344-L345">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.eval₂_cast_comp"><span class="name">MvPolynomial</span>.<span class="name">eval₂_cast_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂">eval₂</a> <span class="fn">c</span> (<span class="fn">g</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>) <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Eval.html#MvPolynomial.eval₂">eval₂</a> <span class="fn">c</span> <span class="fn">g</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">p</span>)</span></span></div></div></div></div><div class="decl" id="MvPolynomial.coeff_rename_mapDomain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L349-L358">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.coeff_rename_mapDomain"><span class="name">MvPolynomial</span>.<span class="name">coeff_rename_mapDomain</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.coeff">coeff</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.mapDomain">Finsupp.mapDomain</a> <span class="fn">f</span> <span class="fn">d</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.coeff">coeff</a> <span class="fn">d</span> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MvPolynomial.coeff_rename_embDomain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L360-L363">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.coeff_rename_embDomain"><span class="name">MvPolynomial</span>.<span class="name">coeff_rename_embDomain</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Logic/Embedding/Basic.html#Function.Embedding">↪</a> <span class="fn">τ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.coeff">coeff</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.embDomain">Finsupp.embDomain</a> <span class="fn">f</span> <span class="fn">d</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">⇑<span class="fn">f</span></span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.coeff">coeff</a> <span class="fn">d</span> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MvPolynomial.coeff_rename_eq_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L365-L375">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.coeff_rename_eq_zero"><span class="name">MvPolynomial</span>.<span class="name">coeff_rename_eq_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn">τ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">u</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn"><a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.mapDomain">Finsupp.mapDomain</a> <span class="fn">f</span> <span class="fn">u</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">d</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.coeff">coeff</a> <span class="fn">u</span> <span class="fn">φ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.coeff">coeff</a> <span class="fn">d</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="MvPolynomial.coeff_rename_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L377-L380">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.coeff_rename_ne_zero"><span class="name">MvPolynomial</span>.<span class="name">coeff_rename_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn">τ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.coeff">coeff</a> <span class="fn">d</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">u</span> : <span class="fn">σ</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <a href="../../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.mapDomain">Finsupp.mapDomain</a> <span class="fn">f</span> <span class="fn">u</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">d</span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.coeff">coeff</a> <span class="fn">u</span> <span class="fn">φ</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></span></div></div></div></div><div class="decl" id="MvPolynomial.constantCoeff_rename"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L382-L391">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.constantCoeff_rename"><span class="name">MvPolynomial</span>.<span class="name">constantCoeff_rename</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.constantCoeff">constantCoeff</a> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">φ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.constantCoeff">constantCoeff</a> <span class="fn">φ</span></span></div></div></div></div><div class="decl" id="MvPolynomial.support_rename_of_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L397-L401">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.support_rename_of_injective"><span class="name">MvPolynomial</span>.<span class="name">support_rename_of_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">σ</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">p</span>)</span>.<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.support">support</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/Finset/Image.html#Finset.image">Finset.image</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Basic.html#Finsupp.mapDomain">Finsupp.mapDomain</a> <span class="fn">f</span>)</span> <span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.support">support</a></span></span></div></div></div></div><div class="decl" id="MvPolynomial.support_rename_killCompl_subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/MvPolynomial/Rename.lean#L403-L407">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.support_rename_killCompl_subset"><span class="name">MvPolynomial</span>.<span class="name">support_rename_killCompl_subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial">MvPolynomial</a> <span class="fn">τ</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">σ</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.rename">rename</a> <span class="fn">f</span>)</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/MvPolynomial/Rename.html#MvPolynomial.killCompl">killCompl</a> <span class="fn">hf</span>)</span> <span class="fn">p</span>)</span>)</span>.<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.support">support</a></span> <a href="../../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Algebra/MvPolynomial/Basic.html#MvPolynomial.support">support</a></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

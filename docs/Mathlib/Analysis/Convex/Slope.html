@@ -1,0 +1,602 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.Convex.Slope</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.Convex.Slope";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">Convex</span>.<span class="name">Slope</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Tactic/AdaptationNote.html">Mathlib.Tactic.AdaptationNote</a></li><li><a href="../../.././Mathlib/Tactic/FieldSimp.html">Mathlib.Tactic.FieldSimp</a></li><li><a href="../../.././Mathlib/Tactic/Linarith.html">Mathlib.Tactic.Linarith</a></li><li><a href="../../.././Mathlib/Analysis/Convex/Function.html">Mathlib.Analysis.Convex.Function</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.Convex.Slope" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#ConvexOn.slope_mono_adjacent"><span class="name">ConvexOn</span>.<span class="name">slope_mono_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#ConcaveOn.slope_anti_adjacent"><span class="name">ConcaveOn</span>.<span class="name">slope_anti_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#StrictConvexOn.slope_strict_mono_adjacent"><span class="name">StrictConvexOn</span>.<span class="name">slope_strict_mono_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#StrictConcaveOn.slope_anti_adjacent"><span class="name">StrictConcaveOn</span>.<span class="name">slope_anti_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#convexOn_of_slope_mono_adjacent"><span class="name">convexOn_of_slope_mono_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#concaveOn_of_slope_anti_adjacent"><span class="name">concaveOn_of_slope_anti_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#strictConvexOn_of_slope_strict_mono_adjacent"><span class="name">strictConvexOn_of_slope_strict_mono_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#strictConcaveOn_of_slope_strict_anti_adjacent"><span class="name">strictConcaveOn_of_slope_strict_anti_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#convexOn_iff_slope_mono_adjacent"><span class="name">convexOn_iff_slope_mono_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#concaveOn_iff_slope_anti_adjacent"><span class="name">concaveOn_iff_slope_anti_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#strictConvexOn_iff_slope_strict_mono_adjacent"><span class="name">strictConvexOn_iff_slope_strict_mono_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#strictConcaveOn_iff_slope_strict_anti_adjacent"><span class="name">strictConcaveOn_iff_slope_strict_anti_adjacent</span></a></div><div class="nav_link"><a class="break_within" href="#ConvexOn.secant_mono_aux1"><span class="name">ConvexOn</span>.<span class="name">secant_mono_aux1</span></a></div><div class="nav_link"><a class="break_within" href="#ConvexOn.secant_mono_aux2"><span class="name">ConvexOn</span>.<span class="name">secant_mono_aux2</span></a></div><div class="nav_link"><a class="break_within" href="#ConvexOn.secant_mono_aux3"><span class="name">ConvexOn</span>.<span class="name">secant_mono_aux3</span></a></div><div class="nav_link"><a class="break_within" href="#ConvexOn.secant_mono"><span class="name">ConvexOn</span>.<span class="name">secant_mono</span></a></div><div class="nav_link"><a class="break_within" href="#StrictConvexOn.secant_strict_mono_aux1"><span class="name">StrictConvexOn</span>.<span class="name">secant_strict_mono_aux1</span></a></div><div class="nav_link"><a class="break_within" href="#StrictConvexOn.secant_strict_mono_aux2"><span class="name">StrictConvexOn</span>.<span class="name">secant_strict_mono_aux2</span></a></div><div class="nav_link"><a class="break_within" href="#StrictConvexOn.secant_strict_mono_aux3"><span class="name">StrictConvexOn</span>.<span class="name">secant_strict_mono_aux3</span></a></div><div class="nav_link"><a class="break_within" href="#StrictConvexOn.secant_strict_mono"><span class="name">StrictConvexOn</span>.<span class="name">secant_strict_mono</span></a></div><div class="nav_link"><a class="break_within" href="#StrictConcaveOn.secant_strict_mono"><span class="name">StrictConcaveOn</span>.<span class="name">secant_strict_mono</span></a></div><div class="nav_link"><a class="break_within" href="#ConvexOn.strictMonoOn"><span class="name">ConvexOn</span>.<span class="name">strictMonoOn</span></a></div><div class="nav_link"><a class="break_within" href="#ConvexOn.strict_mono_of_lt"><span class="name">ConvexOn</span>.<span class="name">strict_mono_of_lt</span></a></div><div class="nav_link"><a class="break_within" href="#ConvexOn.strictAntiOn"><span class="name">ConvexOn</span>.<span class="name">strictAntiOn</span></a></div><div class="nav_link"><a class="break_within" href="#ConcaveOn.strictMonoOn"><span class="name">ConcaveOn</span>.<span class="name">strictMonoOn</span></a></div><div class="nav_link"><a class="break_within" href="#ConcaveOn.strictAntiOn"><span class="name">ConcaveOn</span>.<span class="name">strictAntiOn</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Slopes-of-convex-functions" class="markdown-heading">Slopes of convex functions <a class="hover-link" href="#Slopes-of-convex-functions">#</a></h1><p>This file relates convexity/concavity of functions in a linearly ordered field and the monotonicity
+of their slopes.</p><p>The main use is to show convexity/concavity from monotonicity of the derivative.</p></div><div class="decl" id="ConvexOn.slope_mono_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L26-L38">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConvexOn.slope_mono_adjacent"><span class="name">ConvexOn</span>.<span class="name">slope_mono_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConvexOn">ConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hyz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</div></div><p>If <code>f : 𝕜 → 𝕜</code> is convex, then for any three points <code>x &lt; y &lt; z</code> the slope of the secant line of
+<code>f</code> on <code>[x, y]</code> is less than the slope of the secant line of <code>f</code> on <code>[y, z]</code>.</p></div></div><div class="decl" id="ConcaveOn.slope_anti_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L40-L46">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConcaveOn.slope_anti_adjacent"><span class="name">ConcaveOn</span>.<span class="name">slope_anti_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConcaveOn">ConcaveOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hyz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>) <a href="../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</div></div><p>If <code>f : 𝕜 → 𝕜</code> is concave, then for any three points <code>x &lt; y &lt; z</code> the slope of the secant line of
+<code>f</code> on <code>[x, y]</code> is greater than the slope of the secant line of <code>f</code> on <code>[y, z]</code>.</p></div></div><div class="decl" id="StrictConvexOn.slope_strict_mono_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L48-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#StrictConvexOn.slope_strict_mono_adjacent"><span class="name">StrictConvexOn</span>.<span class="name">slope_strict_mono_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConvexOn">StrictConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hyz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</div></div><p>If <code>f : 𝕜 → 𝕜</code> is strictly convex, then for any three points <code>x &lt; y &lt; z</code> the slope of the
+secant line of <code>f</code> on <code>[x, y]</code> is strictly less than the slope of the secant line of <code>f</code> on
+<code>[y, z]</code>.</p></div></div><div class="decl" id="StrictConcaveOn.slope_anti_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L65-L72">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#StrictConcaveOn.slope_anti_adjacent"><span class="name">StrictConcaveOn</span>.<span class="name">slope_anti_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConcaveOn">StrictConcaveOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hyz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>) <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</div></div><p>If <code>f : 𝕜 → 𝕜</code> is strictly concave, then for any three points <code>x &lt; y &lt; z</code> the slope of the
+secant line of <code>f</code> on <code>[x, y]</code> is strictly greater than the slope of the secant line of <code>f</code> on
+<code>[y, z]</code>.</p></div></div><div class="decl" id="convexOn_of_slope_mono_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L74-L88">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#convexOn_of_slope_mono_adjacent"><span class="name">convexOn_of_slope_mono_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Basic.html#Convex">Convex</a> <span class="fn">𝕜</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ {<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}, <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span> → <span class="fn"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span> → (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConvexOn">ConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span></div></div><p>If for any three points <code>x &lt; y &lt; z</code>, the slope of the secant line of <code>f : 𝕜 → 𝕜</code> on <code>[x, y]</code> is
+less than the slope of the secant line of <code>f</code> on <code>[y, z]</code>, then <code>f</code> is convex.</p></div></div><div class="decl" id="concaveOn_of_slope_anti_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L90-L100">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#concaveOn_of_slope_anti_adjacent"><span class="name">concaveOn_of_slope_anti_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Basic.html#Convex">Convex</a> <span class="fn">𝕜</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ {<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}, <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span> → <span class="fn"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span> → (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>) <a href="../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConcaveOn">ConcaveOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span></div></div><p>If for any three points <code>x &lt; y &lt; z</code>, the slope of the secant line of <code>f : 𝕜 → 𝕜</code> on <code>[x, y]</code> is
+greater than the slope of the secant line of <code>f</code> on <code>[y, z]</code>, then <code>f</code> is concave.</p></div></div><div class="decl" id="strictConvexOn_of_slope_strict_mono_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L102-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#strictConvexOn_of_slope_strict_mono_adjacent"><span class="name">strictConvexOn_of_slope_strict_mono_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Basic.html#Convex">Convex</a> <span class="fn">𝕜</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ {<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}, <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span> → <span class="fn"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span> → (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConvexOn">StrictConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span></div></div><p>If for any three points <code>x &lt; y &lt; z</code>, the slope of the secant line of <code>f : 𝕜 → 𝕜</code> on <code>[x, y]</code> is
+strictly less than the slope of the secant line of <code>f</code> on <code>[y, z]</code>, then <code>f</code> is strictly convex.</p></div></div><div class="decl" id="strictConcaveOn_of_slope_strict_anti_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L118-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#strictConcaveOn_of_slope_strict_anti_adjacent"><span class="name">strictConcaveOn_of_slope_strict_anti_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Basic.html#Convex">Convex</a> <span class="fn">𝕜</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ {<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}, <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span> → <span class="fn"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span> → (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>) <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConcaveOn">StrictConcaveOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span></div></div><p>If for any three points <code>x &lt; y &lt; z</code>, the slope of the secant line of <code>f : 𝕜 → 𝕜</code> on <code>[x, y]</code> is
+strictly greater than the slope of the secant line of <code>f</code> on <code>[y, z]</code>, then <code>f</code> is strictly concave.</p></div></div><div class="decl" id="convexOn_iff_slope_mono_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L131-L138">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#convexOn_iff_slope_mono_adjacent"><span class="name">convexOn_iff_slope_mono_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConvexOn">ConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Basic.html#Convex">Convex</a> <span class="fn">𝕜</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ ⦃<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>⦄, <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span> → <span class="fn"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span> → (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</span></span></span></span></span></div></div><p>A function <code>f : 𝕜 → 𝕜</code> is convex iff for any three points <code>x &lt; y &lt; z</code> the slope of the secant
+line of <code>f</code> on <code>[x, y]</code> is less than the slope of the secant line of <code>f</code> on <code>[y, z]</code>.</p></div></div><div class="decl" id="concaveOn_iff_slope_anti_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L140-L148">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#concaveOn_iff_slope_anti_adjacent"><span class="name">concaveOn_iff_slope_anti_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConcaveOn">ConcaveOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Basic.html#Convex">Convex</a> <span class="fn">𝕜</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ ⦃<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>⦄, <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span> → <span class="fn"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span> → (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>) <a href="../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</span></span></span></span></span></div></div><p>A function <code>f : 𝕜 → 𝕜</code> is concave iff for any three points <code>x &lt; y &lt; z</code> the slope of the secant
+line of <code>f</code> on <code>[x, y]</code> is greater than the slope of the secant line of <code>f</code> on <code>[y, z]</code>.</p></div></div><div class="decl" id="strictConvexOn_iff_slope_strict_mono_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L150-L159">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#strictConvexOn_iff_slope_strict_mono_adjacent"><span class="name">strictConvexOn_iff_slope_strict_mono_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConvexOn">StrictConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Basic.html#Convex">Convex</a> <span class="fn">𝕜</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ ⦃<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>⦄, <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span> → <span class="fn"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span> → (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</span></span></span></span></span></div></div><p>A function <code>f : 𝕜 → 𝕜</code> is strictly convex iff for any three points <code>x &lt; y &lt; z</code> the slope of
+the secant line of <code>f</code> on <code>[x, y]</code> is strictly less than the slope of the secant line of <code>f</code> on
+<code>[y, z]</code>.</p></div></div><div class="decl" id="strictConcaveOn_iff_slope_strict_anti_adjacent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L161-L170">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#strictConcaveOn_iff_slope_strict_anti_adjacent"><span class="name">strictConcaveOn_iff_slope_strict_anti_adjacent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConcaveOn">StrictConcaveOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Basic.html#Convex">Convex</a> <span class="fn">𝕜</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ ⦃<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>⦄, <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span> → <span class="fn"><span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span> → (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>) <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</span></span></span></span></span></div></div><p>A function <code>f : 𝕜 → 𝕜</code> is strictly concave iff for any three points <code>x &lt; y &lt; z</code> the slope of
+the secant line of <code>f</code> on <code>[x, y]</code> is strictly greater than the slope of the secant line of <code>f</code> on
+<code>[y, z]</code>.</p></div></div><div class="decl" id="ConvexOn.secant_mono_aux1"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L172-L184">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConvexOn.secant_mono_aux1"><span class="name">ConvexOn</span>.<span class="name">secant_mono_aux1</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConvexOn">ConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hyz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>) <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">z</span></span></div></div></div></div><div class="decl" id="ConvexOn.secant_mono_aux2"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L186-L191">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConvexOn.secant_mono_aux2"><span class="name">ConvexOn</span>.<span class="name">secant_mono_aux2</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConvexOn">ConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hyz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</div></div></div></div><div class="decl" id="ConvexOn.secant_mono_aux3"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L193-L198">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConvexOn.secant_mono_aux3"><span class="name">ConvexOn</span>.<span class="name">secant_mono_aux3</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConvexOn">ConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hyz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</div></div></div></div><div class="decl" id="ConvexOn.secant_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L200-L212">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConvexOn.secant_mono"><span class="name">ConvexOn</span>.<span class="name">secant_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConvexOn">ConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">x </span><span class="fn">y</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxa</span> : <span class="fn">x</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hya</span> : <span class="fn">y</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">a</span>) <a href="../../.././Init/Prelude.html#LE.le">≤</a> (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">a</span>)</div></div><p>If <code>f : 𝕜 → 𝕜</code> is convex, then for any point <code>a</code> the slope of the secant line of <code>f</code> through <code>a</code>
+and <code>b ≠ a</code> is monotone with respect to <code>b</code>.</p></div></div><div class="decl" id="StrictConvexOn.secant_strict_mono_aux1"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L214-L226">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#StrictConvexOn.secant_strict_mono_aux1"><span class="name">StrictConvexOn</span>.<span class="name">secant_strict_mono_aux1</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConvexOn">StrictConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hyz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>) <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">z</span></span></div></div></div></div><div class="decl" id="StrictConvexOn.secant_strict_mono_aux2"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L228-L233">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#StrictConvexOn.secant_strict_mono_aux2"><span class="name">StrictConvexOn</span>.<span class="name">secant_strict_mono_aux2</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConvexOn">StrictConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hyz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</div></div></div></div><div class="decl" id="StrictConvexOn.secant_strict_mono_aux3"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L235-L240">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#StrictConvexOn.secant_strict_mono_aux3"><span class="name">StrictConvexOn</span>.<span class="name">secant_strict_mono_aux3</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConvexOn">StrictConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y </span><span class="fn">z</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hz</span> : <span class="fn">z</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hyz</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>) <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn"><span class="fn">f</span> <span class="fn">z</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">z</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</div></div></div></div><div class="decl" id="StrictConvexOn.secant_strict_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L242-L253">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#StrictConvexOn.secant_strict_mono"><span class="name">StrictConvexOn</span>.<span class="name">secant_strict_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConvexOn">StrictConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">x </span><span class="fn">y</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxa</span> : <span class="fn">x</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hya</span> : <span class="fn">y</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">a</span>) <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">a</span>)</div></div><p>If <code>f : 𝕜 → 𝕜</code> is strictly convex, then for any point <code>a</code> the slope of the secant line of <code>f</code>
+through <code>a</code> and <code>b</code> is strictly monotone with respect to <code>b</code>.</p></div></div><div class="decl" id="StrictConcaveOn.secant_strict_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L255-L262">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#StrictConcaveOn.secant_strict_mono"><span class="name">StrictConcaveOn</span>.<span class="name">secant_strict_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#StrictConcaveOn">StrictConcaveOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">x </span><span class="fn">y</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxa</span> : <span class="fn">x</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hya</span> : <span class="fn">y</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">y</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">a</span>) <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> (<span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span>) <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">a</span>)</div></div><p>If <code>f : 𝕜 → 𝕜</code> is strictly concave, then for any point <code>a</code> the slope of the secant line of <code>f</code>
+through <code>a</code> and <code>b</code> is strictly antitone with respect to <code>b</code>.</p></div></div><div class="decl" id="ConvexOn.strictMonoOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L264-L281">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConvexOn.strictMonoOn"><span class="name">ConvexOn</span>.<span class="name">strictMonoOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConvexOn">ConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy'</span> : <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#StrictMonoOn">StrictMonoOn</a> <span class="fn">f</span> (<span class="fn">s</span> <a href="../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ici">Set.Ici</a> <span class="fn">y</span></span>)</span></div></div><p>If <code>f</code> is convex on a set <code>s</code> in a linearly ordered field, and <code>f x &lt; f y</code> for two points
+<code>x &lt; y</code> in <code>s</code>, then <code>f</code> is strictly monotone on <code>s ∩ [y, ∞)</code>.</p></div></div><div class="decl" id="ConvexOn.strict_mono_of_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L283-L283">source</a></div><div class="attributes">@[deprecated ConvexOn.strictMonoOn (since := &quot;2025-11-11&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConvexOn.strict_mono_of_lt"><span class="name">ConvexOn</span>.<span class="name">strict_mono_of_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConvexOn">ConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy'</span> : <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#StrictMonoOn">StrictMonoOn</a> <span class="fn">f</span> (<span class="fn">s</span> <a href="../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ici">Set.Ici</a> <span class="fn">y</span></span>)</span></div></div><p><strong>Alias</strong> of <code><a href="../../.././Mathlib/Analysis/Convex/Slope.html#ConvexOn.strictMonoOn">ConvexOn.strictMonoOn</a></code>.</p><hr>
+<p>If <code>f</code> is convex on a set <code>s</code> in a linearly ordered field, and <code>f x &lt; f y</code> for two points
+<code>x &lt; y</code> in <code>s</code>, then <code>f</code> is strictly monotone on <code>s ∩ [y, ∞)</code>.</p></div></div><div class="decl" id="ConvexOn.strictAntiOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L285-L290">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConvexOn.strictAntiOn"><span class="name">ConvexOn</span>.<span class="name">strictAntiOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConvexOn">ConvexOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy'</span> : <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#StrictAntiOn">StrictAntiOn</a> <span class="fn">f</span> (<span class="fn">s</span> <a href="../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">x</span></span>)</span></div></div><p>If <code>f</code> is convex on a set <code>s</code> in a linearly ordered field, and <code>f y &lt; f x</code> for two points
+<code>x &lt; y</code> in <code>s</code>, then <code>f</code> is strictly antitone on <code>s ∩ (∞, x]</code>.</p></div></div><div class="decl" id="ConcaveOn.strictMonoOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L292-L296">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConcaveOn.strictMonoOn"><span class="name">ConcaveOn</span>.<span class="name">strictMonoOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConcaveOn">ConcaveOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">y</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy'</span> : <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#StrictMonoOn">StrictMonoOn</a> <span class="fn">f</span> (<span class="fn">s</span> <a href="../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">x</span></span>)</span></div></div><p>If <code>f</code> is concave on a set <code>s</code> in a linearly ordered field, and <code>f x &lt; f y</code> for two points
+<code>x &lt; y</code> in <code>s</code>, then <code>f</code> is strictly monotone on <code>s ∩ (∞, x]</code>.</p></div></div><div class="decl" id="ConcaveOn.strictAntiOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Convex/Slope.lean#L298-L302">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/Convex/Slope.html#ConcaveOn.strictAntiOn"><span class="name">ConcaveOn</span>.<span class="name">strictAntiOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Ring/Defs.html#IsStrictOrderedRing">IsStrictOrderedRing</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Analysis/Convex/Function.html#ConcaveOn">ConcaveOn</a> <span class="fn">𝕜</span> <span class="fn">s</span> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">𝕜</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy'</span> : <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Monotone/Defs.html#StrictAntiOn">StrictAntiOn</a> <span class="fn">f</span> (<span class="fn">s</span> <a href="../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn"><a href="../../.././Mathlib/Order/Interval/Set/Defs.html#Set.Ici">Set.Ici</a> <span class="fn">y</span></span>)</span></div></div><p>If <code>f</code> is concave on a set <code>s</code> in a linearly ordered field, and <code>f y &lt; f x</code> for two points
+<code>x &lt; y</code> in <code>s</code>, then <code>f</code> is strictly antitone on <code>s ∩ [y, ∞)</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,976 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">CStarAlgebra</span>.<span class="name">ContinuousFunctionalCalculus</span>.<span class="name">Integral</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Analysis/RCLike/Lemmas.html">Mathlib.Analysis.RCLike.Lemmas</a></li><li><a href="../../../.././Mathlib/MeasureTheory/SpecificCodomains/ContinuousMapZero.html">Mathlib.MeasureTheory.SpecificCodomains.ContinuousMapZero</a></li><li><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html">Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.NonUnital</a></li><li><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Spectrum.html">Mathlib.Analysis.Normed.Algebra.Spectrum</a></li><li><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/ContinuousLinearMap.html">Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#cfcL_integral"><span class="name">cfcL_integral</span></a></div><div class="nav_link"><a class="break_within" href="#cfcL_integrable"><span class="name">cfcL_integrable</span></a></div><div class="nav_link"><a class="break_within" href="#cfcHom_integral"><span class="name">cfcHom_integral</span></a></div><div class="nav_link"><a class="break_within" href="#integrable_cfc'"><span class="name">integrable_cfc'</span></a></div><div class="nav_link"><a class="break_within" href="#integrableOn_cfc'"><span class="name">integrableOn_cfc'</span></a></div><div class="nav_link"><a class="break_within" href="#integrable_cfc"><span class="name">integrable_cfc</span></a></div><div class="nav_link"><a class="break_within" href="#integrableOn_cfc"><span class="name">integrableOn_cfc</span></a></div><div class="nav_link"><a class="break_within" href="#cfc_integral'"><span class="name">cfc_integral'</span></a></div><div class="nav_link"><a class="break_within" href="#cfc_setIntegral'"><span class="name">cfc_setIntegral'</span></a></div><div class="nav_link"><a class="break_within" href="#cfc_integral"><span class="name">cfc_integral</span></a></div><div class="nav_link"><a class="break_within" href="#cfc_setIntegral"><span class="name">cfc_setIntegral</span></a></div><div class="nav_link"><a class="break_within" href="#cfcₙL_integral"><span class="name">cfcₙL_integral</span></a></div><div class="nav_link"><a class="break_within" href="#cfcₙHom_integral"><span class="name">cfcₙHom_integral</span></a></div><div class="nav_link"><a class="break_within" href="#cfcₙL_integrable"><span class="name">cfcₙL_integrable</span></a></div><div class="nav_link"><a class="break_within" href="#integrable_cfcₙ'"><span class="name">integrable_cfcₙ'</span></a></div><div class="nav_link"><a class="break_within" href="#integrableOn_cfcₙ'"><span class="name">integrableOn_cfcₙ'</span></a></div><div class="nav_link"><a class="break_within" href="#integrable_cfcₙ"><span class="name">integrable_cfcₙ</span></a></div><div class="nav_link"><a class="break_within" href="#integrableOn_cfcₙ"><span class="name">integrableOn_cfcₙ</span></a></div><div class="nav_link"><a class="break_within" href="#cfcₙ_integral'"><span class="name">cfcₙ_integral'</span></a></div><div class="nav_link"><a class="break_within" href="#cfcₙ_setIntegral'"><span class="name">cfcₙ_setIntegral'</span></a></div><div class="nav_link"><a class="break_within" href="#cfcₙ_integral"><span class="name">cfcₙ_integral</span></a></div><div class="nav_link"><a class="break_within" href="#cfcₙ_setIntegral"><span class="name">cfcₙ_setIntegral</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Integrals-and-the-continuous-functional-calculus" class="markdown-heading">Integrals and the continuous functional calculus <a class="hover-link" href="#Integrals-and-the-continuous-functional-calculus">#</a></h1><p>This file gives results about integrals of the form <code>∫ x, <a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> (f x) a</code>. Most notably, we show
+that the integral commutes with the continuous functional calculus under appropriate conditions.</p><h2 id="Main-declarations" class="markdown-heading">Main declarations <a class="hover-link" href="#Main-declarations">#</a></h2><ul><li><code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfc_setIntegral">cfc_setIntegral</a></code> (resp. <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfc_integral">cfc_integral</a></code>): given a function <code>f : X → 𝕜 → 𝕜</code>, we have that
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> (fun r =&gt; ∫ x in s, f x r ∂μ) a = ∫ x in s, <a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> (f x) a ∂μ</code>
+under appropriate conditions (resp. with <code>s = univ</code>)</li><li><code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙ_setIntegral">cfcₙ_setIntegral</a></code>, <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙ_integral">cfcₙ_integral</a></code>: the same for the non-unital continuous functional calculus</li><li><code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrableOn_cfc">integrableOn_cfc</a></code>, <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrableOn_cfcₙ">integrableOn_cfcₙ</a></code>, <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrable_cfc">integrable_cfc</a></code>, <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrable_cfcₙ">integrable_cfcₙ</a></code>:
+functions of the form <code>fun x =&gt; <a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> (f x) a</code> are integrable.</li></ul><h2 id="Implementation-Notes" class="markdown-heading">Implementation Notes <a class="hover-link" href="#Implementation-Notes">#</a></h2><p>The lemmas mentioned above are stated under much stricter hypotheses than necessary
+(typically, simultaneous continuity of <code>f</code> in the parameter and the spectrum element).
+They all come with primed version which only assume what's needed, and may be used together
+with the API developed in <code><a href="../../../.././Mathlib/MeasureTheory/SpecificCodomains/ContinuousMap.html">Mathlib.MeasureTheory.SpecificCodomains.ContinuousMap</a></code>.</p><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li>Lift this to the case where the CFC is over <code>ℝ≥0</code></li><li>Use this to prove operator monotonicity and concavity/convexity of <code>rpow</code> and <code>log</code></li></ul></div><div class="decl" id="cfcL_integral"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L57-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcL_integral"><span class="name">cfcL_integral</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfcL">cfcL</a> <span class="fn">ha</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfcL">cfcL</a> <span class="fn">ha</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span>)</span></span></div></div></div></div><div class="decl" id="cfcL_integrable"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L62-L65">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcL_integrable"><span class="name">cfcL_integrable</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfcL">cfcL</a> <span class="fn">ha</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span>)</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="cfcHom_integral"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L67-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcHom_integral"><span class="name">cfcHom_integral</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfcHom">cfcHom</a> <span class="fn">ha</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfcHom">cfcHom</a> <span class="fn">ha</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span>)</span></span></div></div></div></div><div class="decl" id="integrable_cfc'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L72-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrable_cfc'"><span class="name">integrable_cfc'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Basic.html#ContinuousMap.mkD">ContinuousMap.mkD</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span> <span class="fn">0</span></span>)</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span>)</span> <span class="fn">μ</span></span></div></div><p>An integrability criterion for the continuous functional calculus.
+For a version with stronger assumptions which in practice are often easier to verify, see
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrable_cfc">integrable_cfc</a></code>.</p></div></div><div class="decl" id="integrableOn_cfc'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L83-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrableOn_cfc'"><span class="name">integrableOn_cfc'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">MeasureTheory.IntegrableOn</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Basic.html#ContinuousMap.mkD">ContinuousMap.mkD</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span> <span class="fn">0</span></span>)</span> <span class="fn">s</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">MeasureTheory.IntegrableOn</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span>)</span> <span class="fn">s</span> <span class="fn">μ</span></span></div></div><p>An integrability criterion for the continuous functional calculus.
+For a version with stronger assumptions which in practice are often easier to verify, see
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrableOn_cfc">integrableOn_cfc</a></code>.</p></div></div><div class="decl" id="integrable_cfc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L94-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrable_cfc"><span class="name">integrable_cfc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#OpensMeasurableSpace">OpensMeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">X</span> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<a href="../../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">f</span>)</span> (<a href="../../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> <a href="../../../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_ge</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">∀ <span class="fn">z</span> ∈ <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>, <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">bound</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_int</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/HasFiniteIntegral.html#MeasureTheory.HasFiniteIntegral">MeasureTheory.HasFiniteIntegral</a> <span class="fn">bound</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span>)</span> <span class="fn">μ</span></span></div></div><p>An integrability criterion for the continuous functional calculus.
+This version assumes joint continuity of <code>f</code>, see <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrable_cfc'">integrable_cfc'</a></code> for a statement
+with weaker assumptions.</p></div></div><div class="decl" id="integrableOn_cfc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L110-L124">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrableOn_cfc"><span class="name">integrableOn_cfc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#OpensMeasurableSpace">OpensMeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">X</span> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<a href="../../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">f</span>)</span> (<span class="fn">s</span> <a href="../../../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_ge</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span></span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">∀ <span class="fn">z</span> ∈ <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>, <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">bound</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_int</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/HasFiniteIntegral.html#MeasureTheory.HasFiniteIntegral">MeasureTheory.HasFiniteIntegral</a> <span class="fn">bound</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">MeasureTheory.IntegrableOn</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span>)</span> <span class="fn">s</span> <span class="fn">μ</span></span></div></div><p>An integrability criterion for the continuous functional calculus.
+This version assumes joint continuity of <code>f</code>, see <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrableOn_cfc'">integrableOn_cfc'</a></code> for a statement
+with weaker assumptions.</p></div></div><div class="decl" id="cfc_integral'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L127-L151">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfc_integral'"><span class="name">cfc_integral'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₂</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Basic.html#ContinuousMap.mkD">ContinuousMap.mkD</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span> <span class="fn">0</span></span>)</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(fun (<span class="fn">z</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div><p>The continuous functional calculus commutes with integration.
+For a version with stronger assumptions which in practice are often easier to verify, see
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfc_integral">cfc_integral</a></code>.</p></div></div><div class="decl" id="cfc_setIntegral'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L154-L163">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfc_setIntegral'"><span class="name">cfc_setIntegral'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span></span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₂</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">MeasureTheory.IntegrableOn</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Basic.html#ContinuousMap.mkD">ContinuousMap.mkD</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span> <span class="fn">0</span></span>)</span> <span class="fn">s</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(fun (<span class="fn">z</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">in</a> <span class="fn">s</span><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">in</a> <span class="fn">s</span><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div><p>The continuous functional calculus commutes with integration.
+For a version with stronger assumptions which in practice are often easier to verify, see
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfc_setIntegral">cfc_setIntegral</a></code>.</p></div></div><div class="decl" id="cfc_integral"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L166-L179">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfc_integral"><span class="name">cfc_integral</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#OpensMeasurableSpace">OpensMeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">X</span> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<a href="../../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">f</span>)</span> (<a href="../../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> <a href="../../../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_ge</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">∀ <span class="fn">z</span> ∈ <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>, <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">bound</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_int</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/HasFiniteIntegral.html#MeasureTheory.HasFiniteIntegral">MeasureTheory.HasFiniteIntegral</a> <span class="fn">bound</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(fun (<span class="fn">r</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">r</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div><p>The continuous functional calculus commutes with integration.
+This version assumes joint continuity of <code>f</code>, see <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfc_integral'">cfc_integral'</a></code> for a statement
+with weaker assumptions.</p></div></div><div class="decl" id="cfc_setIntegral"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L182-L197">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfc_setIntegral"><span class="name">cfc_setIntegral</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#ContinuousFunctionalCalculus">ContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#OpensMeasurableSpace">OpensMeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">X</span> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<a href="../../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">f</span>)</span> (<span class="fn">s</span> <a href="../../../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_ge</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span></span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">∀ <span class="fn">z</span> ∈ <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Basic.html#spectrum">spectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>, <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">bound</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_int</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/HasFiniteIntegral.html#MeasureTheory.HasFiniteIntegral">MeasureTheory.HasFiniteIntegral</a> <span class="fn">bound</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(fun (<span class="fn">r</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">in</a> <span class="fn">s</span><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">r</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">in</a> <span class="fn">s</span><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.html#cfc">cfc</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div><p>The continuous functional calculus commutes with integration.
+This version assumes joint continuity of <code>f</code>, see <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfc_setIntegral'">cfc_setIntegral'</a></code> for a statement
+with weaker assumptions.</p></div></div><div class="decl" id="cfcₙL_integral"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L212-L215">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙL_integral"><span class="name">cfcₙL_integral</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/ContinuousMapZero.html#ContinuousMapZero">ContinuousMapZero</a> <span class="fn">(↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>)</span> <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙL">cfcₙL</a> <span class="fn">ha</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙL">cfcₙL</a> <span class="fn">ha</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span>)</span></span></div></div></div></div><div class="decl" id="cfcₙHom_integral"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L218-L221">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙHom_integral"><span class="name">cfcₙHom_integral</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/ContinuousMapZero.html#ContinuousMapZero">ContinuousMapZero</a> <span class="fn">(↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>)</span> <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙHom">cfcₙHom</a> <span class="fn">ha</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙHom">cfcₙHom</a> <span class="fn">ha</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span>)</span></span></div></div></div></div><div class="decl" id="cfcₙL_integrable"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L224-L227">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙL_integrable"><span class="name">cfcₙL_integrable</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/ContinuousMapZero.html#ContinuousMapZero">ContinuousMapZero</a> <span class="fn">(↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>)</span> <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙL">cfcₙL</a> <span class="fn">ha</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span>)</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="integrable_cfcₙ'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L230-L239">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrable_cfcₙ'"><span class="name">integrable_cfcₙ'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/ContinuousMapZero.html#ContinuousMapZero.mkD">ContinuousMapZero.mkD</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span> <span class="fn">0</span></span>)</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span>)</span> <span class="fn">μ</span></span></div></div><p>An integrability criterion for the continuous functional calculus.
+For a version with stronger assumptions which in practice are often easier to verify, see
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrable_cfcₙ">integrable_cfcₙ</a></code>.</p></div></div><div class="decl" id="integrableOn_cfcₙ'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L242-L250">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrableOn_cfcₙ'"><span class="name">integrableOn_cfcₙ'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">MeasureTheory.IntegrableOn</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/ContinuousMapZero.html#ContinuousMapZero.mkD">ContinuousMapZero.mkD</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span> <span class="fn">0</span></span>)</span> <span class="fn">s</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">MeasureTheory.IntegrableOn</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span>)</span> <span class="fn">s</span> <span class="fn">μ</span></span></div></div><p>An integrability criterion for the continuous functional calculus.
+For a version with stronger assumptions which in practice are often easier to verify, see
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrableOn_cfcₙ">integrableOn_cfcₙ</a></code>.</p></div></div><div class="decl" id="integrable_cfcₙ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L253-L268">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrable_cfcₙ"><span class="name">integrable_cfcₙ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#OpensMeasurableSpace">OpensMeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">X</span> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<a href="../../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">f</span>)</span> (<a href="../../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> <a href="../../../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f_zero</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">0</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_ge</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">∀ <span class="fn">z</span> ∈ <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>, <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">bound</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_int</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/HasFiniteIntegral.html#MeasureTheory.HasFiniteIntegral">MeasureTheory.HasFiniteIntegral</a> <span class="fn">bound</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span>)</span> <span class="fn">μ</span></span></div></div><p>An integrability criterion for the continuous functional calculus.
+This version assumes joint continuity of <code>f</code>, see <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrable_cfcₙ'">integrable_cfcₙ'</a></code> for a statement
+with weaker assumptions.</p></div></div><div class="decl" id="integrableOn_cfcₙ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L271-L286">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrableOn_cfcₙ"><span class="name">integrableOn_cfcₙ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#OpensMeasurableSpace">OpensMeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">X</span> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<a href="../../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">f</span>)</span> (<span class="fn">s</span> <a href="../../../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f_zero</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span></span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">0</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_ge</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span></span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">∀ <span class="fn">z</span> ∈ <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>, <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">bound</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_int</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/HasFiniteIntegral.html#MeasureTheory.HasFiniteIntegral">MeasureTheory.HasFiniteIntegral</a> <span class="fn">bound</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">MeasureTheory.IntegrableOn</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span>)</span> <span class="fn">s</span> <span class="fn">μ</span></span></div></div><p>An integrability criterion for the continuous functional calculus.
+This version assumes joint continuity of <code>f</code>, see <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#integrableOn_cfcₙ'">integrableOn_cfcₙ'</a></code> for a statement
+with weaker assumptions.</p></div></div><div class="decl" id="cfcₙ_integral'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L290-L316">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙ_integral'"><span class="name">cfcₙ_integral'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₂</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">0</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₃</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/ContinuousMapZero.html#ContinuousMapZero.mkD">ContinuousMapZero.mkD</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span> <span class="fn">0</span></span>)</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(fun (<span class="fn">z</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div><p>The continuous functional calculus commutes with integration.
+For a version with stronger assumptions which in practice are often easier to verify, see
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙ_integral">cfcₙ_integral</a></code>.</p></div></div><div class="decl" id="cfcₙ_setIntegral'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L320-L330">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙ_setIntegral'"><span class="name">cfcₙ_setIntegral'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span></span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₂</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span></span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">0</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₃</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/IntegrableOn.html#MeasureTheory.IntegrableOn">MeasureTheory.IntegrableOn</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">X</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/ContinuousMapZero.html#ContinuousMapZero.mkD">ContinuousMapZero.mkD</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span>.<a href="../../../.././Mathlib/Data/Set/Restrict.html#Set.restrict">restrict</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span> <span class="fn">0</span></span>)</span> <span class="fn">s</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(fun (<span class="fn">z</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">in</a> <span class="fn">s</span><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">in</a> <span class="fn">s</span><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div><p>The continuous functional calculus commutes with integration.
+For a version with stronger assumptions which in practice are often easier to verify, see
+<code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙ_setIntegral">cfcₙ_setIntegral</a></code>.</p></div></div><div class="decl" id="cfcₙ_integral"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L333-L348">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙ_integral"><span class="name">cfcₙ_integral</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#OpensMeasurableSpace">OpensMeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">X</span> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<a href="../../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">f</span>)</span> (<a href="../../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> <a href="../../../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f_zero</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">0</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_ge</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn">μ</span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">∀ <span class="fn">z</span> ∈ <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>, <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">bound</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_int</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/HasFiniteIntegral.html#MeasureTheory.HasFiniteIntegral">MeasureTheory.HasFiniteIntegral</a> <span class="fn">bound</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(fun (<span class="fn">r</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">r</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div><p>The continuous functional calculus commutes with integration.
+This version assumes joint continuity of <code>f</code>, see <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙ_integral'">cfcₙ_integral'</a></code> for a statement
+with weaker assumptions.</p></div></div><div class="decl" id="cfcₙ_setIntegral"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.lean#L351-L367">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙ_setIntegral"><span class="name">cfcₙ_setIntegral</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><span class="fn">A</span> → <a href="../../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NonUnitalNormedRing">NonUnitalNormedRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Star/Basic.html#StarRing">StarRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#NonUnitalContinuousFunctionalCalculus">NonUnitalContinuousFunctionalCalculus</a> <span class="fn">𝕜</span> <span class="fn">A</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#OpensMeasurableSpace">OpensMeasurableSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn"><span class="fn">𝕜</span> → <span class="fn">𝕜</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound</span> : <span class="fn"><span class="fn">X</span> → <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#SecondCountableTopologyEither">SecondCountableTopologyEither</a> <span class="fn">X</span> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span>)</span></span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">𝕜</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<a href="../../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">f</span>)</span> (<span class="fn">s</span> <a href="../../../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f_zero</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span></span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">0</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_ge</span> : <span class="fn"><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᵐ</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∂</a><span class="fn"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span></span><a href="../../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">∀ <span class="fn">z</span> ∈ <span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Spectrum/Quasispectrum.html#quasispectrum">quasispectrum</a> <span class="fn">𝕜</span> <span class="fn">a</span></span>, <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">z</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">bound</span> <span class="fn">x</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bound_int</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/HasFiniteIntegral.html#MeasureTheory.HasFiniteIntegral">MeasureTheory.HasFiniteIntegral</a> <span class="fn">bound</span> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">s</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><span class="fn">p</span> <span class="fn">a</span></span> := by cfc_tac)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(fun (<span class="fn">r</span> : <span class="fn">𝕜</span>) =&gt; <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">in</a> <span class="fn">s</span><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span> <span class="fn">r</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">X</span>) <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">in</a> <span class="fn">s</span><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/NonUnital.html#cfcₙ">cfcₙ</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span></div></div><p>The continuous functional calculus commutes with integration.
+This version assumes joint continuity of <code>f</code>, see <code><a href="../../../.././Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Integral.html#cfcₙ_setIntegral'">cfcₙ_setIntegral'</a></code> for a statement
+with weaker assumptions.</p></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

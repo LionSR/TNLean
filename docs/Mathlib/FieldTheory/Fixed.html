@@ -1,0 +1,650 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.FieldTheory.Fixed</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.FieldTheory.Fixed";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">FieldTheory</span>.<span class="name">Fixed</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/FieldTheory/Finiteness.html">Mathlib.FieldTheory.Finiteness</a></li><li><a href="../.././Mathlib/FieldTheory/Separable.html">Mathlib.FieldTheory.Separable</a></li><li><a href="../.././Mathlib/Algebra/Polynomial/GroupRingAction.html">Mathlib.Algebra.Polynomial.GroupRingAction</a></li><li><a href="../.././Mathlib/FieldTheory/Normal/Defs.html">Mathlib.FieldTheory.Normal.Defs</a></li><li><a href="../.././Mathlib/LinearAlgebra/Dual/Lemmas.html">Mathlib.LinearAlgebra.Dual.Lemmas</a></li><li><a href="../.././Mathlib/RingTheory/Polynomial/Subring.html">Mathlib.RingTheory.Polynomial.Subring</a></li><li><a href="../.././Mathlib/Algebra/Ring/Action/Field.html">Mathlib.Algebra.Ring.Action.Field</a></li><li><a href="../.././Mathlib/Algebra/Ring/Action/Invariant.html">Mathlib.Algebra.Ring.Action.Invariant</a></li><li><a href="../.././Mathlib/LinearAlgebra/FreeModule/Finite/Matrix.html">Mathlib.LinearAlgebra.FreeModule.Finite.Matrix</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.FieldTheory.Fixed" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#FixedBy.subfield"><span class="name">FixedBy</span>.<span class="name">subfield</span></a></div><div class="nav_link"><a class="break_within" href="#FixedBy.subfield_mem_iff"><span class="name">FixedBy</span>.<span class="name">subfield_mem_iff</span></a></div><div class="nav_link"><a class="break_within" href="#FixedBy.intermediateField"><span class="name">FixedBy</span>.<span class="name">intermediateField</span></a></div><div class="nav_link"><a class="break_within" href="#FixedBy.intermediateField_mem_iff"><span class="name">FixedBy</span>.<span class="name">intermediateField_mem_iff</span></a></div><div class="nav_link"><a class="break_within" href="#IsInvariantSubfield"><span class="name">IsInvariantSubfield</span></a></div><div class="nav_link"><a class="break_within" href="#IsInvariantSubfield.toMulSemiringAction"><span class="name">IsInvariantSubfield</span>.<span class="name">toMulSemiringAction</span></a></div><div class="nav_link"><a class="break_within" href="#instIsInvariantSubringOfIsInvariantSubfield"><span class="name">instIsInvariantSubringOfIsInvariantSubfield</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.subfield"><span class="name">FixedPoints</span>.<span class="name">subfield</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.instIsInvariantSubfieldSubfield"><span class="name">FixedPoints</span>.<span class="name">instIsInvariantSubfieldSubfield</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.instSMulCommClassSubtypeMemSubfieldSubfield"><span class="name">FixedPoints</span>.<span class="name">instSMulCommClassSubtypeMemSubfieldSubfield</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.smulCommClass'"><span class="name">FixedPoints</span>.<span class="name">smulCommClass'</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.smul"><span class="name">FixedPoints</span>.<span class="name">smul</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.smul_polynomial"><span class="name">FixedPoints</span>.<span class="name">smul_polynomial</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.instAlgebraSubtypeMemSubfieldSubfield"><span class="name">FixedPoints</span>.<span class="name">instAlgebraSubtypeMemSubfieldSubfield</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.coe_algebraMap"><span class="name">FixedPoints</span>.<span class="name">coe_algebraMap</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.linearIndependent_smul_of_linearIndependent"><span class="name">FixedPoints</span>.<span class="name">linearIndependent_smul_of_linearIndependent</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.minpoly"><span class="name">FixedPoints</span>.<span class="name">minpoly</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.minpoly.monic"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">monic</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.minpoly.eval₂"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">eval₂</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.minpoly.eval₂'"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">eval₂'</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.minpoly.ne_one"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">ne_one</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.minpoly.of_eval₂"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">of_eval₂</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.minpoly.irreducible_aux"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">irreducible_aux</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.minpoly.irreducible"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">irreducible</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.isIntegral"><span class="name">FixedPoints</span>.<span class="name">isIntegral</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.minpoly_eq_minpoly"><span class="name">FixedPoints</span>.<span class="name">minpoly_eq_minpoly</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.rank_le_card"><span class="name">FixedPoints</span>.<span class="name">rank_le_card</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.normal"><span class="name">FixedPoints</span>.<span class="name">normal</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.isSeparable"><span class="name">FixedPoints</span>.<span class="name">isSeparable</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.instFiniteDimensionalSubtypeMemSubfieldSubfield"><span class="name">FixedPoints</span>.<span class="name">instFiniteDimensionalSubtypeMemSubfieldSubfield</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.finrank_le_card"><span class="name">FixedPoints</span>.<span class="name">finrank_le_card</span></a></div><div class="nav_link"><a class="break_within" href="#linearIndependent_toLinearMap"><span class="name">linearIndependent_toLinearMap</span></a></div><div class="nav_link"><a class="break_within" href="#cardinalMk_algHom"><span class="name">cardinalMk_algHom</span></a></div><div class="nav_link"><a class="break_within" href="#AlgEquiv.fintype"><span class="name">AlgEquiv</span>.<span class="name">fintype</span></a></div><div class="nav_link"><a class="break_within" href="#finrank_algHom"><span class="name">finrank_algHom</span></a></div><div class="nav_link"><a class="break_within" href="#AlgHom.card_le"><span class="name">AlgHom</span>.<span class="name">card_le</span></a></div><div class="nav_link"><a class="break_within" href="#AlgEquiv.card_le"><span class="name">AlgEquiv</span>.<span class="name">card_le</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.finrank_eq_card"><span class="name">FixedPoints</span>.<span class="name">finrank_eq_card</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.toAlgHom_bijective"><span class="name">FixedPoints</span>.<span class="name">toAlgHom_bijective</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.toAlgHomEquiv"><span class="name">FixedPoints</span>.<span class="name">toAlgHomEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.toAlgAut_bijective"><span class="name">FixedPoints</span>.<span class="name">toAlgAut_bijective</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.toAlgAutMulEquiv"><span class="name">FixedPoints</span>.<span class="name">toAlgAutMulEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#FixedPoints.toAlgAut_surjective"><span class="name">FixedPoints</span>.<span class="name">toAlgAut_surjective</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Fixed-field-under-a-group-action" class="markdown-heading">Fixed field under a group action. <a class="hover-link" href="#Fixed-field-under-a-group-action">#</a></h1><p>This is the basis of the Fundamental Theorem of Galois Theory.
+Given a (finite) group <code>G</code> that acts on a field <code>F</code>, we define <code><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">FixedPoints.subfield</a> G F</code>,
+the subfield consisting of elements of <code>F</code> fixed_points by every element of <code>G</code>.</p><p>This subfield is then normal and separable, and in addition if <code>G</code> acts faithfully on <code>F</code>
+then <code>finrank (FixedPoints.<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.subfield">subfield</a> G F) F = <a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> G</code>.</p><h2 id="Main-Definitions" class="markdown-heading">Main Definitions <a class="hover-link" href="#Main-Definitions">#</a></h2><ul><li><code><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">FixedPoints.subfield</a> G F</code>, the subfield consisting of elements of <code>F</code> fixed_points by every
+element of <code>G</code>, where <code>G</code> is a group that acts on <code>F</code>.</li></ul></div><div class="decl" id="FixedBy.subfield"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L48-L56">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.subfield"><span class="name">FixedBy</span>.<span class="name">subfield</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">F</span></span></div></div><p>The subfield of <code>F</code> fixed by the field endomorphism <code>m</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.subfield">FixedBy.subfield</a> <span class="fn">F</span> <span class="fn">m</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield.mk">{</a> <span class="fn">carrier</span> := <span class="fn"><a href="../.././Mathlib/GroupTheory/GroupAction/Defs.html#MulAction.fixedBy">MulAction.fixedBy</a> <span class="fn">F</span> <span class="fn">m</span></span>, <span class="fn">mul_mem'</span> := <span class="fn">⋯</span>, <span class="fn">one_mem'</span> := <span class="fn">⋯</span>, <span class="fn">add_mem'</span> := <span class="fn">⋯</span>, <span class="fn">zero_mem'</span> := <span class="fn">⋯</span>, <span class="fn">neg_mem'</span> := <span class="fn">⋯</span>,
+    <span class="fn">inv_mem'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield.mk">}</a></li></ul></details><details id="instances-for-list-FixedBy.subfield" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="FixedBy.subfield_mem_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L58-L60">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.subfield_mem_iff"><span class="name">FixedBy</span>.<span class="name">subfield_mem_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.subfield">subfield</a> <span class="fn">F</span> <span class="fn">m</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">m</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="FixedBy.intermediateField"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L64-L67">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.intermediateField"><span class="name">FixedBy</span>.<span class="name">intermediateField</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/FieldTheory/IntermediateField/Basic.html#IntermediateField">IntermediateField</a> <span class="fn">K</span> <span class="fn">F</span></span></div></div><p>The intermediate field between <code>K</code> and <code>F</code> fixed by the field endomorphism <code>m</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.intermediateField">FixedBy.intermediateField</a> <span class="fn">K</span> <span class="fn">F</span> <span class="fn">m</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/FieldTheory/IntermediateField/Basic.html#IntermediateField.mk">{</a> <span class="fn">toSubsemiring</span> := <span class="fn"><span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.subfield">FixedBy.subfield</a> <span class="fn">F</span> <span class="fn">m</span>)</span>.<a href="../.././Mathlib/Algebra/Ring/Subring/Defs.html#Subring.toSubsemiring">toSubsemiring</a></span>, <span class="fn">algebraMap_mem'</span> := <span class="fn">⋯</span>, <span class="fn">inv_mem'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/FieldTheory/IntermediateField/Basic.html#IntermediateField.mk">}</a></li></ul></details><details id="instances-for-list-FixedBy.intermediateField" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="FixedBy.intermediateField_mem_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L69-L71">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.intermediateField_mem_iff"><span class="name">FixedBy</span>.<span class="name">intermediateField_mem_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">M</span> <span class="fn">K</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.intermediateField">intermediateField</a> <span class="fn">K</span> <span class="fn">F</span> <span class="fn">m</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">m</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="IsInvariantSubfield"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L77-L79">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#IsInvariantSubfield"><span class="name">IsInvariantSubfield</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A typeclass for subrings invariant under a <code><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a></code>.</p><ul class="structure_fields" id="IsInvariantSubfield.mk"><li id="IsInvariantSubfield.smul_mem" class="structure_field"><div class="structure_field_info">smul_mem<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">F</span>}</span></span>
+</span> : <span class="fn"><span class="fn">x</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span> → <span class="fn">m</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">S</span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-IsInvariantSubfield" class="instances-list"></ul></details></div></div><div class="decl" id="IsInvariantSubfield.toMulSemiringAction"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L83-L91">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#IsInvariantSubfield.toMulSemiringAction"><span class="name">IsInvariantSubfield</span>.<span class="name">toMulSemiringAction</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#IsInvariantSubfield">IsInvariantSubfield</a> <span class="fn">M</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">↥<span class="fn">S</span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#IsInvariantSubfield.toMulSemiringAction">IsInvariantSubfield.toMulSemiringAction</a> <span class="fn">M</span> <span class="fn">S</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction.mk">{</a> <span class="fn">smul</span> := <span class="fn">fun (<span class="fn">m</span> : <span class="fn">M</span>) (<span class="fn">x</span> : <span class="fn">↥<span class="fn">S</span></span>) =&gt; <a href="../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn">m</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">↑<span class="fn">x</span></span>, <span class="fn">⋯</span><a href="../.././Init/Prelude.html#Subtype.mk">⟩</a></span>, <span class="fn">mul_smul</span> := <span class="fn">⋯</span>, <span class="fn">one_smul</span> := <span class="fn">⋯</span>, <span class="fn">smul_zero</span> := <span class="fn">⋯</span>, <span class="fn">smul_add</span> := <span class="fn">⋯</span>,
+    <span class="fn">smul_one</span> := <span class="fn">⋯</span>, <span class="fn">smul_mul</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction.mk">}</a></li></ul></details></div></div><div class="decl" id="instIsInvariantSubringOfIsInvariantSubfield"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L93-L94">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#instIsInvariantSubringOfIsInvariantSubfield"><span class="name">instIsInvariantSubringOfIsInvariantSubfield</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#IsInvariantSubfield">IsInvariantSubfield</a> <span class="fn">M</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Invariant.html#IsInvariantSubring">IsInvariantSubring</a> <span class="fn">M</span> <span class="fn"><span class="fn">S</span>.<a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield.toSubring">toSubring</a></span></span></div></div></div></div><div class="decl" id="FixedPoints.subfield"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L103-L106">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield"><span class="name">FixedPoints</span>.<span class="name">subfield</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield">Subfield</a> <span class="fn">F</span></span></div></div><p>The subfield of fixed points by a monoid action.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">FixedPoints.subfield</a> <span class="fn">M</span> <span class="fn">F</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(⨅ (<span class="fn">m</span> : <span class="fn">M</span>), <span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedBy.subfield">FixedBy.subfield</a> <span class="fn">F</span> <span class="fn">m</span></span>)</span>.<a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield.copy">copy</a></span> <span class="fn">(<a href="../.././Mathlib/GroupTheory/GroupAction/Defs.html#MulAction.fixedPoints">MulAction.fixedPoints</a> <span class="fn">M</span> <span class="fn">F</span>)</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-FixedPoints.subfield" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="FixedPoints.instIsInvariantSubfieldSubfield"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L108-L109">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.instIsInvariantSubfieldSubfield"><span class="name">FixedPoints</span>.<span class="name">instIsInvariantSubfieldSubfield</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#IsInvariantSubfield">IsInvariantSubfield</a> <span class="fn">M</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">M</span> <span class="fn">F</span>)</span></span></div></div></div></div><div class="decl" id="FixedPoints.instSMulCommClassSubtypeMemSubfieldSubfield"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L111-L112">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.instSMulCommClassSubtypeMemSubfieldSubfield"><span class="name">FixedPoints</span>.<span class="name">instSMulCommClassSubtypeMemSubfieldSubfield</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">M</span> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">M</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="FixedPoints.smulCommClass'"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L114-L115">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.smulCommClass'"><span class="name">FixedPoints</span>.<span class="name">smulCommClass'</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">M</span> <span class="fn">F</span>)</span>)</span> <span class="fn">M</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="FixedPoints.smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L117-L119">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.smul"><span class="name">FixedPoints</span>.<span class="name">smul</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">M</span> <span class="fn">F</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">m</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="FixedPoints.smul_polynomial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L122-L126">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.smul_polynomial"><span class="name">FixedPoints</span>.<span class="name">smul_polynomial</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">M</span> <span class="fn">F</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">m</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">p</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">p</span></div></div></div></div><div class="decl" id="FixedPoints.instAlgebraSubtypeMemSubfieldSubfield"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L128-L128">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.instAlgebraSubtypeMemSubfieldSubfield"><span class="name">FixedPoints</span>.<span class="name">instAlgebraSubtypeMemSubfieldSubfield</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">M</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.instAlgebraSubtypeMemSubfieldSubfield">FixedPoints.instAlgebraSubtypeMemSubfieldSubfield</a> <span class="fn">M</span> <span class="fn">F</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#inferInstance">inferInstance</a></li></ul></details></div></div><div class="decl" id="FixedPoints.coe_algebraMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L130-L132">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.coe_algebraMap"><span class="name">FixedPoints</span>.<span class="name">coe_algebraMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">M</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">M</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">M</span> <span class="fn">F</span>)</span>.<a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield.subtype">subtype</a></span></div></div></div></div><div class="decl" id="FixedPoints.linearIndependent_smul_of_linearIndependent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L134-L176">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.linearIndependent_smul_of_linearIndependent"><span class="name">FixedPoints</span>.<span class="name">linearIndependent_smul_of_linearIndependent</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndepOn">LinearIndepOn</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <a href="../.././Init/Prelude.html#id">id</a> <span class="fn">↑<span class="fn">s</span></span></span> → <span class="fn"><a href="../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndepOn">LinearIndepOn</a> <span class="fn">F</span> <span class="fn">⇑<span class="fn">(<a href="../.././Mathlib/Algebra/Group/Action/Basic.html#MulAction.toFun">MulAction.toFun</a> <span class="fn">G</span> <span class="fn">F</span>)</span></span> <span class="fn">↑<span class="fn">s</span></span></span></span></div></div></div></div><div class="decl" id="FixedPoints.minpoly"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L182-L186">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly"><span class="name">FixedPoints</span>.<span class="name">minpoly</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span></span></span></div></div><p><code><a href="../.././Mathlib/FieldTheory/Minpoly/Basic.html#minpoly">minpoly</a> G F x</code> is the minimal polynomial of <code>(x : F)</code> over <code><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">FixedPoints.subfield</a> G F</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly">FixedPoints.minpoly</a> <span class="fn">G</span> <span class="fn">F</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Polynomial/GroupRingAction.html#prodXSubSMul">prodXSubSMul</a> <span class="fn">G</span> <span class="fn">F</span> <span class="fn">x</span>)</span>.<a href="../.././Mathlib/RingTheory/Polynomial/Subring.html#Polynomial.toSubring">toSubring</a></span> <span class="fn"><span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">FixedPoints.subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>.<a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield.toSubring">toSubring</a></span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-FixedPoints.minpoly" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="FixedPoints.minpoly.monic"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L190-L193">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly.monic"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">monic</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly">minpoly</a> <span class="fn">G</span> <span class="fn">F</span> <span class="fn">x</span>)</span>.<a href="../.././Mathlib/Algebra/Polynomial/Degree/Defs.html#Polynomial.Monic">Monic</a></span></div></div></div></div><div class="decl" id="FixedPoints.minpoly.eval₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L195-L199">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly.eval₂"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">eval₂</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Eval/Defs.html#Polynomial.eval₂">Polynomial.eval₂</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>.<a href="../.././Mathlib/Algebra/Ring/Subring/Defs.html#Subring.subtype">subtype</a></span> <span class="fn">x</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly">minpoly</a> <span class="fn">G</span> <span class="fn">F</span> <span class="fn">x</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="FixedPoints.minpoly.eval₂'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L201-L203">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly.eval₂'"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">eval₂'</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Eval/Defs.html#Polynomial.eval₂">Polynomial.eval₂</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>.<a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield.subtype">subtype</a></span> <span class="fn">x</span> <span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly">minpoly</a> <span class="fn">G</span> <span class="fn">F</span> <span class="fn">x</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="FixedPoints.minpoly.ne_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L205-L207">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly.ne_one"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">ne_one</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly">minpoly</a> <span class="fn">G</span> <span class="fn">F</span> <span class="fn">x</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="FixedPoints.minpoly.of_eval₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L209-L224">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly.of_eval₂"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">of_eval₂</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Eval/Defs.html#Polynomial.eval₂">Polynomial.eval₂</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>.<a href="../.././Mathlib/Algebra/Field/Subfield/Defs.html#Subfield.subtype">subtype</a></span> <span class="fn">x</span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly">minpoly</a> <span class="fn">G</span> <span class="fn">F</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="FixedPoints.minpoly.irreducible_aux"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L227-L243">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly.irreducible_aux"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">irreducible_aux</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/Algebra/Polynomial/Degree/Defs.html#Polynomial.Monic">Monic</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/Algebra/Polynomial/Degree/Defs.html#Polynomial.Monic">Monic</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hfg</span> : <span class="fn">f</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">g</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly">minpoly</a> <span class="fn">G</span> <span class="fn">F</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span> <a href="../.././Init/Prelude.html#Or">∨</a> <span class="fn">g</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="FixedPoints.minpoly.irreducible"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L245-L246">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly.irreducible"><span class="name">FixedPoints</span>.<span class="name">minpoly</span>.<span class="name">irreducible</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly">minpoly</a> <span class="fn">G</span> <span class="fn">F</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="FixedPoints.isIntegral"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L252-L253">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.isIntegral"><span class="name">FixedPoints</span>.<span class="name">isIntegral</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/IntegralClosure/IsIntegral/Defs.html#IsIntegral">IsIntegral</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="FixedPoints.minpoly_eq_minpoly"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L259-L261">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly_eq_minpoly"><span class="name">FixedPoints</span>.<span class="name">minpoly_eq_minpoly</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.minpoly">minpoly</a> <span class="fn">G</span> <span class="fn">F</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/FieldTheory/Minpoly/Basic.html#minpoly">_root_.minpoly</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="FixedPoints.rank_le_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L263-L267">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.rank_le_card"><span class="name">FixedPoints</span>.<span class="name">rank_le_card</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/LinearAlgebra/Dimension/Basic.html#Module.rank">Module.rank</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">G</span>)</span></span></div></div></div></div><div class="decl" id="FixedPoints.normal"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L275-L281">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.normal"><span class="name">FixedPoints</span>.<span class="name">normal</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/FieldTheory/Normal/Defs.html#Normal">Normal</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="FixedPoints.isSeparable"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L283-L290">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.isSeparable"><span class="name">FixedPoints</span>.<span class="name">isSeparable</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/FieldTheory/Separable.html#Algebra.IsSeparable">Algebra.IsSeparable</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="FixedPoints.instFiniteDimensionalSubtypeMemSubfieldSubfield"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L292-L295">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.instFiniteDimensionalSubtypeMemSubfieldSubfield"><span class="name">FixedPoints</span>.<span class="name">instFiniteDimensionalSubtypeMemSubfieldSubfield</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="FixedPoints.finrank_le_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L299-L301">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.finrank_le_card"><span class="name">FixedPoints</span>.<span class="name">finrank_le_card</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">G</span></span></div></div></div></div><div class="decl" id="linearIndependent_toLinearMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L305-L312">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#linearIndependent_toLinearMap"><span class="name">linearIndependent_toLinearMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../.././foundational_types.html">Type</a> w)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/LinearAlgebra/LinearIndependent/Defs.html#LinearIndependent">LinearIndependent</a> <span class="fn">B</span> <a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom.toLinearMap">AlgHom.toLinearMap</a></span></div></div></div></div><div class="decl" id="cardinalMk_algHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L314-L317">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#cardinalMk_algHom"><span class="name">cardinalMk_algHom</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W</span> : <a href="../.././foundational_types.html">Type</a> w)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">W</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">W</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/SetTheory/Cardinal/Defs.html#Cardinal.mk">Cardinal.mk</a> (<span class="fn">V</span> <a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">K</span><a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">W</span>)</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">W</span> (<span class="fn">V</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">K</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">W</span>))</span></span></div></div></div></div><div class="decl" id="AlgEquiv.fintype"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L319-L321">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#AlgEquiv.fintype"><span class="name">AlgEquiv</span>.<span class="name">fintype</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">Gal(<span class="fn">V</span>/<span class="fn">K</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#AlgEquiv.fintype">AlgEquiv.fintype</a> <span class="fn">K</span> <span class="fn">V</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/OfMap.html#Fintype.ofEquiv">Fintype.ofEquiv</a> (<span class="fn">V</span> <a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">K</span><a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">V</span>) <span class="fn">↑<span class="fn"><span class="fn">(<a href="../.././Mathlib/RingTheory/Algebraic/Integral.html#algEquivEquivAlgHom">algEquivEquivAlgHom</a> <span class="fn">K</span> <span class="fn">V</span>)</span>.<a href="../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv.symm">symm</a></span></span></span></li></ul></details></div></div><div class="decl" id="finrank_algHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L323-L325">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#finrank_algHom"><span class="name">finrank_algHom</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <a href="../.././foundational_types.html">Type</a> v)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">K</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">K</span> <span class="fn">V</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> (<span class="fn">V</span> <a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">K</span><a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">V</span>)</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">V</span> (<span class="fn">V</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">K</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">V</span>)</span></div></div></div></div><div class="decl" id="AlgHom.card_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L327-L329">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#AlgHom.card_le"><span class="name">AlgHom</span>.<span class="name">card_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">F</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">F</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> (<span class="fn">K</span> <a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">F</span><a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">K</span>)</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">F</span> <span class="fn">K</span></span></div></div></div></div><div class="decl" id="AlgEquiv.card_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L331-L333">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#AlgEquiv.card_le"><span class="name">AlgEquiv</span>.<span class="name">card_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">F</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">F</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">Gal(<span class="fn">K</span>/<span class="fn">F</span>)</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">F</span> <span class="fn">K</span></span></div></div></div></div><div class="decl" id="FixedPoints.finrank_eq_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L340-L350">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.finrank_eq_card"><span class="name">FixedPoints</span>.<span class="name">finrank_eq_card</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/LinearAlgebra/Dimension/Finrank.html#Module.finrank">Module.finrank</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">G</span></span></div></div><p>Let $F$ be a field. Let $G$ be a finite group acting faithfully on $F$.
+Then $[F : F^G] = |G|$.</p></div></div><div class="decl" id="FixedPoints.toAlgHom_bijective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L353-L363">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.toAlgHom_bijective"><span class="name">FixedPoints</span>.<span class="name">toAlgHom_bijective</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Hom.html#MulSemiringAction.toAlgHom">MulSemiringAction.toAlgHom</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span>)</span></span></div></div><p><code><a href="../.././Mathlib/Algebra/Algebra/Hom.html#MulSemiringAction.toAlgHom">MulSemiringAction.toAlgHom</a></code> is bijective.</p></div></div><div class="decl" id="FixedPoints.toAlgHomEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L365-L367">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.toAlgHomEquiv"><span class="name">FixedPoints</span>.<span class="name">toAlgHomEquiv</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">G</span> <a href="../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> (<span class="fn">F</span> <a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span></span><a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">F</span>)</div></div><p>Bijection between <code>G</code> and algebra endomorphisms of <code>F</code> that fix the fixed points.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.toAlgHomEquiv">FixedPoints.toAlgHomEquiv</a> <span class="fn">G</span> <span class="fn">F</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Logic/Equiv/Defs.html#Equiv.ofBijective">Equiv.ofBijective</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Hom.html#MulSemiringAction.toAlgHom">MulSemiringAction.toAlgHom</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">FixedPoints.subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span>)</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-FixedPoints.toAlgHomEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="FixedPoints.toAlgAut_bijective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L370-L375">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.toAlgAut_bijective"><span class="name">FixedPoints</span>.<span class="name">toAlgAut_bijective</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">⇑<span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Equiv.html#MulSemiringAction.toAlgAut">MulSemiringAction.toAlgAut</a> <span class="fn">G</span> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span>)</span></span></span></div></div><p><code><a href="../.././Mathlib/Algebra/Algebra/Equiv.html#MulSemiringAction.toAlgAut">MulSemiringAction.toAlgAut</a></code> is bijective.</p></div></div><div class="decl" id="FixedPoints.toAlgAutMulEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L377-L379">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.toAlgAutMulEquiv"><span class="name">FixedPoints</span>.<span class="name">toAlgAutMulEquiv</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Faithful.html#FaithfulSMul">FaithfulSMul</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv">≃*</a> <span class="fn">Gal(<span class="fn">F</span>/<span class="fn">↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span></span>)</span></div></div><p>Bijection between <code>G</code> and algebra automorphisms of <code>F</code> that fix the fixed points.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.toAlgAutMulEquiv">FixedPoints.toAlgAutMulEquiv</a> <span class="fn">G</span> <span class="fn">F</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquiv.ofBijective">MulEquiv.ofBijective</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Equiv.html#MulSemiringAction.toAlgAut">MulSemiringAction.toAlgAut</a> <span class="fn">G</span> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">FixedPoints.subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span>)</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-FixedPoints.toAlgAutMulEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="FixedPoints.toAlgAut_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/FieldTheory/Fixed.lean#L382-L398">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.toAlgAut_surjective"><span class="name">FixedPoints</span>.<span class="name">toAlgAut_surjective</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Action/Basic.html#MulSemiringAction">MulSemiringAction</a> <span class="fn">G</span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Equiv.html#MulSemiringAction.toAlgAut">MulSemiringAction.toAlgAut</a> <span class="fn">G</span> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/FieldTheory/Fixed.html#FixedPoints.subfield">subfield</a> <span class="fn">G</span> <span class="fn">F</span>)</span>)</span> <span class="fn">F</span>)</span></span></span></div></div><p><code><a href="../.././Mathlib/Algebra/Algebra/Equiv.html#MulSemiringAction.toAlgAut">MulSemiringAction.toAlgAut</a></code> is surjective.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

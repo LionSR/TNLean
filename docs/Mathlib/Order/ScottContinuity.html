@@ -1,0 +1,444 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Order.ScottContinuity</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Order.ScottContinuity";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Order</span>.<span class="name">ScottContinuity</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Order/Directed.html">Mathlib.Order.Directed</a></li><li><a href="../.././Mathlib/Tactic/ToFun.html">Mathlib.Tactic.ToFun</a></li><li><a href="../.././Mathlib/Order/Bounds/Defs.html">Mathlib.Order.Bounds.Defs</a></li><li><a href="../.././Mathlib/Order/Bounds/Image.html">Mathlib.Order.Bounds.Image</a></li><li><a href="../.././Mathlib/Tactic/FunProp/Attr.html">Mathlib.Tactic.FunProp.Attr</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Order.ScottContinuity" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn"><span class="name">ScottContinuousOn</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.mono"><span class="name">ScottContinuousOn</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.monotone"><span class="name">ScottContinuousOn</span>.<span class="name">monotone</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.id"><span class="name">ScottContinuousOn</span>.<span class="name">id</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.fun_id"><span class="name">ScottContinuousOn</span>.<span class="name">fun_id</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.const"><span class="name">ScottContinuousOn</span>.<span class="name">const</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.fun_const"><span class="name">ScottContinuousOn</span>.<span class="name">fun_const</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.comp"><span class="name">ScottContinuousOn</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.fun_comp"><span class="name">ScottContinuousOn</span>.<span class="name">fun_comp</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.image_comp"><span class="name">ScottContinuousOn</span>.<span class="name">image_comp</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.fun_image_comp"><span class="name">ScottContinuousOn</span>.<span class="name">fun_image_comp</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.prodMk"><span class="name">ScottContinuousOn</span>.<span class="name">prodMk</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.fst"><span class="name">ScottContinuousOn</span>.<span class="name">fst</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.snd"><span class="name">ScottContinuousOn</span>.<span class="name">snd</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous"><span class="name">ScottContinuous</span></a></div><div class="nav_link"><a class="break_within" href="#scottContinuousOn_univ"><span class="name">scottContinuousOn_univ</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.scottContinuousOn"><span class="name">ScottContinuous</span>.<span class="name">scottContinuousOn</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.monotone"><span class="name">ScottContinuous</span>.<span class="name">monotone</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.id"><span class="name">ScottContinuous</span>.<span class="name">id</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.fun_id"><span class="name">ScottContinuous</span>.<span class="name">fun_id</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.const"><span class="name">ScottContinuous</span>.<span class="name">const</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.fun_const"><span class="name">ScottContinuous</span>.<span class="name">fun_const</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.comp"><span class="name">ScottContinuous</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.fun_comp"><span class="name">ScottContinuous</span>.<span class="name">fun_comp</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.prodMk"><span class="name">ScottContinuous</span>.<span class="name">prodMk</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.fst"><span class="name">ScottContinuous</span>.<span class="name">fst</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.snd"><span class="name">ScottContinuous</span>.<span class="name">snd</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuous.sup₂"><span class="name">ScottContinuous</span>.<span class="name">sup₂</span></a></div><div class="nav_link"><a class="break_within" href="#ScottContinuousOn.sup₂"><span class="name">ScottContinuousOn</span>.<span class="name">sup₂</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Scott-continuity" class="markdown-heading">Scott continuity <a class="hover-link" href="#Scott-continuity">#</a></h1><p>A function <code>f : α → β</code> between preorders is Scott continuous (referring to Dana Scott) if it
+distributes over <code><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a></code>. Scott continuity corresponds to continuity in Scott topological spaces
+(defined in <code><a href="../.././Mathlib/Topology/Order/ScottTopology.html">Mathlib/Topology/Order/ScottTopology.lean</a></code>). It is distinct from the (more commonly
+used) continuity from topology (see <code><a href="../.././Mathlib/Topology/Basic.html">Mathlib/Topology/Basic.lean</a></code>).</p><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>Given a set <code>D</code> of directed sets, we define say <code>f</code> is <code><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> D</code> if it distributes over
+<code><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a></code> for all elements of <code>D</code>. This allows us to consider Scott Continuity on all directed sets
+in this file, and ωScott Continuity on chains later in
+<code><a href="../.././Mathlib/Order/OmegaCompletePartialOrder.html">Mathlib/Order/OmegaCompletePartialOrder.lean</a></code>.</p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>[Abramsky and Jung, <em>Domain Theory</em>][abramsky_gabbay_maibaum_1994]</li><li>[Gierz et al, <em>A Compendium of Continuous Lattices</em>][GierzEtAl1980]</li></ul></div><div class="decl" id="ScottContinuousOn"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L49-L62">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn"><span class="name">ScottContinuousOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A function between preorders is said to be Scott continuous on a set <code>D</code> of directed sets if it
+preserves <code><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a></code> on elements of <code>D</code>.</p><p>The dual notion</p><pre><code class="language-lean">∀ ⦃d : <a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> α⦄, d ∈ D →  d.<a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> → <a href="../.././Mathlib/Order/Directed.html#DirectedOn">DirectedOn</a> (· ≥ ·) d → ∀ ⦃a⦄, <a href="../.././Mathlib/Order/Bounds/Defs.html#IsGLB">IsGLB</a> d a → <a href="../.././Mathlib/Order/Bounds/Defs.html#IsGLB">IsGLB</a> (f '' d) (f a)
+</code></pre><p>does not appear to play a significant role in the literature, so is omitted here.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn">∀ ⦃<span class="fn">d</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>⦄,
+    <span class="fn"><span class="fn">d</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">D</span> → <span class="fn"><span class="fn"><span class="fn">d</span>.<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span> → <span class="fn"><span class="fn"><a href="../.././Mathlib/Order/Directed.html#DirectedOn">DirectedOn</a> <span class="fn">(fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">α</span>) =&gt; <span class="fn">x1</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x2</span>)</span> <span class="fn">d</span></span> → <span class="fn">∀ ⦃<span class="fn">a</span> : <span class="fn">α</span>⦄, <span class="fn"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> <span class="fn">d</span> <span class="fn">a</span></span> → <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">d</span>) <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span></span></span></span></span></span></span></span></li></ul></details><details id="instances-for-list-ScottContinuousOn" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ScottContinuousOn.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L64-L65">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.mono"><span class="name">ScottContinuousOn</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁ </span><span class="fn">D₂</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hD</span> : <span class="fn">D₁</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">D₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D₂</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D₁</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="ScottContinuousOn.monotone"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L67-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.monotone"><span class="name">ScottContinuousOn</span>.<span class="name">monotone</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hD</span> : <span class="fn">∀ (<span class="fn">a </span><span class="fn">b</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">a</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <a href="../.././Init/Core.html#Insert.insert">{</a><span class="fn">a</span><a href="../.././Init/Core.html#Insert.insert">,</a> <span class="fn">b</span><a href="../.././Init/Core.html#Insert.insert">}</a> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">D</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="ScottContinuousOn.id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L76-L77">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.id"><span class="name">ScottContinuousOn</span>.<span class="name">id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <a href="../.././Init/Prelude.html#id">_root_.id</a></span></div></div></div></div><div class="decl" id="ScottContinuousOn.fun_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L76-L76">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.fun_id"><span class="name">ScottContinuousOn</span>.<span class="name">fun_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">x</span></span></span></div></div><p>Eta-expanded form of <code><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.id">ScottContinuousOn.id</a></code></p></div></div><div class="decl" id="ScottContinuousOn.const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L79-L82">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.const"><span class="name">ScottContinuousOn</span>.<span class="name">const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">(<a href="../.././Init/Prelude.html#Function.const">Function.const</a> <span class="fn">α</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="ScottContinuousOn.fun_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L79-L79">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.fun_const"><span class="name">ScottContinuousOn</span>.<span class="name">fun_const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">fun (<span class="fn">x_1</span> : <span class="fn">α</span>) =&gt; <span class="fn">x</span></span></span></div></div><p>Eta-expanded form of <code><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.const">ScottContinuousOn.const</a></code></p></div></div><div class="decl" id="ScottContinuousOn.comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L84-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.comp"><span class="name">ScottContinuousOn</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hD</span> : <span class="fn">∀ (<span class="fn">a </span><span class="fn">b</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">a</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <a href="../.././Init/Core.html#Insert.insert">{</a><span class="fn">a</span><a href="../.././Init/Core.html#Insert.insert">,</a> <span class="fn">b</span><a href="../.././Init/Core.html#Insert.insert">}</a> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">D</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hD'</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>) =&gt; <span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">x</span>)</span> <span class="fn">D</span> <span class="fn">D'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D'</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> (<span class="fn">g</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="ScottContinuousOn.fun_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L84-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.fun_comp"><span class="name">ScottContinuousOn</span>.<span class="name">fun_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D'</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">β</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hD</span> : <span class="fn">∀ (<span class="fn">a </span><span class="fn">b</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">a</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <a href="../.././Init/Core.html#Insert.insert">{</a><span class="fn">a</span><a href="../.././Init/Core.html#Insert.insert">,</a> <span class="fn">b</span><a href="../.././Init/Core.html#Insert.insert">}</a> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">D</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hD'</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>) =&gt; <span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">x</span>)</span> <span class="fn">D</span> <span class="fn">D'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D'</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span></span></div></div><p>Eta-expanded form of <code><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.comp">ScottContinuousOn.comp</a></code></p></div></div><div class="decl" id="ScottContinuousOn.image_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L98-L104">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.image_comp"><span class="name">ScottContinuousOn</span>.<span class="name">image_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hD</span> : <span class="fn">∀ (<span class="fn">a </span><span class="fn">b</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">a</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <a href="../.././Init/Core.html#Insert.insert">{</a><span class="fn">a</span><a href="../.././Init/Core.html#Insert.insert">,</a> <span class="fn">b</span><a href="../.././Init/Core.html#Insert.insert">}</a> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">D</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> (<span class="fn">(fun (<span class="fn">x</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>) =&gt; <span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">x</span>)</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">D</span>) <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> (<span class="fn">g</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="ScottContinuousOn.fun_image_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L98-L98">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.fun_image_comp"><span class="name">ScottContinuousOn</span>.<span class="name">fun_image_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hD</span> : <span class="fn">∀ (<span class="fn">a </span><span class="fn">b</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">a</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <a href="../.././Init/Core.html#Insert.insert">{</a><span class="fn">a</span><a href="../.././Init/Core.html#Insert.insert">,</a> <span class="fn">b</span><a href="../.././Init/Core.html#Insert.insert">}</a> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">D</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> (<span class="fn">(fun (<span class="fn">x</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>) =&gt; <span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">x</span>)</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">D</span>) <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span></span></div></div><p>Eta-expanded form of <code><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.image_comp">ScottContinuousOn.image_comp</a></code></p></div></div><div class="decl" id="ScottContinuousOn.prodMk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L106-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.prodMk"><span class="name">ScottContinuousOn</span>.<span class="name">prodMk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hD</span> : <span class="fn">∀ (<span class="fn">a </span><span class="fn">b</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">a</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <a href="../.././Init/Core.html#Insert.insert">{</a><span class="fn">a</span><a href="../.././Init/Core.html#Insert.insert">,</a> <span class="fn">b</span><a href="../.././Init/Core.html#Insert.insert">}</a> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">D</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <a href="../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span><a href="../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span><a href="../.././Init/Prelude.html#Prod.mk">)</a></span></span></div></div></div></div><div class="decl" id="ScottContinuousOn.fst"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L129-L133">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.fst"><span class="name">ScottContinuousOn</span>.<span class="name">fst</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (<span class="fn">α</span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span>))</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <a href="../.././Init/Prelude.html#Prod.fst">Prod.fst</a></span></div></div></div></div><div class="decl" id="ScottContinuousOn.snd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L135-L139">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.snd"><span class="name">ScottContinuousOn</span>.<span class="name">snd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (<span class="fn">α</span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span>))</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <a href="../.././Init/Prelude.html#Prod.snd">Prod.snd</a></span></div></div></div></div><div class="decl" id="ScottContinuous"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L141-L147">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous"><span class="name">ScottContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A function between preorders is said to be Scott continuous if it preserves <code><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a></code> on directed
+sets. It can be shown that a function is Scott continuous if and only if it is continuous w.r.t. the
+Scott topology.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn">∀ ⦃<span class="fn">d</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>⦄, <span class="fn"><span class="fn"><span class="fn">d</span>.<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span> → <span class="fn"><span class="fn"><a href="../.././Mathlib/Order/Directed.html#DirectedOn">DirectedOn</a> <span class="fn">(fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">α</span>) =&gt; <span class="fn">x1</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x2</span>)</span> <span class="fn">d</span></span> → <span class="fn">∀ ⦃<span class="fn">a</span> : <span class="fn">α</span>⦄, <span class="fn"><span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> <span class="fn">d</span> <span class="fn">a</span></span> → <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> (<span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">d</span>) <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span></span></span></span></span></span></span></li></ul></details><details id="instances-for-list-ScottContinuous" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="scottContinuousOn_univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L149-L150">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#scottContinuousOn_univ"><span class="name">scottContinuousOn_univ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <a href="../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="ScottContinuous.scottContinuousOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L152-L153">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.scottContinuousOn"><span class="name">ScottContinuous</span>.<span class="name">scottContinuousOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">f</span></span> → <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">f</span></span></span></div></div></div></div><div class="decl" id="ScottContinuous.monotone"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L155-L156">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.monotone"><span class="name">ScottContinuous</span>.<span class="name">monotone</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="ScottContinuous.id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L158-L159">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.id"><span class="name">ScottContinuous</span>.<span class="name">id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <a href="../.././Init/Prelude.html#id">_root_.id</a></span></div></div></div></div><div class="decl" id="ScottContinuous.fun_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L158-L158">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.fun_id"><span class="name">ScottContinuous</span>.<span class="name">fun_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">x</span></span></span></div></div><p>Eta-expanded form of <code><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.id">ScottContinuous.id</a></code></p></div></div><div class="decl" id="ScottContinuous.const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L161-L163">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.const"><span class="name">ScottContinuous</span>.<span class="name">const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">(<a href="../.././Init/Prelude.html#Function.const">Function.const</a> <span class="fn">α</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="ScottContinuous.fun_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L161-L161">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.fun_const"><span class="name">ScottContinuous</span>.<span class="name">fun_const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">fun (<span class="fn">x_1</span> : <span class="fn">α</span>) =&gt; <span class="fn">x</span></span></span></div></div><p>Eta-expanded form of <code><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.const">ScottContinuous.const</a></code></p></div></div><div class="decl" id="ScottContinuous.comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L165-L170">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.comp"><span class="name">ScottContinuous</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> (<span class="fn">g</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></div></div></div></div><div class="decl" id="ScottContinuous.fun_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L165-L165">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.fun_comp"><span class="name">ScottContinuous</span>.<span class="name">fun_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span></span></div></div><p>Eta-expanded form of <code><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.comp">ScottContinuous.comp</a></code></p></div></div><div class="decl" id="ScottContinuous.prodMk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L172-L177">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.prodMk"><span class="name">ScottContinuous</span>.<span class="name">prodMk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <a href="../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span><a href="../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span><a href="../.././Init/Prelude.html#Prod.mk">)</a></span></span></div></div></div></div><div class="decl" id="ScottContinuous.fst"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L179-L181">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.fst"><span class="name">ScottContinuous</span>.<span class="name">fst</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <a href="../.././Init/Prelude.html#Prod.fst">Prod.fst</a></span></div></div></div></div><div class="decl" id="ScottContinuous.snd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L183-L185">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.snd"><span class="name">ScottContinuous</span>.<span class="name">snd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <a href="../.././Init/Prelude.html#Prod.snd">Prod.snd</a></span></div></div></div></div><div class="decl" id="ScottContinuous.sup₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L193-L205">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous.sup₂"><span class="name">ScottContinuous</span>.<span class="name">sup₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuous">ScottContinuous</a> <span class="fn">fun (<span class="fn">b</span> : <span class="fn">β</span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">b</span>.1</span> ⊔ <span class="fn"><span class="fn">b</span>.2</span></span></span></span></div></div><p>The join operation is Scott continuous</p></div></div><div class="decl" id="ScottContinuousOn.sup₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/ScottContinuity.lean#L207-L210">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn.sup₂"><span class="name">ScottContinuousOn</span>.<span class="name">sup₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#SemilatticeSup">SemilatticeSup</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (<span class="fn">β</span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span>))</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ScottContinuity.html#ScottContinuousOn">ScottContinuousOn</a> <span class="fn">D</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">β</span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn">β</span>) =&gt;
+  <span class="fn">match <span class="fn">x</span> with
+  | <a href="../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">a</span><a href="../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">b</span><a href="../.././Init/Prelude.html#Prod.mk">)</a> =&gt; <span class="fn"><span class="fn">a</span> ⊔ <span class="fn">b</span></span></span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

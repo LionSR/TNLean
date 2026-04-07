@@ -1,0 +1,348 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Data.FunLike.Equiv</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Data.FunLike.Equiv";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Data</span>.<span class="name">FunLike</span>.<span class="name">Equiv</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Data/FunLike/Embedding.html">Mathlib.Data.FunLike.Embedding</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Data.FunLike.Equiv" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#EquivLike"><span class="name">EquivLike</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.inv_injective"><span class="name">EquivLike</span>.<span class="name">inv_injective</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.toFunLike"><span class="name">EquivLike</span>.<span class="name">toFunLike</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.coe_apply"><span class="name">EquivLike</span>.<span class="name">coe_apply</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.inv_apply_eq"><span class="name">EquivLike</span>.<span class="name">inv_apply_eq</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.toEmbeddingLike"><span class="name">EquivLike</span>.<span class="name">toEmbeddingLike</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.injective"><span class="name">EquivLike</span>.<span class="name">injective</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.surjective"><span class="name">EquivLike</span>.<span class="name">surjective</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.bijective"><span class="name">EquivLike</span>.<span class="name">bijective</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.apply_eq_iff_eq"><span class="name">EquivLike</span>.<span class="name">apply_eq_iff_eq</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.injective_comp"><span class="name">EquivLike</span>.<span class="name">injective_comp</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.surjective_comp"><span class="name">EquivLike</span>.<span class="name">surjective_comp</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.bijective_comp"><span class="name">EquivLike</span>.<span class="name">bijective_comp</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.inv_apply_apply"><span class="name">EquivLike</span>.<span class="name">inv_apply_apply</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.apply_inv_apply"><span class="name">EquivLike</span>.<span class="name">apply_inv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.comp_injective"><span class="name">EquivLike</span>.<span class="name">comp_injective</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.comp_surjective"><span class="name">EquivLike</span>.<span class="name">comp_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.comp_bijective"><span class="name">EquivLike</span>.<span class="name">comp_bijective</span></a></div><div class="nav_link"><a class="break_within" href="#EquivLike.subsingleton_dom"><span class="name">EquivLike</span>.<span class="name">subsingleton_dom</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Typeclass-for-a-type-F-with-an-injective-map-to-A-≃-B" class="markdown-heading">Typeclass for a type <code>F</code> with an injective map to <code>A ≃ B</code> <a class="hover-link" href="#Typeclass-for-a-type-F-with-an-injective-map-to-A-≃-B">#</a></h1><p>This typeclass is primarily for use by isomorphisms like <code>MonoidEquiv</code> and <code><a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">LinearEquiv</a></code>.</p><h2 id="Basic-usage-of-EquivLike" class="markdown-heading">Basic usage of <code><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a></code> <a class="hover-link" href="#Basic-usage-of-EquivLike">#</a></h2><p>A typical type of isomorphisms should be declared as:</p><pre><code>structure MyIso (A B : Type*) [MyClass A] [MyClass B] extends <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">Equiv</a> A B where
+  (map_op' : ∀ (x y : A), toFun (MyClass.op x y) = MyClass.op (toFun x) (toFun y))
+
+namespace MyIso
+
+variable (A B : Type*) [MyClass A] [MyClass B]
+
+instance instEquivLike : <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> (MyIso A B) A B where
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe">coe</a> f := f.toFun
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv">inv</a> f := f.invFun
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.left_inv">left_inv</a> f := f.<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.left_inv">left_inv</a>
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.right_inv">right_inv</a> f := f.<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.right_inv">right_inv</a>
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe_injective'">coe_injective'</a> f g h₁ h₂ := by cases f; cases g; congr; exact <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe_injective'">EquivLike.coe_injective'</a> _ _ h₁ h₂
+
+@[ext] theorem ext {f g : MyIso A B} (h : ∀ x, f x = g x) : f = g := <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.ext">DFunLike.ext</a> f g h
+
+/-- Copy of a `MyIso` with a new `toFun` equal to the old one. Useful to fix definitional
+equalities. -/
+protected def copy (f : MyIso A B) (f' : A → B) (f_inv : B → A)
+    (h₁ : f' = f) (h₂ : f_inv = f.invFun) : MyIso A B where
+  toFun := f'
+  invFun := f_inv
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.left_inv">left_inv</a> := h₁.<a href="../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a> ▸ h₂.<a href="../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a> ▸ f.<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.left_inv">left_inv</a>
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.right_inv">right_inv</a> := h₁.<a href="../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a> ▸ h₂.<a href="../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a> ▸ f.<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.right_inv">right_inv</a>
+  map_op' := h₁.<a href="../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a> ▸ f.map_op'
+
+end MyIso
+</code></pre><p>This file will then provide a <code><a href="../../.././Init/Coe.html#CoeFun">CoeFun</a></code> instance and various
+extensionality and simp lemmas.</p><h2 id="Isomorphism-classes-extending-EquivLike" class="markdown-heading">Isomorphism classes extending <code><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a></code> <a class="hover-link" href="#Isomorphism-classes-extending-EquivLike">#</a></h2><p>The <code><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a></code> design provides further benefits if you put in a bit more work.
+The first step is to extend <code><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a></code> to create a class of those types satisfying
+the axioms of your new type of isomorphisms.
+Continuing the example above:</p><pre><code>/-- `MyIsoClass F A B` states that `F` is a type of `MyClass.op`-preserving morphisms.
+You should extend this class when you extend `MyIso`. -/
+class MyIsoClass (F : Type*) (A B : <a href="../../.././Init/Prelude.html#outParam">outParam</a> Type*) [MyClass A] [MyClass B]
+    [EquivLike F A B]
+    extends MyHomClass F A B
+
+namespace MyIso
+
+variable {A B : Type*} [MyClass A] [MyClass B]
+
+-- This goes after `MyIsoClass.instEquivLike`:
+instance : MyIsoClass (MyIso A B) A B where
+  map_op := MyIso.map_op'
+
+-- [Insert `ext` and `copy` here]
+
+end MyIso
+</code></pre><p>The second step is to add instances of your new <code>MyIsoClass</code> for all types extending <code>MyIso</code>.
+Typically, you can just declare a new class analogous to <code>MyIsoClass</code>:</p><pre><code>structure CoolerIso (A B : Type*) [CoolClass A] [CoolClass B] extends MyIso A B where
+  (map_cool' : toFun CoolClass.cool = CoolClass.cool)
+
+class CoolerIsoClass (F : Type*) (A B : <a href="../../.././Init/Prelude.html#outParam">outParam</a> Type*) [CoolClass A] [CoolClass B]
+    [EquivLike F A B]
+    extends MyIsoClass F A B where
+  (map_cool : ∀ (f : F), f CoolClass.cool = CoolClass.cool)
+
+@[simp] <a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> map_cool {F A B : Type*} [CoolClass A] [CoolClass B]
+    [EquivLike F A B] [CoolerIsoClass F A B] (f : F) :
+    f CoolClass.cool = CoolClass.cool :=
+  CoolerIsoClass.map_cool _
+
+namespace CoolerIso
+
+variable {A B : Type*} [CoolClass A] [CoolClass B]
+
+instance : <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> (CoolerIso A B) A B where
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe">coe</a> f := f.toFun
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv">inv</a> f := f.invFun
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.left_inv">left_inv</a> f := f.<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.left_inv">left_inv</a>
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.right_inv">right_inv</a> f := f.<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.right_inv">right_inv</a>
+  <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe_injective'">coe_injective'</a> f g h₁ h₂ := by cases f; cases g; congr; exact <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe_injective'">EquivLike.coe_injective'</a> _ _ h₁ h₂
+
+instance : CoolerIsoClass (CoolerIso A B) A B where
+  map_op f := f.map_op'
+  map_cool f := f.map_cool'
+
+-- [Insert `ext` and `copy` here]
+
+end CoolerIso
+</code></pre><p>Then any declaration taking a specific type of morphisms as parameter can instead take the
+class you just defined:</p><pre><code>-- Compare with: <a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> do_something (f : MyIso A B) : sorry := sorry
+<a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> do_something {F : Type*} [EquivLike F A B] [MyIsoClass F A B] (f : F) : sorry := sorry
+</code></pre><p>This means anything set up for <code>MyIso</code>s will automatically work for <code>CoolerIsoClass</code>es,
+and defining <code>CoolerIsoClass</code> only takes a constant amount of effort,
+instead of linearly increasing the work per <code>MyIso</code>-related declaration.</p></div><div class="decl" id="EquivLike"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L131-L150">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike"><span class="name">EquivLike</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><a href="../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../.././foundational_types.html">(Sort</a> u_2)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../.././foundational_types.html">(Sort</a> u_3)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Sort</a> (max (max (max 1 u_1) u_2) u_3)</div></div><p>The class <code><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> E α β</code> expresses that terms of type <code>E</code> have an
+injective coercion to bijections between <code>α</code> and <code>β</code>.</p><p>Note that this does not directly extend <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code>, nor take <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code> as a parameter,
+so we can state <code><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe_injective'">coe_injective'</a></code> in a nicer way.</p><p>This typeclass is used in the definition of the isomorphism (or equivalence) typeclasses,
+such as <code>ZeroEquivClass</code>, <code><a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#MulEquivClass">MulEquivClass</a></code>, <code>MonoidEquivClass</code>, ....</p><ul class="structure_fields" id="EquivLike.mk"><li id="EquivLike.coe" class="structure_field"><div class="structure_field_info">coe : <span class="fn"><span class="fn">E</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span></div><div class="structure_field_doc"><p>The coercion to a function in the forward direction.</p></div></li><li id="EquivLike.inv" class="structure_field"><div class="structure_field_info">inv : <span class="fn"><span class="fn">E</span> → <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span></span></div><div class="structure_field_doc"><p>The coercion to a function in the backwards direction.</p></div></li><li id="EquivLike.left_inv" class="structure_field"><div class="structure_field_info">left_inv<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">E</span>)</span></span>
+ : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.LeftInverse">Function.LeftInverse</a> <span class="fn">(<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv">inv</a> <span class="fn">e</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe">coe</a> <span class="fn">e</span>)</span></span></div><div class="structure_field_doc"><p>The coercions are left inverses.</p></div></li><li id="EquivLike.right_inv" class="structure_field"><div class="structure_field_info">right_inv<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">E</span>)</span></span>
+ : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.RightInverse">Function.RightInverse</a> <span class="fn">(<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv">inv</a> <span class="fn">e</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe">coe</a> <span class="fn">e</span>)</span></span></div><div class="structure_field_doc"><p>The coercions are right inverses.</p></div></li><li id="EquivLike.coe_injective'" class="structure_field"><div class="structure_field_info">coe_injective'<span class="decl_args">
+<span class="fn">(<span class="fn">e </span><span class="fn">g</span> : <span class="fn">E</span>)</span></span>
+ : <span class="fn"><span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe">coe</a> <span class="fn">e</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe">coe</a> <span class="fn">g</span></span> → <span class="fn"><span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv">inv</a> <span class="fn">e</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv">inv</a> <span class="fn">g</span></span> → <span class="fn">e</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></span></span></div><div class="structure_field_doc"><p>The two coercions to functions are jointly injective.</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-EquivLike" class="instances-list"></ul></details></div></div><div class="decl" id="EquivLike.inv_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L158-L159">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv_injective"><span class="name">EquivLike</span>.<span class="name">inv_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv">inv</a></span></div></div></div></div><div class="decl" id="EquivLike.toFunLike"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L161-L164">source</a></div><div class="attributes">@[implicit_reducible, instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.toFunLike"><span class="name">EquivLike</span>.<span class="name">toFunLike</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.toFunLike">EquivLike.toFunLike</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.mk">{</a> <span class="fn">coe</span> := <a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe">EquivLike.coe</a>, <span class="fn">coe_injective'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.mk">}</a></li></ul></details></div></div><div class="decl" id="EquivLike.coe_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L166-L166">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe_apply"><span class="name">EquivLike</span>.<span class="name">coe_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn">E</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.coe">coe</a> <span class="fn">e</span> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">e</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="EquivLike.inv_apply_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L168-L170">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv_apply_eq"><span class="name">EquivLike</span>.<span class="name">inv_apply_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn">E</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">β</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv">inv</a> <span class="fn">e</span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">b</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">e</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="EquivLike.toEmbeddingLike"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L172-L173">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.toEmbeddingLike"><span class="name">EquivLike</span>.<span class="name">toEmbeddingLike</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="EquivLike.injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L175-L176">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.injective"><span class="name">EquivLike</span>.<span class="name">injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">e</span></span></span></div></div></div></div><div class="decl" id="EquivLike.surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L178-L179">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.surjective"><span class="name">EquivLike</span>.<span class="name">surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">e</span></span></span></div></div></div></div><div class="decl" id="EquivLike.bijective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L181-L182">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.bijective"><span class="name">EquivLike</span>.<span class="name">bijective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">⇑<span class="fn">e</span></span></span></div></div></div></div><div class="decl" id="EquivLike.apply_eq_iff_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L184-L185">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.apply_eq_iff_eq"><span class="name">EquivLike</span>.<span class="name">apply_eq_iff_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">E</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span></div></div></div></div><div class="decl" id="EquivLike.injective_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L187-L189">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.injective_comp"><span class="name">EquivLike</span>.<span class="name">injective_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">e</span></span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="EquivLike.surjective_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L191-L193">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.surjective_comp"><span class="name">EquivLike</span>.<span class="name">surjective_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">e</span></span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="EquivLike.bijective_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L195-L197">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.bijective_comp"><span class="name">EquivLike</span>.<span class="name">bijective_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> (<span class="fn">f</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">e</span></span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="EquivLike.inv_apply_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L199-L206">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv_apply_apply"><span class="name">EquivLike</span>.<span class="name">inv_apply_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv">inv</a> <span class="fn">e</span> <span class="fn">(<span class="fn">e</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></div></div><p>This lemma is only supposed to be used in the generic context, when working with instances
+of classes extending <code><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a></code>.
+For concrete isomorphism types such as <code><a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">Equiv</a></code>, you should use <code><a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm_apply_apply">Equiv.symm_apply_apply</a></code>
+or its equivalent.</p><p>TODO: define a generic form of <code><a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">Equiv.symm</a></code>.</p></div></div><div class="decl" id="EquivLike.apply_inv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L208-L215">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.apply_inv_apply"><span class="name">EquivLike</span>.<span class="name">apply_inv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">E</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">e</span> <span class="fn">(<a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.inv">inv</a> <span class="fn">e</span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span></div></div><p>This lemma is only supposed to be used in the generic context, when working with instances
+of classes extending <code><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a></code>.
+For concrete isomorphism types such as <code><a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">Equiv</a></code>, you should use <code><a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.apply_symm_apply">Equiv.apply_symm_apply</a></code>
+or its equivalent.</p><p>TODO: define a generic form of <code><a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">Equiv.symm</a></code>.</p></div></div><div class="decl" id="EquivLike.comp_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L217-L218">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.comp_injective"><span class="name">EquivLike</span>.<span class="name">comp_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">F</span> <span class="fn">β</span> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> (<span class="fn">⇑<span class="fn">e</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="EquivLike.comp_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L220-L222">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.comp_surjective"><span class="name">EquivLike</span>.<span class="name">comp_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">F</span> <span class="fn">β</span> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> (<span class="fn">⇑<span class="fn">e</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="EquivLike.comp_bijective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L224-L226">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.comp_bijective"><span class="name">EquivLike</span>.<span class="name">comp_bijective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">F</span> <span class="fn">β</span> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> (<span class="fn">⇑<span class="fn">e</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Logic/Function/Defs.html#Function.Bijective">Function.Bijective</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="EquivLike.subsingleton_dom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Equiv.lean#L229-L231">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike.subsingleton_dom"><span class="name">EquivLike</span>.<span class="name">subsingleton_dom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">E</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">E</span></span></div></div><p>This is not an instance to avoid slowing down every single <code><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a></code> typeclass search.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

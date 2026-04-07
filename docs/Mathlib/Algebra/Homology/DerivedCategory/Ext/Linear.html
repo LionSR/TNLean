@@ -1,0 +1,386 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../../.././style.css"></link><link rel="icon" href="../../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Homology.DerivedCategory.Ext.Linear</title><script defer="true" src="../../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Homology.DerivedCategory.Ext.Linear";</script><script type="module" src="../../../../.././jump-src.js"></script><script type="module" src="../../../../.././search.js"></script><script type="module" src="../../../../.././expand-nav.js"></script><script type="module" src="../../../../.././how-about.js"></script><script type="module" src="../../../../.././instances.js"></script><script type="module" src="../../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Homology</span>.<span class="name">DerivedCategory</span>.<span class="name">Ext</span>.<span class="name">Linear</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../../.././Init.html">Init</a></li><li><a href="../../../../.././Mathlib/LinearAlgebra/BilinearMap.html">Mathlib.LinearAlgebra.BilinearMap</a></li><li><a href="../../../../.././Mathlib/Algebra/Module/TransferInstance.html">Mathlib.Algebra.Module.TransferInstance</a></li><li><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Linear.html">Mathlib.Algebra.Homology.DerivedCategory.Linear</a></li><li><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html">Mathlib.Algebra.Homology.DerivedCategory.Ext.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Homology.DerivedCategory.Ext.Linear" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.instModule"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">instModule</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.smul_eq_comp_mk₀"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">smul_eq_comp_mk₀</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.smul_hom"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">smul_hom</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.comp_smul"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">comp_smul</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.smul_comp"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">smul_comp</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.homLinearEquiv"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">homLinearEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.homLinearEquiv_symm_apply"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">homLinearEquiv_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.homLinearEquiv_apply"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">homLinearEquiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.mk₀_smul"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">mk₀_smul</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.linearEquiv₀"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">linearEquiv₀</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.linearEquiv₀_symm_apply"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">linearEquiv₀_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.mk₀_linearEquiv₀_apply"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">mk₀_linearEquiv₀_apply</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.bilinearCompOfLinear"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">bilinearCompOfLinear</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.bilinearCompOfLinear_apply_apply"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">bilinearCompOfLinear_apply_apply</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.postcompOfLinear"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">postcompOfLinear</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.Ext.precompOfLinear"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">precompOfLinear</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Ext-modules-in-linear-categories" class="markdown-heading">Ext-modules in linear categories <a class="hover-link" href="#Ext-modules-in-linear-categories">#</a></h1><p>In this file, we show that if <code>C</code> is an <code>R</code>-linear abelian category,
+then there is an <code>R</code>-module structure on the groups <code><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Ext.html#Ext">Ext</a> X Y n</code>
+for <code>X</code> and <code>Y</code> in <code>C</code> and <code>n : ℕ</code>.</p></div><div class="decl" id="CategoryTheory.Abelian.Ext.instModule"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L39-L41">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.instModule"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">instModule</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">(<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">n</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.instModule">CategoryTheory.Abelian.Ext.instModule</a> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Algebra/Module/TransferInstance.html#Equiv.module">Equiv.module</a> <span class="fn">R</span> <a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.homEquiv">CategoryTheory.Abelian.Ext.homEquiv</a></span></li></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.smul_eq_comp_mk₀"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L43-L50">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.smul_eq_comp_mk₀"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">smul_eq_comp_mk₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">r</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">x</span>.<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.comp">comp</a></span> <span class="fn">(<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.mk₀">mk₀</a> (<span class="fn">r</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.id">CategoryStruct.id</a> <span class="fn">Y</span></span>))</span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.smul_hom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L52-L55">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.smul_hom"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">smul_hom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Basic.html#HasDerivedCategory">HasDerivedCategory</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">r</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>).<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.hom">hom</a></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.hom">hom</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.comp_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L57-L62">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.comp_smul"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">comp_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">Y</span> <span class="fn">Z</span> <span class="fn">b</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">α</span>.<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.comp">comp</a></span> (<span class="fn">r</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">β</span>) <span class="fn">h</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn"><span class="fn">α</span>.<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.comp">comp</a></span> <span class="fn">β</span> <span class="fn">h</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.smul_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L64-L69">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.smul_comp"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">smul_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">Y</span> <span class="fn">Z</span> <span class="fn">b</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">c</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">r</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">α</span>).<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.comp">comp</a></span> <span class="fn">β</span> <span class="fn">h</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn"><span class="fn">α</span>.<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.comp">comp</a></span> <span class="fn">β</span> <span class="fn">h</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.homLinearEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L72-L80">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.homLinearEquiv"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">homLinearEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Basic.html#HasDerivedCategory">HasDerivedCategory</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">n</span></span> <a href="../../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">R</span><a href="../../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Shift/ShiftedHom.html#CategoryTheory.ShiftedHom">ShiftedHom</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Basic.html#DerivedCategory.singleFunctor">DerivedCategory.singleFunctor</a> <span class="fn">C</span> <span class="fn">0</span>)</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Basic.html#DerivedCategory.singleFunctor">DerivedCategory.singleFunctor</a> <span class="fn">C</span> <span class="fn">0</span>)</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span>)</span> <span class="fn">↑<span class="fn">n</span></span></span></div></div><p>When an instance of <code>[HasDerivedCategory.{w'} C]</code> is available, this is the <code>R</code>-linear
+equivalence between <code>Ext.{w} X Y n</code> and a type of morphisms in the derived category
+of the <code>R</code>-linear abelian category <code>C</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.Ext.homLinearEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.homLinearEquiv_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L75-L75">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.homLinearEquiv_symm_apply"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">homLinearEquiv_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Basic.html#HasDerivedCategory">HasDerivedCategory</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a✝</span> : <span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Shift/ShiftedHom.html#CategoryTheory.ShiftedHom">ShiftedHom</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Basic.html#DerivedCategory.singleFunctor">DerivedCategory.singleFunctor</a> <span class="fn">C</span> <span class="fn">0</span>)</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X</span>)</span> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Basic.html#DerivedCategory.singleFunctor">DerivedCategory.singleFunctor</a> <span class="fn">C</span> <span class="fn">0</span>)</span>.<a href="../../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">Y</span>)</span> <span class="fn">↑<span class="fn">n</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.homLinearEquiv">homLinearEquiv</a>.<a href="../../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">a✝</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.homAddEquiv">homAddEquiv</a>.<a href="../../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.invFun">invFun</a></span> <span class="fn">a✝</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.homLinearEquiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L75-L75">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.homLinearEquiv_apply"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">homLinearEquiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Basic.html#HasDerivedCategory">HasDerivedCategory</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a✝</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.homLinearEquiv">homLinearEquiv</a> <span class="fn">a✝</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.homAddEquiv">homAddEquiv</a>.<a href="../../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.toFun">toFun</a></span> <span class="fn">a✝</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.mk₀_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L82-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.mk₀_smul"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">mk₀_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">X</span> <a href="../../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.mk₀">mk₀</a> (<span class="fn">r</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>)</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span> <a href="../../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.mk₀">mk₀</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.linearEquiv₀"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L86-L91">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.linearEquiv₀"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">linearEquiv₀</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">0</span></span> <a href="../../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">R</span><a href="../../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn">X</span> <a href="../../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span></div></div><p>The linear equivalence <code><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Ext.html#Ext">Ext</a> X Y 0 ≃ₜ[R] (X ⟶ Y)</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.Ext.linearEquiv₀" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.linearEquiv₀_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L87-L87">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.linearEquiv₀_symm_apply"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">linearEquiv₀_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a✝</span> : <span class="fn">X</span> <a href="../../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.linearEquiv₀">linearEquiv₀</a>.<a href="../../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">a✝</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.mk₀">mk₀</a> <span class="fn">a✝</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.mk₀_linearEquiv₀_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L93-L96">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.mk₀_linearEquiv₀_apply"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">mk₀_linearEquiv₀_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.mk₀">mk₀</a> <span class="fn">(<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.linearEquiv₀">linearEquiv₀</a> <span class="fn">f</span>)</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.bilinearCompOfLinear"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L104-L114">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.bilinearCompOfLinear"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">bilinearCompOfLinear</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b </span><span class="fn">c</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">a</span></span> <a href="../../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">Y</span> <span class="fn">Z</span> <span class="fn">b</span></span> <a href="../../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Z</span> <span class="fn">c</span></span></div></div><p>The composition of <code><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Ext.html#Ext">Ext</a></code>, as a bilinear map.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.Ext.bilinearCompOfLinear" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.bilinearCompOfLinear_apply_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L105-L105">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.bilinearCompOfLinear_apply_apply"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">bilinearCompOfLinear_apply_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a </span><span class="fn">b </span><span class="fn">c</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">b</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">c</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">Y</span> <span class="fn">Z</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.bilinearCompOfLinear">bilinearCompOfLinear</a> <span class="fn">R</span> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">Z</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">c</span> <span class="fn">h</span>)</span> <span class="fn">α</span>)</span> <span class="fn">β</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">α</span>.<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext.comp">comp</a></span> <span class="fn">β</span> <span class="fn">h</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.postcompOfLinear"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L116-L120">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.postcompOfLinear"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">postcompOfLinear</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">Y</span> <span class="fn">Z</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn">C</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">n</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">a</span></span> <a href="../../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Z</span> <span class="fn">b</span></span></div></div><p>The postcomposition <code><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Ext.html#Ext">Ext</a> X Y a →ₗ[R] <a href="../../../../.././Mathlib/CategoryTheory/Abelian/Ext.html#Ext">Ext</a> X Z b</code> with <code>β : <a href="../../../../.././Mathlib/CategoryTheory/Abelian/Ext.html#Ext">Ext</a> Y Z n</code> when <code>a + n = b</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">β</span>.<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.postcompOfLinear">postcompOfLinear</a></span> <span class="fn">R</span> <span class="fn">X</span> <span class="fn">h</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.bilinearCompOfLinear">CategoryTheory.Abelian.Ext.bilinearCompOfLinear</a> <span class="fn">R</span> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">Z</span> <span class="fn">a</span> <span class="fn">n</span> <span class="fn">b</span> <span class="fn">h</span>)</span>.<a href="../../../../.././Mathlib/LinearAlgebra/BilinearMap.html#LinearMap.flip">flip</a></span> <span class="fn">β</span></span></li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.Ext.postcompOfLinear" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Abelian.Ext.precompOfLinear"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.lean#L122-L126">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.precompOfLinear"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">Ext</span>.<span class="name">precompOfLinear</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.HasExt">HasExt</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">n</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../../../.././foundational_types.html">Type</a> t)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear">Linear</a> <span class="fn">R</span> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Z</span> : <span class="fn">C</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <a href="../../../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">n</span> <a href="../../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">a</span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">Y</span> <span class="fn">Z</span> <span class="fn">a</span></span> <a href="../../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Basic.html#CategoryTheory.Abelian.Ext">Ext</a> <span class="fn">X</span> <span class="fn">Z</span> <span class="fn">b</span></span></div></div><p>The precomposition <code><a href="../../../../.././Mathlib/CategoryTheory/Abelian/Ext.html#Ext">Ext</a> Y Z a →ₗ[R] <a href="../../../../.././Mathlib/CategoryTheory/Abelian/Ext.html#Ext">Ext</a> X Z b</code> with <code>α : <a href="../../../../.././Mathlib/CategoryTheory/Abelian/Ext.html#Ext">Ext</a> X Y n</code> when <code>n + a = b</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">α</span>.<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.precompOfLinear">precompOfLinear</a></span> <span class="fn">R</span> <span class="fn">Z</span> <span class="fn">h</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../../.././Mathlib/Algebra/Homology/DerivedCategory/Ext/Linear.html#CategoryTheory.Abelian.Ext.bilinearCompOfLinear">CategoryTheory.Abelian.Ext.bilinearCompOfLinear</a> <span class="fn">R</span> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">Z</span> <span class="fn">n</span> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">h</span>)</span> <span class="fn">α</span></span></li></ul></details><details id="instances-for-list-CategoryTheory.Abelian.Ext.precompOfLinear" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

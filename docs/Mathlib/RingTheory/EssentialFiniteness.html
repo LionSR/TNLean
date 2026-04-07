@@ -1,0 +1,472 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.EssentialFiniteness</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.EssentialFiniteness";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">EssentialFiniteness</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/RingTheory/FiniteType.html">Mathlib.RingTheory.FiniteType</a></li><li><a href="../.././Mathlib/RingTheory/Localization/Defs.html">Mathlib.RingTheory.Localization.Defs</a></li><li><a href="../.././Mathlib/RingTheory/TensorProduct/Quotient.html">Mathlib.RingTheory.TensorProduct.Quotient</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.EssentialFiniteness" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.finset"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">finset</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.subalgebra"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">subalgebra</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.adjoin_mem_finset"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">adjoin_mem_finset</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.instFiniteTypeSubtypeMemSubalgebraSubalgebra"><span class="name">Algebra</span>.<span class="name">instFiniteTypeSubtypeMemSubalgebraSubalgebra</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.submonoid"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">submonoid</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.isLocalization"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">isLocalization</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.essFiniteType_cond_iff"><span class="name">Algebra</span>.<span class="name">essFiniteType_cond_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.essFiniteType_iff"><span class="name">Algebra</span>.<span class="name">essFiniteType_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.of_finiteType"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">of_finiteType</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.of_isLocalization"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">of_isLocalization</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.of_id"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">of_id</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.aux"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">aux</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.comp"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.essFiniteType_iff_exists_subalgebra"><span class="name">Algebra</span>.<span class="name">essFiniteType_iff_exists_subalgebra</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.baseChange"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">baseChange</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.of_comp"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">of_comp</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.comp_iff"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">comp_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.instEssFiniteTypeQuotientIdeal"><span class="name">Algebra</span>.<span class="name">instEssFiniteTypeQuotientIdeal</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.instEssFiniteTypeLocalization"><span class="name">Algebra</span>.<span class="name">instEssFiniteTypeLocalization</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.of_surjective"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">of_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.iff_of_algEquiv"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">iff_of_algEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.algHom_ext"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">algHom_ext</span></a></div><div class="nav_link"><a class="break_within" href="#Algebra.EssFiniteType.quotient_map"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">quotient_map</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.EssFiniteType"><span class="name">RingHom</span>.<span class="name">EssFiniteType</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.essFiniteType_algebraMap"><span class="name">RingHom</span>.<span class="name">essFiniteType_algebraMap</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.EssFiniteType.finset"><span class="name">RingHom</span>.<span class="name">EssFiniteType</span>.<span class="name">finset</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.FiniteType.essFiniteType"><span class="name">RingHom</span>.<span class="name">FiniteType</span>.<span class="name">essFiniteType</span></a></div><div class="nav_link"><a class="break_within" href="#RingHom.EssFiniteType.ext"><span class="name">RingHom</span>.<span class="name">EssFiniteType</span>.<span class="name">ext</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Essentially-of-finite-type-algebras" class="markdown-heading">Essentially of finite type algebras <a class="hover-link" href="#Essentially-of-finite-type-algebras">#</a></h1><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">Algebra.EssFiniteType</a></code>: The class of essentially of finite type algebras. An <code>R</code>-algebra is
+essentially of finite type if it is the localization of an algebra of finite type.</li><li><code><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.algHom_ext">Algebra.EssFiniteType.algHom_ext</a></code>: The algebra homomorphisms out from an algebra essentially of
+finite type is determined by its values on a finite set.</li></ul></div><div class="decl" id="Algebra.EssFiniteType"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L32-L42">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>An <code>R</code>-algebra is essentially of finite type if
+it is the localization of an algebra of finite type.
+See <code><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.essFiniteType_iff_exists_subalgebra">essFiniteType_iff_exists_subalgebra</a></code>.</p><p>For field extensions, this is equivalent to being finitely generated as a field.
+See <code><a href="../.././Mathlib/FieldTheory/IntermediateField/Adjoin/Algebra.html#IntermediateField.fg_top_iff">IntermediateField.fg_top_iff</a></code>.</p><ul class="structure_fields" id="Algebra.EssFiniteType.mk"><li id="Algebra.EssFiniteType.cond" class="structure_field"><div class="structure_field_info">cond : <span class="fn">∃ (<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">S</span></span>), <span class="fn"><a href="../.././Mathlib/RingTheory/Localization/Defs.html#IsLocalization">IsLocalization</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Group/Submonoid/Operations.html#Submonoid.comap">Submonoid.comap</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">adjoin</a> <span class="fn">R</span> <span class="fn">↑<span class="fn">s</span></span>)</span>)</span> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/Algebra/Group/Submonoid/Basic.html#IsUnit.submonoid">IsUnit.submonoid</a> <span class="fn">S</span>)</span>)</span> <span class="fn">S</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-Algebra.EssFiniteType" class="instances-list"></ul></details></div></div><div class="decl" id="Algebra.EssFiniteType.finset"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L44-L47">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.finset"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">finset</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">S</span></span></div></div><p>Let <code>S</code> be an <code>R</code>-algebra essentially of finite type, this is a choice of a finset <code>s ⊆ S</code>
+such that <code>S</code> is the localization of <code>R[s]</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.finset">Algebra.EssFiniteType.finset</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">⋯</span>.<a href="../.././Init/Classical.html#Exists.choose">choose</a></span></li></ul></details><details id="instances-for-list-Algebra.EssFiniteType.finset" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Algebra.EssFiniteType.subalgebra"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L49-L53">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable abbrev</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.subalgebra"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">subalgebra</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Basic.html#Subalgebra">Subalgebra</a> <span class="fn">R</span> <span class="fn">S</span></span></div></div><p>A choice of a subalgebra of finite type in an essentially of finite type algebra, such that
+its localization is the whole ring.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.subalgebra">Algebra.EssFiniteType.subalgebra</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">R</span> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.finset">Algebra.EssFiniteType.finset</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></span></li></ul></details><details id="instances-for-list-Algebra.EssFiniteType.subalgebra" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Algebra.EssFiniteType.adjoin_mem_finset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L55-L56">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.adjoin_mem_finset"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">adjoin_mem_finset</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">adjoin</a> <span class="fn">R</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.subalgebra">subalgebra</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">↑<span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.finset">finset</a> <span class="fn">R</span> <span class="fn">S</span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="Algebra.instFiniteTypeSubtypeMemSubalgebraSubalgebra"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L58-L61">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.instFiniteTypeSubtypeMemSubalgebraSubalgebra"><span class="name">Algebra</span>.<span class="name">instFiniteTypeSubtypeMemSubalgebraSubalgebra</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">FiniteType</a> <span class="fn">R</span> <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.subalgebra">EssFiniteType.subalgebra</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.submonoid"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L63-L66">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.submonoid"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">submonoid</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid">Submonoid</a> <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.subalgebra">subalgebra</a> <span class="fn">R</span> <span class="fn">S</span>)</span></span></span></div></div><p>A submonoid of <code><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.subalgebra">EssFiniteType.subalgebra</a> R S</code>, whose localization is the whole algebra <code>S</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.submonoid">Algebra.EssFiniteType.submonoid</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././Mathlib/Algebra/Group/Submonoid/Operations.html#Submonoid.comap">Submonoid.comap</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.subalgebra">Algebra.EssFiniteType.subalgebra</a> <span class="fn">R</span> <span class="fn">S</span>)</span>)</span> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/Algebra/Group/Submonoid/Basic.html#IsUnit.submonoid">IsUnit.submonoid</a> <span class="fn">S</span>)</span></span></li></ul></details><details id="instances-for-list-Algebra.EssFiniteType.submonoid" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Algebra.EssFiniteType.isLocalization"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L68-L70">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.isLocalization"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">isLocalization</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Localization/Defs.html#IsLocalization">IsLocalization</a> <span class="fn">(<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.submonoid">submonoid</a> <span class="fn">R</span> <span class="fn">S</span>)</span> <span class="fn">S</span></span></div></div></div></div><div class="decl" id="Algebra.essFiniteType_cond_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L72-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.essFiniteType_cond_iff"><span class="name">Algebra</span>.<span class="name">essFiniteType_cond_iff</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/Localization/Defs.html#IsLocalization">IsLocalization</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Group/Submonoid/Operations.html#Submonoid.comap">Submonoid.comap</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">adjoin</a> <span class="fn">R</span> <span class="fn">↑<span class="fn">σ</span></span>)</span>)</span> <span class="fn">S</span>)</span> <span class="fn">(<a href="../.././Mathlib/Algebra/Group/Submonoid/Basic.html#IsUnit.submonoid">IsUnit.submonoid</a> <span class="fn">S</span>)</span>)</span> <span class="fn">S</span></span> <a href="../.././Init/Core.html#Iff">↔</a>   <span class="fn">∀ (<span class="fn">s</span> : <span class="fn">S</span>), <span class="fn">∃ <span class="fn">t</span> ∈ <span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">adjoin</a> <span class="fn">R</span> <span class="fn">↑<span class="fn">σ</span></span></span>, <span class="fn"><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">t</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">t</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">adjoin</a> <span class="fn">R</span> <span class="fn">↑<span class="fn">σ</span></span></span></span></span></div></div></div></div><div class="decl" id="Algebra.essFiniteType_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L88-L93">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.essFiniteType_iff"><span class="name">Algebra</span>.<span class="name">essFiniteType_iff</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">S</span></span>), <span class="fn">∀ (<span class="fn">s</span> : <span class="fn">S</span>), <span class="fn">∃ <span class="fn">t</span> ∈ <span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">adjoin</a> <span class="fn">R</span> <span class="fn">↑<span class="fn">σ</span></span></span>, <span class="fn"><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">t</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">t</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">adjoin</a> <span class="fn">R</span> <span class="fn">↑<span class="fn">σ</span></span></span></span></span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.of_finiteType"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L95-L98">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.of_finiteType"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">of_finiteType</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">FiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.of_isLocalization"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L101-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.of_isLocalization"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">of_isLocalization</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid">Submonoid</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Localization/Defs.html#IsLocalization">IsLocalization</a> <span class="fn">M</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.of_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L111-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.of_id"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">of_id</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">R</span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.aux"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L116-L138">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.aux"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">aux</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Basic.html#Subalgebra">Subalgebra</a> <span class="fn">R</span> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hσ</span> : <span class="fn">∀ (<span class="fn">s</span> : <span class="fn">S</span>), <span class="fn">∃ <span class="fn">t</span> ∈ <span class="fn">σ</span>, <span class="fn"><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">t</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">t</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">σ</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">τ</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">T</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">T</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn">t</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">adjoin</a> <span class="fn">S</span> <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ <span class="fn">s</span> ∈ <span class="fn">σ</span>, <span class="fn"><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">t</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Basic.html#Subalgebra.map">Subalgebra.map</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Tower.html#IsScalarTower.toAlgHom">IsScalarTower.toAlgHom</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span>)</span> <span class="fn">σ</span></span> ⊔ <span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">adjoin</a> <span class="fn">R</span> <span class="fn">τ</span></span></span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L140-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.comp"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">comp</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h₁</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h₂</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">T</span></span></div></div></div></div><div class="decl" id="Algebra.essFiniteType_iff_exists_subalgebra"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L161-L166">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.essFiniteType_iff_exists_subalgebra"><span class="name">Algebra</span>.<span class="name">essFiniteType_iff_exists_subalgebra</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">S₀</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Subalgebra/Basic.html#Subalgebra">Subalgebra</a> <span class="fn">R</span> <span class="fn">S</span></span>) (<span class="fn">M</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid">Submonoid</a> <span class="fn">↥<span class="fn">S₀</span></span></span>), <span class="fn"><a href="../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">FiniteType</a> <span class="fn">R</span> <span class="fn">↥<span class="fn">S₀</span></span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Localization/Defs.html#IsLocalization">IsLocalization</a> <span class="fn">M</span> <span class="fn">S</span></span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.baseChange"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L168-L198">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.baseChange"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">baseChange</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">T</span> <span class="fn">(<a href="../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">T</span> <span class="fn">S</span>)</span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.of_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L200-L208">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.of_comp"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">of_comp</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">S</span> <span class="fn">T</span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.comp_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L210-L212">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.comp_iff"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">comp_iff</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">R</span> <span class="fn">S</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">T</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">S</span> <span class="fn">T</span></span></div></div></div></div><div class="decl" id="Algebra.instEssFiniteTypeQuotientIdeal"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L214-L215">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.instEssFiniteTypeQuotientIdeal"><span class="name">Algebra</span>.<span class="name">instEssFiniteTypeQuotientIdeal</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> (<span class="fn">S</span> <a href="../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">I</span>)</span></div></div></div></div><div class="decl" id="Algebra.instEssFiniteTypeLocalization"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L217-L219">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.instEssFiniteTypeLocalization"><span class="name">Algebra</span>.<span class="name">instEssFiniteTypeLocalization</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid">Submonoid</a> <span class="fn">S</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">(<a href="../.././Mathlib/GroupTheory/MonoidLocalization/Basic.html#Localization">Localization</a> <span class="fn">M</span>)</span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.of_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L224-L229">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.of_surjective"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">of_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">S</span> <a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">T</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">T</span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.iff_of_algEquiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L232-L235">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.iff_of_algEquiv"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">iff_of_algEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">S</span> <a href="../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">≃ₐ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Algebra/Equiv.html#AlgEquiv">]</a> <span class="fn">T</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">T</span></span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.algHom_ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L238-L246">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.algHom_ext"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">algHom_ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">S</span> <a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">→ₐ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Algebra/Hom.html#AlgHom">]</a> <span class="fn">T</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.finset">finset</a> <span class="fn">R</span> <span class="fn">S</span></span>, <span class="fn"><span class="fn">f</span> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="Algebra.EssFiniteType.quotient_map"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L248-L251">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.quotient_map"><span class="name">Algebra</span>.<span class="name">EssFiniteType</span>.<span class="name">quotient_map</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">EssFiniteType</a> (<span class="fn">R</span> <a href="../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">p</span>) (<span class="fn">S</span> <a href="../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Ideal.map">Ideal.map</a> <span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">S</span>)</span> <span class="fn">p</span></span>)</span></div></div></div></div><div class="decl" id="RingHom.EssFiniteType"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L259-L264">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType"><span class="name">RingHom</span>.<span class="name">EssFiniteType</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A ring hom is essentially of finite type if it is the composition of a localization map
+and a ring hom of finite type. See <code><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">Algebra.EssFiniteType</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType">EssFiniteType</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">Algebra.EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span></li></ul></details><details id="instances-for-list-RingHom.EssFiniteType" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="RingHom.essFiniteType_algebraMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L266-L268">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.essFiniteType_algebraMap"><span class="name">RingHom</span>.<span class="name">essFiniteType_algebraMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">S</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">R</span> <span class="fn">S</span>)</span>.<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType">EssFiniteType</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType">Algebra.EssFiniteType</a> <span class="fn">R</span> <span class="fn">S</span></span></div></div></div></div><div class="decl" id="RingHom.EssFiniteType.finset"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L270-L276">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType.finset"><span class="name">RingHom</span>.<span class="name">EssFiniteType</span>.<span class="name">finset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType">EssFiniteType</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">S</span></span></div></div><p>A choice of &quot;essential generators&quot; for a ring hom essentially of finite type.
+See <code>Algebra.EssFiniteType.<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType.ext">ext</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">hf</span>.<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType.finset">finset</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#Algebra.EssFiniteType.finset">Algebra.EssFiniteType.finset</a> <span class="fn">R</span> <span class="fn">S</span></span></li></ul></details><details id="instances-for-list-RingHom.EssFiniteType.finset" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="RingHom.FiniteType.essFiniteType"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L278-L281">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.FiniteType.essFiniteType"><span class="name">RingHom</span>.<span class="name">FiniteType</span>.<span class="name">essFiniteType</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/FiniteType.html#RingHom.FiniteType">FiniteType</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType">EssFiniteType</a></span></div></div></div></div><div class="decl" id="RingHom.EssFiniteType.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/EssentialFiniteness.lean#L283-L288">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType.ext"><span class="name">RingHom</span>.<span class="name">EssFiniteType</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">T</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">R</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType">EssFiniteType</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁ </span><span class="fn">g₂</span> : <span class="fn">S</span> <a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">T</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><span class="fn"><span class="fn">g₁</span>.<a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">g₂</span>.<a href="../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn"><span class="fn">hf</span>.<a href="../.././Mathlib/RingTheory/EssentialFiniteness.html#RingHom.EssFiniteType.finset">finset</a></span>, <span class="fn"><span class="fn">g₁</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g₂</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">g₁</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g₂</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

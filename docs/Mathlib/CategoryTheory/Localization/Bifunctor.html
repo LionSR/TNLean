@@ -1,0 +1,818 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.Localization.Bifunctor</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.Localization.Bifunctor";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Bifunctor</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/CategoryTheory/Functor/Currying.html">Mathlib.CategoryTheory.Functor.Currying</a></li><li><a href="../../.././Mathlib/CategoryTheory/Localization/Prod.html">Mathlib.CategoryTheory.Localization.Prod</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.Localization.Bifunctor" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.MorphismProperty.IsInvertedBy₂"><span class="name">CategoryTheory</span>.<span class="name">MorphismProperty</span>.<span class="name">IsInvertedBy₂</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.Lifting₂"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.Lifting₂.fst"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">fst</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.Lifting₂.flip"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">flip</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.Lifting₂.snd"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">snd</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.Lifting₂.uncurry"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">uncurry</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.lift₂"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.instLifting₂Lift₂"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">instLifting₂Lift₂</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.Lifting₂.liftingLift₂"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">liftingLift₂</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.Lifting₂.liftingLift₂Flip"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">liftingLift₂Flip</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.lift₂_iso_hom_app_app₁"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂_iso_hom_app_app₁</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.lift₂_iso_hom_app_app₂"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂_iso_hom_app_app₂</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.Lifting₂.compRight"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">compRight</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.lift₂NatTrans"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂NatTrans</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.lift₂NatTrans_app_app"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂NatTrans_app_app</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.natTrans₂_ext"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">natTrans₂_ext</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.lift₂NatIso"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂NatIso</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.lift₂NatIso_hom"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂NatIso_hom</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Localization.lift₂NatIso_inv"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂NatIso_inv</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Lifting-of-bifunctors" class="markdown-heading">Lifting of bifunctors <a class="hover-link" href="#Lifting-of-bifunctors">#</a></h1><p>In this file, in the context of the localization of categories, we extend the notion
+of lifting of functors to the case of bifunctors. As the localization of categories
+behaves well with respect to finite products of categories (when the classes of
+morphisms contain identities), all the definitions for bifunctors <code>C₁ ⥤ C₂ ⥤ E</code>
+are obtained by reducing to the case of functors <code>(C₁ × C₂) ⥤ E</code> by using
+currying and uncurrying.</p><p>Given morphism properties <code>W₁ : MorphismProperty C₁</code> and <code>W₂ : MorphismProperty C₂</code>,
+and a functor <code>F : C₁ ⥤ C₂ ⥤ E</code>, we define <code><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.MorphismProperty.IsInvertedBy₂">MorphismProperty.IsInvertedBy₂</a> W₁ W₂ F</code>
+as the condition that the functor <code>uncurry.obj F : C₁ × C₂ ⥤ E</code> inverts <code>W₁.prod W₂</code>.</p><p>If <code>L₁ : C₁ ⥤ D₁</code> and <code>L₂ : C₂ ⥤ D₂</code> are localization functors for <code>W₁</code> and <code>W₂</code>
+respectively, and <code>F : C₁ ⥤ C₂ ⥤ E</code> satisfies <code><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.MorphismProperty.IsInvertedBy₂">MorphismProperty.IsInvertedBy₂</a> W₁ W₂ F</code>,
+we introduce <code><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">Localization.lift₂</a> F hF L₁ L₂ : D₁ ⥤ D₂ ⥤ E</code> which is a bifunctor
+which lifts <code>F</code>.</p></div><div class="decl" id="CategoryTheory.MorphismProperty.IsInvertedBy₂"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L43-L48">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.MorphismProperty.IsInvertedBy₂"><span class="name">CategoryTheory</span>.<span class="name">MorphismProperty</span>.<span class="name">IsInvertedBy₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>Classes of morphisms <code>W₁ : MorphismProperty C₁</code> and <code>W₂ : MorphismProperty C₂</code> are said
+to be inverted by <code>F : C₁ ⥤ C₂ ⥤ E</code> if <code>W₁.prod W₂</code> is inverted by
+the functor <code>uncurry.obj F : C₁ × C₂ ⥤ E</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.MorphismProperty.IsInvertedBy₂">IsInvertedBy₂</a></span> <span class="fn">W₂</span> <span class="fn">F</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty.prod">prod</a></span> <span class="fn">W₂</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/IsInvertedBy.html#CategoryTheory.MorphismProperty.IsInvertedBy">IsInvertedBy</a></span> <span class="fn">(<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Currying.html#CategoryTheory.Functor.uncurry">CategoryTheory.Functor.uncurry</a>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">F</span>)</span></span></li></ul></details><details id="instances-for-list-CategoryTheory.MorphismProperty.IsInvertedBy₂" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.Lifting₂"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L58-L65">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Type</a> (max (max u_1 u_2) v_5)</div></div><p>Given functors <code>L₁ : C₁ ⥤ D₁</code>, <code>L₂ : C₂ ⥤ D₂</code>, morphisms properties <code>W₁</code> on <code>C₁</code>
+and <code>W₂</code> on <code>C₂</code>, and functors <code>F : C₁ ⥤ C₂ ⥤ E</code> and <code>F' : D₁ ⥤ D₂ ⥤ E</code>, we say
+<code><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> L₁ L₂ W₁ W₂ F F'</code> holds if <code>F</code> is induced by <code>F'</code>, up to an isomorphism.</p><ul class="structure_fields" id="CategoryTheory.Localization.Lifting₂.mk"><li id="CategoryTheory.Localization.Lifting₂.iso" class="structure_field"><div class="structure_field_info">iso : <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskeringLeft₂">Functor.whiskeringLeft₂</a> <span class="fn">E</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">L₁</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">L₂</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">F'</span></span> <a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">F</span></div><div class="structure_field_doc"><p>the isomorphism <code>(((whiskeringLeft₂ E).obj L₁).obj L₂).obj F' ≅ F</code> expressing
+that <code>F</code> is induced by <code>F'</code> up to an isomorphism</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-CategoryTheory.Localization.Lifting₂" class="instances-list"></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.Lifting₂.fst"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L70-L75">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.fst"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">fst</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">F'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X₁</span> : <span class="fn">C₁</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Localization.Lifting">Lifting</a> <span class="fn">L₂</span> <span class="fn">W₂</span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span> <span class="fn">(<span class="fn"><span class="fn">F'</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">(<span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span>)</span></span></div></div><p>If <code><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> L₁ L₂ W₁ W₂ F F'</code> holds, then <code>Lifting L₂ W₂ (F.obj X₁) (F'.obj (L₁.obj X₁))</code>
+holds for any <code>X₁ : C₁</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Localization.Lifting₂.fst" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.Lifting₂.flip"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L77-L78">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.flip"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">flip</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">F'</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₂</span> <span class="fn">L₁</span> <span class="fn">W₂</span> <span class="fn">W₁</span> <span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span> <span class="fn"><span class="fn">F'</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.flip">CategoryTheory.Localization.Lifting₂.flip</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">F'</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.mk">{</a> <span class="fn">iso</span> := <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.flipFunctor">CategoryTheory.flipFunctor</a> <span class="fn">C₁</span> <span class="fn">C₂</span> <span class="fn">E</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Functor.mapIso">mapIso</a></span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.iso">CategoryTheory.Localization.Lifting₂.iso</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">F'</span>)</span></span> <a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.mk">}</a></li></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.Lifting₂.snd"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L80-L85">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.snd"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">snd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">F'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X₂</span> : <span class="fn">C₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Localization.Lifting">Lifting</a> <span class="fn">L₁</span> <span class="fn">W₁</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₂</span>)</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">F'</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">(<span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₂</span>)</span>)</span></span></div></div><p>If <code><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> L₁ L₂ W₁ W₂ F F'</code> holds, then
+<code>Lifting L₁ W₁ (F.flip.obj X₂) (F'.flip.obj (L₂.obj X₂))</code> holds for any <code>X₂ : C₂</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.snd">CategoryTheory.Localization.Lifting₂.snd</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">F'</span> <span class="fn">X₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.fst">CategoryTheory.Localization.Lifting₂.fst</a> <span class="fn">L₂</span> <span class="fn">L₁</span> <span class="fn">W₂</span> <span class="fn">W₁</span> <span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span> <span class="fn"><span class="fn">F'</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span> <span class="fn">X₂</span></span></li></ul></details><details id="instances-for-list-CategoryTheory.Localization.Lifting₂.snd" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.Lifting₂.uncurry"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L87-L89">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.uncurry"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">uncurry</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">F'</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Localization.Lifting">Lifting</a> <span class="fn">(<span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Products/Basic.html#CategoryTheory.Functor.prod">prod</a></span> <span class="fn">L₂</span>)</span> <span class="fn">(<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty.prod">prod</a></span> <span class="fn">W₂</span>)</span> <span class="fn">(<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Currying.html#CategoryTheory.Functor.uncurry">Functor.uncurry</a>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">F</span>)</span> <span class="fn">(<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Currying.html#CategoryTheory.Functor.uncurry">Functor.uncurry</a>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">F'</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.uncurry">CategoryTheory.Localization.Lifting₂.uncurry</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">F'</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Localization.Lifting.mk">{</a> <span class="fn">iso</span> := <span class="fn"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Currying.html#CategoryTheory.Functor.uncurry">CategoryTheory.Functor.uncurry</a>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Functor.mapIso">mapIso</a></span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.iso">CategoryTheory.Localization.Lifting₂.iso</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">F'</span>)</span></span> <a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Localization.Lifting.mk">}</a></li></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.lift₂"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L101-L106">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn"><span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.MorphismProperty.IsInvertedBy₂">IsInvertedBy₂</a></span> <span class="fn">W₂</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span></div></div><p>Given localization functor <code>L₁ : C₁ ⥤ D₁</code> and <code>L₂ : C₂ ⥤ D₂</code> with respect
+to <code>W₁ : MorphismProperty C₁</code> and <code>W₂ : MorphismProperty C₂</code> respectively,
+and a bifunctor <code>F : C₁ ⥤ C₂ ⥤ E</code> which inverts <code>W₁</code> and <code>W₂</code>, this is
+the induced localized bifunctor <code>D₁ ⥤ D₂ ⥤ E</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">CategoryTheory.Localization.lift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Currying.html#CategoryTheory.Functor.curry">CategoryTheory.Functor.curry</a>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span>
+    <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Localization.lift">CategoryTheory.Localization.lift</a> <span class="fn">(<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Currying.html#CategoryTheory.Functor.uncurry">CategoryTheory.Functor.uncurry</a>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">F</span>)</span> <span class="fn">hF</span> <span class="fn">(<span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Products/Basic.html#CategoryTheory.Functor.prod">prod</a></span> <span class="fn">L₂</span>)</span>)</span></span></li></ul></details><details id="instances-for-list-CategoryTheory.Localization.lift₂" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.instLifting₂Lift₂"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L108-L111">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.instLifting₂Lift₂"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">instLifting₂Lift₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn"><span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.MorphismProperty.IsInvertedBy₂">IsInvertedBy₂</a></span> <span class="fn">W₂</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">lift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.Lifting₂.liftingLift₂"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L113-L115">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.liftingLift₂"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">liftingLift₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn"><span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.MorphismProperty.IsInvertedBy₂">IsInvertedBy₂</a></span> <span class="fn">W₂</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X₁</span> : <span class="fn">C₁</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Localization.Lifting">Lifting</a> <span class="fn">L₂</span> <span class="fn">W₂</span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">lift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">(<span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.liftingLift₂">CategoryTheory.Localization.Lifting₂.liftingLift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">X₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.fst">CategoryTheory.Localization.Lifting₂.fst</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">CategoryTheory.Localization.lift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span>)</span> <span class="fn">X₁</span></span></li></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.Lifting₂.liftingLift₂Flip"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L117-L119">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.liftingLift₂Flip"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">liftingLift₂Flip</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn"><span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.MorphismProperty.IsInvertedBy₂">IsInvertedBy₂</a></span> <span class="fn">W₂</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X₂</span> : <span class="fn">C₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Localization.Lifting">Lifting</a> <span class="fn">L₁</span> <span class="fn">W₁</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₂</span>)</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">lift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">(<span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₂</span>)</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.liftingLift₂Flip">CategoryTheory.Localization.Lifting₂.liftingLift₂Flip</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">X₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.snd">CategoryTheory.Localization.Lifting₂.snd</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">CategoryTheory.Localization.lift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span>)</span> <span class="fn">X₂</span></span></li></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.lift₂_iso_hom_app_app₁"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L121-L124">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂_iso_hom_app_app₁"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂_iso_hom_app_app₁</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn"><span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.MorphismProperty.IsInvertedBy₂">IsInvertedBy₂</a></span> <span class="fn">W₂</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X₁</span> : <span class="fn">C₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₂</span> : <span class="fn">C₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.iso">Lifting₂.iso</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">lift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₁</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Localization.Lifting.iso">Lifting.iso</a> <span class="fn">L₂</span> <span class="fn">W₂</span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">lift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">(<span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₂</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Localization.lift₂_iso_hom_app_app₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L126-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂_iso_hom_app_app₂"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂_iso_hom_app_app₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn"><span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.MorphismProperty.IsInvertedBy₂">IsInvertedBy₂</a></span> <span class="fn">W₂</span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X₁</span> : <span class="fn">C₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₂</span> : <span class="fn">C₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.iso">Lifting₂.iso</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">lift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₁</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₂</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Localization.Lifting.iso">Lifting.iso</a> <span class="fn">L₁</span> <span class="fn">W₁</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₂</span>)</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂">lift₂</a> <span class="fn">F</span> <span class="fn">hF</span> <span class="fn">L₁</span> <span class="fn">L₂</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Category.html#CategoryTheory.Functor.flip">flip</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">(<span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₂</span>)</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₁</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Localization.Lifting₂.compRight"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L142-L146">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.compRight"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">Lifting₂</span>.<span class="name">compRight</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F</span> <span class="fn">F'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E'</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_7, u_7}</a> <span class="fn">E'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">G</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">E</span> <span class="fn">E'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskeringRight">Functor.whiskeringRight</a> <span class="fn">C₂</span> <span class="fn">E</span> <span class="fn">E'</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">G</span>)</span>)</span>
+  <span class="fn">(<span class="fn"><span class="fn">F'</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskeringRight">Functor.whiskeringRight</a> <span class="fn">D₂</span> <span class="fn">E</span> <span class="fn">E'</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">G</span>)</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.lift₂NatTrans"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L159-L165">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂NatTrans"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂NatTrans</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F₁ </span><span class="fn">F₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F₁' </span><span class="fn">F₂'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₁</span> <span class="fn">F₁'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₂</span> <span class="fn">F₂'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">τ</span> : <span class="fn">F₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">F₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">F₁'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">F₂'</span></div></div><p>The natural transformation <code>F₁' ⟶ F₂'</code> of bifunctors induced by a
+natural transformation <code>τ : F₁ ⟶ F₂</code> when <code><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> L₁ L₂ W₁ W₂ F₁ F₁'</code>
+and <code><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> L₁ L₂ W₁ W₂ F₂ F₂'</code> hold.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Localization.lift₂NatTrans" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.lift₂NatTrans_app_app"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L167-L174">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂NatTrans_app_app"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂NatTrans_app_app</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F₁ </span><span class="fn">F₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F₁' </span><span class="fn">F₂'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₁</span> <span class="fn">F₁'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₂</span> <span class="fn">F₂'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">τ</span> : <span class="fn">F₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">F₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₁</span> : <span class="fn">C₁</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₂</span> : <span class="fn">C₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂NatTrans">lift₂NatTrans</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₁</span> <span class="fn">F₂</span> <span class="fn">F₁'</span> <span class="fn">F₂'</span> <span class="fn">τ</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">(<span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">(<span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₂</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.iso">Lifting₂.iso</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₁</span> <span class="fn">F₁'</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₁</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₂</span>)</span>
+    <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">τ</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₁</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₂</span>)</span> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂.iso">Lifting₂.iso</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₂</span> <span class="fn">F₂'</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₁</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X₂</span>)</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Localization.natTrans₂_ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L178-L181">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.natTrans₂_ext"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">natTrans₂_ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F₁' </span><span class="fn">F₂'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ </span><span class="fn">τ'</span> : <span class="fn">F₁'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">F₂'</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">X₁</span> : <span class="fn">C₁</span>) (<span class="fn">X₂</span> : <span class="fn">C₂</span>), <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">τ</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">(<span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">(<span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₂</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">τ'</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">(<span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">(<span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₂</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">τ</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">τ'</span></div></div></div></div><div class="decl" id="CategoryTheory.Localization.lift₂NatIso"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L184-L192">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂NatIso"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂NatIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F₁ </span><span class="fn">F₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F₁' </span><span class="fn">F₂'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₁</span> <span class="fn">F₁'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₂</span> <span class="fn">F₂'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">F₁</span> <a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">F₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">F₁'</span> <a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">F₂'</span></div></div><p>The natural isomorphism <code>F₁' ≅ F₂'</code> of bifunctors induced by a
+natural isomorphism <code>e : F₁ ≅ F₂</code> when <code><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> L₁ L₂ W₁ W₂ F₁ F₁'</code>
+and <code><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> L₁ L₂ W₁ W₂ F₂ F₂'</code> hold.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Localization.lift₂NatIso" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Localization.lift₂NatIso_hom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L187-L187">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂NatIso_hom"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂NatIso_hom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F₁ </span><span class="fn">F₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F₁' </span><span class="fn">F₂'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₁</span> <span class="fn">F₁'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₂</span> <span class="fn">F₂'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">F₁</span> <a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">F₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂NatIso">lift₂NatIso</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₁</span> <span class="fn">F₂</span> <span class="fn">F₁'</span> <span class="fn">F₂'</span> <span class="fn">e</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂NatTrans">lift₂NatTrans</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₁</span> <span class="fn">F₂</span> <span class="fn">F₁'</span> <span class="fn">F₂'</span> <span class="fn"><span class="fn">e</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.Localization.lift₂NatIso_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/Bifunctor.lean#L187-L187">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂NatIso_inv"><span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">lift₂NatIso_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₁</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_3, u_3}</a> <span class="fn">D₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_4, u_4}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_5, u_5}</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">W₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₁</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₁</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">W₂</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Composition.html#CategoryTheory.MorphismProperty.ContainsIdentities">ContainsIdentities</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F₁ </span><span class="fn">F₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F₁' </span><span class="fn">F₂'</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₁</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">E</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₁</span> <span class="fn">F₁'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.Lifting₂">Lifting₂</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₂</span> <span class="fn">F₂'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">F₁</span> <a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">F₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂NatIso">lift₂NatIso</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₁</span> <span class="fn">F₂</span> <span class="fn">F₁'</span> <span class="fn">F₂'</span> <span class="fn">e</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Localization/Bifunctor.html#CategoryTheory.Localization.lift₂NatTrans">lift₂NatTrans</a> <span class="fn">L₁</span> <span class="fn">L₂</span> <span class="fn">W₁</span> <span class="fn">W₂</span> <span class="fn">F₂</span> <span class="fn">F₁</span> <span class="fn">F₂'</span> <span class="fn">F₁'</span> <span class="fn"><span class="fn">e</span>.<a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

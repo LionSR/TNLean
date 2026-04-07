@@ -1,0 +1,447 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.UniformSpace.UniformApproximation</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.UniformSpace.UniformApproximation";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">UniformSpace</span>.<span class="name">UniformApproximation</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Topology/UniformSpace/LocallyUniformConvergence.html">Mathlib.Topology.UniformSpace.LocallyUniformConvergence</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.UniformSpace.UniformApproximation" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#continuousWithinAt_of_locally_uniform_approx_of_continuousWithinAt"><span class="name">continuousWithinAt_of_locally_uniform_approx_of_continuousWithinAt</span></a></div><div class="nav_link"><a class="break_within" href="#continuousAt_of_locally_uniform_approx_of_continuousAt"><span class="name">continuousAt_of_locally_uniform_approx_of_continuousAt</span></a></div><div class="nav_link"><a class="break_within" href="#continuousOn_of_locally_uniform_approx_of_continuousWithinAt"><span class="name">continuousOn_of_locally_uniform_approx_of_continuousWithinAt</span></a></div><div class="nav_link"><a class="break_within" href="#continuousOn_of_uniform_approx_of_continuousOn"><span class="name">continuousOn_of_uniform_approx_of_continuousOn</span></a></div><div class="nav_link"><a class="break_within" href="#continuous_of_locally_uniform_approx_of_continuousAt"><span class="name">continuous_of_locally_uniform_approx_of_continuousAt</span></a></div><div class="nav_link"><a class="break_within" href="#continuous_of_uniform_approx_of_continuous"><span class="name">continuous_of_uniform_approx_of_continuous</span></a></div><div class="nav_link"><a class="break_within" href="#TendstoLocallyUniformlyOn.continuousOn"><span class="name">TendstoLocallyUniformlyOn</span>.<span class="name">continuousOn</span></a></div><div class="nav_link"><a class="break_within" href="#TendstoUniformlyOn.continuousOn"><span class="name">TendstoUniformlyOn</span>.<span class="name">continuousOn</span></a></div><div class="nav_link"><a class="break_within" href="#TendstoLocallyUniformly.continuous"><span class="name">TendstoLocallyUniformly</span>.<span class="name">continuous</span></a></div><div class="nav_link"><a class="break_within" href="#TendstoUniformly.continuous"><span class="name">TendstoUniformly</span>.<span class="name">continuous</span></a></div><div class="nav_link"><a class="break_within" href="#tendsto_comp_of_locally_uniform_limit_within"><span class="name">tendsto_comp_of_locally_uniform_limit_within</span></a></div><div class="nav_link"><a class="break_within" href="#tendsto_comp_of_locally_uniform_limit"><span class="name">tendsto_comp_of_locally_uniform_limit</span></a></div><div class="nav_link"><a class="break_within" href="#TendstoLocallyUniformlyOn.tendsto_comp"><span class="name">TendstoLocallyUniformlyOn</span>.<span class="name">tendsto_comp</span></a></div><div class="nav_link"><a class="break_within" href="#TendstoUniformlyOn.tendsto_comp"><span class="name">TendstoUniformlyOn</span>.<span class="name">tendsto_comp</span></a></div><div class="nav_link"><a class="break_within" href="#TendstoLocallyUniformly.tendsto_comp"><span class="name">TendstoLocallyUniformly</span>.<span class="name">tendsto_comp</span></a></div><div class="nav_link"><a class="break_within" href="#TendstoUniformly.tendsto_comp"><span class="name">TendstoUniformly</span>.<span class="name">tendsto_comp</span></a></div><div class="nav_link"><a class="break_within" href="#uniformContinuousOn_of_uniform_approx_of_uniformContinuousOn"><span class="name">uniformContinuousOn_of_uniform_approx_of_uniformContinuousOn</span></a></div><div class="nav_link"><a class="break_within" href="#uniformContinuous_of_uniform_approx_of_uniformContinuous"><span class="name">uniformContinuous_of_uniform_approx_of_uniformContinuous</span></a></div><div class="nav_link"><a class="break_within" href="#TendstoUniformlyOn.uniformContinuousOn"><span class="name">TendstoUniformlyOn</span>.<span class="name">uniformContinuousOn</span></a></div><div class="nav_link"><a class="break_within" href="#TendstoUniformly.uniformContinuous"><span class="name">TendstoUniformly</span>.<span class="name">uniformContinuous</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Uniform-approximation" class="markdown-heading">Uniform approximation <a class="hover-link" href="#Uniform-approximation">#</a></h1><p>In this file, we give lemmas ensuring that a function is continuous if it can be approximated
+uniformly by continuous functions. We give various versions, within a set or the whole space, at
+a single point or at all points, with locally uniform approximation or uniform approximation. All
+the statements are derived from a statement about locally uniform approximation within a set at
+a point, called <code><a href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#continuousWithinAt_of_locally_uniform_approx_of_continuousWithinAt">continuousWithinAt_of_locally_uniform_approx_of_continuousWithinAt</a></code>.</p><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>Most results hold under weaker assumptions of locally uniform approximation. In a first section,
+we prove the results under these weaker assumptions. Then, we derive the results on uniform
+convergence from them.</p><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>Uniform limit, uniform convergence, tends uniformly to</p></div><div class="decl" id="continuousWithinAt_of_locally_uniform_approx_of_continuousWithinAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L40-L56">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#continuousWithinAt_of_locally_uniform_approx_of_continuousWithinAt"><span class="name">continuousWithinAt_of_locally_uniform_approx_of_continuousWithinAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#uniformity">uniformity</a> <span class="fn">β</span></span>, <span class="fn">∃ <span class="fn">t</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhdsWithin">nhdsWithin</a> <span class="fn">x</span> <span class="fn">s</span></span>, <span class="fn">∃ (<span class="fn">F</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousWithinAt">ContinuousWithinAt</a> <span class="fn">F</span> <span class="fn">s</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ <span class="fn">y</span> ∈ <span class="fn">t</span>, <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">F</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">u</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousWithinAt">ContinuousWithinAt</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">x</span></span></div></div><p>A function which can be locally uniformly approximated by functions which are continuous
+within a set at a point is continuous within this set at this point.</p></div></div><div class="decl" id="continuousAt_of_locally_uniform_approx_of_continuousAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L58-L65">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#continuousAt_of_locally_uniform_approx_of_continuousAt"><span class="name">continuousAt_of_locally_uniform_approx_of_continuousAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#uniformity">uniformity</a> <span class="fn">β</span></span>, <span class="fn">∃ <span class="fn">t</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span>, <span class="fn">∃ (<span class="fn">F</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousAt">ContinuousAt</a> <span class="fn">F</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ <span class="fn">y</span> ∈ <span class="fn">t</span>, <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">F</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">u</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousAt">ContinuousAt</a> <span class="fn">f</span> <span class="fn">x</span></span></div></div><p>A function which can be locally uniformly approximated by functions which are continuous at
+a point is continuous at this point.</p></div></div><div class="decl" id="continuousOn_of_locally_uniform_approx_of_continuousWithinAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L67-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#continuousOn_of_locally_uniform_approx_of_continuousWithinAt"><span class="name">continuousOn_of_locally_uniform_approx_of_continuousWithinAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> :
+  <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#uniformity">uniformity</a> <span class="fn">β</span></span>, <span class="fn">∃ <span class="fn">t</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhdsWithin">nhdsWithin</a> <span class="fn">x</span> <span class="fn">s</span></span>, <span class="fn">∃ (<span class="fn">F</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousWithinAt">ContinuousWithinAt</a> <span class="fn">F</span> <span class="fn">s</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ <span class="fn">y</span> ∈ <span class="fn">t</span>, <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">F</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">u</span></span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">f</span> <span class="fn">s</span></span></div></div><p>A function which can be locally uniformly approximated by functions which are continuous
+on a set is continuous on this set.</p></div></div><div class="decl" id="continuousOn_of_uniform_approx_of_continuousOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L75-L80">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#continuousOn_of_uniform_approx_of_continuousOn"><span class="name">continuousOn_of_uniform_approx_of_continuousOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#uniformity">uniformity</a> <span class="fn">β</span></span>, <span class="fn">∃ (<span class="fn">F</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">F</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ <span class="fn">y</span> ∈ <span class="fn">s</span>, <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">F</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">u</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">f</span> <span class="fn">s</span></span></div></div><p>A function which can be uniformly approximated by functions which are continuous on a set
+is continuous on this set.</p></div></div><div class="decl" id="continuous_of_locally_uniform_approx_of_continuousAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L82-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#continuous_of_locally_uniform_approx_of_continuousAt"><span class="name">continuous_of_locally_uniform_approx_of_continuousAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#uniformity">uniformity</a> <span class="fn">β</span></span>, <span class="fn">∃ <span class="fn">t</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span>, <span class="fn">∃ (<span class="fn">F</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousAt">ContinuousAt</a> <span class="fn">F</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ <span class="fn">y</span> ∈ <span class="fn">t</span>, <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">F</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">u</span></span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">f</span></span></div></div><p>A function which can be locally uniformly approximated by continuous functions is continuous.</p></div></div><div class="decl" id="continuous_of_uniform_approx_of_continuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L89-L94">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#continuous_of_uniform_approx_of_continuous"><span class="name">continuous_of_uniform_approx_of_continuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">L</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#uniformity">uniformity</a> <span class="fn">β</span></span>, <span class="fn">∃ (<span class="fn">F</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>), <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">F</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ (<span class="fn">y</span> : <span class="fn">α</span>), <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">F</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">u</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">f</span></span></div></div><p>A function which can be uniformly approximated by continuous functions is continuous.</p></div></div><div class="mod_doc"><h3 id="Uniform-limits" class="markdown-heading">Uniform limits <a class="hover-link" href="#Uniform-limits">#</a></h3><p>From the previous statements on uniform approximation, we deduce continuity results for uniform
+limits.</p></div><div class="decl" id="TendstoLocallyUniformlyOn.continuousOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L104-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#TendstoLocallyUniformlyOn.continuousOn"><span class="name">TendstoLocallyUniformlyOn</span>.<span class="name">continuousOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/LocallyUniformConvergence.html#TendstoLocallyUniformlyOn">TendstoLocallyUniformlyOn</a> <span class="fn">F</span> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">n</span> : <span class="fn">ι</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">p</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<span class="fn">F</span> <span class="fn">n</span>)</span> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">f</span> <span class="fn">s</span></span></div></div><p>A locally uniform limit on a set of functions which are continuous on this set is itself
+continuous on this set.</p></div></div><div class="decl" id="TendstoUniformlyOn.continuousOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L113-L117">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#TendstoUniformlyOn.continuousOn"><span class="name">TendstoUniformlyOn</span>.<span class="name">continuousOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/UniformConvergence.html#TendstoUniformlyOn">TendstoUniformlyOn</a> <span class="fn">F</span> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">n</span> : <span class="fn">ι</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">p</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">(<span class="fn">F</span> <span class="fn">n</span>)</span> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousOn">ContinuousOn</a> <span class="fn">f</span> <span class="fn">s</span></span></div></div><p>A uniform limit on a set of functions which are continuous on this set is itself continuous
+on this set.</p></div></div><div class="decl" id="TendstoLocallyUniformly.continuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L119-L123">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#TendstoLocallyUniformly.continuous"><span class="name">TendstoLocallyUniformly</span>.<span class="name">continuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/LocallyUniformConvergence.html#TendstoLocallyUniformly">TendstoLocallyUniformly</a> <span class="fn">F</span> <span class="fn">f</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">n</span> : <span class="fn">ι</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">p</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">(<span class="fn">F</span> <span class="fn">n</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">f</span></span></div></div><p>A locally uniform limit of continuous functions is continuous.</p></div></div><div class="decl" id="TendstoUniformly.continuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L125-L128">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#TendstoUniformly.continuous"><span class="name">TendstoUniformly</span>.<span class="name">continuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/UniformConvergence.html#TendstoUniformly">TendstoUniformly</a> <span class="fn">F</span> <span class="fn">f</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">n</span> : <span class="fn">ι</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">p</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">(<span class="fn">F</span> <span class="fn">n</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">f</span></span></div></div><p>A uniform limit of continuous functions is continuous.</p></div></div><div class="mod_doc"><h3 id="Composing-limits-under-uniform-convergence" class="markdown-heading">Composing limits under uniform convergence <a class="hover-link" href="#Composing-limits-under-uniform-convergence">#</a></h3><p>In general, if <code>Fₙ</code> converges pointwise to a function <code>f</code>, and <code>gₙ</code> tends to <code>x</code>, it is not true
+that <code>Fₙ gₙ</code> tends to <code>f x</code>. It is true however if the convergence of <code>Fₙ</code> to <code>f</code> is uniform. In
+this paragraph, we prove variations around this statement.</p></div><div class="decl" id="tendsto_comp_of_locally_uniform_limit_within"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L139-L151">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#tendsto_comp_of_locally_uniform_limit_within"><span class="name">tendsto_comp_of_locally_uniform_limit_within</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousWithinAt">ContinuousWithinAt</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">g</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhdsWithin">nhdsWithin</a> <span class="fn">x</span> <span class="fn">s</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hunif</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#uniformity">uniformity</a> <span class="fn">β</span></span>, <span class="fn">∃ <span class="fn">t</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhdsWithin">nhdsWithin</a> <span class="fn">x</span> <span class="fn">s</span></span>, <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">n</span> : <span class="fn">ι</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">p</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">∀ <span class="fn">y</span> ∈ <span class="fn">t</span>, <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">F</span> <span class="fn">n</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">u</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">F</span> <span class="fn">n</span> <span class="fn">(<span class="fn">g</span> <span class="fn">n</span>)</span></span>)</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span></span></div></div><p>If <code>Fₙ</code> converges locally uniformly on a neighborhood of <code>x</code> within a set <code>s</code> to a function <code>f</code>
+which is continuous at <code>x</code> within <code>s</code>, and <code>gₙ</code> tends to <code>x</code> within <code>s</code>, then <code>Fₙ (gₙ)</code> tends
+to <code>f x</code>.</p></div></div><div class="decl" id="tendsto_comp_of_locally_uniform_limit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L153-L160">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#tendsto_comp_of_locally_uniform_limit"><span class="name">tendsto_comp_of_locally_uniform_limit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousAt">ContinuousAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">g</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hunif</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#uniformity">uniformity</a> <span class="fn">β</span></span>, <span class="fn">∃ <span class="fn">t</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span></span>, <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">∀ᶠ</a> (<span class="fn">n</span> : <span class="fn">ι</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">in</a> <span class="fn">p</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Eventually">,</a> <span class="fn">∀ <span class="fn">y</span> ∈ <span class="fn">t</span>, <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">F</span> <span class="fn">n</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">u</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">F</span> <span class="fn">n</span> <span class="fn">(<span class="fn">g</span> <span class="fn">n</span>)</span></span>)</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span></span></div></div><p>If <code>Fₙ</code> converges locally uniformly on a neighborhood of <code>x</code> to a function <code>f</code> which is
+continuous at <code>x</code>, and <code>gₙ</code> tends to <code>x</code>, then <code>Fₙ (gₙ)</code> tends to <code>f x</code>.</p></div></div><div class="decl" id="TendstoLocallyUniformlyOn.tendsto_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L162-L167">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#TendstoLocallyUniformlyOn.tendsto_comp"><span class="name">TendstoLocallyUniformlyOn</span>.<span class="name">tendsto_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/LocallyUniformConvergence.html#TendstoLocallyUniformlyOn">TendstoLocallyUniformlyOn</a> <span class="fn">F</span> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousWithinAt">ContinuousWithinAt</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">g</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhdsWithin">nhdsWithin</a> <span class="fn">x</span> <span class="fn">s</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">F</span> <span class="fn">n</span> <span class="fn">(<span class="fn">g</span> <span class="fn">n</span>)</span></span>)</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span></span></div></div><p>If <code>Fₙ</code> tends locally uniformly to <code>f</code> on a set <code>s</code>, and <code>gₙ</code> tends to <code>x</code> within <code>s</code>, then
+<code>Fₙ gₙ</code> tends to <code>f x</code> if <code>f</code> is continuous at <code>x</code> within <code>s</code> and <code>x ∈ s</code>.</p></div></div><div class="decl" id="TendstoUniformlyOn.tendsto_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L169-L174">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#TendstoUniformlyOn.tendsto_comp"><span class="name">TendstoUniformlyOn</span>.<span class="name">tendsto_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/UniformConvergence.html#TendstoUniformlyOn">TendstoUniformlyOn</a> <span class="fn">F</span> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousWithinAt">ContinuousWithinAt</a> <span class="fn">f</span> <span class="fn">s</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">g</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhdsWithin">nhdsWithin</a> <span class="fn">x</span> <span class="fn">s</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">F</span> <span class="fn">n</span> <span class="fn">(<span class="fn">g</span> <span class="fn">n</span>)</span></span>)</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span></span></div></div><p>If <code>Fₙ</code> tends uniformly to <code>f</code> on a set <code>s</code>, and <code>gₙ</code> tends to <code>x</code> within <code>s</code>, then <code>Fₙ gₙ</code>
+tends to <code>f x</code> if <code>f</code> is continuous at <code>x</code> within <code>s</code>.</p></div></div><div class="decl" id="TendstoLocallyUniformly.tendsto_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L176-L179">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#TendstoLocallyUniformly.tendsto_comp"><span class="name">TendstoLocallyUniformly</span>.<span class="name">tendsto_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/LocallyUniformConvergence.html#TendstoLocallyUniformly">TendstoLocallyUniformly</a> <span class="fn">F</span> <span class="fn">f</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousAt">ContinuousAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">g</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">F</span> <span class="fn">n</span> <span class="fn">(<span class="fn">g</span> <span class="fn">n</span>)</span></span>)</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span></span></div></div><p>If <code>Fₙ</code> tends locally uniformly to <code>f</code>, and <code>gₙ</code> tends to <code>x</code>, then <code>Fₙ gₙ</code> tends to <code>f x</code>.</p></div></div><div class="decl" id="TendstoUniformly.tendsto_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L181-L184">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#TendstoUniformly.tendsto_comp"><span class="name">TendstoUniformly</span>.<span class="name">tendsto_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/UniformConvergence.html#TendstoUniformly">TendstoUniformly</a> <span class="fn">F</span> <span class="fn">f</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#ContinuousAt">ContinuousAt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">g</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">x</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">F</span> <span class="fn">n</span> <span class="fn">(<span class="fn">g</span> <span class="fn">n</span>)</span></span>)</span> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span></span></div></div><p>If <code>Fₙ</code> tends uniformly to <code>f</code>, and <code>gₙ</code> tends to <code>x</code>, then <code>Fₙ gₙ</code> tends to <code>f x</code>.</p></div></div><div class="mod_doc"><h3 id="Uniform-approximation-and-limit-of-uniformly-continuous-functions" class="markdown-heading">Uniform approximation and limit of uniformly continuous functions. <a class="hover-link" href="#Uniform-approximation-and-limit-of-uniformly-continuous-functions">#</a></h3></div><div class="decl" id="uniformContinuousOn_of_uniform_approx_of_uniformContinuousOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L193-L204">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#uniformContinuousOn_of_uniform_approx_of_uniformContinuousOn"><span class="name">uniformContinuousOn_of_uniform_approx_of_uniformContinuousOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#uniformity">uniformity</a> <span class="fn">β</span></span>, <span class="fn">∃ (<span class="fn">F</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>), <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuousOn">UniformContinuousOn</a> <span class="fn">F</span> <span class="fn">s</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ <span class="fn">y</span> ∈ <span class="fn">s</span>, <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">F</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">u</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuousOn">UniformContinuousOn</a> <span class="fn">f</span> <span class="fn">s</span></span></div></div><p>A function which can be uniformly approximated by functions which are uniformly continuous on a
+set is uniformly continuous on this set.</p></div></div><div class="decl" id="uniformContinuous_of_uniform_approx_of_uniformContinuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L206-L212">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#uniformContinuous_of_uniform_approx_of_uniformContinuous"><span class="name">uniformContinuous_of_uniform_approx_of_uniformContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#uniformity">uniformity</a> <span class="fn">β</span></span>, <span class="fn">∃ (<span class="fn">F</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>), <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuous">UniformContinuous</a> <span class="fn">F</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ (<span class="fn">y</span> : <span class="fn">α</span>), <a href="../../.././Init/Prelude.html#Prod.mk">(</a><span class="fn"><span class="fn">f</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn"><span class="fn">F</span> <span class="fn">y</span></span><a href="../../.././Init/Prelude.html#Prod.mk">)</a> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">u</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuous">UniformContinuous</a> <span class="fn">f</span></span></div></div><p>A function which can be uniformly approximated by uniformly continuous functions is uniformly
+continuous.</p></div></div><div class="decl" id="TendstoUniformlyOn.uniformContinuousOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L214-L220">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#TendstoUniformlyOn.uniformContinuousOn"><span class="name">TendstoUniformlyOn</span>.<span class="name">uniformContinuousOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/UniformConvergence.html#TendstoUniformlyOn">TendstoUniformlyOn</a> <span class="fn">F</span> <span class="fn">f</span> <span class="fn">p</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">n</span> : <span class="fn">ι</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">p</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuousOn">UniformContinuousOn</a> <span class="fn">(<span class="fn">F</span> <span class="fn">n</span>)</span> <span class="fn">s</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuousOn">UniformContinuousOn</a> <span class="fn">f</span> <span class="fn">s</span></span></div></div><p>A uniform limit on a set of functions which are uniformly continuous on this set is itself
+uniformly continuous on this set.</p></div></div><div class="decl" id="TendstoUniformly.uniformContinuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/UniformSpace/UniformApproximation.lean#L222-L227">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Topology/UniformSpace/UniformApproximation.html#TendstoUniformly.uniformContinuous"><span class="name">TendstoUniformly</span>.<span class="name">uniformContinuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter">Filter</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/UniformConvergence.html#TendstoUniformly">TendstoUniformly</a> <span class="fn">F</span> <span class="fn">f</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">∃ᶠ</a> (<span class="fn">n</span> : <span class="fn">ι</span>) <a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">in</a> <span class="fn">p</span><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Frequently">,</a> <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuous">UniformContinuous</a> <span class="fn">(<span class="fn">F</span> <span class="fn">n</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuous">UniformContinuous</a> <span class="fn">f</span></span></div></div><p>A uniform limit of uniformly continuous functions is uniformly continuous.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

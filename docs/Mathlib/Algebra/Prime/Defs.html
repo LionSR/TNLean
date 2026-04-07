@@ -1,0 +1,251 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.Prime.Defs</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.Prime.Defs";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">Prime</span>.<span class="name">Defs</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/GroupWithZero/Divisibility.html">Mathlib.Algebra.GroupWithZero.Divisibility</a></li><li><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html">Mathlib.Algebra.Group.Irreducible.Defs</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.Prime.Defs" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Prime"><span class="name">Prime</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.ne_zero"><span class="name">Prime</span>.<span class="name">ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.not_unit"><span class="name">Prime</span>.<span class="name">not_unit</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.not_dvd_one"><span class="name">Prime</span>.<span class="name">not_dvd_one</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.ne_one"><span class="name">Prime</span>.<span class="name">ne_one</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.dvd_or_dvd"><span class="name">Prime</span>.<span class="name">dvd_or_dvd</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.dvd_mul"><span class="name">Prime</span>.<span class="name">dvd_mul</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.isPrimal"><span class="name">Prime</span>.<span class="name">isPrimal</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.not_dvd_mul"><span class="name">Prime</span>.<span class="name">not_dvd_mul</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.dvd_of_dvd_pow"><span class="name">Prime</span>.<span class="name">dvd_of_dvd_pow</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.dvd_pow_iff_dvd"><span class="name">Prime</span>.<span class="name">dvd_pow_iff_dvd</span></a></div><div class="nav_link"><a class="break_within" href="#not_prime_zero"><span class="name">not_prime_zero</span></a></div><div class="nav_link"><a class="break_within" href="#not_prime_one"><span class="name">not_prime_one</span></a></div><div class="nav_link"><a class="break_within" href="#Irreducible.not_dvd_isUnit"><span class="name">Irreducible</span>.<span class="name">not_dvd_isUnit</span></a></div><div class="nav_link"><a class="break_within" href="#Irreducible.not_dvd_one"><span class="name">Irreducible</span>.<span class="name">not_dvd_one</span></a></div><div class="nav_link"><a class="break_within" href="#Irreducible.not_dvd_unit"><span class="name">Irreducible</span>.<span class="name">not_dvd_unit</span></a></div><div class="nav_link"><a class="break_within" href="#not_irreducible_zero"><span class="name">not_irreducible_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Irreducible.ne_zero"><span class="name">Irreducible</span>.<span class="name">ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Irreducible.dvd_symm"><span class="name">Irreducible</span>.<span class="name">dvd_symm</span></a></div><div class="nav_link"><a class="break_within" href="#Irreducible.dvd_comm"><span class="name">Irreducible</span>.<span class="name">dvd_comm</span></a></div><div class="nav_link"><a class="break_within" href="#Irreducible.prime_of_isPrimal"><span class="name">Irreducible</span>.<span class="name">prime_of_isPrimal</span></a></div><div class="nav_link"><a class="break_within" href="#Irreducible.prime"><span class="name">Irreducible</span>.<span class="name">prime</span></a></div><div class="nav_link"><a class="break_within" href="#Prime.irreducible"><span class="name">Prime</span>.<span class="name">irreducible</span></a></div><div class="nav_link"><a class="break_within" href="#irreducible_iff_prime"><span class="name">irreducible_iff_prime</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Prime-elements" class="markdown-heading">Prime elements <a class="hover-link" href="#Prime-elements">#</a></h1><p>In this file we define the predicate <code><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> p</code>
+saying that an element of a commutative monoid with zero is prime.
+Namely, <code><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> p</code> means that <code>p</code> isn't zero, it isn't a unit,
+and <code>p ∣ a * b → p ∣ a ∨ p ∣ b</code> for all <code>a</code>, <code>b</code>;</p><p>In decomposition monoids (e.g., <code>ℕ</code>, <code>ℤ</code>), this predicate is equivalent to <code><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a></code>
+(see <code><a href="../../.././Mathlib/Algebra/Prime/Defs.html#irreducible_iff_prime">irreducible_iff_prime</a></code>), however this is not true in general.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a></code>: a prime element of a commutative monoid with zero</li></ul><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../../.././Mathlib/Algebra/Prime/Defs.html#irreducible_iff_prime">irreducible_iff_prime</a></code>: the two definitions are equivalent in a decomposition monoid.</li></ul></div><div class="decl" id="Prime"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L41-L44">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime"><span class="name">Prime</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>An element <code>p</code> of a commutative monoid with zero (e.g., a ring) is called <em>prime</em>,
+if it's not zero, not a unit, and <code>p ∣ a * b → p ∣ a ∨ p ∣ b</code> for all <code>a</code>, <code>b</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> (<span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span> <a href="../../.././Init/Prelude.html#And">∧</a> <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ (<span class="fn">a </span><span class="fn">b</span> : <span class="fn">M</span>), <span class="fn"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span> → <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">b</span></span></span>)</li></ul></details><details id="instances-for-list-Prime" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Prime.ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L51-L52">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.ne_zero"><span class="name">Prime</span>.<span class="name">ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="Prime.not_unit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L54-L55">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.not_unit"><span class="name">Prime</span>.<span class="name">not_unit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="Prime.not_dvd_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L57-L58">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.not_dvd_one"><span class="name">Prime</span>.<span class="name">not_dvd_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Prime.ne_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L60-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.ne_one"><span class="name">Prime</span>.<span class="name">ne_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Prime.dvd_or_dvd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L62-L63">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.dvd_or_dvd"><span class="name">Prime</span>.<span class="name">dvd_or_dvd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">b</span></div></div></div></div><div class="decl" id="Prime.dvd_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L65-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.dvd_mul"><span class="name">Prime</span>.<span class="name">dvd_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#Or">∨</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">b</span></div></div></div></div><div class="decl" id="Prime.isPrimal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L68-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.isPrimal"><span class="name">Prime</span>.<span class="name">isPrimal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Divisibility/Basic.html#IsPrimal">IsPrimal</a> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="Prime.not_dvd_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L71-L72">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.not_dvd_mul"><span class="name">Prime</span>.<span class="name">not_dvd_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hb</span> : <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">b</span></div></div></div></div><div class="decl" id="Prime.dvd_of_dvd_pow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L74-L85">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.dvd_of_dvd_pow"><span class="name">Prime</span>.<span class="name">dvd_of_dvd_pow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="Prime.dvd_pow_iff_dvd"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L87-L88">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.dvd_pow_iff_dvd"><span class="name">Prime</span>.<span class="name">dvd_pow_iff_dvd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">n</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span> <a href="../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="not_prime_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L92-L93">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#not_prime_zero"><span class="name">not_prime_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">0</span></span></div></div></div></div><div class="decl" id="not_prime_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L95-L96">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#not_prime_one"><span class="name">not_prime_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">1</span></span></div></div></div></div><div class="decl" id="Irreducible.not_dvd_isUnit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L100-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Irreducible.not_dvd_isUnit"><span class="name">Irreducible</span>.<span class="name">not_dvd_isUnit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#CommMonoid">CommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">u</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hu</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">u</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">u</span></div></div></div></div><div class="decl" id="Irreducible.not_dvd_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L104-L105">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Irreducible.not_dvd_one"><span class="name">Irreducible</span>.<span class="name">not_dvd_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#CommMonoid">CommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Irreducible.not_dvd_unit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L107-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Irreducible.not_dvd_unit"><span class="name">Irreducible</span>.<span class="name">not_dvd_unit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#CommMonoid">CommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">u</span> : <span class="fn">M</span><a href="../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">↑<span class="fn">u</span></span></div></div></div></div><div class="decl" id="not_irreducible_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L111-L115">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#not_irreducible_zero"><span class="name">not_irreducible_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">0</span></span></div></div></div></div><div class="decl" id="Irreducible.ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L117-L118">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Irreducible.ne_zero"><span class="name">Irreducible</span>.<span class="name">ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#MonoidWithZero">MonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">p</span></span> → <span class="fn">p</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></span></div></div></div></div><div class="decl" id="Irreducible.dvd_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L120-L124">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Irreducible.dvd_symm"><span class="name">Irreducible</span>.<span class="name">dvd_symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">q</span> → <span class="fn">q</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">p</span></span></div></div><p>If <code>p</code> and <code>q</code> are irreducible, then <code>p ∣ q</code> implies <code>q ∣ p</code>.</p></div></div><div class="decl" id="Irreducible.dvd_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L126-L128">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Irreducible.dvd_comm"><span class="name">Irreducible</span>.<span class="name">dvd_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">q</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">q</span> <a href="../../.././Init/Prelude.html#Dvd.dvd">∣</a> <span class="fn">p</span></div></div></div></div><div class="decl" id="Irreducible.prime_of_isPrimal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L134-L138">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Irreducible.prime_of_isPrimal"><span class="name">Irreducible</span>.<span class="name">prime_of_isPrimal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">irr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">primal</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Divisibility/Basic.html#IsPrimal">IsPrimal</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="Irreducible.prime"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L140-L141">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Irreducible.prime"><span class="name">Irreducible</span>.<span class="name">prime</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Divisibility/Basic.html#DecompositionMonoid">DecompositionMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">irr</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="Prime.irreducible"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L149-L156">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime.irreducible"><span class="name">Prime</span>.<span class="name">irreducible</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#IsCancelMulZero">IsCancelMulZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="irreducible_iff_prime"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/Prime/Defs.lean#L158-L159">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/Prime/Defs.html#irreducible_iff_prime"><span class="name">irreducible_iff_prime</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#CommMonoidWithZero">CommMonoidWithZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/Defs.html#IsCancelMulZero">IsCancelMulZero</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Divisibility/Basic.html#DecompositionMonoid">DecompositionMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/Group/Irreducible/Defs.html#Irreducible">Irreducible</a> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Prime/Defs.html#Prime">Prime</a> <span class="fn">a</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,790 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.Normed.Algebra.TrivSqZeroExt</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.Normed.Algebra.TrivSqZeroExt";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">Normed</span>.<span class="name">Algebra</span>.<span class="name">TrivSqZeroExt</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Topology/Instances/TrivSqZeroExt.html">Mathlib.Topology.Instances.TrivSqZeroExt</a></li><li><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html">Mathlib.Analysis.Normed.Algebra.Exponential</a></li><li><a href="../../../.././Mathlib/Analysis/Normed/Lp/ProdLp.html">Mathlib.Analysis.Normed.Lp.ProdLp</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.Normed.Algebra.TrivSqZeroExt" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.fst_expSeries"><span class="name">TrivSqZeroExt</span>.<span class="name">fst_expSeries</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.snd_expSeries_of_smul_comm"><span class="name">TrivSqZeroExt</span>.<span class="name">snd_expSeries_of_smul_comm</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.hasSum_snd_expSeries_of_smul_comm"><span class="name">TrivSqZeroExt</span>.<span class="name">hasSum_snd_expSeries_of_smul_comm</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.hasSum_expSeries_of_smul_comm"><span class="name">TrivSqZeroExt</span>.<span class="name">hasSum_expSeries_of_smul_comm</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.exp_def_of_smul_comm"><span class="name">TrivSqZeroExt</span>.<span class="name">exp_def_of_smul_comm</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.exp_inl"><span class="name">TrivSqZeroExt</span>.<span class="name">exp_inl</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.exp_inr"><span class="name">TrivSqZeroExt</span>.<span class="name">exp_inr</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.exp_def"><span class="name">TrivSqZeroExt</span>.<span class="name">exp_def</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.fst_exp"><span class="name">TrivSqZeroExt</span>.<span class="name">fst_exp</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.snd_exp"><span class="name">TrivSqZeroExt</span>.<span class="name">snd_exp</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.eq_smul_exp_of_invertible"><span class="name">TrivSqZeroExt</span>.<span class="name">eq_smul_exp_of_invertible</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.eq_smul_exp_of_ne_zero"><span class="name">TrivSqZeroExt</span>.<span class="name">eq_smul_exp_of_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.instL1SeminormedAddCommGroup"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1SeminormedAddCommGroup</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.norm_def"><span class="name">TrivSqZeroExt</span>.<span class="name">norm_def</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.nnnorm_def"><span class="name">TrivSqZeroExt</span>.<span class="name">nnnorm_def</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.norm_inl"><span class="name">TrivSqZeroExt</span>.<span class="name">norm_inl</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.norm_inr"><span class="name">TrivSqZeroExt</span>.<span class="name">norm_inr</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.nnnorm_inl"><span class="name">TrivSqZeroExt</span>.<span class="name">nnnorm_inl</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.nnnorm_inr"><span class="name">TrivSqZeroExt</span>.<span class="name">nnnorm_inr</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.instL1SeminormedRing"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1SeminormedRing</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.instL1IsBoundedSMul"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1IsBoundedSMul</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.instNormOneClass"><span class="name">TrivSqZeroExt</span>.<span class="name">instNormOneClass</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.instL1SeminormedCommRing"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1SeminormedCommRing</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.instL1NormedAddCommGroup"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1NormedAddCommGroup</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.instL1NormedRing"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1NormedRing</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.instL1NormedCommRing"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1NormedCommRing</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.instL1NormedSpace"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1NormedSpace</span></a></div><div class="nav_link"><a class="break_within" href="#TrivSqZeroExt.instL1NormedAlgebra"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1NormedAlgebra</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Results-on-TrivSqZeroExt-R-M-related-to-the-norm" class="markdown-heading">Results on <code><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> R M</code> related to the norm <a class="hover-link" href="#Results-on-TrivSqZeroExt-R-M-related-to-the-norm">#</a></h1><p>This file contains results about <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a></code> for <code><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a></code>.</p><p>It also contains a definition of the $ℓ^1$ norm,
+which defines $\|r + m\| \coloneqq \|r\| + \|m\|$.
+This is not a particularly canonical choice of definition,
+but it is sufficient to provide a <code><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a></code> instance,
+and thus enables <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp_add_of_commute">NormedSpace.exp_add_of_commute</a></code> to be used on <code><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a></code>.
+If the non-canonicity becomes problematic in future,
+we could keep the collection of instances behind an <code>open scoped</code>.</p><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.fst_exp">TrivSqZeroExt.fst_exp</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.snd_exp">TrivSqZeroExt.snd_exp</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.exp_inl">TrivSqZeroExt.exp_inl</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.exp_inr">TrivSqZeroExt.exp_inr</a></code></li><li>The $ℓ^1$ norm on <code><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a></code>:<ul><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1SeminormedAddCommGroup">TrivSqZeroExt.instL1SeminormedAddCommGroup</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1SeminormedRing">TrivSqZeroExt.instL1SeminormedRing</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1SeminormedCommRing">TrivSqZeroExt.instL1SeminormedCommRing</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1IsBoundedSMul">TrivSqZeroExt.instL1IsBoundedSMul</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedAddCommGroup">TrivSqZeroExt.instL1NormedAddCommGroup</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedRing">TrivSqZeroExt.instL1NormedRing</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedCommRing">TrivSqZeroExt.instL1NormedCommRing</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedSpace">TrivSqZeroExt.instL1NormedSpace</a></code></li><li><code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedAlgebra">TrivSqZeroExt.instL1NormedAlgebra</a></code></li></ul></li></ul><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li>Generalize more of these results to non-commutative <code>R</code>. In principle, under sufficient conditions
+we should expect
+<code>(exp x).snd = ∫ t in 0..1, exp (t • x.fst) • op (exp ((1 - t) • x.fst)) • x.snd</code>
+(<a href="https://physics.stackexchange.com/a/41671/185147">Physics.SE</a>, and
+<a href="https://link.springer.com/chapter/10.1007/978-3-540-44953-9_2">https://link.springer.com/chapter/10.1007/978-3-540-44953-9_2</a>).</li></ul></div><div class="decl" id="TrivSqZeroExt.fst_expSeries"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L72-L74">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.fst_expSeries"><span class="name">TrivSqZeroExt</span>.<span class="name">fst_expSeries</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕜</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span> <span class="fn">n</span>)</span> <span class="fn">fun (<span class="fn">x_1</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span>) =&gt; <span class="fn">x</span></span>)</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕜</span> <span class="fn">R</span> <span class="fn">n</span>)</span> <span class="fn">fun (<span class="fn">x_1</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span>) =&gt; <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span></span></div></div></div></div><div class="decl" id="TrivSqZeroExt.snd_expSeries_of_smul_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L85-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.snd_expSeries_of_smul_comm"><span class="name">TrivSqZeroExt</span>.<span class="name">snd_expSeries_of_smul_comm</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕜</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite.op">MulOpposite.op</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>))</span> <span class="fn">fun (<span class="fn">x_1</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span>) =&gt; <span class="fn">x</span></span>)</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕜</span> <span class="fn">R</span> <span class="fn">n</span>)</span> <span class="fn">fun (<span class="fn">x_1</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span>) =&gt; <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span>)</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span></div></div></div></div><div class="decl" id="TrivSqZeroExt.hasSum_snd_expSeries_of_smul_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L93-L104">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.hasSum_snd_expSeries_of_smul_comm"><span class="name">TrivSqZeroExt</span>.<span class="name">hasSum_snd_expSeries_of_smul_comm</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕜</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite.op">MulOpposite.op</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasSum">HasSum</a> <span class="fn">(fun (<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕜</span> <span class="fn">R</span> <span class="fn">n</span>)</span> <span class="fn">fun (<span class="fn">x_1</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span>) =&gt; <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span></span>)</span> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasSum">HasSum</a> <span class="fn">(fun (<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span> <span class="fn">n</span>)</span> <span class="fn">fun (<span class="fn">x_1</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span>) =&gt; <span class="fn">x</span></span>)</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span>)</span> (<span class="fn">e</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span>)</span></div></div><p>If <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> R x.fst</code> converges to <code>e</code>
+then <code>(NormedSpace.exp R x).snd</code> converges to <code>e • x.snd</code>.</p></div></div><div class="decl" id="TrivSqZeroExt.hasSum_expSeries_of_smul_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L106-L115">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.hasSum_expSeries_of_smul_comm"><span class="name">TrivSqZeroExt</span>.<span class="name">hasSum_expSeries_of_smul_comm</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕜</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite.op">MulOpposite.op</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">e</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasSum">HasSum</a> <span class="fn">(fun (<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕜</span> <span class="fn">R</span> <span class="fn">n</span>)</span> <span class="fn">fun (<span class="fn">x_1</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span>) =&gt; <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span></span>)</span> <span class="fn">e</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasSum">HasSum</a> <span class="fn">(fun (<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span> <span class="fn">n</span>)</span> <span class="fn">fun (<span class="fn">x_1</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span>) =&gt; <span class="fn">x</span></span></span>)</span> (<span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inl">inl</a> <span class="fn">e</span></span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inr">inr</a> (<span class="fn">e</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span>)</span>)</span></div></div><p>If <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> R x.fst</code> converges to <code>e</code>
+then <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> R x</code> converges to <code>inl e + inr (e • x.snd)</code>.</p></div></div><div class="decl" id="TrivSqZeroExt.exp_def_of_smul_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L120-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.exp_def_of_smul_comm"><span class="name">TrivSqZeroExt</span>.<span class="name">exp_def_of_smul_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite.op">MulOpposite.op</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inl">inl</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span>)</span></span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inr">inr</a> (<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span>)</span></div></div></div></div><div class="decl" id="TrivSqZeroExt.exp_inl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L132-L135">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.exp_inl"><span class="name">TrivSqZeroExt</span>.<span class="name">exp_inl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inl">inl</a> <span class="fn">x</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inl">inl</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="TrivSqZeroExt.exp_inr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L137-L140">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.exp_inr"><span class="name">TrivSqZeroExt</span>.<span class="name">exp_inr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#Ring">Ring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inr">inr</a> <span class="fn">m</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inr">inr</a> <span class="fn">m</span></span></div></div></div></div><div class="decl" id="TrivSqZeroExt.exp_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L152-L153">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.exp_def"><span class="name">TrivSqZeroExt</span>.<span class="name">exp_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsCentralScalar">IsCentralScalar</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inl">inl</a> <span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span>)</span></span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inr">inr</a> (<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span>)</span></div></div></div></div><div class="decl" id="TrivSqZeroExt.fst_exp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L155-L157">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.fst_exp"><span class="name">TrivSqZeroExt</span>.<span class="name">fst_exp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsCentralScalar">IsCentralScalar</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span></div></div></div></div><div class="decl" id="TrivSqZeroExt.snd_exp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L159-L161">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.snd_exp"><span class="name">TrivSqZeroExt</span>.<span class="name">snd_exp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsCentralScalar">IsCentralScalar</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span>)</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span></div></div></div></div><div class="decl" id="TrivSqZeroExt.eq_smul_exp_of_invertible"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L163-L167">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.eq_smul_exp_of_invertible"><span class="name">TrivSqZeroExt</span>.<span class="name">eq_smul_exp_of_invertible</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsCentralScalar">IsCentralScalar</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible.invOf">⅟</a><span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inr">inr</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span></span>)</span></div></div><p>Polar form of trivial-square-zero extension.</p></div></div><div class="decl" id="TrivSqZeroExt.eq_smul_exp_of_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L180-L185">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.eq_smul_exp_of_ne_zero"><span class="name">TrivSqZeroExt</span>.<span class="name">eq_smul_exp_of_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsCentralScalar">IsCentralScalar</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Ring/Basic.html#IsTopologicalRing">IsTopologicalRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inr">inr</a> <span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span></span>)</span></div></div><p>More convenient version of <code><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.eq_smul_exp_of_invertible">TrivSqZeroExt.eq_smul_exp_of_invertible</a></code> for when <code>R</code> is a
+field.</p></div></div><div class="mod_doc"><h3 id="The-ℓ^1-norm-on-the-trivial-square-zero-extension" class="markdown-heading">The $ℓ^1$ norm on the trivial square zero extension <a class="hover-link" href="#The-ℓ^1-norm-on-the-trivial-square-zero-extension">#</a></h3></div><div class="decl" id="TrivSqZeroExt.instL1SeminormedAddCommGroup"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L202-L205">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1SeminormedAddCommGroup"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1SeminormedAddCommGroup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="TrivSqZeroExt.norm_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L211-L215">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.norm_def"><span class="name">TrivSqZeroExt</span>.<span class="name">norm_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="TrivSqZeroExt.nnnorm_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L217-L218">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.nnnorm_def"><span class="name">TrivSqZeroExt</span>.<span class="name">nnnorm_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">x</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.fst">fst</a></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn"><span class="fn">x</span>.<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.snd">snd</a></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a></div></div></div></div><div class="decl" id="TrivSqZeroExt.norm_inl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L220-L220">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.norm_inl"><span class="name">TrivSqZeroExt</span>.<span class="name">norm_inl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inl">inl</a> <span class="fn">r</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">r</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="TrivSqZeroExt.norm_inr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L221-L221">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.norm_inr"><span class="name">TrivSqZeroExt</span>.<span class="name">norm_inr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inr">inr</a> <span class="fn">m</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a><span class="fn">m</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#Norm.norm">‖</a></div></div></div></div><div class="decl" id="TrivSqZeroExt.nnnorm_inl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L223-L223">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.nnnorm_inl"><span class="name">TrivSqZeroExt</span>.<span class="name">nnnorm_inl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inl">inl</a> <span class="fn">r</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">r</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a></div></div></div></div><div class="decl" id="TrivSqZeroExt.nnnorm_inr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L224-L224">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.nnnorm_inr"><span class="name">TrivSqZeroExt</span>.<span class="name">nnnorm_inr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.inr">inr</a> <span class="fn">m</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖</a><span class="fn">m</span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NNNorm.nnnorm">‖₊</a></div></div></div></div><div class="decl" id="TrivSqZeroExt.instL1SeminormedRing"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L229-L244">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1SeminormedRing"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1SeminormedRing</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1SeminormedRing">TrivSqZeroExt.instL1SeminormedRing</a> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing.mk">{</a> <span class="fn">toNorm</span> := <span class="fn"><a href="../../../.././Init/Prelude.html#inferInstance">inferInstance</a>.<a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup.toNorm">toNorm</a></span>, <span class="fn">toRing</span> := <a href="../../../.././Init/Prelude.html#inferInstance">inferInstance</a>, <span class="fn">toPseudoMetricSpace</span> := <span class="fn"><a href="../../../.././Init/Prelude.html#inferInstance">inferInstance</a>.<a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup.toPseudoMetricSpace">toPseudoMetricSpace</a></span>,
+    <span class="fn">dist_eq</span> := <span class="fn">⋯</span>, <span class="fn">norm_mul_le</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing.mk">}</a></li></ul></details></div></div><div class="decl" id="TrivSqZeroExt.instL1IsBoundedSMul"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L246-L247">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1IsBoundedSMul"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1IsBoundedSMul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedCommRing">SeminormedCommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">S</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">S</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">S</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">S</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></div></div></div></div><div class="decl" id="TrivSqZeroExt.instNormOneClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L249-L250">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instNormOneClass"><span class="name">TrivSqZeroExt</span>.<span class="name">instNormOneClass</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedRing">SeminormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormOneClass">NormOneClass</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormOneClass">NormOneClass</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></div></div></div></div><div class="decl" id="TrivSqZeroExt.instL1SeminormedCommRing"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L260-L262">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1SeminormedCommRing"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1SeminormedCommRing</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedCommRing">SeminormedCommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#SeminormedAddCommGroup">SeminormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsCentralScalar">IsCentralScalar</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedCommRing">SeminormedCommRing</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1SeminormedCommRing">TrivSqZeroExt.instL1SeminormedCommRing</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedCommRing.mk">{</a> <span class="fn">toSeminormedRing</span> := <a href="../../../.././Init/Prelude.html#inferInstance">inferInstance</a>, <span class="fn">mul_comm</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#SeminormedCommRing.mk">}</a></li></ul></details></div></div><div class="decl" id="TrivSqZeroExt.instL1NormedAddCommGroup"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L275-L276">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedAddCommGroup"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1NormedAddCommGroup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="TrivSqZeroExt.instL1NormedRing"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L278-L280">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedRing"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1NormedRing</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="TrivSqZeroExt.instL1NormedCommRing"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L290-L292">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedCommRing"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1NormedCommRing</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsCentralScalar">IsCentralScalar</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedCommRing">TrivSqZeroExt.instL1NormedCommRing</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing.mk">{</a> <span class="fn">toNormedRing</span> := <a href="../../../.././Init/Prelude.html#inferInstance">inferInstance</a>, <span class="fn">mul_comm</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing.mk">}</a></li></ul></details></div></div><div class="decl" id="TrivSqZeroExt.instL1NormedSpace"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L303-L304">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedSpace"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1NormedSpace</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedSpace">TrivSqZeroExt.instL1NormedSpace</a> <span class="fn">𝕜</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace.mk">{</a> <span class="fn">toModule</span> := <a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.module">TrivSqZeroExt.module</a>, <span class="fn">norm_smul_le</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace.mk">}</a></li></ul></details></div></div><div class="decl" id="TrivSqZeroExt.instL1NormedAlgebra"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.lean#L306-L307">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedAlgebra"><span class="name">TrivSqZeroExt</span>.<span class="name">instL1NormedAlgebra</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Algebra.html#IsBoundedSMul">IsBoundedSMul</a> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#SMulCommClass">SMulCommClass</a> <span class="fn">R</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕜</span> <span class="fn">R</span><a href="../../../.././Mathlib/Algebra/Opposites.html#MulOpposite">ᵐᵒᵖ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt">TrivSqZeroExt</a> <span class="fn">R</span> <span class="fn">M</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Algebra/TrivSqZeroExt.html#TrivSqZeroExt.instL1NormedAlgebra">TrivSqZeroExt.instL1NormedAlgebra</a> <span class="fn">𝕜</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra.mk">{</a> <span class="fn">toAlgebra</span> := <span class="fn"><a href="../../../.././Mathlib/Algebra/TrivSqZeroExt/Basic.html#TrivSqZeroExt.algebra'">TrivSqZeroExt.algebra'</a> <span class="fn">𝕜</span> <span class="fn">R</span> <span class="fn">M</span></span>, <span class="fn">norm_smul_le</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra.mk">}</a></li></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

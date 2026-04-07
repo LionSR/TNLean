@@ -1,0 +1,201 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Order.SemiconjSup</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Order.SemiconjSup";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Order</span>.<span class="name">SemiconjSup</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Order/OrdContinuous.html">Mathlib.Order.OrdContinuous</a></li><li><a href="../.././Mathlib/Logic/Function/Conjugate.html">Mathlib.Logic.Function.Conjugate</a></li><li><a href="../.././Mathlib/Order/Bounds/OrderIso.html">Mathlib.Order.Bounds.OrderIso</a></li><li><a href="../.././Mathlib/Algebra/Group/Units/Equiv.html">Mathlib.Algebra.Group.Units.Equiv</a></li><li><a href="../.././Mathlib/Algebra/Order/Group/End.html">Mathlib.Algebra.Order.Group.End</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Order.SemiconjSup" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsOrderRightAdjoint"><span class="name">IsOrderRightAdjoint</span></a></div><div class="nav_link"><a class="break_within" href="#isOrderRightAdjoint_sSup"><span class="name">isOrderRightAdjoint_sSup</span></a></div><div class="nav_link"><a class="break_within" href="#isOrderRightAdjoint_csSup"><span class="name">isOrderRightAdjoint_csSup</span></a></div><div class="nav_link"><a class="break_within" href="#IsOrderRightAdjoint.unique"><span class="name">IsOrderRightAdjoint</span>.<span class="name">unique</span></a></div><div class="nav_link"><a class="break_within" href="#IsOrderRightAdjoint.right_mono"><span class="name">IsOrderRightAdjoint</span>.<span class="name">right_mono</span></a></div><div class="nav_link"><a class="break_within" href="#IsOrderRightAdjoint.orderIso_comp"><span class="name">IsOrderRightAdjoint</span>.<span class="name">orderIso_comp</span></a></div><div class="nav_link"><a class="break_within" href="#IsOrderRightAdjoint.comp_orderIso"><span class="name">IsOrderRightAdjoint</span>.<span class="name">comp_orderIso</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Semiconj.symm_adjoint"><span class="name">Function</span>.<span class="name">Semiconj</span>.<span class="name">symm_adjoint</span></a></div><div class="nav_link"><a class="break_within" href="#Function.semiconj_of_isLUB"><span class="name">Function</span>.<span class="name">semiconj_of_isLUB</span></a></div><div class="nav_link"><a class="break_within" href="#Function.sSup_div_semiconj"><span class="name">Function</span>.<span class="name">sSup_div_semiconj</span></a></div><div class="nav_link"><a class="break_within" href="#Function.csSup_div_semiconj"><span class="name">Function</span>.<span class="name">csSup_div_semiconj</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Semiconjugate-by-sSup" class="markdown-heading">Semiconjugate by <code>sSup</code> <a class="hover-link" href="#Semiconjugate-by-sSup">#</a></h1><p>In this file we prove two facts about semiconjugate (families of) functions.</p><p>First, if an order isomorphism <code>fa : α → α</code> is semiconjugate to an order embedding <code>fb : β → β</code> by
+<code>g : α → β</code>, then <code>fb</code> is semiconjugate to <code>fa</code> by <code>y ↦ sSup {x | g x ≤ y}</code>, see
+<code><a href="../.././Mathlib/Order/SemiconjSup.html#Function.Semiconj.symm_adjoint">Semiconj.symm_adjoint</a></code>.</p><p>Second, consider two actions <code>f₁ f₂ : G → α → α</code> of a group on a complete lattice by order
+isomorphisms. Then the map <code>x ↦ ⨆ g : G, (f₁ g)⁻¹ (f₂ g x)</code> semiconjugates each <code>f₁ g'</code> to <code>f₂ g'</code>,
+see <code><a href="../.././Mathlib/Order/SemiconjSup.html#Function.sSup_div_semiconj">Function.sSup_div_semiconj</a></code>.  In the case of a conditionally complete lattice, a similar
+statement holds true under an additional assumption that each set <code>{(f₁ g)⁻¹ (f₂ g x) | g : G}</code> is
+bounded above, see <code><a href="../.././Mathlib/Order/SemiconjSup.html#Function.csSup_div_semiconj">Function.csSup_div_semiconj</a></code>.</p><p>The lemmas come from [Étienne Ghys, Groupes d'homéomorphismes du cercle et cohomologie
+bornée][ghys87:groupes], Proposition 2.1 and 5.4 respectively. In the paper they are formulated for
+homeomorphisms of the circle, so in order to apply results from this file one has to lift these
+homeomorphisms to the real line first.</p></div><div class="decl" id="IsOrderRightAdjoint"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L44-L48">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint"><span class="name">IsOrderRightAdjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>We say that <code>g : β → α</code> is an order right adjoint function for <code>f : α → β</code> if it sends each <code>y</code>
+to a least upper bound for <code>{x | f x ≤ y}</code>. If <code>α</code> is a partial order, and <code>f : α → β</code> has
+a right adjoint, then this right adjoint is unique.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> <span class="fn">f</span> <span class="fn">g</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">α</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a> <span class="fn">(<span class="fn">g</span> <span class="fn">y</span>)</span></span></span></li></ul></details><details id="instances-for-list-IsOrderRightAdjoint" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="isOrderRightAdjoint_sSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L50-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#isOrderRightAdjoint_sSup"><span class="name">isOrderRightAdjoint_sSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteSemilatticeSup">CompleteSemilatticeSup</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> <span class="fn">f</span> <span class="fn">fun (<span class="fn">y</span> : <span class="fn">β</span>) =&gt; <span class="fn"><a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">α</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></span></span></div></div></div></div><div class="decl" id="isOrderRightAdjoint_csSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L53-L55">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#isOrderRightAdjoint_csSup"><span class="name">isOrderRightAdjoint_csSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hne</span> : <span class="fn">∀ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn">∃ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hbdd</span> : <span class="fn">∀ (<span class="fn">y</span> : <span class="fn">β</span>), <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">α</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> <span class="fn">f</span> <span class="fn">fun (<span class="fn">y</span> : <span class="fn">β</span>) =&gt; <span class="fn"><a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">α</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></span></span></div></div></div></div><div class="decl" id="IsOrderRightAdjoint.unique"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L59-L61">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint.unique"><span class="name">IsOrderRightAdjoint</span>.<span class="name">unique</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁ </span><span class="fn">g₂</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> <span class="fn">f</span> <span class="fn">g₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> <span class="fn">f</span> <span class="fn">g₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">g₁</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g₂</span></div></div></div></div><div class="decl" id="IsOrderRightAdjoint.right_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L63-L64">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint.right_mono"><span class="name">IsOrderRightAdjoint</span>.<span class="name">right_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">g</span></span></div></div></div></div><div class="decl" id="IsOrderRightAdjoint.orderIso_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L66-L68">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint.orderIso_comp"><span class="name">IsOrderRightAdjoint</span>.<span class="name">orderIso_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">β</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">γ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> (<span class="fn">⇑<span class="fn">e</span></span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>) (<span class="fn">g</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn"><span class="fn">e</span>.<a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso.symm">symm</a></span></span>)</span></div></div></div></div><div class="decl" id="IsOrderRightAdjoint.comp_orderIso"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L70-L75">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint.comp_orderIso"><span class="name">IsOrderRightAdjoint</span>.<span class="name">comp_orderIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">γ</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> (<span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">e</span></span>) (<span class="fn">⇑<span class="fn"><span class="fn">e</span>.<a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso.symm">symm</a></span></span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>)</span></div></div></div></div><div class="decl" id="Function.Semiconj.symm_adjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L81-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#Function.Semiconj.symm_adjoint"><span class="name">Function</span>.<span class="name">Semiconj</span>.<span class="name">symm_adjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fa</span> : <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fb</span> : <span class="fn">β</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderEmbedding">↪o</a> <span class="fn">β</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Semiconj</a> <span class="fn">g</span> <span class="fn">⇑<span class="fn">fa</span></span> <span class="fn">⇑<span class="fn">fb</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg'</span> : <span class="fn"><a href="../.././Mathlib/Order/SemiconjSup.html#IsOrderRightAdjoint">IsOrderRightAdjoint</a> <span class="fn">g</span> <span class="fn">g'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Semiconj</a> <span class="fn">g'</span> <span class="fn">⇑<span class="fn">fb</span></span> <span class="fn">⇑<span class="fn">fa</span></span></span></div></div><p>If an order automorphism <code>fa</code> is semiconjugate to an order embedding <code>fb</code> by a function <code>g</code>
+and <code>g'</code> is an order right adjoint of <code>g</code> (i.e. <code>g' y = sSup {x | f x ≤ y}</code>), then <code>fb</code> is
+semiconjugate to <code>fa</code> by <code>g'</code>.</p><p>This is a version of Proposition 2.1 from [Étienne Ghys, Groupes d'homéomorphismes du cercle et
+cohomologie bornée][ghys87:groupes].</p></div></div><div class="decl" id="Function.semiconj_of_isLUB"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L96-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#Function.semiconj_of_isLUB"><span class="name">Function</span>.<span class="name">semiconj_of_isLUB</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">α</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#IsLUB">IsLUB</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">fun (<span class="fn">g'</span> : <span class="fn">G</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">g'</span>)</span><a href="../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">(<span class="fn">(<span class="fn">f₂</span> <span class="fn">g'</span>)</span> <span class="fn">x</span>)</span></span></span>)</span> <span class="fn">(<span class="fn">h</span> <span class="fn">x</span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Semiconj</a> <span class="fn">h</span> <span class="fn">⇑<span class="fn">(<span class="fn">f₂</span> <span class="fn">g</span>)</span></span> <span class="fn">⇑<span class="fn">(<span class="fn">f₁</span> <span class="fn">g</span>)</span></span></span></div></div></div></div><div class="decl" id="Function.sSup_div_semiconj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L104-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#Function.sSup_div_semiconj"><span class="name">Function</span>.<span class="name">sSup_div_semiconj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Semiconj</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">⨆ (<span class="fn">g'</span> : <span class="fn">G</span>), <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">g'</span>)</span><a href="../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">(<span class="fn">(<span class="fn">f₂</span> <span class="fn">g'</span>)</span> <span class="fn">x</span>)</span></span></span>)</span> <span class="fn">⇑<span class="fn">(<span class="fn">f₂</span> <span class="fn">g</span>)</span></span> <span class="fn">⇑<span class="fn">(<span class="fn">f₁</span> <span class="fn">g</span>)</span></span></span></div></div><p>Consider two actions <code>f₁ f₂ : G → α → α</code> of a group on a complete lattice by order
+isomorphisms. Then the map <code>x ↦ ⨆ g : G, (f₁ g)⁻¹ (f₂ g x)</code> semiconjugates each <code>f₁ g'</code> to <code>f₂ g'</code>.</p><p>This is a version of Proposition 5.4 from [Étienne Ghys, Groupes d'homéomorphismes du cercle et
+cohomologie bornée][ghys87:groupes].</p></div></div><div class="decl" id="Function.csSup_div_semiconj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SemiconjSup.lean#L113-L122">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SemiconjSup.html#Function.csSup_div_semiconj"><span class="name">Function</span>.<span class="name">csSup_div_semiconj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hbdd</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><a href="../.././Mathlib/Order/Bounds/Defs.html#BddAbove">BddAbove</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">fun (<span class="fn">g</span> : <span class="fn">G</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">g</span>)</span><a href="../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">(<span class="fn">(<span class="fn">f₂</span> <span class="fn">g</span>)</span> <span class="fn">x</span>)</span></span></span>)</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">G</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Semiconj</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">⨆ (<span class="fn">g'</span> : <span class="fn">G</span>), <span class="fn"><span class="fn">(<span class="fn">f₁</span> <span class="fn">g'</span>)</span><a href="../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">(<span class="fn">(<span class="fn">f₂</span> <span class="fn">g'</span>)</span> <span class="fn">x</span>)</span></span></span>)</span> <span class="fn">⇑<span class="fn">(<span class="fn">f₂</span> <span class="fn">g</span>)</span></span> <span class="fn">⇑<span class="fn">(<span class="fn">f₁</span> <span class="fn">g</span>)</span></span></span></div></div><p>Consider two actions <code>f₁ f₂ : G → α → α</code> of a group on a conditionally complete lattice by order
+isomorphisms. Suppose that each set $s(x)=\{f_1(g)^{-1} (f_2(g)(x)) | g \in G\}$ is bounded above.
+Then the map <code>x ↦ sSup s(x)</code> semiconjugates each <code>f₁ g'</code> to <code>f₂ g'</code>.</p><p>This is a version of Proposition 5.4 from [Étienne Ghys, Groupes d'homéomorphismes du cercle et
+cohomologie bornée][ghys87:groupes].</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

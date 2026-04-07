@@ -1,0 +1,1010 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Order.SupIndep</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Order.SupIndep";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Order</span>.<span class="name">SupIndep</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Order/CompleteLatticeIntervals.html">Mathlib.Order.CompleteLatticeIntervals</a></li><li><a href="../.././Mathlib/Order/ModularLattice.html">Mathlib.Order.ModularLattice</a></li><li><a href="../.././Mathlib/Tactic/FinCases.html">Mathlib.Tactic.FinCases</a></li><li><a href="../.././Mathlib/Data/Finset/Sigma.html">Mathlib.Data.Finset.Sigma</a></li><li><a href="../.././Mathlib/Data/Fintype/Basic.html">Mathlib.Data.Fintype.Basic</a></li><li><a href="../.././Mathlib/Data/Finset/Lattice/Prod.html">Mathlib.Data.Finset.Lattice.Prod</a></li><li><a href="../.././Mathlib/Data/Finset/Lattice/Union.html">Mathlib.Data.Finset.Lattice.Union</a></li><li><a href="../.././Mathlib/Data/Set/Finite/Basic.html">Mathlib.Data.Set.Finite.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Order.SupIndep" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep"><span class="name">Finset</span>.<span class="name">SupIndep</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_iff_disjoint_erase"><span class="name">Finset</span>.<span class="name">supIndep_iff_disjoint_erase</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.instDecidableSupIndepOfDecidableEq"><span class="name">Finset</span>.<span class="name">instDecidableSupIndepOfDecidableEq</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.subset"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">subset</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.mono"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_empty"><span class="name">Finset</span>.<span class="name">supIndep_empty</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_singleton"><span class="name">Finset</span>.<span class="name">supIndep_singleton</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.pairwiseDisjoint"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">pairwiseDisjoint</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.le_sup_iff"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">le_sup_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.antitone_fun"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">antitone_fun</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.image"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">image</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_map"><span class="name">Finset</span>.<span class="name">supIndep_map</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_pair"><span class="name">Finset</span>.<span class="name">supIndep_pair</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_univ_bool"><span class="name">Finset</span>.<span class="name">supIndep_univ_bool</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_univ_fin_two"><span class="name">Finset</span>.<span class="name">supIndep_univ_fin_two</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_attach"><span class="name">Finset</span>.<span class="name">supIndep_attach</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.attach"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">attach</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.biUnion"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">biUnion</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.sup"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">sup</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.sigma"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">sigma</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.product"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">product</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.disjoint_sup_sup"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">disjoint_sup_sup</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_sigma_iff'"><span class="name">Finset</span>.<span class="name">supIndep_sigma_iff'</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_product_iff"><span class="name">Finset</span>.<span class="name">supIndep_product_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.union"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">union</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.insert"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">insert</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.supIndep_iff_pairwiseDisjoint"><span class="name">Finset</span>.<span class="name">supIndep_iff_pairwiseDisjoint</span></a></div><div class="nav_link"><a class="break_within" href="#Set.PairwiseDisjoint.supIndep"><span class="name">Set</span>.<span class="name">PairwiseDisjoint</span>.<span class="name">supIndep</span></a></div><div class="nav_link"><a class="break_within" href="#sSupIndep"><span class="name">sSupIndep</span></a></div><div class="nav_link"><a class="break_within" href="#sSupIndep_empty"><span class="name">sSupIndep_empty</span></a></div><div class="nav_link"><a class="break_within" href="#sSupIndep.mono"><span class="name">sSupIndep</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#sSupIndep.pairwiseDisjoint"><span class="name">sSupIndep</span>.<span class="name">pairwiseDisjoint</span></a></div><div class="nav_link"><a class="break_within" href="#sSupIndep_singleton"><span class="name">sSupIndep_singleton</span></a></div><div class="nav_link"><a class="break_within" href="#sSupIndep_pair"><span class="name">sSupIndep_pair</span></a></div><div class="nav_link"><a class="break_within" href="#sSupIndep.disjoint_sSup"><span class="name">sSupIndep</span>.<span class="name">disjoint_sSup</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep"><span class="name">iSupIndep</span></a></div><div class="nav_link"><a class="break_within" href="#sSupIndep_iff"><span class="name">sSupIndep_iff</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_def"><span class="name">iSupIndep_def</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_def'"><span class="name">iSupIndep_def'</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_def''"><span class="name">iSupIndep_def''</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_subsingleton"><span class="name">iSupIndep_subsingleton</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.pairwiseDisjoint"><span class="name">iSupIndep</span>.<span class="name">pairwiseDisjoint</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.mono"><span class="name">iSupIndep</span>.<span class="name">mono</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.comp"><span class="name">iSupIndep</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.comp'"><span class="name">iSupIndep</span>.<span class="name">comp'</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.sSupIndep_range"><span class="name">iSupIndep</span>.<span class="name">sSupIndep_range</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_ne_bot"><span class="name">iSupIndep_ne_bot</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.injOn"><span class="name">iSupIndep</span>.<span class="name">injOn</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.injOn_iInf"><span class="name">iSupIndep</span>.<span class="name">injOn_iInf</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.injective"><span class="name">iSupIndep</span>.<span class="name">injective</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_pair"><span class="name">iSupIndep_pair</span></a></div><div class="nav_link"><a class="break_within" href="#iSup_fin_three"><span class="name">iSup_fin_three</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_fin_three"><span class="name">iSupIndep_fin_three</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.map_orderIso"><span class="name">iSupIndep</span>.<span class="name">map_orderIso</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_map_orderIso_iff"><span class="name">iSupIndep_map_orderIso_iff</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.disjoint_biSup"><span class="name">iSupIndep</span>.<span class="name">disjoint_biSup</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.of_coe_Iic_comp"><span class="name">iSupIndep</span>.<span class="name">of_coe_Iic_comp</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_comp_coe_iff_supIndep"><span class="name">iSupIndep_comp_coe_iff_supIndep</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.independent"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">independent</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.supIndep"><span class="name">iSupIndep</span>.<span class="name">supIndep</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.supIndep'"><span class="name">iSupIndep</span>.<span class="name">supIndep'</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_iff_supIndep_univ"><span class="name">iSupIndep_iff_supIndep_univ</span></a></div><div class="nav_link"><a class="break_within" href="#Finset.SupIndep.iSupIndep_of_univ"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">iSupIndep_of_univ</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.sup_indep_univ"><span class="name">iSupIndep</span>.<span class="name">sup_indep_univ</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.le_iff_eq_of_iSup_eq_top"><span class="name">iSupIndep</span>.<span class="name">le_iff_eq_of_iSup_eq_top</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.disjoint_biSup_biSup'"><span class="name">iSupIndep</span>.<span class="name">disjoint_biSup_biSup'</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep.mem_of_biSup_eq_top"><span class="name">iSupIndep</span>.<span class="name">mem_of_biSup_eq_top</span></a></div><div class="nav_link"><a class="break_within" href="#sSupIndep_iff_pairwiseDisjoint"><span class="name">sSupIndep_iff_pairwiseDisjoint</span></a></div><div class="nav_link"><a class="break_within" href="#Set.PairwiseDisjoint.sSupIndep"><span class="name">Set</span>.<span class="name">PairwiseDisjoint</span>.<span class="name">sSupIndep</span></a></div><div class="nav_link"><a class="break_within" href="#iSupIndep_iff_pairwiseDisjoint"><span class="name">iSupIndep_iff_pairwiseDisjoint</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Supremum-independence" class="markdown-heading">Supremum independence <a class="hover-link" href="#Supremum-independence">#</a></h1><p>In this file, we define supremum independence of indexed sets. An indexed family <code>f : ι → α</code> is
+sup-independent if, for all <code>a</code>, <code>f a</code> and the supremum of the rest are disjoint.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">Finset.SupIndep</a> s f</code>: a family of elements <code>f</code> are supremum independent on the finite set <code>s</code>.</li><li><code><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> s</code>: a set of elements are supremum independent.</li><li><code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> f</code>: a family of elements are supremum independent.</li></ul><h2 id="Main-statements" class="markdown-heading">Main statements <a class="hover-link" href="#Main-statements">#</a></h2><ul><li>In a distributive lattice, supremum independence is equivalent to pairwise disjointness:<ul><li><code><a href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_iff_pairwiseDisjoint">Finset.supIndep_iff_pairwiseDisjoint</a></code></li><li><code><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep_iff_pairwiseDisjoint">CompleteLattice.sSupIndep_iff_pairwiseDisjoint</a></code></li><li><code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep_iff_pairwiseDisjoint">CompleteLattice.iSupIndep_iff_pairwiseDisjoint</a></code></li></ul></li><li>Otherwise, supremum independence is stronger than pairwise disjointness:<ul><li><code><a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.pairwiseDisjoint">Finset.SupIndep.pairwiseDisjoint</a></code></li><li><code><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep.pairwiseDisjoint">sSupIndep.pairwiseDisjoint</a></code></li><li><code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep.pairwiseDisjoint">iSupIndep.pairwiseDisjoint</a></code></li></ul></li></ul><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>For the finite version, we avoid the &quot;obvious&quot; definition
+<code>∀ i ∈ s, <a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> (f i) ((s.erase i).<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.sup">sup</a> f)</code> because <code>erase</code> would require decidable equality on
+<code>ι</code>.</p></div><div class="mod_doc"><h3 id="On-lattices-with-a-bottom-element-via-Finset-sup" class="markdown-heading">On lattices with a bottom element, via <code><a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">Finset.sup</a></code> <a class="hover-link" href="#On-lattices-with-a-bottom-element-via-Finset-sup">#</a></h3></div><div class="decl" id="Finset.SupIndep"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L61-L64">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep"><span class="name">Finset</span>.<span class="name">SupIndep</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>Supremum independence of finite sets. We avoid the &quot;obvious&quot; definition using <code>s.erase i</code>
+because <code>erase</code> would require decidable equality on <code>ι</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ ⦃<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>⦄, <span class="fn"><span class="fn">t</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span> → <span class="fn">∀ ⦃<span class="fn">i</span> : <span class="fn">ι</span>⦄, <span class="fn"><span class="fn">i</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><span class="fn"><span class="fn">i</span> ∉ <span class="fn">t</span></span> → <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span></span></span></span></span></span></span></li></ul></details><details id="instances-for-list-Finset.SupIndep" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Finset.supIndep_iff_disjoint_erase"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L68-L72">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_iff_disjoint_erase"><span class="name">Finset</span>.<span class="name">supIndep_iff_disjoint_erase</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Erase.html#Finset.erase">erase</a></span> <span class="fn">i</span>)</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span></span></span></div></div><p>The RHS looks like the definition of <code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a></code>.</p></div></div><div class="decl" id="Finset.instDecidableSupIndepOfDecidableEq"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L74-L88">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.instDecidableSupIndepOfDecidableEq"><span class="name">Finset</span>.<span class="name">instDecidableSupIndepOfDecidableEq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Prelude.html#Decidable">Decidable</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span>)</span></span></div></div><p>If both the index type and the lattice have decidable equality,
+then the <code><a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></code> predicate is decidable.</p><p>TODO: speedup the definition and drop the <code>[DecidableEq ι]</code> assumption
+by iterating over the pairs <code>(a, t)</code> such that <code>s = <a href="../.././Mathlib/Data/Finset/Insert.html#Finset.cons">Finset.cons</a> a t _</code>
+using something like <code><a href="../.././Init/Data/List/Basic.html#List.eraseIdx">List.eraseIdx</a></code>
+or by generating both <code>f i</code> and <code>(s.erase i).<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.sup">sup</a> f</code> in one loop over <code>s</code>.
+Yet another possible optimization is to precompute partial suprema of <code>f</code>
+over the inits and tails of the list representing <code>s</code>,
+store them in 2 <code><a href="../.././Init/Prelude.html#Array">Array</a></code>s,
+then compute each <code><a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.sup">sup</a></code> in 1 operation.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../.././Mathlib/Order/SupIndep.html#Finset.instDecidableSupIndepOfDecidableEq">Finset.instDecidableSupIndepOfDecidableEq</a> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Init/PropLemmas.html#decidable_of_iff">decidable_of_iff</a> <span class="fn">(∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Erase.html#Finset.erase">erase</a></span> <span class="fn">i</span>)</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span></span>)</span> <span class="fn">⋯</span></span></li></ul></details></div></div><div class="decl" id="Finset.SupIndep.subset"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L90-L91">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.subset"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">subset</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">s</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">t</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.SupIndep.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L93-L94">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.mono"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">g</span> <span class="fn">i</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">g</span></span></div></div></div></div><div class="decl" id="Finset.supIndep_empty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L96-L98">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_empty"><span class="name">Finset</span>.<span class="name">supIndep_empty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.supIndep_singleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L100-L104">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_singleton"><span class="name">Finset</span>.<span class="name">supIndep_singleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">i</span><a href="../.././Init/Core.html#Singleton.singleton">}</a>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.SupIndep.pairwiseDisjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L106-L108">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.pairwiseDisjoint"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">pairwiseDisjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">s</span>)</span>.<a href="../.././Mathlib/Data/Set/Pairwise/Basic.html#Set.PairwiseDisjoint">PairwiseDisjoint</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.SupIndep.le_sup_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L110-L114">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.le_sup_iff"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">le_sup_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hts</span> : <span class="fn">t</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn">i</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">i</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">i</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">t</span></div></div></div></div><div class="decl" id="Finset.SupIndep.antitone_fun"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L116-L118">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.antitone_fun"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">antitone_fun</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hle</span> : <span class="fn">∀ <span class="fn">x</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.SupIndep.image"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L120-L126">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.image"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">image</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> (<span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/Data/Finset/Image.html#Finset.image">image</a> <span class="fn">g</span> <span class="fn">s</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.supIndep_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L128-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_map"><span class="name">Finset</span>.<span class="name">supIndep_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">ι'</span> <a href="../.././Mathlib/Logic/Embedding/Basic.html#Function.Embedding">↪</a> <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/Data/Finset/Image.html#Finset.map">map</a> <span class="fn">g</span> <span class="fn">s</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> (<span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">g</span></span>)</span></div></div></div></div><div class="decl" id="Finset.supIndep_pair"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L136-L142">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_pair"><span class="name">Finset</span>.<span class="name">supIndep_pair</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hij</span> : <span class="fn">i</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">j</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Init/Core.html#Insert.insert">{</a><span class="fn">i</span><a href="../.././Init/Core.html#Insert.insert">,</a> <span class="fn">j</span><a href="../.././Init/Core.html#Insert.insert">}</a>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">j</span>)</span></span></div></div></div></div><div class="decl" id="Finset.supIndep_univ_bool"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L144-L147">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_univ_bool"><span class="name">Finset</span>.<span class="name">supIndep_univ_bool</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../.././Init/Prelude.html#Bool">Bool</a> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">univ</a>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">f</span> <a href="../.././Init/Prelude.html#Bool.false">false</a>)</span> <span class="fn">(<span class="fn">f</span> <a href="../.././Init/Prelude.html#Bool.true">true</a>)</span></span></div></div></div></div><div class="decl" id="Finset.supIndep_univ_fin_two"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L149-L153">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_univ_fin_two"><span class="name">Finset</span>.<span class="name">supIndep_univ_fin_two</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">2</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">univ</a>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">f</span> <span class="fn">0</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">1</span>)</span></span></div></div></div></div><div class="decl" id="Finset.supIndep_attach"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L155-L157">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_attach"><span class="name">Finset</span>.<span class="name">supIndep_attach</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Attach.html#Finset.attach">attach</a></span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">a</span> : <span class="fn">↥<span class="fn">s</span></span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">↑<span class="fn">a</span></span></span></span>)</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.SupIndep.attach"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L159-L159">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.attach"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">attach</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> → <span class="fn"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Attach.html#Finset.attach">attach</a></span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">a</span> : <span class="fn">↥<span class="fn">s</span></span>) =&gt; <span class="fn"><span class="fn">f</span> <span class="fn">↑<span class="fn">a</span></span></span></span></span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_attach">Finset.supIndep_attach</a></code>.</p></div></div><div class="decl" id="Finset.SupIndep.biUnion"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L167-L183">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.biUnion"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">biUnion</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι'</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn">∀ <span class="fn">i'</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">i'</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Union.html#Finset.biUnion">biUnion</a></span> <span class="fn">g</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div><p>Bind operation for <code><a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></code>.</p></div></div><div class="decl" id="Finset.SupIndep.sup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L185-L190">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.sup"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">sup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι'</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn">∀ <span class="fn">i'</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">i'</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">g</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div><p>Bind operation for <code><a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></code>.</p></div></div><div class="decl" id="Finset.SupIndep.sigma"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L192-L200">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.sigma"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">sigma</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">ι</span> → <a href="../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">(<span class="fn">β</span> <span class="fn">i</span>)</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn"><a href="../.././Init/Core.html#Sigma">Sigma</a> <span class="fn">β</span></span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">fun (<span class="fn">b</span> : <span class="fn"><span class="fn">β</span> <span class="fn">i</span></span>) =&gt; <span class="fn"><span class="fn">f</span> <a href="../.././Init/Core.html#Sigma.mk">⟨</a><span class="fn">i</span>, <span class="fn">b</span><a href="../.././Init/Core.html#Sigma.mk">⟩</a></span></span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">b</span> : <span class="fn"><span class="fn">β</span> <span class="fn">i</span></span>) =&gt; <span class="fn"><span class="fn">f</span> <a href="../.././Init/Core.html#Sigma.mk">⟨</a><span class="fn">i</span>, <span class="fn">b</span><a href="../.././Init/Core.html#Sigma.mk">⟩</a></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Sigma.html#Finset.sigma">sigma</a></span> <span class="fn">g</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div><p>Bind operation for <code><a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></code>.</p></div></div><div class="decl" id="Finset.SupIndep.product"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L202-L209">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.product"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">product</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn">ι'</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">fun (<span class="fn">i'</span> : <span class="fn">ι'</span>) =&gt; <span class="fn"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">i</span><a href="../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">i'</span><a href="../.././Init/Prelude.html#Prod.mk">)</a></span></span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">i'</span> : <span class="fn">ι'</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">i</span><a href="../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">i'</span><a href="../.././Init/Prelude.html#Prod.mk">)</a></span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">s</span> <a href="../.././Mathlib/Data/SProd.html#SProd.sprod">×ˢ</a> <span class="fn">t</span>).<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.SupIndep.disjoint_sup_sup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L211-L218">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.disjoint_sup_sup"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">disjoint_sup_sup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">u </span><span class="fn">v</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hu</span> : <span class="fn">u</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hv</span> : <span class="fn">v</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">huv</span> : <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">u</span> <span class="fn">v</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn"><span class="fn">u</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span> <span class="fn">(<span class="fn"><span class="fn">v</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="Finset.supIndep_sigma_iff'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L220-L230">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_sigma_iff'"><span class="name">Finset</span>.<span class="name">supIndep_sigma_iff'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">ι</span> → <a href="../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">(<span class="fn">β</span> <span class="fn">i</span>)</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn"><a href="../.././Init/Core.html#Sigma">Sigma</a> <span class="fn">β</span></span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Sigma.html#Finset.sigma">sigma</a></span> <span class="fn">g</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a>   <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">fun (<span class="fn">b</span> : <span class="fn"><span class="fn">β</span> <span class="fn">i</span></span>) =&gt; <span class="fn"><span class="fn">f</span> <a href="../.././Init/Core.html#Sigma.mk">⟨</a><span class="fn">i</span>, <span class="fn">b</span><a href="../.././Init/Core.html#Sigma.mk">⟩</a></span></span></span></span>)</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">i</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">b</span> : <span class="fn"><span class="fn">β</span> <span class="fn">i</span></span>) =&gt; <span class="fn"><span class="fn">f</span> <a href="../.././Init/Core.html#Sigma.mk">⟨</a><span class="fn">i</span>, <span class="fn">b</span><a href="../.././Init/Core.html#Sigma.mk">⟩</a></span></span></span></span></div></div></div></div><div class="decl" id="Finset.supIndep_product_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L232-L242">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_product_iff"><span class="name">Finset</span>.<span class="name">supIndep_product_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> <a href="../.././Init/Prelude.html#Prod">×</a> <span class="fn">ι'</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Prod.html#Finset.product">product</a></span> <span class="fn">t</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a>   <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">fun (<span class="fn">i'</span> : <span class="fn">ι'</span>) =&gt; <span class="fn"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">i</span><a href="../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">i'</span><a href="../.././Init/Prelude.html#Prod.mk">)</a></span></span></span></span>)</span> <a href="../.././Init/Prelude.html#And">∧</a>     <span class="fn"><span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">fun (<span class="fn">i'</span> : <span class="fn">ι'</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Prod.mk">(</a><span class="fn">i</span><a href="../.././Init/Prelude.html#Prod.mk">,</a> <span class="fn">i'</span><a href="../.././Init/Prelude.html#Prod.mk">)</a></span></span></span></span></span></div></div></div></div><div class="decl" id="Finset.SupIndep.union"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L244-L248">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.union"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">union</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span> <span class="fn">(<span class="fn"><span class="fn">t</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">s</span> <a href="../.././Init/Core.html#Union.union">∪</a> <span class="fn">t</span>).<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.SupIndep.insert"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L250-L252">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.insert"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">insert</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finset/Lattice/Fold.html#Finset.sup">sup</a></span> <span class="fn">f</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Init/Core.html#Insert.insert">insert</a> <span class="fn">i</span> <span class="fn">s</span>)</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.supIndep_iff_pairwiseDisjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L260-L262">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_iff_pairwiseDisjoint"><span class="name">Finset</span>.<span class="name">supIndep_iff_pairwiseDisjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#DistribLattice">DistribLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">s</span>)</span>.<a href="../.././Mathlib/Data/Set/Pairwise/Basic.html#Set.PairwiseDisjoint">PairwiseDisjoint</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Set.PairwiseDisjoint.supIndep"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L264-L264">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Set.PairwiseDisjoint.supIndep"><span class="name">Set</span>.<span class="name">PairwiseDisjoint</span>.<span class="name">supIndep</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Lattice.html#DistribLattice">DistribLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">s</span>)</span>.<a href="../.././Mathlib/Data/Set/Pairwise/Basic.html#Set.PairwiseDisjoint">PairwiseDisjoint</a></span> <span class="fn">f</span></span> → <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../.././Mathlib/Order/SupIndep.html#Finset.supIndep_iff_pairwiseDisjoint">Finset.supIndep_iff_pairwiseDisjoint</a></code>.</p></div></div><div class="mod_doc"><h3 id="On-complete-lattices-via-sSup" class="markdown-heading">On complete lattices via <code>sSup</code> <a class="hover-link" href="#On-complete-lattices-via-sSup">#</a></h3></div><div class="decl" id="sSupIndep"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L277-L280">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#sSupIndep"><span class="name">sSupIndep</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>An independent set of elements in a complete lattice is one in which every element is disjoint
+from the <code>Sup</code> of the rest.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ ⦃<span class="fn">a</span> : <span class="fn">α</span>⦄, <span class="fn"><span class="fn">a</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span> → <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">a</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">s</span> <a href="../.././Init/Core.html#SDiff.sdiff">\</a> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">a</span><a href="../.././Init/Core.html#Singleton.singleton">}</a>))</span></span></span></span></li></ul></details><details id="instances-for-list-sSupIndep" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="sSupIndep_empty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L284-L286">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#sSupIndep_empty"><span class="name">sSupIndep_empty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <a href="../.././Init/Core.html#EmptyCollection.emptyCollection">∅</a></span></div></div></div></div><div class="decl" id="sSupIndep.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L289-L290">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#sSupIndep.mono"><span class="name">sSupIndep</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <span class="fn">s</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hst</span> : <span class="fn">t</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="sSupIndep.pairwiseDisjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L293-L295">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#sSupIndep.pairwiseDisjoint"><span class="name">sSupIndep</span>.<span class="name">pairwiseDisjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Set/Pairwise/Basic.html#Set.PairwiseDisjoint">PairwiseDisjoint</a></span> <a href="../.././Init/Prelude.html#id">id</a></span></div></div><p>If the elements of a set are independent, then any pair within that set is disjoint.</p></div></div><div class="decl" id="sSupIndep_singleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L297-L298">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#sSupIndep_singleton"><span class="name">sSupIndep_singleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <a href="../.././Init/Core.html#Singleton.singleton">{</a><span class="fn">a</span><a href="../.././Init/Core.html#Singleton.singleton">}</a></span></div></div></div></div><div class="decl" id="sSupIndep_pair"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L300-L309">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#sSupIndep_pair"><span class="name">sSupIndep_pair</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hab</span> : <span class="fn">a</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">b</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <a href="../.././Init/Core.html#Insert.insert">{</a><span class="fn">a</span><a href="../.././Init/Core.html#Insert.insert">,</a> <span class="fn">b</span><a href="../.././Init/Core.html#Insert.insert">}</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">a</span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="sSupIndep.disjoint_sSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L312-L318">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#sSupIndep.disjoint_sSup"><span class="name">sSupIndep</span>.<span class="name">disjoint_sSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <span class="fn">s</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">y</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxy</span> : <span class="fn"><span class="fn">x</span> ∉ <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">x</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <span class="fn">y</span>)</span></span></div></div><p>If the elements of a set are independent, then any element is disjoint from the <code>sSup</code> of some
+subset of the rest.</p></div></div><div class="decl" id="iSupIndep"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L320-L330">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep"><span class="name">iSupIndep</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>An independent indexed family of elements in a complete lattice is one in which every element
+is disjoint from the <code><a href="../.././Mathlib/Order/SetNotation.html#iSup">iSup</a></code> of the rest.</p><p>Example: an indexed family of non-zero elements in a
+vector space is linearly independent iff the indexed family of subspaces they generate is
+independent in this sense.</p><p>Example: an indexed family of submodules of a module is independent in this sense if
+and only the natural map from the direct sum of the submodules to the module is injective.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">t</span> <span class="fn">i</span>)</span> <span class="fn">(⨆ (<span class="fn">j</span> : <span class="fn">ι</span>), <span class="fn">⨆ (_ : <span class="fn">j</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">i</span>), <span class="fn"><span class="fn">t</span> <span class="fn">j</span></span></span>)</span></span></span></li></ul></details><details id="instances-for-list-iSupIndep" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="sSupIndep_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L332-L336">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#sSupIndep_iff"><span class="name">sSupIndep_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <a href="../.././Init/Prelude.html#Subtype.val">Subtype.val</a></span></div></div></div></div><div class="decl" id="iSupIndep_def"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L340-L341">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_def"><span class="name">iSupIndep_def</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">t</span> <span class="fn">i</span>)</span> <span class="fn">(⨆ (<span class="fn">j</span> : <span class="fn">ι</span>), <span class="fn">⨆ (_ : <span class="fn">j</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">i</span>), <span class="fn"><span class="fn">t</span> <span class="fn">j</span></span></span>)</span></span></span></div></div></div></div><div class="decl" id="iSupIndep_def'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L343-L345">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_def'"><span class="name">iSupIndep_def'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">t</span> <span class="fn">i</span>)</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> (<span class="fn">t</span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">j</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">ι</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">j</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">i</span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a>))</span></span></span></div></div></div></div><div class="decl" id="iSupIndep_def''"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L347-L350">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_def''"><span class="name">iSupIndep_def''</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">t</span> <span class="fn">i</span>)</span> <span class="fn">(<a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">sSup</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">a</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">α</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">∃ (<span class="fn">j</span> : <span class="fn">ι</span>), <span class="fn">j</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">i</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">t</span> <span class="fn">j</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a>)</span></span></span></div></div></div></div><div class="decl" id="iSupIndep_subsingleton"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L352-L354">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_subsingleton"><span class="name">iSupIndep_subsingleton</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="iSupIndep.pairwiseDisjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L357-L359">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.pairwiseDisjoint"><span class="name">iSupIndep</span>.<span class="name">pairwiseDisjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Logic/Pairwise.html#Pairwise">Pairwise</a> <span class="fn">(<a href="../.././Mathlib/Logic/Function/Defs.html#Function.onFun">Function.onFun</a> <a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">t</span>)</span></span></div></div><p>If the elements of a set are independent, then any pair within that set is disjoint.</p></div></div><div class="decl" id="iSupIndep.mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L361-L362">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.mono"><span class="name">iSupIndep</span>.<span class="name">mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hst</span> : <span class="fn">t</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">s</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="iSupIndep.comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L364-L370">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.comp"><span class="name">iSupIndep</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../.././foundational_types.html">Sort</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> (<span class="fn">t</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span></div></div><p>Composing an independent indexed family with an injective function on the index results in
+another independent indexed family.</p></div></div><div class="decl" id="iSupIndep.comp'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L372-L377">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.comp'"><span class="name">iSupIndep</span>.<span class="name">comp'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../.././foundational_types.html">Sort</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> (<span class="fn">t</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="iSupIndep.sSupIndep_range"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L379-L382">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.sSupIndep_range"><span class="name">iSupIndep</span>.<span class="name">sSupIndep_range</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <span class="fn">(<a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">t</span>)</span></span></div></div></div></div><div class="decl" id="iSupIndep_ne_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L384-L397">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_ne_bot"><span class="name">iSupIndep_ne_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">fun (<span class="fn">i</span> : <a href="../.././Init/Prelude.html#Subtype">{</a> <span class="fn">i</span> <a href="../.././Init/Prelude.html#Subtype">:</a> <span class="fn">ι</span> <a href="../.././Init/Prelude.html#Subtype">//</a> <span class="fn"><span class="fn">t</span> <span class="fn">i</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> <a href="../.././Init/Prelude.html#Subtype">}</a>) =&gt; <span class="fn"><span class="fn">t</span> <span class="fn">↑<span class="fn">i</span></span></span></span>)</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="iSupIndep.injOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L399-L408">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.injOn"><span class="name">iSupIndep</span>.<span class="name">injOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.InjOn">Set.InjOn</a> <span class="fn">t</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">i</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">ι</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">t</span> <span class="fn">i</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="iSupIndep.injOn_iInf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L410-L419">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.injOn_iInf"><span class="name">iSupIndep</span>.<span class="name">injOn_iInf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">ι</span> → <a href="../.././foundational_types.html">Type</a> u_5</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn"><span class="fn">β</span> <span class="fn">i</span></span> → <span class="fn">α</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">(<span class="fn">t</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.InjOn">Set.InjOn</a> <span class="fn">(fun (<span class="fn">b</span> : <span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">β</span> <span class="fn">i</span></span></span>) =&gt; <span class="fn">⨅ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">t</span> <span class="fn">i</span> <span class="fn">(<span class="fn">b</span> <span class="fn">i</span>)</span></span></span>)</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">b</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn"><span class="fn">β</span> <span class="fn">i</span></span></span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">⨅ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">t</span> <span class="fn">i</span> <span class="fn">(<span class="fn">b</span> <span class="fn">i</span>)</span></span></span> <a href="../.././Init/Core.html#Ne">≠</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="iSupIndep.injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L421-L423">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.injective"><span class="name">iSupIndep</span>.<span class="name">injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h_ne_bot</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">t</span> <span class="fn">i</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="iSupIndep_pair"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L425-L434">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_pair"><span class="name">iSupIndep_pair</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hij</span> : <span class="fn">i</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">j</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">huniv</span> : <span class="fn">∀ (<span class="fn">k</span> : <span class="fn">ι</span>), <span class="fn">k</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">i</span> <a href="../.././Init/Prelude.html#Or">∨</a> <span class="fn">k</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">j</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">t</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">t</span> <span class="fn">j</span>)</span></span></div></div></div></div><div class="decl" id="iSup_fin_three"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L436-L441">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSup_fin_three"><span class="name">iSup_fin_three</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">3</span></span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">⨆ (<span class="fn">i</span> : <span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">3</span></span>), <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">0</span></span> ⊔ <span class="fn"><span class="fn">f</span> <span class="fn">1</span></span></span> ⊔ <span class="fn"><span class="fn">f</span> <span class="fn">2</span></span></span></div></div></div></div><div class="decl" id="iSupIndep_fin_three"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L443-L453">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_fin_three"><span class="name">iSupIndep_fin_three</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">3</span></span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">f</span> <span class="fn">0</span>)</span> <span class="fn">(<span class="fn"><span class="fn">f</span> <span class="fn">1</span></span> ⊔ <span class="fn"><span class="fn">f</span> <span class="fn">2</span></span>)</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">f</span> <span class="fn">1</span>)</span> <span class="fn">(<span class="fn"><span class="fn">f</span> <span class="fn">2</span></span> ⊔ <span class="fn"><span class="fn">f</span> <span class="fn">0</span></span>)</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">f</span> <span class="fn">2</span>)</span> <span class="fn">(<span class="fn"><span class="fn">f</span> <span class="fn">0</span></span> ⊔ <span class="fn"><span class="fn">f</span> <span class="fn">1</span></span>)</span></span></div></div></div></div><div class="decl" id="iSupIndep.map_orderIso"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L455-L459">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.map_orderIso"><span class="name">iSupIndep</span>.<span class="name">map_orderIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">β</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> (<span class="fn">⇑<span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">a</span>)</span></div></div><p>Composing an independent indexed family with an order isomorphism on the elements results in
+another independent indexed family.</p></div></div><div class="decl" id="iSupIndep_map_orderIso_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L461-L467">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_map_orderIso_iff"><span class="name">iSupIndep_map_orderIso_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../.././Mathlib/Order/Hom/Basic.html#OrderIso">≃o</a> <span class="fn">β</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> (<span class="fn">⇑<span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">a</span>)</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="iSupIndep.disjoint_biSup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L469-L473">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.disjoint_biSup"><span class="name">iSupIndep</span>.<span class="name">disjoint_biSup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">y</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><span class="fn">x</span> ∉ <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(<span class="fn">t</span> <span class="fn">x</span>)</span> <span class="fn">(⨆ <span class="fn">i</span> ∈ <span class="fn">y</span>, <span class="fn"><span class="fn">t</span> <span class="fn">i</span></span>)</span></span></div></div><p>If the elements of a set are independent, then any element is disjoint from the <code><a href="../.././Mathlib/Order/SetNotation.html#iSup">iSup</a></code> of some
+subset of the rest.</p></div></div><div class="decl" id="iSupIndep.of_coe_Iic_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L475-L480">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.of_coe_Iic_comp"><span class="name">iSupIndep</span>.<span class="name">of_coe_Iic_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Order/Interval/Set/Defs.html#Set.Iic">Set.Iic</a> <span class="fn">a</span>)</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> (<a href="../.././Init/Prelude.html#Subtype.val">Subtype.val</a> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">t</span>)</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="iSupIndep_comp_coe_iff_supIndep"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L482-L491">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_comp_coe_iff_supIndep"><span class="name">iSupIndep_comp_coe_iff_supIndep</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> (<span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <a href="../.././Init/Prelude.html#Subtype.val">Subtype.val</a>)</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Finset.SupIndep.independent"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L493-L493">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.independent"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">independent</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> → <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> (<span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <a href="../.././Init/Prelude.html#Subtype.val">Subtype.val</a>)</span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep_comp_coe_iff_supIndep">iSupIndep_comp_coe_iff_supIndep</a></code>.</p></div></div><div class="decl" id="iSupIndep.supIndep"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L493-L493">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.supIndep"><span class="name">iSupIndep</span>.<span class="name">supIndep</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> (<span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <a href="../.././Init/Prelude.html#Subtype.val">Subtype.val</a>)</span> → <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></span></div></div><p><strong>Alias</strong> of the forward direction of <code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep_comp_coe_iff_supIndep">iSupIndep_comp_coe_iff_supIndep</a></code>.</p></div></div><div class="decl" id="iSupIndep.supIndep'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L495-L496">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.supIndep'"><span class="name">iSupIndep</span>.<span class="name">supIndep'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="iSupIndep_iff_supIndep_univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L498-L502">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_iff_supIndep_univ"><span class="name">iSupIndep_iff_supIndep_univ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">Finset.univ</a>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></div></div><p>A variant of <code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep_comp_coe_iff_supIndep">iSupIndep_comp_coe_iff_supIndep</a></code> for <code><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code>s.</p></div></div><div class="decl" id="Finset.SupIndep.iSupIndep_of_univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L504-L504">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep.iSupIndep_of_univ"><span class="name">Finset</span>.<span class="name">SupIndep</span>.<span class="name">iSupIndep_of_univ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">univ</a>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span> → <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">f</span></span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep_iff_supIndep_univ">iSupIndep_iff_supIndep_univ</a></code>.</p><hr>
+<p>A variant of <code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep_comp_coe_iff_supIndep">iSupIndep_comp_coe_iff_supIndep</a></code> for <code><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code>s.</p></div></div><div class="decl" id="iSupIndep.sup_indep_univ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L504-L504">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.sup_indep_univ"><span class="name">iSupIndep</span>.<span class="name">sup_indep_univ</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">f</span></span> → <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">Finset.univ</a>.<a href="../.././Mathlib/Order/SupIndep.html#Finset.SupIndep">SupIndep</a></span> <span class="fn">f</span></span></span></div></div><p><strong>Alias</strong> of the forward direction of <code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep_iff_supIndep_univ">iSupIndep_iff_supIndep_univ</a></code>.</p><hr>
+<p>A variant of <code><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep_comp_coe_iff_supIndep">iSupIndep_comp_coe_iff_supIndep</a></code> for <code><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a></code>s.</p></div></div><div class="decl" id="iSupIndep.le_iff_eq_of_iSup_eq_top"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L506-L514">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.le_iff_eq_of_iSup_eq_top"><span class="name">iSupIndep</span>.<span class="name">le_iff_eq_of_iSup_eq_top</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../.././Mathlib/Order/SetNotation.html#iSup">iSup</a> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">g</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="iSupIndep.disjoint_biSup_biSup'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L516-L539">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.disjoint_biSup_biSup'"><span class="name">iSupIndep</span>.<span class="name">disjoint_biSup_biSup'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/ModularLattice.html#IsModularLattice">IsModularLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s </span><span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hst</span> : <span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">s</span> <span class="fn">t</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Finite/Defs.html#Set.Finite">Finite</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">(⨆ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span> <span class="fn">(⨆ <span class="fn">i</span> ∈ <span class="fn">t</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span></span></div></div><p>See also <code><a href="../.././Mathlib/Order/CompactlyGenerated/Basic.html#iSupIndep.disjoint_biSup_biSup">iSupIndep.disjoint_biSup_biSup</a></code> where it is shown that the hypothesis <code>s.<a href="../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a></code> may
+be omitted if the lattice is compactly-generated.</p></div></div><div class="decl" id="iSupIndep.mem_of_biSup_eq_top"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L541-L546">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep.mem_of_biSup_eq_top"><span class="name">iSupIndep</span>.<span class="name">mem_of_biSup_eq_top</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">ι</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">⨆ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">i</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span></div></div></div></div><div class="decl" id="sSupIndep_iff_pairwiseDisjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L553-L555">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#sSupIndep_iff_pairwiseDisjoint"><span class="name">sSupIndep_iff_pairwiseDisjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteBooleanAlgebra.html#Order.Frame">Order.Frame</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">sSupIndep</a> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Set/Pairwise/Basic.html#Set.PairwiseDisjoint">PairwiseDisjoint</a></span> <a href="../.././Init/Prelude.html#id">id</a></span></div></div></div></div><div class="decl" id="Set.PairwiseDisjoint.sSupIndep"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L557-L557">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#Set.PairwiseDisjoint.sSupIndep"><span class="name">Set</span>.<span class="name">PairwiseDisjoint</span>.<span class="name">sSupIndep</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteBooleanAlgebra.html#Order.Frame">Order.Frame</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../.././Mathlib/Data/Set/Pairwise/Basic.html#Set.PairwiseDisjoint">PairwiseDisjoint</a></span> <a href="../.././Init/Prelude.html#id">id</a></span> → <span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep">_root_.sSupIndep</a> <span class="fn">s</span></span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../.././Mathlib/Order/SupIndep.html#sSupIndep_iff_pairwiseDisjoint">sSupIndep_iff_pairwiseDisjoint</a></code>.</p></div></div><div class="decl" id="iSupIndep_iff_pairwiseDisjoint"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/SupIndep.lean#L560-L562">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/SupIndep.html#iSupIndep_iff_pairwiseDisjoint"><span class="name">iSupIndep_iff_pairwiseDisjoint</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/CompleteBooleanAlgebra.html#Order.Frame">Order.Frame</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/SupIndep.html#iSupIndep">iSupIndep</a> <span class="fn">f</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Logic/Pairwise.html#Pairwise">Pairwise</a> <span class="fn">(<a href="../.././Mathlib/Logic/Function/Defs.html#Function.onFun">Function.onFun</a> <a href="../.././Mathlib/Order/Disjoint.html#Disjoint">Disjoint</a> <span class="fn">f</span>)</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

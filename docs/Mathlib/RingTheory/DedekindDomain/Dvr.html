@@ -1,0 +1,187 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.DedekindDomain.Dvr</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.DedekindDomain.Dvr";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">DedekindDomain</span>.<span class="name">Dvr</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/RingTheory/DiscreteValuationRing/TFAE.html">Mathlib.RingTheory.DiscreteValuationRing.TFAE</a></li><li><a href="../../.././Mathlib/RingTheory/LocalProperties/IntegrallyClosed.html">Mathlib.RingTheory.LocalProperties.IntegrallyClosed</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.DedekindDomain.Dvr" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsDedekindDomainDvr"><span class="name">IsDedekindDomainDvr</span></a></div><div class="nav_link"><a class="break_within" href="#Ring.DimensionLEOne.localization"><span class="name">Ring</span>.<span class="name">DimensionLEOne</span>.<span class="name">localization</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocalization.isDedekindDomain"><span class="name">IsLocalization</span>.<span class="name">isDedekindDomain</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocalization.AtPrime.isDedekindDomain"><span class="name">IsLocalization</span>.<span class="name">AtPrime</span>.<span class="name">isDedekindDomain</span></a></div><div class="nav_link"><a class="break_within" href="#Localization.AtPrime.isDedekindDomain"><span class="name">Localization</span>.<span class="name">AtPrime</span>.<span class="name">isDedekindDomain</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocalization.AtPrime.not_isField"><span class="name">IsLocalization</span>.<span class="name">AtPrime</span>.<span class="name">not_isField</span></a></div><div class="nav_link"><a class="break_within" href="#IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain"><span class="name">IsLocalization</span>.<span class="name">AtPrime</span>.<span class="name">isDiscreteValuationRing_of_dedekind_domain</span></a></div><div class="nav_link"><a class="break_within" href="#IsDedekindDomain.isDedekindDomainDvr"><span class="name">IsDedekindDomain</span>.<span class="name">isDedekindDomainDvr</span></a></div><div class="nav_link"><a class="break_within" href="#IsDedekindDomainDvr.ring_dimensionLEOne"><span class="name">IsDedekindDomainDvr</span>.<span class="name">ring_dimensionLEOne</span></a></div><div class="nav_link"><a class="break_within" href="#IsDedekindDomainDvr.isIntegrallyClosed"><span class="name">IsDedekindDomainDvr</span>.<span class="name">isIntegrallyClosed</span></a></div><div class="nav_link"><a class="break_within" href="#IsDedekindDomainDvr.isDedekindDomain"><span class="name">IsDedekindDomainDvr</span>.<span class="name">isDedekindDomain</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Dedekind-domains" class="markdown-heading">Dedekind domains <a class="hover-link" href="#Dedekind-domains">#</a></h1><p>This file defines an equivalent notion of a Dedekind domain (or Dedekind ring),
+namely a Noetherian integral domain where the localization at every nonzero prime ideal is a DVR.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomainDvr">IsDedekindDomainDvr</a></code> alternatively defines a Dedekind domain as an integral domain that
+is Noetherian, and the localization at every nonzero prime ideal is a DVR.</li></ul><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain">IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain</a></code> shows that
+<code><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a></code> implies the localization at each nonzero prime ideal is a DVR.</li><li><code><a href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomain.isDedekindDomainDvr">IsDedekindDomain.isDedekindDomainDvr</a></code> is one direction of the equivalence of definitions
+of a Dedekind domain</li></ul><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>The definitions that involve a field of fractions choose a canonical field of fractions,
+but are independent of that choice. The <code>..._iff</code> lemmas express this independence.</p><p>Often, definitions assume that Dedekind domains are not fields. We found it more practical
+to add a <code>(h : ¬ <a href="../../.././Mathlib/Algebra/Field/IsField.html#IsField">IsField</a> A)</code> assumption whenever this is explicitly needed.</p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>[D. Marcus, <em>Number Fields</em>][marcus1977number]</li><li>[J.W.S. Cassels, A. Fröhlich, <em>Algebraic Number Theory</em>][cassels1967algebraic]</li><li>[J. Neukirch, <em>Algebraic Number Theory</em>][Neukirch1992]</li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>dedekind domain, dedekind ring</p></div><div class="decl" id="IsDedekindDomainDvr"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L54-L61">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomainDvr"><span class="name">IsDedekindDomainDvr</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="IsDedekindDomainDvr.toIsNoetherian"><span class="fn"><a href="../../.././Mathlib/RingTheory/Noetherian/Defs.html#IsNoetherian">IsNoetherian</a> <span class="fn">A</span> <span class="fn">A</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A Dedekind domain is an integral domain that is Noetherian, and the
+localization at every nonzero prime is a discrete valuation ring.</p><p>This is equivalent to <code><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a></code>.</p><ul class="structure_fields" id="IsDedekindDomainDvr.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../.././Mathlib/RingTheory/Noetherian/Defs.html#IsNoetherian.noetherian">noetherian</a><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">A</span> <span class="fn">A</span></span>)</span></span>
+ : <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span></div></li><li id="IsDedekindDomainDvr.is_dvr_at_nonzero_prime" class="structure_field"><div class="structure_field_info">is_dvr_at_nonzero_prime<span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">A</span></span>)</span></span>
+ : <span class="fn"><span class="fn">P</span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a> → <span class="fn">∀ (<span class="fn">x</span> : <span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>), <span class="fn"><a href="../../.././Mathlib/RingTheory/DiscreteValuationRing/Basic.html#IsDiscreteValuationRing">IsDiscreteValuationRing</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html#Localization.AtPrime">Localization.AtPrime</a> <span class="fn">P</span>)</span></span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-IsDedekindDomainDvr" class="instances-list"></ul></details></div></div><div class="decl" id="Ring.DimensionLEOne.localization"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L63-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#Ring.DimensionLEOne.localization"><span class="name">Ring</span>.<span class="name">DimensionLEOne</span>.<span class="name">localization</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Rₘ</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">Rₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">R</span> <span class="fn">Rₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid">Submonoid</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Localization/Defs.html#IsLocalization">IsLocalization</a> <span class="fn">M</span> <span class="fn">Rₘ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hM</span> : <span class="fn">M</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/NonZeroDivisors.html#nonZeroDivisors">nonZeroDivisors</a> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#Ring.DimensionLEOne">DimensionLEOne</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#Ring.DimensionLEOne">DimensionLEOne</a> <span class="fn">Rₘ</span></span></div></div><p>Localizing a domain of Krull dimension <code>≤ 1</code> gives another ring of Krull dimension <code>≤ 1</code>.</p><p>Note that the same proof can/should be generalized to preserving any Krull dimension,
+once we have a suitable definition.</p></div></div><div class="decl" id="IsLocalization.isDedekindDomain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L83-L104">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsLocalization.isDedekindDomain"><span class="name">IsLocalization</span>.<span class="name">isDedekindDomain</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#Submonoid">Submonoid</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hM</span> : <span class="fn">M</span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../.././Mathlib/Algebra/GroupWithZero/NonZeroDivisors.html#nonZeroDivisors">nonZeroDivisors</a> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Aₘ</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Localization/Defs.html#IsLocalization">IsLocalization</a> <span class="fn">M</span> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">Aₘ</span></span></div></div><p>The localization of a Dedekind domain is a Dedekind domain.</p></div></div><div class="decl" id="IsLocalization.AtPrime.isDedekindDomain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L106-L110">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsLocalization.AtPrime.isDedekindDomain"><span class="name">IsLocalization</span>.<span class="name">AtPrime</span>.<span class="name">isDedekindDomain</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">A</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Aₘ</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html#IsLocalization.AtPrime">IsLocalization.AtPrime</a> <span class="fn">Aₘ</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">Aₘ</span></span></div></div><p>The localization of a Dedekind domain at every nonzero prime ideal is a Dedekind domain.</p></div></div><div class="decl" id="Localization.AtPrime.isDedekindDomain"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L112-L114">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#Localization.AtPrime.isDedekindDomain"><span class="name">Localization</span>.<span class="name">AtPrime</span>.<span class="name">isDedekindDomain</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">A</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html#Localization.AtPrime">Localization.AtPrime</a> <span class="fn">P</span>)</span></span></div></div></div></div><div class="decl" id="IsLocalization.AtPrime.not_isField"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L116-L128">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsLocalization.AtPrime.not_isField"><span class="name">IsLocalization</span>.<span class="name">AtPrime</span>.<span class="name">not_isField</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hP</span> : <span class="fn">P</span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">pP</span> : <span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Aₘ</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html#IsLocalization.AtPrime">IsLocalization.AtPrime</a> <span class="fn">Aₘ</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><a href="../../.././Mathlib/Algebra/Field/IsField.html#IsField">IsField</a> <span class="fn">Aₘ</span></span></div></div></div></div><div class="decl" id="IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L130-L141">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain"><span class="name">IsLocalization</span>.<span class="name">AtPrime</span>.<span class="name">isDiscreteValuationRing_of_dedekind_domain</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">A</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hP</span> : <span class="fn">P</span> <a href="../../.././Init/Core.html#Ne">≠</a> <a href="../../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">pP</span> : <span class="fn"><span class="fn">P</span>.<a href="../../.././Mathlib/RingTheory/Ideal/Prime.html#Ideal.IsPrime">IsPrime</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Aₘ</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">A</span> <span class="fn">Aₘ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Localization/AtPrime/Basic.html#IsLocalization.AtPrime">IsLocalization.AtPrime</a> <span class="fn">Aₘ</span> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/DiscreteValuationRing/Basic.html#IsDiscreteValuationRing">IsDiscreteValuationRing</a> <span class="fn">Aₘ</span></span></div></div><p>In a Dedekind domain, the localization at every nonzero prime ideal is a DVR.</p></div></div><div class="decl" id="IsDedekindDomain.isDedekindDomainDvr"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L143-L148">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomain.isDedekindDomainDvr"><span class="name">IsDedekindDomain</span>.<span class="name">isDedekindDomainDvr</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomainDvr">IsDedekindDomainDvr</a> <span class="fn">A</span></span></div></div><p>Dedekind domains, in the sense of Noetherian integrally closed domains of Krull dimension ≤ 1,
+are also Dedekind domains in the sense of Noetherian domains where the localization at every
+nonzero prime ideal is a DVR.</p></div></div><div class="decl" id="IsDedekindDomainDvr.ring_dimensionLEOne"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L150-L167">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomainDvr.ring_dimensionLEOne"><span class="name">IsDedekindDomainDvr</span>.<span class="name">ring_dimensionLEOne</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomainDvr">IsDedekindDomainDvr</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#Ring.DimensionLEOne">Ring.DimensionLEOne</a> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="IsDedekindDomainDvr.isIntegrallyClosed"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L169-L174">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomainDvr.isIntegrallyClosed"><span class="name">IsDedekindDomainDvr</span>.<span class="name">isIntegrallyClosed</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomainDvr">IsDedekindDomainDvr</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/IntegralClosure/IntegrallyClosed.html#IsIntegrallyClosed">IsIntegrallyClosed</a> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="IsDedekindDomainDvr.isDedekindDomain"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/DedekindDomain/Dvr.lean#L176-L178">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomainDvr.isDedekindDomain"><span class="name">IsDedekindDomainDvr</span>.<span class="name">isDedekindDomain</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Dvr.html#IsDedekindDomainDvr">IsDedekindDomainDvr</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/DedekindDomain/Basic.html#IsDedekindDomain">IsDedekindDomain</a> <span class="fn">A</span></span></div></div><p>If an integral domain is Noetherian, and the localization at every nonzero prime is
+a discrete valuation ring, then it is a Dedekind domain.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

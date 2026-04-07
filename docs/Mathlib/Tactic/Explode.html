@@ -1,0 +1,80 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Tactic.Explode</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Tactic.Explode";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">Explode</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/Explode.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Lean/PrettyPrinter.html">Lean.PrettyPrinter</a></li><li><a href="../.././Lean/Elab/Command.html">Lean.Elab.Command</a></li><li><a href="../.././Mathlib/Tactic/Explode/Datatypes.html">Mathlib.Tactic.Explode.Datatypes</a></li><li><a href="../.././Mathlib/Tactic/Explode/Pretty.html">Mathlib.Tactic.Explode.Pretty</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Tactic.Explode" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Mathlib.Explode.explodeCore"><span class="name">Mathlib</span>.<span class="name">Explode</span>.<span class="name">explodeCore</span></a></div><div class="nav_link"><a class="break_within" href="#Mathlib.Explode.explode"><span class="name">Mathlib</span>.<span class="name">Explode</span>.<span class="name">explode</span></a></div><div class="nav_link"><a class="break_within" href="#Mathlib.Explode.«command#explode_»"><span class="name">Mathlib</span>.<span class="name">Explode</span>.<span class="name">«command#explode_»</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Explode-command" class="markdown-heading">Explode command <a class="hover-link" href="#Explode-command">#</a></h1><p>This file contains the main code behind the <code>#explode</code> command.
+If you have a theorem with a name <code>hi</code>, <code>#explode hi</code> will display a Fitch table.</p></div><div class="decl" id="Mathlib.Explode.explodeCore"><div class="opaque"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/Explode.lean#L28-L142">source</a></div><div class="decl_header"><span class="decl_kind">partial def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/Explode.html#Mathlib.Explode.explodeCore"><span class="name">Mathlib</span>.<span class="name">Explode</span>.<span class="name">explodeCore</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">select</span> : <span class="fn"><a href="../.././Lean/Expr.html#Lean.Expr">Lean.Expr</a> → <span class="fn"><a href="../.././Lean/Meta/Basic.html#Lean.Meta.MetaM">Lean.MetaM</a> <a href="../.././Init/Prelude.html#Bool">Bool</a></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">includeAllDeps</span> : <a href="../.././Init/Prelude.html#Bool">Bool</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <a href="../.././Lean/Expr.html#Lean.Expr">Lean.Expr</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">depth</span> : <a href="../.././Init/Prelude.html#Nat">Nat</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">entries</span> : <a href="../.././Mathlib/Tactic/Explode/Datatypes.html#Mathlib.Explode.Entries">Entries</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">start</span> : <a href="../.././Init/Prelude.html#Bool">Bool</a> := <a href="../.././Init/Prelude.html#Bool.false">false</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Lean/Meta/Basic.html#Lean.Meta.MetaM">Lean.MetaM</a> (<span class="fn"><a href="../.././Init/Prelude.html#Option">Option</a> <a href="../.././Mathlib/Tactic/Explode/Datatypes.html#Mathlib.Explode.Entry">Entry</a></span> <a href="../.././Init/Prelude.html#Prod">×</a> <a href="../.././Mathlib/Tactic/Explode/Datatypes.html#Mathlib.Explode.Entries">Entries</a>)</span></div></div><p>Core <code><a href="../.././Mathlib/Tactic/Explode.html#Mathlib.Explode.explode">explode</a></code> algorithm.</p><ul><li><code>select</code> is a condition for which expressions to process</li><li><code>includeAllDeps</code> is whether to include dependencies even if they were filtered out.
+If <code><a href="../.././Init/Prelude.html#True">True</a></code>, then <code>none</code> is inserted for omitted dependencies</li><li><code>e</code> is the expression to process</li><li><code>depth</code> is the current abstraction depth</li><li><code>entries</code> is the table so far</li><li><code>start</code> is whether we are at the top-level of the expression, which
+causes lambdas to use <code>Status.sintro</code> to prevent a layer of nesting.</li></ul></div></div><div class="decl" id="Mathlib.Explode.explode"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/Explode.lean#L144-L149">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/Explode.html#Mathlib.Explode.explode"><span class="name">Mathlib</span>.<span class="name">Explode</span>.<span class="name">explode</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <a href="../.././Lean/Expr.html#Lean.Expr">Lean.Expr</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">filterProofs</span> : <a href="../.././Init/Prelude.html#Bool">Bool</a> := <a href="../.././Init/Prelude.html#Bool.true">true</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Lean/Meta/Basic.html#Lean.Meta.MetaM">Lean.MetaM</a> <a href="../.././Mathlib/Tactic/Explode/Datatypes.html#Mathlib.Explode.Entries">Entries</a></span></div></div><p>Main definition behind <code>#explode</code> command.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Explode.explode" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Mathlib.Explode.«command#explode_»"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/Explode.lean#L152-L277">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/Explode.html#Mathlib.Explode.«command#explode_»"><span class="name">Mathlib</span>.<span class="name">Explode</span>.<span class="name">«command#explode_»</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Lean.ParserDescr">Lean.ParserDescr</a></div></div><p><code>#explode expr</code> displays a proof term in a line-by-line format somewhat akin to a Fitch-style
+proof or the Metamath proof style.</p><p>For example, exploding the following theorem:</p><pre><code class="language-lean">#explode <a href="../.././Init/Core.html#iff_of_true">iff_of_true</a>
+</code></pre><p>produces:</p><pre><code class="language-lean"><a href="../.././Init/Core.html#iff_of_true">iff_of_true</a> : ∀ {a b : Prop}, a → b → (a ↔ b)
+
+0│         │ a         ├ Prop
+1│         │ b         ├ Prop
+2│         │ ha        ├ a
+3│         │ hb        ├ b
+4│         │ x✝        │ ┌ a
+5│4,3      │ ∀I        │ a → b
+6│         │ x✝        │ ┌ b
+7│6,2      │ ∀I        │ b → a
+8│5,7      │ <a href="../.././Init/Core.html#Iff.intro">Iff.intro</a> │ a ↔ b
+9│0,1,2,3,8│ ∀I        │ ∀ {a b : Prop}, a → b → (a ↔ b)
+</code></pre><h2 id="Overview" class="markdown-heading">Overview <a class="hover-link" href="#Overview">#</a></h2><p>The <code>#explode</code> command takes the body of the theorem and decomposes it into its parts,
+displaying each expression constructor one at a time. The constructor is indicated
+in some way in column 3, and its dependencies are recorded in column 2.</p><p>These are the main constructor types:</p><ul><li><p>Lambda expressions (<code>Expr.lam</code>). The expression <code>fun (h : p) =&gt; s</code> is displayed as</p><pre><code class="language-lean"> 0│    │ h   │ ┌ p
+ 1│**  │ **  │ │ q
+ 2│1,2 │ ∀I  │ ∀ (h : p), q
+</code></pre><p>with <code>**</code> a wildcard, and there can be intervening steps between 0 and 1.
+Nested lambda expressions can be merged, and <code>∀I</code> can depend on a whole list of arguments.</p></li><li><p>Applications (<code>Expr.app</code>). The expression <code>f a b c</code> is displayed as</p><pre><code class="language-lean">0│**      │ f  │ A → B → C → D
+1│**      │ a  │ A
+2│**      │ b  │ B
+3│**      │ c  │ C
+1│0,1,2,3 │ ∀E │ D
+</code></pre><p>There can be intervening steps between each of these.
+As a special case, if <code>f</code> is a constant it can be omitted and the display instead looks like</p><pre><code class="language-lean">0│**    │ a │ A
+1│**    │ b │ B
+2│**    │ c │ C
+3│1,2,3 │ f │ D
+</code></pre></li><li><p>Let expressions (<code>Expr.letE</code>) do not display in any special way, but they do
+ensure that in <code>let x := v; b</code> that <code>v</code> is processed first and then <code>b</code>, rather
+than first doing zeta reduction. This keeps lambda merging and application merging
+from making proofs with <code>let</code> confusing to interpret.</p></li><li><p>Everything else (constants, fvars, etc.) display <code>x : X</code> as</p><pre><code class="language-lean">0│  │ x │ X
+</code></pre></li></ul><h2 id="In-more-detail" class="markdown-heading">In more detail <a class="hover-link" href="#In-more-detail">#</a></h2><p>The output of <code>#explode</code> is a Fitch-style proof in a four-column diagram modeled after Metamath
+proof displays like <a href="http://us.metamath.org/mpeuni/ru.html">this</a>. The headers of the columns are
+&quot;Step&quot;, &quot;Hyp&quot;, &quot;Ref&quot;, &quot;Type&quot; (or &quot;Expression&quot; in the case of Metamath):</p><ul><li><strong>Step</strong>: An increasing sequence of numbers for each row in the proof, used in the Hyp fields.</li><li><strong>Hyp</strong>: The direct children of the current step. These are step numbers for the subexpressions
+for this step's expression. For theorem applications, it's the theorem arguments, and for
+foralls it is all the bound variables and the conclusion.</li><li><strong>Ref</strong>: The name of the theorem being applied. This is well-defined in Metamath, but in Lean
+there are some special steps that may have long names because the structure of proof terms doesn't
+exactly match this mold.<ul><li>If the theorem is <code>foo (x y : Z) : A x -&gt; B y -&gt; C x y</code>:<ul><li>the Ref field will contain <code>foo</code>,</li><li><code>x</code> and <code>y</code> will be suppressed, because term construction is not interesting, and</li><li>the Hyp field will reference steps proving <code>A x</code> and <code>B y</code>. This corresponds to a proof term
+like <code>@foo x y pA pB</code> where <code>pA</code> and <code>pB</code> are subproofs.</li><li>In the Hyp column, suppressed terms are omitted, including terms that ought to be
+suppressed but are not (in particular lambda arguments).
+TODO: implement a configuration option to enable representing suppressed terms using
+an <code>_</code> rather than a step number.</li></ul></li><li>If the head of the proof term is a local constant or lambda, then in this case the Ref will
+say <code>∀E</code> for forall-elimination. This happens when you have for example <code>h : A -&gt; B</code> and
+<code>ha : A</code> and prove <code>b</code> by <code>h ha</code>; we reinterpret this as if it said <code>∀E h ha</code> where <code>∀E</code> is
+(n-ary) modus ponens.</li><li>If the proof term is a lambda, we will also use <code>∀I</code> for forall-introduction, referencing the
+body of the lambda. The indentation level will increase, and a bracket will surround the proof
+of the body of the lambda, starting at a proof step labeled with the name of the lambda variable
+and its type, and ending with the <code>∀I</code> step. Metamath doesn't have steps like this, but the
+style is based on Fitch proofs in first-order logic.</li></ul></li><li><strong>Type</strong>: This contains the type of the proof term, the theorem being proven at the current step.</li></ul><p>Also, it is common for a Lean theorem to begin with a sequence of lambdas introducing local
+constants of the theorem. In order to minimize the indentation level, the <code>∀I</code> steps at the end of
+the proof will be introduced in a group and the indentation will stay fixed. (The indentation
+brackets are only needed in order to delimit the scope of assumptions, and these assumptions
+have global scope anyway so detailed tracking is not necessary.)</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Explode.«command#explode_»" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,320 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Data.FunLike.Basic</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Data.FunLike.Basic";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Data</span>.<span class="name">FunLike</span>.<span class="name">Basic</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Lean/Meta/CoeAttr.html">Lean.Meta.CoeAttr</a></li><li><a href="../../.././Mathlib/Logic/Unique.html">Mathlib.Logic.Unique</a></li><li><a href="../../.././Mathlib/Tactic/SplitIfs.html">Mathlib.Tactic.SplitIfs</a></li><li><a href="../../.././Mathlib/Util/CompileInductive.html">Mathlib.Util.CompileInductive</a></li><li><a href="../../.././Mathlib/Logic/Function/Basic.html">Mathlib.Logic.Function.Basic</a></li><li><a href="../../.././Mathlib/Tactic/Simps/NotationClass.html">Mathlib.Tactic.Simps.NotationClass</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Data.FunLike.Basic" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#DFunLike"><span class="name">DFunLike</span></a></div><div class="nav_link"><a class="break_within" href="#FunLike"><span class="name">FunLike</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.hasCoeToFun"><span class="name">DFunLike</span>.<span class="name">hasCoeToFun</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.coe_eq_coe_fn"><span class="name">DFunLike</span>.<span class="name">coe_eq_coe_fn</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.coe_injective"><span class="name">DFunLike</span>.<span class="name">coe_injective</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.coe_fn_eq"><span class="name">DFunLike</span>.<span class="name">coe_fn_eq</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.ext'"><span class="name">DFunLike</span>.<span class="name">ext'</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.ext'_iff"><span class="name">DFunLike</span>.<span class="name">ext'_iff</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.ext"><span class="name">DFunLike</span>.<span class="name">ext</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.ext_iff"><span class="name">DFunLike</span>.<span class="name">ext_iff</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.congr_fun"><span class="name">DFunLike</span>.<span class="name">congr_fun</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.ne_iff"><span class="name">DFunLike</span>.<span class="name">ne_iff</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.exists_ne"><span class="name">DFunLike</span>.<span class="name">exists_ne</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.subsingleton_cod"><span class="name">DFunLike</span>.<span class="name">subsingleton_cod</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.subsingleton_dom"><span class="name">DFunLike</span>.<span class="name">subsingleton_dom</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.congr"><span class="name">DFunLike</span>.<span class="name">congr</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.congr_arg"><span class="name">DFunLike</span>.<span class="name">congr_arg</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.dite_apply"><span class="name">DFunLike</span>.<span class="name">dite_apply</span></a></div><div class="nav_link"><a class="break_within" href="#DFunLike.ite_apply"><span class="name">DFunLike</span>.<span class="name">ite_apply</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Typeclass-for-a-type-F-with-an-injective-map-to-A-→-B" class="markdown-heading">Typeclass for a type <code>F</code> with an injective map to <code>A → B</code> <a class="hover-link" href="#Typeclass-for-a-type-F-with-an-injective-map-to-A-→-B">#</a></h1><p>This typeclass is primarily for use by homomorphisms like <code><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">MonoidHom</a></code> and <code><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">LinearMap</a></code>.</p><p>There is the &quot;D&quot;ependent version <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a></code> and the non-dependent version <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code>.</p><h2 id="Basic-usage-of-DFunLike-and-FunLike" class="markdown-heading">Basic usage of <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a></code> and <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code> <a class="hover-link" href="#Basic-usage-of-DFunLike-and-FunLike">#</a></h2><p>A typical type of morphisms should be declared as:</p><pre><code>structure MyHom (A B : Type*) [MyClass A] [MyClass B] where
+  (toFun : A → B)
+  (map_op' : ∀ (x y : A), toFun (MyClass.op x y) = MyClass.op (toFun x) (toFun y))
+
+namespace MyHom
+
+variable (A B : Type*) [MyClass A] [MyClass B]
+
+instance : <a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> (MyHom A B) A B where
+  <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">coe</a> := MyHom.toFun
+  <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe_injective'">coe_injective'</a> := fun f g h =&gt; by cases f; cases g; <a href="../../.././Init/Prelude.html#congr">congr</a>
+
+@[ext] theorem <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.ext">ext</a> {f g : MyHom A B} (h : ∀ x, f x = g x) : f = g := <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.ext">DFunLike.ext</a> f g h
+
+/-- Copy of a `MyHom` with a new `toFun` equal to the old one. Useful to fix definitional
+equalities. -/
+protected def copy (f : MyHom A B) (f' : A → B) (h : f' = ⇑f) : MyHom A B where
+  toFun := f'
+  map_op' := h.<a href="../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a> ▸ f.map_op'
+
+end MyHom
+</code></pre><p>This file will then provide a <code><a href="../../.././Init/Coe.html#CoeFun">CoeFun</a></code> instance and various
+extensionality and simp lemmas.</p><h2 id="Morphism-classes-extending-DFunLike-and-FunLike" class="markdown-heading">Morphism classes extending <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a></code> and <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code> <a class="hover-link" href="#Morphism-classes-extending-DFunLike-and-FunLike">#</a></h2><p>The <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code> design provides further benefits if you put in a bit more work.
+The first step is to extend <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code> to create a class of those types satisfying
+the axioms of your new type of morphisms.
+Continuing the example above:</p><pre><code>/-- `MyHomClass F A B` states that `F` is a type of `MyClass.op`-preserving morphisms.
+You should extend this class when you extend `MyHom`. -/
+class MyHomClass (F : Type*) (A B : <a href="../../.././Init/Prelude.html#outParam">outParam</a> Type*) [MyClass A] [MyClass B]
+    [FunLike F A B] : Prop :=
+  (map_op : ∀ (f : F) (x y : A), f (MyClass.op x y) = MyClass.op (f x) (f y))
+
+@[simp]
+<a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> map_op {F A B : Type*} [MyClass A] [MyClass B] [FunLike F A B] [MyHomClass F A B]
+    (f : F) (x y : A) :
+    f (MyClass.op x y) = MyClass.op (f x) (f y) :=
+  MyHomClass.map_op _ _ _
+
+-- You can add the below instance next to `MyHomClass.instFunLike`:
+instance : MyHomClass (MyHom A B) A B where
+  map_op := MyHom.map_op'
+
+-- [Insert `ext` and `copy` here]
+</code></pre><p>Note that <code>A B</code> are marked as <code><a href="../../.././Init/Prelude.html#outParam">outParam</a></code> even though they are not purely required to be so
+due to the <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code> parameter already filling them in. This is required to see through
+type synonyms, which is important in the category theory library. Also, it appears having them as
+<code><a href="../../.././Init/Prelude.html#outParam">outParam</a></code> is slightly faster.</p><p>The second step is to add instances of your new <code>MyHomClass</code> for all types extending <code>MyHom</code>.
+Typically, you can just declare a new class analogous to <code>MyHomClass</code>:</p><pre><code>structure CoolerHom (A B : Type*) [CoolClass A] [CoolClass B] extends MyHom A B where
+  (map_cool' : toFun CoolClass.cool = CoolClass.cool)
+
+class CoolerHomClass (F : Type*) (A B : <a href="../../.././Init/Prelude.html#outParam">outParam</a> Type*) [CoolClass A] [CoolClass B]
+  [FunLike F A B] extends MyHomClass F A B :=
+    (map_cool : ∀ (f : F), f CoolClass.cool = CoolClass.cool)
+
+@[simp] <a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> map_cool {F A B : Type*} [CoolClass A] [CoolClass B] [FunLike F A B]
+    [CoolerHomClass F A B] (f : F) : f CoolClass.cool = CoolClass.cool :=
+  CoolerHomClass.map_cool _
+
+variable {A B : Type*} [CoolClass A] [CoolClass B]
+
+instance : <a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> (CoolerHom A B) A B where
+  <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">coe</a> f := f.toFun
+  <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe_injective'">coe_injective'</a> := fun f g h ↦ by cases f; cases g; congr; apply DFunLike.coe_injective; <a href="../../.././Init/Prelude.html#congr">congr</a>
+
+instance : CoolerHomClass (CoolerHom A B) A B where
+  map_op f := f.map_op'
+  map_cool f := f.map_cool'
+
+-- [Insert `ext` and `copy` here]
+</code></pre><p>Then any declaration taking a specific type of morphisms as parameter can instead take the
+class you just defined:</p><pre><code>-- Compare with: <a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> do_something (f : MyHom A B) : sorry := sorry
+<a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> do_something {F : Type*} [FunLike F A B] [MyHomClass F A B] (f : F) : sorry :=
+  sorry
+</code></pre><p>This means anything set up for <code>MyHom</code>s will automatically work for <code>CoolerHomClass</code>es,
+and defining <code>CoolerHomClass</code> only takes a constant amount of effort,
+instead of linearly increasing the work per <code>MyHom</code>-related declaration.</p><h2 id="Design-rationale" class="markdown-heading">Design rationale <a class="hover-link" href="#Design-rationale">#</a></h2><p>The current form of FunLike was set up in pull request https://github.com/leanprover-community/mathlib4/pull/8386:
+<a href="https://github.com/leanprover-community/mathlib4/pull/8386">https://github.com/leanprover-community/mathlib4/pull/8386</a>
+We made <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code> <em>unbundled</em>: child classes don't extend <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code>, they take a <code>[FunLike F A B]</code>
+parameter instead. This suits the instance synthesis algorithm better: it's easy to verify a type
+does <strong>not</strong> have a <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code> instance by checking the discrimination tree once instead of searching
+the entire <code>extends</code> hierarchy.</p></div><div class="decl" id="DFunLike"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L136-L149">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike"><span class="name">DFunLike</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><a href="../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../.././foundational_types.html">(Sort</a> u_2)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../../.././Init/Prelude.html#outParam">outParam</a> <span class="fn">(<span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Sort</a> (max (max (max 1 u_1) u_2) u_3)</div></div><p>The class <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> F α β</code> expresses that terms of type <code>F</code> have an
+injective coercion to (dependent) functions from <code>α</code> to <code>β</code>.</p><p>For non-dependent functions you can also use the abbreviation <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code>.</p><p>This typeclass is used in the definition of the homomorphism typeclasses,
+such as <code><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a></code>, <code><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MulHomClass">MulHomClass</a></code>, <code><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHomClass">MonoidHomClass</a></code>, ....</p><ul class="structure_fields" id="DFunLike.mk"><li id="DFunLike.coe" class="structure_field"><div class="structure_field_info">coe : <span class="fn"><span class="fn">F</span> → <span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>) → <span class="fn"><span class="fn">β</span> <span class="fn">a</span></span></span></span></div><div class="structure_field_doc"><p>The coercion from <code>F</code> to a function.</p></div></li><li id="DFunLike.coe_injective'" class="structure_field"><div class="structure_field_info">coe_injective' : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">coe</a></span></div><div class="structure_field_doc"><p>The coercion to functions must be injective.</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-DFunLike" class="instances-list"></ul></details></div></div><div class="decl" id="FunLike"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L151-L157">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike"><span class="name">FunLike</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_3)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Sort</a> (max (max (max 1 u_1) u_2) u_3)</div></div><p>The class <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> F α β</code> (<code>Fun</code>ction-<code>Like</code>) expresses that terms of type <code>F</code>
+have an injective coercion to functions from <code>α</code> to <code>β</code>.
+<code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a></code> is the non-dependent version of <code><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a></code>.
+This typeclass is used in the definition of the homomorphism typeclasses,
+such as <code><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#ZeroHomClass">ZeroHomClass</a></code>, <code><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MulHomClass">MulHomClass</a></code>, <code><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHomClass">MonoidHomClass</a></code>, ....</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn">β</span></span></span></li></ul></details><details id="instances-for-list-FunLike" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="mod_doc"><h3 id="DFunLike-F-α-β-where-β-depends-on-a-α" class="markdown-heading"><code><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> F α β</code> where <code>β</code> depends on <code>a : α</code> <a class="hover-link" href="#DFunLike-F-α-β-where-β-depends-on-a-α">#</a></h3></div><div class="decl" id="DFunLike.hasCoeToFun"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L169-L170">source</a></div><div class="attributes">@[implicit_reducible, instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.hasCoeToFun"><span class="name">DFunLike</span>.<span class="name">hasCoeToFun</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Coe.html#CoeFun">CoeFun</a> <span class="fn">F</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">F</span>) =&gt; <span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>) → <span class="fn"><span class="fn">β</span> <span class="fn">a</span></span></span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.hasCoeToFun">DFunLike.hasCoeToFun</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Coe.html#CoeFun.mk">{</a> <span class="fn">coe</span> := <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a> <a href="../../.././Init/Coe.html#CoeFun.mk">}</a></li></ul></details></div></div><div class="decl" id="DFunLike.coe_eq_coe_fn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L176-L176">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe_eq_coe_fn"><span class="name">DFunLike</span>.<span class="name">coe_eq_coe_fn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">coe</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">fun (<span class="fn">f</span> : <span class="fn">F</span>) =&gt; <span class="fn">⇑<span class="fn">f</span></span></span></div></div></div></div><div class="decl" id="DFunLike.coe_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L178-L179">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe_injective"><span class="name">DFunLike</span>.<span class="name">coe_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">fun (<span class="fn">f</span> : <span class="fn">F</span>) =&gt; <span class="fn">⇑<span class="fn">f</span></span></span></span></div></div></div></div><div class="decl" id="DFunLike.coe_fn_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L181-L183">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe_fn_eq"><span class="name">DFunLike</span>.<span class="name">coe_fn_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">g</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">f</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="DFunLike.ext'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L185-L186">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.ext'"><span class="name">DFunLike</span>.<span class="name">ext'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">⇑<span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="DFunLike.ext'_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L188-L189">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.ext'_iff"><span class="name">DFunLike</span>.<span class="name">ext'_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">⇑<span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">g</span></span></div></div></div></div><div class="decl" id="DFunLike.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L191-L192">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.ext"><span class="name">DFunLike</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="DFunLike.ext_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L194-L195">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.ext_iff"><span class="name">DFunLike</span>.<span class="name">ext_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></span></div></div></div></div><div class="decl" id="DFunLike.congr_fun"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L197-L198">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.congr_fun"><span class="name">DFunLike</span>.<span class="name">congr_fun</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">f</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="DFunLike.ne_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L200-L201">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.ne_iff"><span class="name">DFunLike</span>.<span class="name">ne_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">g</span> <a href="../../.././Init/Core.html#Iff">↔</a> <a href="../../.././Init/Core.html#Exists">∃</a> <a href="../../.././Init/Core.html#Exists">(</a><span class="fn">a</span> <a href="../../.././Init/Core.html#Exists">:</a> <span class="fn">α</span><a href="../../.././Init/Core.html#Exists">)</a><a href="../../.././Init/Core.html#Exists">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn"><span class="fn">g</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="DFunLike.exists_ne"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L203-L204">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.exists_ne"><span class="name">DFunLike</span>.<span class="name">exists_ne</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">F</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Init/Core.html#Exists">∃</a> <a href="../../.././Init/Core.html#Exists">(</a><span class="fn">x</span> <a href="../../.././Init/Core.html#Exists">:</a> <span class="fn">α</span><a href="../../.././Init/Core.html#Exists">)</a><a href="../../.././Init/Core.html#Exists">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="DFunLike.subsingleton_cod"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L206-L208">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.subsingleton_cod"><span class="name">DFunLike</span>.<span class="name">subsingleton_cod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">(<span class="fn">β</span> <span class="fn">a</span>)</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">F</span></span></div></div><p>This is not an instance to avoid slowing down every single <code><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a></code> typeclass search.</p></div></div><div class="decl" id="DFunLike.subsingleton_dom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L211-L213">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.subsingleton_dom"><span class="name">DFunLike</span>.<span class="name">subsingleton_dom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <span class="fn"><span class="fn">α</span> → <a href="../../.././foundational_types.html">Sort</a> u_3</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">F</span></span></div></div><p>This is not an instance to avoid slowing down every single <code><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a></code> typeclass search.</p></div></div><div class="mod_doc"><h3 id="FunLike-F-α-β-where-β-does-not-depend-on-a-α" class="markdown-heading"><code><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> F α β</code> where <code>β</code> does not depend on <code>a : α</code> <a class="hover-link" href="#FunLike-F-α-β-where-β-does-not-depend-on-a-α">#</a></h3></div><div class="decl" id="DFunLike.congr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L227-L228">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.congr"><span class="name">DFunLike</span>.<span class="name">congr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">F</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn">f</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="DFunLike.congr_arg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L230-L231">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.congr_arg"><span class="name">DFunLike</span>.<span class="name">congr_arg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="DFunLike.dite_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L233-L235">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.dite_apply"><span class="name">DFunLike</span>.<span class="name">dite_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Prop</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Decidable">Decidable</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">P</span> → <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">P</span> → <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(if h : <span class="fn">P</span> then <span class="fn"><span class="fn">f</span> <span class="fn">h</span></span> else <span class="fn"><span class="fn">g</span> <span class="fn">h</span></span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">if h : <span class="fn">P</span> then <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">h</span>)</span> <span class="fn">x</span></span> else <span class="fn"><span class="fn">(<span class="fn">g</span> <span class="fn">h</span>)</span> <span class="fn">x</span></span></span></div></div></div></div><div class="decl" id="DFunLike.ite_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Basic.lean#L237-L239">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.ite_apply"><span class="name">DFunLike</span>.<span class="name">ite_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Prop</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Decidable">Decidable</a> <span class="fn">P</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<a href="../../.././Init/Prelude.html#ite">if</a> <span class="fn">P</span> <a href="../../.././Init/Prelude.html#ite">then</a> <span class="fn">f</span> <a href="../../.././Init/Prelude.html#ite">else</a> <span class="fn">g</span>) <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#ite">if</a> <span class="fn">P</span> <a href="../../.././Init/Prelude.html#ite">then</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#ite">else</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

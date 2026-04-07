@@ -1,0 +1,945 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Algebra.DirectSum.Decomposition</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Algebra.DirectSum.Decomposition";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Algebra</span>.<span class="name">DirectSum</span>.<span class="name">Decomposition</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/DirectSum/Module.html">Mathlib.Algebra.DirectSum.Module</a></li><li><a href="../../.././Mathlib/Algebra/Module/Submodule/Basic.html">Mathlib.Algebra.Module.Submodule.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Algebra.DirectSum.Decomposition" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#DirectSum.Decomposition"><span class="name">DirectSum</span>.<span class="name">Decomposition</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.instSubsingletonDecomposition"><span class="name">DirectSum</span>.<span class="name">instSubsingletonDecomposition</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Decomposition.ofAddHom"><span class="name">DirectSum</span>.<span class="name">Decomposition</span>.<span class="name">ofAddHom</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.IsInternal.chooseDecomposition"><span class="name">DirectSum</span>.<span class="name">IsInternal</span>.<span class="name">chooseDecomposition</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Decomposition.isInternal"><span class="name">DirectSum</span>.<span class="name">Decomposition</span>.<span class="name">isInternal</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose"><span class="name">DirectSum</span>.<span class="name">decompose</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.SetLike.IsHomogeneous"><span class="name">DirectSum</span>.<span class="name">SetLike</span>.<span class="name">IsHomogeneous</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Decomposition.inductionOn"><span class="name">DirectSum</span>.<span class="name">Decomposition</span>.<span class="name">inductionOn</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Decomposition.decompose'_eq"><span class="name">DirectSum</span>.<span class="name">Decomposition</span>.<span class="name">decompose'_eq</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_symm_of"><span class="name">DirectSum</span>.<span class="name">decompose_symm_of</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_coe"><span class="name">DirectSum</span>.<span class="name">decompose_coe</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_of_mem"><span class="name">DirectSum</span>.<span class="name">decompose_of_mem</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_of_mem_same"><span class="name">DirectSum</span>.<span class="name">decompose_of_mem_same</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_of_mem_ne"><span class="name">DirectSum</span>.<span class="name">decompose_of_mem_ne</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.degree_eq_of_mem_mem"><span class="name">DirectSum</span>.<span class="name">degree_eq_of_mem_mem</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decomposeAddEquiv"><span class="name">DirectSum</span>.<span class="name">decomposeAddEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decomposeAddEquiv_apply"><span class="name">DirectSum</span>.<span class="name">decomposeAddEquiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decomposeAddEquiv_symm_apply"><span class="name">DirectSum</span>.<span class="name">decomposeAddEquiv_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_zero"><span class="name">DirectSum</span>.<span class="name">decompose_zero</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_symm_zero"><span class="name">DirectSum</span>.<span class="name">decompose_symm_zero</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_add"><span class="name">DirectSum</span>.<span class="name">decompose_add</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_symm_add"><span class="name">DirectSum</span>.<span class="name">decompose_symm_add</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_sum"><span class="name">DirectSum</span>.<span class="name">decompose_sum</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_symm_sum"><span class="name">DirectSum</span>.<span class="name">decompose_symm_sum</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.sum_support_decompose"><span class="name">DirectSum</span>.<span class="name">sum_support_decompose</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.AddSubmonoidClass.IsHomogeneous.mem_iff"><span class="name">DirectSum</span>.<span class="name">AddSubmonoidClass</span>.<span class="name">IsHomogeneous</span>.<span class="name">mem_iff</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.AddSubmonoidClass.IsHomogeneous.ext"><span class="name">DirectSum</span>.<span class="name">AddSubmonoidClass</span>.<span class="name">IsHomogeneous</span>.<span class="name">ext</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_neg"><span class="name">DirectSum</span>.<span class="name">decompose_neg</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_symm_neg"><span class="name">DirectSum</span>.<span class="name">decompose_symm_neg</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_sub"><span class="name">DirectSum</span>.<span class="name">decompose_sub</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_symm_sub"><span class="name">DirectSum</span>.<span class="name">decompose_symm_sub</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.Decomposition.ofLinearMap"><span class="name">DirectSum</span>.<span class="name">Decomposition</span>.<span class="name">ofLinearMap</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decomposeLinearEquiv"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decomposeLinearEquiv_apply"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decomposeLinearEquiv_symm_apply"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_smul"><span class="name">DirectSum</span>.<span class="name">decompose_smul</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decomposeLinearEquiv_symm_comp_lof"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv_symm_comp_lof</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decomposeLinearEquiv_symm_lof"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv_symm_lof</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decomposeLinearEquiv_apply_coe"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv_apply_coe</span></a></div><div class="nav_link"><a class="break_within" href="#DirectSum.decompose_lhom_ext"><span class="name">DirectSum</span>.<span class="name">decompose_lhom_ext</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Decompositions-of-additive-monoids-groups-and-modules-into-direct-sums" class="markdown-heading">Decompositions of additive monoids, groups, and modules into direct sums <a class="hover-link" href="#Decompositions-of-additive-monoids-groups-and-modules-into-direct-sums">#</a></h1><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">DirectSum.Decomposition</a> ℳ</code>: A typeclass to provide a constructive decomposition from
+an additive monoid <code>M</code> into a family of additive submonoids <code>ℳ</code></li><li><code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">DirectSum.decompose</a> ℳ</code>: The canonical equivalence provided by the above typeclass</li></ul><h2 id="Main-statements" class="markdown-heading">Main statements <a class="hover-link" href="#Main-statements">#</a></h2><ul><li><code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.isInternal">DirectSum.Decomposition.isInternal</a></code>: The link to <code><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.IsInternal">DirectSum.IsInternal</a></code>.</li></ul><h2 id="Implementation-details" class="markdown-heading">Implementation details <a class="hover-link" href="#Implementation-details">#</a></h2><p>As we want to talk about different types of decomposition (additive monoids, modules, rings, ...),
+we choose to avoid heavily bundling <code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">DirectSum.decompose</a></code>, instead making copies for the
+<code><a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv">AddEquiv</a></code>, <code><a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">LinearEquiv</a></code>, etc. This means we have to repeat statements that follow from these
+bundled homs, but means we don't have to repeat statements for different types of decomposition.</p></div><div class="decl" id="DirectSum.Decomposition"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L47-L59">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition"><span class="name">DirectSum</span>.<span class="name">Decomposition</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Type</a> (max u_1 u_3)</div></div><p>A decomposition is an equivalence between an additive monoid <code>M</code> and a direct sum of additive
+submonoids <code>ℳ i</code> of that <code>M</code>, such that the &quot;recomposition&quot; is canonical. This definition also
+works for additive groups and modules.</p><p>This is a version of <code><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.IsInternal">DirectSum.IsInternal</a></code> which comes with a constructive inverse to the
+canonical &quot;recomposition&quot; rather than just a proof that the &quot;recomposition&quot; is bijective.</p><p>Often it is easier to construct a term of this type via <code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.ofAddHom">Decomposition.ofAddHom</a></code> or
+<code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.ofLinearMap">Decomposition.ofLinearMap</a></code>.</p><ul class="structure_fields" id="DirectSum.Decomposition.mk"><li id="DirectSum.Decomposition.decompose'" class="structure_field"><div class="structure_field_info">decompose' : <span class="fn"><span class="fn">M</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span></span></div></li><li id="DirectSum.Decomposition.left_inv" class="structure_field"><div class="structure_field_info">left_inv : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.LeftInverse">Function.LeftInverse</a> <span class="fn">(⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.coeAddMonoidHom">DirectSum.coeAddMonoidHom</a> <span class="fn">ℳ</span>)</span>)</span> <a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.decompose'">decompose'</a></span></div></li><li id="DirectSum.Decomposition.right_inv" class="structure_field"><div class="structure_field_info">right_inv : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.RightInverse">Function.RightInverse</a> <span class="fn">(⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.coeAddMonoidHom">DirectSum.coeAddMonoidHom</a> <span class="fn">ℳ</span>)</span>)</span> <a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.decompose'">decompose'</a></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-DirectSum.Decomposition" class="instances-list"></ul></details></div></div><div class="decl" id="DirectSum.instSubsingletonDecomposition"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L61-L67">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.instSubsingletonDecomposition"><span class="name">DirectSum</span>.<span class="name">instSubsingletonDecomposition</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span>)</span></span></div></div><p><code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">DirectSum.Decomposition</a></code> instances, while carrying data, are always equal.</p></div></div><div class="decl" id="DirectSum.Decomposition.ofAddHom"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L69-L76">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.ofAddHom"><span class="name">DirectSum</span>.<span class="name">Decomposition</span>.<span class="name">ofAddHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">decompose</span> : <span class="fn">M</span> <a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom">→+</a> <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h_left_inv</span> : <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.coeAddMonoidHom">DirectSum.coeAddMonoidHom</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom.comp">comp</a></span> <span class="fn">decompose</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom.id">AddMonoidHom.id</a> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h_right_inv</span> : <span class="fn"><span class="fn"><span class="fn">decompose</span>.<a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.coeAddMonoidHom">DirectSum.coeAddMonoidHom</a> <span class="fn">ℳ</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom.id">AddMonoidHom.id</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span></div></div><p>A convenience method to construct a decomposition from an <code><a href="../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom">AddMonoidHom</a></code>, such that the proofs
+of left and right inverse can be constructed via <code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.AddSubmonoidClass.IsHomogeneous.ext">ext</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.ofAddHom">DirectSum.Decomposition.ofAddHom</a> <span class="fn">ℳ</span> <span class="fn">decompose</span> <span class="fn">h_left_inv</span> <span class="fn">h_right_inv</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.mk">{</a> <span class="fn">decompose'</span> := <span class="fn">⇑<span class="fn">decompose</span></span>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>, <span class="fn">right_inv</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.mk">}</a></li></ul></details><details id="instances-for-list-DirectSum.Decomposition.ofAddHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="DirectSum.IsInternal.chooseDecomposition"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L78-L84">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.IsInternal.chooseDecomposition"><span class="name">DirectSum</span>.<span class="name">IsInternal</span>.<span class="name">chooseDecomposition</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.IsInternal">IsInternal</a> <span class="fn">ℳ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span></div></div><p>Noncomputably conjure a decomposition instance from a <code><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.IsInternal">DirectSum.IsInternal</a></code> proof.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.IsInternal.chooseDecomposition">DirectSum.IsInternal.chooseDecomposition</a> <span class="fn">ℳ</span> <span class="fn">h</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.mk">{</a> <span class="fn">decompose'</span> := <span class="fn">⇑<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.ofBijective">Equiv.ofBijective</a> <span class="fn">(⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.coeAddMonoidHom">DirectSum.coeAddMonoidHom</a> <span class="fn">ℳ</span>)</span>)</span> <span class="fn">h</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span></span>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>, <span class="fn">right_inv</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.mk">}</a></li></ul></details><details id="instances-for-list-DirectSum.IsInternal.chooseDecomposition" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="DirectSum.Decomposition.isInternal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L88-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.isInternal"><span class="name">DirectSum</span>.<span class="name">Decomposition</span>.<span class="name">isInternal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.IsInternal">IsInternal</a> <span class="fn">ℳ</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L91-L97">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose"><span class="name">DirectSum</span>.<span class="name">decompose</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">M</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span></div></div><p>If <code>M</code> is graded by <code>ι</code> with degree <code>i</code> component <code>ℳ i</code>, then it is isomorphic as
+to a direct sum of components. This is the canonical spelling of the <code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.decompose'">decompose'</a></code> field.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">DirectSum.decompose</a> <span class="fn">ℳ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.mk">{</a> <span class="fn">toFun</span> := <a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.decompose'">DirectSum.Decomposition.decompose'</a>, <span class="fn">invFun</span> := <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.coeAddMonoidHom">DirectSum.coeAddMonoidHom</a> <span class="fn">ℳ</span>)</span></span>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>,
+    <span class="fn">right_inv</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.mk">}</a></li></ul></details><details id="instances-for-list-DirectSum.decompose" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="DirectSum.SetLike.IsHomogeneous"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L100-L103">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.SetLike.IsHomogeneous"><span class="name">DirectSum</span>.<span class="name">SetLike</span>.<span class="name">IsHomogeneous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">P</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A substructure <code>p ⊆ M</code> is homogeneous if for every <code>m ∈ p</code>, all homogeneous components
+of <code>m</code> are in <code>p</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.SetLike.IsHomogeneous">DirectSum.SetLike.IsHomogeneous</a> <span class="fn">ℳ</span> <span class="fn">p</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>) ⦃<span class="fn">m</span> : <span class="fn">M</span>⦄, <span class="fn"><span class="fn">m</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">p</span> → <span class="fn">↑<span class="fn">(<span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">DirectSum.decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">m</span>)</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">p</span></span></span></li></ul></details><details id="instances-for-list-DirectSum.SetLike.IsHomogeneous" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="DirectSum.Decomposition.inductionOn"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L105-L119">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.inductionOn"><span class="name">DirectSum</span>.<span class="name">Decomposition</span>.<span class="name">inductionOn</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">motive</span> : <span class="fn"><span class="fn">M</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">zero</span> : <span class="fn"><span class="fn">motive</span> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">homogeneous</span> : <span class="fn">∀ {<span class="fn">i</span> : <span class="fn">ι</span>} (<span class="fn">m</span> : <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>), <span class="fn"><span class="fn">motive</span> <span class="fn">↑<span class="fn">m</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">add</span> : <span class="fn">∀ (<span class="fn">m </span><span class="fn">m'</span> : <span class="fn">M</span>), <span class="fn"><span class="fn"><span class="fn">motive</span> <span class="fn">m</span></span> → <span class="fn"><span class="fn"><span class="fn">motive</span> <span class="fn">m'</span></span> → <span class="fn"><span class="fn">motive</span> (<span class="fn">m</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">m'</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">motive</span> <span class="fn">m</span></span></div></div></div></div><div class="decl" id="DirectSum.Decomposition.decompose'_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L123-L124">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.decompose'_eq"><span class="name">DirectSum</span>.<span class="name">Decomposition</span>.<span class="name">decompose'_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.decompose'">decompose'</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_symm_of"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L126-L128">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_symm_of"><span class="name">DirectSum</span>.<span class="name">decompose_symm_of</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.of">of</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">i</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">x</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L130-L132">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_coe"><span class="name">DirectSum</span>.<span class="name">decompose_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">↑<span class="fn">x</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.of">of</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">i</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_of_mem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L134-L136">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_of_mem"><span class="name">DirectSum</span>.<span class="name">decompose_of_mem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">ℳ</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum.of">of</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">i</span>)</span> <a href="../../.././Init/Prelude.html#Subtype.mk">⟨</a><span class="fn">x</span>, <span class="fn">hx</span><a href="../../.././Init/Prelude.html#Subtype.mk">⟩</a></span></div></div></div></div><div class="decl" id="DirectSum.decompose_of_mem_same"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L138-L139">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_of_mem_same"><span class="name">DirectSum</span>.<span class="name">decompose_of_mem_same</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">ℳ</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">x</span>)</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="DirectSum.decompose_of_mem_ne"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L141-L143">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_of_mem_ne"><span class="name">DirectSum</span>.<span class="name">decompose_of_mem_ne</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">ℳ</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hij</span> : <span class="fn">i</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">j</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">x</span>)</span> <span class="fn">j</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="DirectSum.degree_eq_of_mem_mem"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L145-L147">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.degree_eq_of_mem_mem"><span class="name">DirectSum</span>.<span class="name">degree_eq_of_mem_mem</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hxi</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">ℳ</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxj</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">ℳ</span> <span class="fn">j</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">i</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">j</span></div></div></div></div><div class="decl" id="DirectSum.decomposeAddEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L149-L153">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeAddEquiv"><span class="name">DirectSum</span>.<span class="name">decomposeAddEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">M</span> <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv">≃+</a> <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span></div></div><p>If <code>M</code> is graded by <code>ι</code> with degree <code>i</code> component <code>ℳ i</code>, then it is isomorphic as
+an additive monoid to a direct sum of components.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeAddEquiv">DirectSum.decomposeAddEquiv</a> <span class="fn">ℳ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(let <span class="fn">__src</span> := <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">DirectSum.decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span>;
+    <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv.mk">{</a> <span class="fn">toEquiv</span> := <span class="fn">__src</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv.mk">}</a>)</span>.<a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv.symm">symm</a></span></li></ul></details><details id="instances-for-list-DirectSum.decomposeAddEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="DirectSum.decomposeAddEquiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L151-L151">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeAddEquiv_apply"><span class="name">DirectSum</span>.<span class="name">decomposeAddEquiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a✝</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeAddEquiv">decomposeAddEquiv</a> <span class="fn">ℳ</span>)</span> <span class="fn">a✝</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">a✝</span></span></div></div></div></div><div class="decl" id="DirectSum.decomposeAddEquiv_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L151-L151">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeAddEquiv_symm_apply"><span class="name">DirectSum</span>.<span class="name">decomposeAddEquiv_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a✝</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeAddEquiv">decomposeAddEquiv</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Algebra/Group/Equiv/Defs.html#AddEquiv.symm">symm</a></span> <span class="fn">a✝</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">a✝</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L155-L157">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_zero"><span class="name">DirectSum</span>.<span class="name">decompose_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="DirectSum.decompose_symm_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L159-L161">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_symm_zero"><span class="name">DirectSum</span>.<span class="name">decompose_symm_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="DirectSum.decompose_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L163-L165">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_add"><span class="name">DirectSum</span>.<span class="name">decompose_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">y</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_symm_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L167-L170">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_symm_add"><span class="name">DirectSum</span>.<span class="name">decompose_symm_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">y</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_sum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L172-L175">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_sum"><span class="name">DirectSum</span>.<span class="name">decompose_sum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">(∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_symm_sum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L177-L180">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_symm_sum"><span class="name">DirectSum</span>.<span class="name">decompose_symm_sum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι'</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Data/Finset/Defs.html#Finset">Finset</a> <span class="fn">ι'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">ι'</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">(∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn">f</span> <span class="fn">i</span></span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn">s</span>, <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span></span></div></div></div></div><div class="decl" id="DirectSum.sum_support_decompose"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L182-L187">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.sum_support_decompose"><span class="name">DirectSum</span>.<span class="name">sum_support_decompose</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>) → <span class="fn">(<span class="fn">x</span> : <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>) → <span class="fn"><a href="../../.././Init/Prelude.html#Decidable">Decidable</a> (<span class="fn">x</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∑ <span class="fn">i</span> ∈ <span class="fn"><a href="../../.././Mathlib/Data/DFinsupp/Defs.html#DFinsupp.support">DFinsupp.support</a> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">r</span>)</span></span>, <span class="fn">↑<span class="fn">(<span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">r</span>)</span> <span class="fn">i</span>)</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span></div></div></div></div><div class="decl" id="DirectSum.AddSubmonoidClass.IsHomogeneous.mem_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L189-L196">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.AddSubmonoidClass.IsHomogeneous.mem_iff"><span class="name">DirectSum</span>.<span class="name">AddSubmonoidClass</span>.<span class="name">IsHomogeneous</span>.<span class="name">mem_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">P</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">P</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">P</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.SetLike.IsHomogeneous">SetLike.IsHomogeneous</a> <span class="fn">ℳ</span> <span class="fn">p</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">p</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn">↑<span class="fn">(<span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">x</span>)</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="DirectSum.AddSubmonoidClass.IsHomogeneous.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L198-L206">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.AddSubmonoidClass.IsHomogeneous.ext"><span class="name">DirectSum</span>.<span class="name">AddSubmonoidClass</span>.<span class="name">IsHomogeneous</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">P</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">P</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoidClass">AddSubmonoidClass</a> <span class="fn">P</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p </span><span class="fn">q</span> : <span class="fn">P</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.SetLike.IsHomogeneous">SetLike.IsHomogeneous</a> <span class="fn">ℳ</span> <span class="fn">p</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hq</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.SetLike.IsHomogeneous">SetLike.IsHomogeneous</a> <span class="fn">ℳ</span> <span class="fn">q</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hpq</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn">∀ <span class="fn">m</span> ∈ <span class="fn"><span class="fn">ℳ</span> <span class="fn">i</span></span>, <span class="fn">m</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">p</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">m</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">q</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">p</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">q</span></div></div></div></div><div class="decl" id="DirectSum.decompose_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L216-L218">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_neg"><span class="name">DirectSum</span>.<span class="name">decompose_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> (<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_symm_neg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L220-L222">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_symm_neg"><span class="name">DirectSum</span>.<span class="name">decompose_symm_neg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> (<a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L224-L226">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_sub"><span class="name">DirectSum</span>.<span class="name">decompose_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_symm_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L228-L231">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_symm_sub"><span class="name">DirectSum</span>.<span class="name">decompose_symm_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">y</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">y</span></span></div></div></div></div><div class="decl" id="DirectSum.Decomposition.ofLinearMap"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L240-L247">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.ofLinearMap"><span class="name">DirectSum</span>.<span class="name">Decomposition</span>.<span class="name">ofLinearMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">decompose</span> : <span class="fn">M</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h_left_inv</span> : <span class="fn"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Module.html#DirectSum.coeLinearMap">coeLinearMap</a> <span class="fn">ℳ</span></span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.comp">∘ₗ</a> <span class="fn">decompose</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.id">LinearMap.id</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h_right_inv</span> : <span class="fn"><span class="fn">decompose</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.comp">∘ₗ</a> <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Module.html#DirectSum.coeLinearMap">coeLinearMap</a> <span class="fn">ℳ</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.id">LinearMap.id</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span></div></div><p>A convenience method to construct a decomposition from an <code><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">LinearMap</a></code>, such that the proofs
+of left and right inverse can be constructed via <code><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.AddSubmonoidClass.IsHomogeneous.ext">ext</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.ofLinearMap">DirectSum.Decomposition.ofLinearMap</a> <span class="fn">ℳ</span> <span class="fn">decompose</span> <span class="fn">h_left_inv</span> <span class="fn">h_right_inv</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.mk">{</a> <span class="fn">decompose'</span> := <span class="fn">⇑<span class="fn">decompose</span></span>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>, <span class="fn">right_inv</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition.mk">}</a></li></ul></details><details id="instances-for-list-DirectSum.Decomposition.ofLinearMap" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="DirectSum.decomposeLinearEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L251-L255">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">M</span> <a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span></div></div><p>If <code>M</code> is graded by <code>ι</code> with degree <code>i</code> component <code>ℳ i</code>, then it is isomorphic as
+a module to a direct sum of components.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-DirectSum.decomposeLinearEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="DirectSum.decomposeLinearEquiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L257-L258">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv_apply"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv">decomposeLinearEquiv</a> <span class="fn">ℳ</span>)</span> <span class="fn">m</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">m</span></span></div></div></div></div><div class="decl" id="DirectSum.decomposeLinearEquiv_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L260-L261">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv_symm_apply"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Basic.html#DirectSum">DirectSum</a> <span class="fn">ι</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv">decomposeLinearEquiv</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">m</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">m</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L263-L265">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_smul"><span class="name">DirectSum</span>.<span class="name">decompose_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> (<span class="fn">r</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose">decompose</a> <span class="fn">ℳ</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="DirectSum.decomposeLinearEquiv_symm_comp_lof"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L267-L269">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv_symm_comp_lof"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv_symm_comp_lof</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">↑<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv">decomposeLinearEquiv</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span></span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.comp">∘ₗ</a> <span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Module.html#DirectSum.lof">lof</a> <span class="fn">R</span> <span class="fn">ι</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">x</span>)</span></span>)</span> <span class="fn">i</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span>.<a href="../../.././Mathlib/Algebra/Module/Submodule/LinearMap.html#Submodule.subtype">subtype</a></span></div></div></div></div><div class="decl" id="DirectSum.decomposeLinearEquiv_symm_lof"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L271-L273">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv_symm_lof"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv_symm_lof</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv">decomposeLinearEquiv</a> <span class="fn">ℳ</span>)</span>.<a href="../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Module.html#DirectSum.lof">lof</a> <span class="fn">R</span> <span class="fn">ι</span> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">i</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">x</span></span></div></div></div></div><div class="decl" id="DirectSum.decomposeLinearEquiv_apply_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L275-L277">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv_apply_coe"><span class="name">DirectSum</span>.<span class="name">decomposeLinearEquiv_apply_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decomposeLinearEquiv">decomposeLinearEquiv</a> <span class="fn">ℳ</span>)</span> <span class="fn">↑<span class="fn">x</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/DirectSum/Module.html#DirectSum.lof">lof</a> <span class="fn">R</span> <span class="fn">ι</span> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn">↥<span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">i</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="DirectSum.decompose_lhom_ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Algebra/DirectSum/Decomposition.lean#L279-L289">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.decompose_lhom_ext"><span class="name">DirectSum</span>.<span class="name">decompose_lhom_ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ℳ</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/DirectSum/Decomposition.html#DirectSum.Decomposition">Decomposition</a> <span class="fn">ℳ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">f </span><span class="fn">g</span> : <span class="fn">M</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">N</span>⦄</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">f</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.comp">∘ₗ</a> <span class="fn"><span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span>.<a href="../../.././Mathlib/Algebra/Module/Submodule/LinearMap.html#Submodule.subtype">subtype</a></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.comp">∘ₗ</a> <span class="fn"><span class="fn">(<span class="fn">ℳ</span> <span class="fn">i</span>)</span>.<a href="../../.././Mathlib/Algebra/Module/Submodule/LinearMap.html#Submodule.subtype">subtype</a></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div><p>Two linear maps from a module with a decomposition agree if they agree on every piece.</p><p>Note this cannot be <code>@[ext]</code> as <code>ℳ</code> cannot be inferred.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

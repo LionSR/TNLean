@@ -1,0 +1,518 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.Order.Hom.Basic</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.Order.Hom.Basic";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">Order</span>.<span class="name">Hom</span>.<span class="name">Basic</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Topology/Continuous.html">Mathlib.Topology.Continuous</a></li><li><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html">Mathlib.Topology.ContinuousMap.Defs</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.Order.Hom.Basic" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom"><span class="name">ContinuousOrderHom</span></a></div><div class="nav_link"><a class="break_within" href="#«term_→Co_»"><span class="name">«term_→Co_»</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHomClass"><span class="name">ContinuousOrderHomClass</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHomClass.toOrderHomClass"><span class="name">ContinuousOrderHomClass</span>.<span class="name">toOrderHomClass</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHomClass.toContinuousOrderHom"><span class="name">ContinuousOrderHomClass</span>.<span class="name">toContinuousOrderHom</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHomClass.instCoeTCContinuousOrderHom"><span class="name">ContinuousOrderHomClass</span>.<span class="name">instCoeTCContinuousOrderHom</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.toContinuousMap"><span class="name">ContinuousOrderHom</span>.<span class="name">toContinuousMap</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.instFunLike"><span class="name">ContinuousOrderHom</span>.<span class="name">instFunLike</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.instContinuousOrderHomClass"><span class="name">ContinuousOrderHom</span>.<span class="name">instContinuousOrderHomClass</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.coe_toOrderHom"><span class="name">ContinuousOrderHom</span>.<span class="name">coe_toOrderHom</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.toFun_eq_coe"><span class="name">ContinuousOrderHom</span>.<span class="name">toFun_eq_coe</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.ext"><span class="name">ContinuousOrderHom</span>.<span class="name">ext</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.ext_iff"><span class="name">ContinuousOrderHom</span>.<span class="name">ext_iff</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.copy"><span class="name">ContinuousOrderHom</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.coe_copy"><span class="name">ContinuousOrderHom</span>.<span class="name">coe_copy</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.copy_eq"><span class="name">ContinuousOrderHom</span>.<span class="name">copy_eq</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.id"><span class="name">ContinuousOrderHom</span>.<span class="name">id</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.instInhabited"><span class="name">ContinuousOrderHom</span>.<span class="name">instInhabited</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.coe_id"><span class="name">ContinuousOrderHom</span>.<span class="name">coe_id</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.id_apply"><span class="name">ContinuousOrderHom</span>.<span class="name">id_apply</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.comp"><span class="name">ContinuousOrderHom</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.coe_comp"><span class="name">ContinuousOrderHom</span>.<span class="name">coe_comp</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.comp_apply"><span class="name">ContinuousOrderHom</span>.<span class="name">comp_apply</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.comp_assoc"><span class="name">ContinuousOrderHom</span>.<span class="name">comp_assoc</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.comp_id"><span class="name">ContinuousOrderHom</span>.<span class="name">comp_id</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.id_comp"><span class="name">ContinuousOrderHom</span>.<span class="name">id_comp</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.cancel_right"><span class="name">ContinuousOrderHom</span>.<span class="name">cancel_right</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.cancel_left"><span class="name">ContinuousOrderHom</span>.<span class="name">cancel_left</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.instPreorder"><span class="name">ContinuousOrderHom</span>.<span class="name">instPreorder</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousOrderHom.instPartialOrder"><span class="name">ContinuousOrderHom</span>.<span class="name">instPartialOrder</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Continuous-order-homomorphisms" class="markdown-heading">Continuous order homomorphisms <a class="hover-link" href="#Continuous-order-homomorphisms">#</a></h1><p>This file defines continuous order homomorphisms, that is maps which are both continuous and
+monotone. They are also called Priestley homomorphisms because they are the morphisms of the
+category of Priestley spaces.</p><p>We use the <code><a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a></code> design, so each type of morphisms has a companion typeclass which is meant to
+be satisfied by itself and all stricter types.</p><h2 id="Types-of-morphisms" class="markdown-heading">Types of morphisms <a class="hover-link" href="#Types-of-morphisms">#</a></h2><ul><li><code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">ContinuousOrderHom</a></code>: Continuous monotone functions, aka Priestley homomorphisms.</li></ul><h2 id="Typeclasses" class="markdown-heading">Typeclasses <a class="hover-link" href="#Typeclasses">#</a></h2><ul><li><code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass">ContinuousOrderHomClass</a></code></li></ul></div><div class="decl" id="ContinuousOrderHom"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L37-L40">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom"><span class="name">ContinuousOrderHom</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_7)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="ContinuousOrderHom.toOrderHom"><span class="fn">α</span> <a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom">→o</a> <span class="fn">β</span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Type</a> (max u_6 u_7)</div></div><p>The type of continuous monotone maps from <code>α</code> to <code>β</code>, aka Priestley homomorphisms.</p><ul class="structure_fields" id="ContinuousOrderHom.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.monotone'">monotone'</a> : <span class="fn"><a href="../../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn"><span class="fn">self</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span></span></div></li><li id="ContinuousOrderHom.continuous_toFun" class="structure_field"><div class="structure_field_info">continuous_toFun : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn"><span class="fn">self</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span></span></div></li></ul><details id="instances-for-list-ContinuousOrderHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="«term_→Co_»"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L42-L42">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#«term_→Co_»"><span class="name">«term_→Co_»</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Init/Prelude.html#Lean.TrailingParserDescr">Lean.TrailingParserDescr</a></div></div><p>The type of continuous monotone maps from <code>α</code> to <code>β</code>, aka Priestley homomorphisms.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#«term_→Co_»">«term_→Co_»</a> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Init/Prelude.html#Lean.ParserDescr.trailingNode">Lean.ParserDescr.trailingNode</a> <span class="fn">`«term_→Co_»</span> <span class="fn">25</span> <span class="fn">26</span>
+    <span class="fn">(<a href="../../../.././Init/Prelude.html#Lean.ParserDescr.binary">Lean.ParserDescr.binary</a> <span class="fn">`andthen</span> <span class="fn">(<a href="../../../.././Init/Prelude.html#Lean.ParserDescr.symbol">Lean.ParserDescr.symbol</a> <span class="fn">&quot; →Co &quot;</span>)</span> <span class="fn">(<a href="../../../.././Init/Prelude.html#Lean.ParserDescr.cat">Lean.ParserDescr.cat</a> <span class="fn">`term</span> <span class="fn">25</span>)</span>)</span></span></li></ul></details><details id="instances-for-list-«term_→Co_»" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousOrderHomClass"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L46-L52">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass"><span class="name">ContinuousOrderHomClass</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../../.././foundational_types.html">(Type</a> u_7)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../../.././foundational_types.html">(Type</a> u_8)</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="ContinuousOrderHomClass.toContinuousMapClass"><span class="fn"><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMapClass">ContinuousMapClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Prop</a></div></div><p><code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass">ContinuousOrderHomClass</a> F α β</code> states that <code>F</code> is a type of continuous monotone maps.</p><p>You should extend this class when you extend <code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">ContinuousOrderHom</a></code>.</p><ul class="structure_fields" id="ContinuousOrderHomClass.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMapClass.map_continuous">map_continuous</a><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+ : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">⇑<span class="fn">f</span></span></span></div></li><li id="ContinuousOrderHomClass.map_monotone" class="structure_field"><div class="structure_field_info">map_monotone<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+ : <span class="fn"><a href="../../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">⇑<span class="fn">f</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-ContinuousOrderHomClass" class="instances-list"></ul></details></div></div><div class="decl" id="ContinuousOrderHomClass.toOrderHomClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L60-L63">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass.toOrderHomClass"><span class="name">ContinuousOrderHomClass</span>.<span class="name">toOrderHomClass</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass">ContinuousOrderHomClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHomClass">OrderHomClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="ContinuousOrderHomClass.toContinuousOrderHom"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L65-L71">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass.toContinuousOrderHom"><span class="name">ContinuousOrderHomClass</span>.<span class="name">toContinuousOrderHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass">ContinuousOrderHomClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span></div></div><p>Turn an element of a type <code>F</code> satisfying <code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass">ContinuousOrderHomClass</a> F α β</code> into an actual
+<code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">ContinuousOrderHom</a></code>. This is declared as the default coercion from <code>F</code> to <code>α →Co β</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn">↑<span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">⇑<span class="fn">f</span></span>, <span class="fn">monotone'</span> := <span class="fn">⋯</span>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.mk">}</a></li></ul></details><details id="instances-for-list-ContinuousOrderHomClass.toContinuousOrderHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousOrderHomClass.instCoeTCContinuousOrderHom"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L73-L74">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass.instCoeTCContinuousOrderHom"><span class="name">ContinuousOrderHomClass</span>.<span class="name">instCoeTCContinuousOrderHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass">ContinuousOrderHomClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Coe.html#CoeTC">CoeTC</a> <span class="fn">F</span> (<span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass.instCoeTCContinuousOrderHom">ContinuousOrderHomClass.instCoeTCContinuousOrderHom</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Init/Coe.html#CoeTC.mk">{</a> <span class="fn">coe</span> := <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass.toContinuousOrderHom">ContinuousOrderHomClass.toContinuousOrderHom</a> <a href="../../../.././Init/Coe.html#CoeTC.mk">}</a></li></ul></details></div></div><div class="mod_doc"><h3 id="Top-homomorphisms" class="markdown-heading">Top homomorphisms <a class="hover-link" href="#Top-homomorphisms">#</a></h3></div><div class="decl" id="ContinuousOrderHom.toContinuousMap"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L88-L90">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.toContinuousMap"><span class="name">ContinuousOrderHom</span>.<span class="name">toContinuousMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">α</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">β</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a></div></div><p>Reinterpret a <code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">ContinuousOrderHom</a></code> as a <code><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">ContinuousMap</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.toContinuousMap">toContinuousMap</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap.mk">{</a> <span class="fn">toFun</span> := <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap.mk">}</a></li></ul></details><details id="instances-for-list-ContinuousOrderHom.toContinuousMap" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousOrderHom.instFunLike"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L92-L97">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.instFunLike"><span class="name">ContinuousOrderHom</span>.<span class="name">instFunLike</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> (<span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>) <span class="fn">α</span> <span class="fn">β</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.instFunLike">ContinuousOrderHom.instFunLike</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.mk">{</a> <span class="fn">coe</span> := <span class="fn">fun (<span class="fn">f</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span></span>, <span class="fn">coe_injective'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.mk">}</a></li></ul></details></div></div><div class="decl" id="ContinuousOrderHom.instContinuousOrderHomClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L99-L101">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.instContinuousOrderHomClass"><span class="name">ContinuousOrderHom</span>.<span class="name">instContinuousOrderHomClass</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass">ContinuousOrderHomClass</a> (<span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>) <span class="fn">α</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="ContinuousOrderHom.coe_toOrderHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L103-L103">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.coe_toOrderHom"><span class="name">ContinuousOrderHom</span>.<span class="name">coe_toOrderHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.toOrderHom">toOrderHom</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="ContinuousOrderHom.toFun_eq_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L105-L105">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.toFun_eq_coe"><span class="name">ContinuousOrderHom</span>.<span class="name">toFun_eq_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="ContinuousOrderHom.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L107-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.ext"><span class="name">ContinuousOrderHom</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">a</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="ContinuousOrderHom.ext_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L107-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.ext_iff"><span class="name">ContinuousOrderHom</span>.<span class="name">ext_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">a</span></span></span></div></div></div></div><div class="decl" id="ContinuousOrderHom.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L111-L114">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.copy"><span class="name">ContinuousOrderHom</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span></div></div><p>Copy of a <code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">ContinuousOrderHom</a></code> with a new <code><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">ContinuousMap</a></code> equal to the old one. Useful to fix
+definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.mk">{</a> <span class="fn">toOrderHom</span> := <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span></span>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.mk">}</a></li></ul></details><details id="instances-for-list-ContinuousOrderHom.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousOrderHom.coe_copy"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L116-L118">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.coe_copy"><span class="name">ContinuousOrderHom</span>.<span class="name">coe_copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f'</span></div></div></div></div><div class="decl" id="ContinuousOrderHom.copy_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L120-L121">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.copy_eq"><span class="name">ContinuousOrderHom</span>.<span class="name">copy_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="ContinuousOrderHom.id"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L125-L127">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id"><span class="name">ContinuousOrderHom</span>.<span class="name">id</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">α</span></div></div><p><code><a href="../../../.././Init/Prelude.html#id">id</a></code> as a <code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">ContinuousOrderHom</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id">ContinuousOrderHom.id</a> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.mk">{</a> <span class="fn">toOrderHom</span> := <a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.id">OrderHom.id</a>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.mk">}</a></li></ul></details><details id="instances-for-list-ContinuousOrderHom.id" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousOrderHom.instInhabited"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L129-L130">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.instInhabited"><span class="name">ContinuousOrderHom</span>.<span class="name">instInhabited</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Prelude.html#Inhabited">Inhabited</a> (<span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">α</span>)</span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.instInhabited">ContinuousOrderHom.instInhabited</a> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Init/Prelude.html#Inhabited.mk">{</a> <span class="fn">default</span> := <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id">ContinuousOrderHom.id</a> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Inhabited.mk">}</a></li></ul></details></div></div><div class="decl" id="ContinuousOrderHom.coe_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L132-L134">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.coe_id"><span class="name">ContinuousOrderHom</span>.<span class="name">coe_id</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id">ContinuousOrderHom.id</a> <span class="fn">α</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Init/Prelude.html#id">id</a></div></div></div></div><div class="decl" id="ContinuousOrderHom.id_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L138-L140">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id_apply"><span class="name">ContinuousOrderHom</span>.<span class="name">id_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id">ContinuousOrderHom.id</a> <span class="fn">α</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="ContinuousOrderHom.comp"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L142-L144">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp"><span class="name">ContinuousOrderHom</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">β</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">γ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">γ</span></div></div><p>Composition of <code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">ContinuousOrderHom</a></code>s as a <code><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">ContinuousOrderHom</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">g</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.mk">{</a> <span class="fn">toOrderHom</span> := <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.comp">comp</a></span> <span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.toOrderHom">toOrderHom</a></span></span>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.mk">}</a></li></ul></details><details id="instances-for-list-ContinuousOrderHom.comp" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousOrderHom.coe_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L146-L148">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.coe_comp"><span class="name">ContinuousOrderHom</span>.<span class="name">coe_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">β</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">γ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">g</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">g</span></span></div></div></div></div><div class="decl" id="ContinuousOrderHom.comp_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L150-L152">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp_apply"><span class="name">ContinuousOrderHom</span>.<span class="name">comp_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">β</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">γ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">g</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">g</span> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="ContinuousOrderHom.comp_assoc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L154-L157">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp_assoc"><span class="name">ContinuousOrderHom</span>.<span class="name">comp_assoc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">δ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">δ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">γ</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">δ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">β</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">γ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">g</span>)</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">h</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">h</span>)</span></span></div></div></div></div><div class="decl" id="ContinuousOrderHom.comp_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L159-L161">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp_id"><span class="name">ContinuousOrderHom</span>.<span class="name">comp_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id">ContinuousOrderHom.id</a> <span class="fn">α</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="ContinuousOrderHom.id_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L163-L165">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id_comp"><span class="name">ContinuousOrderHom</span>.<span class="name">id_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id">ContinuousOrderHom.id</a> <span class="fn">β</span>)</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="ContinuousOrderHom.cancel_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L167-L170">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.cancel_right"><span class="name">ContinuousOrderHom</span>.<span class="name">cancel_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁ </span><span class="fn">g₂</span> : <span class="fn">β</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">γ</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">g₁</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">g₂</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">g₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g₂</span></div></div></div></div><div class="decl" id="ContinuousOrderHom.cancel_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L172-L175">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.cancel_left"><span class="name">ContinuousOrderHom</span>.<span class="name">cancel_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">β</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">γ</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">g</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">f₁</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">f₂</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">f₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f₂</span></div></div></div></div><div class="decl" id="ContinuousOrderHom.instPreorder"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L177-L178">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.instPreorder"><span class="name">ContinuousOrderHom</span>.<span class="name">instPreorder</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> (<span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.instPreorder">ContinuousOrderHom.instPreorder</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Order/Basic.html#Preorder.lift">Preorder.lift</a> <a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a></span></li></ul></details></div></div><div class="decl" id="ContinuousOrderHom.instPartialOrder"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Basic.lean#L182-L183">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.instPartialOrder"><span class="name">ContinuousOrderHom</span>.<span class="name">instPartialOrder</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> (<span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span>)</span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.instPartialOrder">ContinuousOrderHom.instPartialOrder</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Order/Basic.html#PartialOrder.lift">PartialOrder.lift</a> <a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a> <span class="fn">⋯</span></span></li></ul></details></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

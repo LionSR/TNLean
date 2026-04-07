@@ -1,0 +1,278 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.LinearAlgebra.Alternating.Curry</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.LinearAlgebra.Alternating.Curry";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">LinearAlgebra</span>.<span class="name">Alternating</span>.<span class="name">Curry</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html">Mathlib.LinearAlgebra.Alternating.Basic</a></li><li><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Curry.html">Mathlib.LinearAlgebra.Multilinear.Curry</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.LinearAlgebra.Alternating.Curry" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeft"><span class="name">AlternatingMap</span>.<span class="name">curryLeft</span></a></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeft_apply_toMultilinearMap"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_apply_toMultilinearMap</span></a></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeft_apply_apply"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_apply_apply</span></a></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeft_zero"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_zero</span></a></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeft_add"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_add</span></a></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeft_smul"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_smul</span></a></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeftLinearMap"><span class="name">AlternatingMap</span>.<span class="name">curryLeftLinearMap</span></a></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeftLinearMap_apply"><span class="name">AlternatingMap</span>.<span class="name">curryLeftLinearMap_apply</span></a></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeft_same"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_same</span></a></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeft_compAlternatingMap"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_compAlternatingMap</span></a></div><div class="nav_link"><a class="break_within" href="#AlternatingMap.curryLeft_compLinearMap"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_compLinearMap</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Currying-alternating-forms" class="markdown-heading">Currying alternating forms <a class="hover-link" href="#Currying-alternating-forms">#</a></h1><p>In this file we define <code><a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">AlternatingMap.curryLeft</a></code>
+which interprets an alternating map in <code>n + 1</code> variables
+as a linear map in the 0th variable taking values in the alternating maps in <code>n</code> variables.</p></div><div class="decl" id="AlternatingMap.curryLeft"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L27-L40">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft"><span class="name">AlternatingMap</span>.<span class="name">curryLeft</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">M</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span></div></div><p>Given an alternating map <code>f</code> in <code>n+1</code> variables, split the first variable to obtain
+a linear map into alternating maps in <code>n</code> variables, given by <code>x ↦ (m ↦ f (Matrix.vecCons x m))</code>.
+It can be thought of as a map $Hom(\bigwedge^{n+1} M, N) \to Hom(M, Hom(\bigwedge^n M, N))$.</p><p>This is <code><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Curry.html#MultilinearMap.curryLeft">MultilinearMap.curryLeft</a></code> for <code><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">AlternatingMap</a></code>. See also
+<code><a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeftLinearMap">AlternatingMap.curryLeftLinearMap</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.mk">{</a>     <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">m</span> : <span class="fn">M</span>) =&gt;
+      <span class="fn">let <span class="fn">__src</span> := <span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">f</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Multilinear/Curry.html#MultilinearMap.curryLeft">curryLeft</a></span> <span class="fn">m</span></span>;
+      <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap.mk">{</a> <span class="fn">toMultilinearMap</span> := <span class="fn">__src</span>, <span class="fn">map_eq_zero_of_eq'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap.mk">}</a></span></span>,
+    <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">map_smul'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.mk">}</a></li></ul></details><details id="instances-for-list-AlternatingMap.curryLeft" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="AlternatingMap.curryLeft_apply_toMultilinearMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L33-L33">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft_apply_toMultilinearMap"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_apply_toMultilinearMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <span class="fn">m</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">f</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Multilinear/Curry.html#MultilinearMap.curryLeft">curryLeft</a></span> <span class="fn">m</span></span></div></div></div></div><div class="decl" id="AlternatingMap.curryLeft_apply_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L42-L45">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft_apply_apply"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_apply_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn"><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span> → <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <span class="fn">x</span>)</span> <span class="fn">v</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<a href="../../.././Mathlib/Data/Fin/VecNotation.html#Matrix.vecCons">Matrix.vecCons</a> <span class="fn">x</span> <span class="fn">v</span>)</span></span></div></div></div></div><div class="decl" id="AlternatingMap.curryLeft_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L47-L49">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft_zero"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a> <span class="fn">0</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="AlternatingMap.curryLeft_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L51-L54">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft_add"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f </span><span class="fn">g</span> : <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">f</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">g</span>).<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">g</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span></div></div></div></div><div class="decl" id="AlternatingMap.curryLeft_smul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L56-L59">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft_smul"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_smul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">r</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">f</span>).<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span></div></div></div></div><div class="decl" id="AlternatingMap.curryLeftLinearMap"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L61-L68">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeftLinearMap"><span class="name">AlternatingMap</span>.<span class="name">curryLeftLinearMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">M</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">n</span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span></div></div><p><code><a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">AlternatingMap.curryLeft</a></code> as a <code><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">LinearMap</a></code>. This is a separate definition as dot notation
+does not work for this version.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeftLinearMap">AlternatingMap.curryLeftLinearMap</a> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">f</span> : <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span>) =&gt; <span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span></span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">map_smul'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.mk">}</a></li></ul></details><details id="instances-for-list-AlternatingMap.curryLeftLinearMap" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="AlternatingMap.curryLeftLinearMap_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L63-L63">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeftLinearMap_apply"><span class="name">AlternatingMap</span>.<span class="name">curryLeftLinearMap_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeftLinearMap">curryLeftLinearMap</a> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span></div></div></div></div><div class="decl" id="AlternatingMap.curryLeft_same"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L70-L74">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft_same"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_same</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <span class="fn">m</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <span class="fn">m</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div><p>Currying with the same element twice gives the zero map.</p></div></div><div class="decl" id="AlternatingMap.curryLeft_compAlternatingMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L76-L80">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft_compAlternatingMap"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_compAlternatingMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₂</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">N</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">N₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#LinearMap.compAlternatingMap">compAlternatingMap</a></span> <span class="fn">f</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <span class="fn">m</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#LinearMap.compAlternatingMap">compAlternatingMap</a></span> <span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <span class="fn">m</span>)</span></span></div></div></div></div><div class="decl" id="AlternatingMap.curryLeft_compLinearMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Alternating/Curry.lean#L82-L85">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft_compLinearMap"><span class="name">AlternatingMap</span>.<span class="name">curryLeft_compLinearMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">M₂</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">M</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">M</span> <a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">[⋀^</a><span class="fn"><a href="../../.././Init/Prelude.html#Fin">Fin</a> <span class="fn"><span class="fn">n</span>.<a href="../../.././Init/Prelude.html#Nat.succ">succ</a></span></span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap">]</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">m</span> : <span class="fn">M₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap.compLinearMap">compLinearMap</a></span> <span class="fn">g</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <span class="fn">m</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Curry.html#AlternatingMap.curryLeft">curryLeft</a></span> <span class="fn">(<span class="fn">g</span> <span class="fn">m</span>)</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Alternating/Basic.html#AlternatingMap.compLinearMap">compLinearMap</a></span> <span class="fn">g</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

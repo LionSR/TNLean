@@ -1,0 +1,69 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Tactic.NthRewrite</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Tactic.NthRewrite";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">NthRewrite</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/NthRewrite.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Init.html">Mathlib.Init</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Tactic.NthRewrite" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Mathlib.Tactic.tacticNth_rewrite_____"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">tacticNth_rewrite_____</span></a></div><div class="nav_link"><a class="break_within" href="#Mathlib.Tactic.tacticNth_rw_____"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">tacticNth_rw_____</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="nth-rewrite-tactic" class="markdown-heading"><code>nth_rewrite</code> tactic <a class="hover-link" href="#nth-rewrite-tactic">#</a></h1><p>The tactic <code>nth_rewrite</code> and <code>nth_rw</code> are variants of <code>rewrite</code> and <code>rw</code> that only performs the
+<code>n</code>th possible rewrite.</p></div><div class="decl" id="Mathlib.Tactic.tacticNth_rewrite_____"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/NthRewrite.lean#L74-L75">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/NthRewrite.html#Mathlib.Tactic.tacticNth_rewrite_____"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">tacticNth_rewrite_____</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Lean.ParserDescr">Lean.ParserDescr</a></div></div><p><code>nth_rewrite</code> is a variant of <code>rewrite</code> that only changes the <code>n₁, ..., nₖ</code>ᵗʰ <em>occurrence</em> of
+the expression to be rewritten. <code>nth_rewrite n₁ ... nₖ [eq₁, eq₂,..., eqₘ]</code> will rewrite the
+<code>n₁, ..., nₖ</code>ᵗʰ <em>occurrence</em> of each of the <code>m</code> equalities <code>eqᵢ</code>in that order. Occurrences are
+counted beginning with <code>1</code> in order of precedence.</p><p>For example,</p><pre><code class="language-lean">example (h : a = 1) : a + a + a + a + a = 5 := by
+  nth_rewrite 2 3 [h]
+/-
+a: ℕ
+h: a = 1
+⊢ a + 1 + 1 + a + a = 5
+-/
+</code></pre><p>Notice that the second and third occurrences of <code>a</code> from the left have been rewritten by
+<code>nth_rewrite</code>.</p><p>To understand the importance of order of precedence, consider the example below</p><pre><code class="language-lean">example (a b c : Nat) : (a + b) + c = (b + a) + c := by
+  nth_rewrite 2 [Nat.add_comm] -- ⊢ (b + a) + c = (b + a) + c
+</code></pre><p>Here, although the occurrence parameter is <code>2</code>, <code>(a + b)</code> is rewritten to <code>(b + a)</code>. This happens
+because in order of precedence, the first occurrence of <code>_ + _</code> is the one that adds <code>a + b</code> to <code>c</code>.
+The occurrence in <code>a + b</code> counts as the second occurrence.</p><p>If a term <code>t</code> is introduced by rewriting with <code>eqᵢ</code>, then this instance of <code>t</code> will be counted as an
+<em>occurrence</em> of <code>t</code> for all subsequent rewrites of <code>t</code> with <code>eqⱼ</code> for <code>j &gt; i</code>. This behaviour is
+illustrated by the example below</p><pre><code class="language-lean">example (h : a = a + b) : a + a + a + a + a = 0 := by
+  nth_rewrite 3 [h, h]
+/-
+a b: ℕ
+h: a = a + b
+⊢ a + a + (a + b + b) + a + a = 0
+-/
+</code></pre><p>Here, the first <code>nth_rewrite</code> with <code>h</code> introduces an additional occurrence of <code>a</code> in the goal.
+That is, the goal state after the first rewrite looks like below</p><pre><code class="language-lean">/-
+a b: ℕ
+h: a = a + b
+⊢ a + a + (a + b) + a + a = 0
+-/
+</code></pre><p>This new instance of <code>a</code> also turns out to be the third <em>occurrence</em> of <code>a</code>.  Therefore,
+the next <code>nth_rewrite</code> with <code>h</code> rewrites this <code>a</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Tactic.tacticNth_rewrite_____" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Mathlib.Tactic.tacticNth_rw_____"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/NthRewrite.lean#L130-L131">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/NthRewrite.html#Mathlib.Tactic.tacticNth_rw_____"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">tacticNth_rw_____</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Lean.ParserDescr">Lean.ParserDescr</a></div></div><p><code>nth_rw</code> is a variant of <code>rw</code> that only changes the <code>n₁, ..., nₖ</code>ᵗʰ <em>occurrence</em> of the expression
+to be rewritten. Like <code>rw</code>, and unlike <code>nth_rewrite</code>, it will try to close the goal by trying <code><a href="../.././Init/Prelude.html#rfl">rfl</a></code>
+afterwards. <code>nth_rw n₁ ... nₖ [eq₁, eq₂,..., eqₘ]</code> will rewrite the <code>n₁, ..., nₖ</code>ᵗʰ <em>occurrence</em> of
+each of the <code>m</code> equalities <code>eqᵢ</code>in that order. Occurrences are counted beginning with <code>1</code> in
+order of precedence. For example,</p><pre><code class="language-lean">example (h : a = 1) : a + a + a + a + a = 5 := by
+  nth_rw 2 3 [h]
+/-
+a: ℕ
+h: a = 1
+⊢ a + 1 + 1 + a + a = 5
+-/
+</code></pre><p>Notice that the second and third occurrences of <code>a</code> from the left have been rewritten by
+<code>nth_rw</code>.</p><p>To understand the importance of order of precedence, consider the example below</p><pre><code class="language-lean">example (a b c : Nat) : (a + b) + c = (b + a) + c := by
+  nth_rewrite 2 [Nat.add_comm] -- ⊢ (b + a) + c = (b + a) + c
+</code></pre><p>Here, although the occurrence parameter is <code>2</code>, <code>(a + b)</code> is rewritten to <code>(b + a)</code>. This happens
+because in order of precedence, the first occurrence of <code>_ + _</code> is the one that adds <code>a + b</code> to <code>c</code>.
+The occurrence in <code>a + b</code> counts as the second occurrence.</p><p>If a term <code>t</code> is introduced by rewriting with <code>eqᵢ</code>, then this instance of <code>t</code> will be counted as an
+<em>occurrence</em> of <code>t</code> for all subsequent rewrites of <code>t</code> with <code>eqⱼ</code> for <code>j &gt; i</code>. This behaviour is
+illustrated by the example below</p><pre><code class="language-lean">example (h : a = a + b) : a + a + a + a + a = 0 := by
+  nth_rw 3 [h, h]
+/-
+a b: ℕ
+h: a = a + b
+⊢ a + a + (a + b + b) + a + a = 0
+-/
+</code></pre><p>Here, the first <code>nth_rw</code> with <code>h</code> introduces an additional occurrence of <code>a</code> in the goal. That is,
+the goal state after the first rewrite looks like below</p><pre><code class="language-lean">/-
+a b: ℕ
+h: a = a + b
+⊢ a + a + (a + b) + a + a = 0
+-/
+</code></pre><p>This new instance of <code>a</code> also turns out to be the third <em>occurrence</em> of <code>a</code>.  Therefore,
+the next <code>nth_rw</code> with <code>h</code> rewrites this <code>a</code>.</p><p>Further, <code>nth_rw</code> will close the remaining goal with <code><a href="../.././Init/Prelude.html#rfl">rfl</a></code> if possible.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Tactic.tacticNth_rw_____" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

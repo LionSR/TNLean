@@ -1,0 +1,180 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.Abelian.CommSq</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.Abelian.CommSq";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">CommSq</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Abelian/CommSq.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/Homology/CommSq.html">Mathlib.Algebra.Homology.CommSq</a></li><li><a href="../../.././Mathlib/CategoryTheory/Abelian/Refinements.html">Mathlib.CategoryTheory.Abelian.Refinements</a></li><li><a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Limits.html">Mathlib.CategoryTheory.MorphismProperty.Limits</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.Abelian.CommSq" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.instIsStableUnderCobaseChangeMonomorphisms"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">instIsStableUnderCobaseChangeMonomorphisms</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.instIsStableUnderBaseChangeEpimorphisms"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">instIsStableUnderBaseChangeEpimorphisms</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.exact_shortComplex"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">exact_shortComplex</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.hom_eq_add_up_to_refinements"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">hom_eq_add_up_to_refinements</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.mono_of_isPullback_of_mono"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">mono_of_isPullback_of_mono</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPullback.exact_shortComplex'"><span class="name">CategoryTheory</span>.<span class="name">IsPullback</span>.<span class="name">exact_shortComplex'</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.mono_cokernel_map_of_isPullback"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">mono_cokernel_map_of_isPullback</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Abelian.epi_kernel_map_of_isPushout"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">epi_kernel_map_of_isPushout</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="The-exact-sequence-attached-to-a-pushout-square" class="markdown-heading">The exact sequence attached to a pushout square <a class="hover-link" href="#The-exact-sequence-attached-to-a-pushout-square">#</a></h1><p>Consider a pushout square in an abelian category:</p><pre><code>    t
+ X₁ ⟶ X₂
+l|    |r
+ v    v
+ X₃ ⟶ X₄
+    b
+</code></pre><p>We study the associated exact sequence <code>X₁ ⟶ X₂ ⊞ X₃ ⟶ X₄ ⟶ 0</code>.
+We also show that the induced morphism <code>kernel t ⟶ kernel b</code> is an epimorphism.</p></div><div class="decl" id="CategoryTheory.Abelian.instIsStableUnderCobaseChangeMonomorphisms"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Abelian/CommSq.lean#L43-L44">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Abelian/CommSq.html#CategoryTheory.Abelian.instIsStableUnderCobaseChangeMonomorphisms"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">instIsStableUnderCobaseChangeMonomorphisms</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty.monomorphisms">MorphismProperty.monomorphisms</a> <span class="fn">C</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Limits.html#CategoryTheory.MorphismProperty.IsStableUnderCobaseChange">IsStableUnderCobaseChange</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.instIsStableUnderBaseChangeEpimorphisms"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Abelian/CommSq.lean#L46-L47">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Abelian/CommSq.html#CategoryTheory.Abelian.instIsStableUnderBaseChangeEpimorphisms"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">instIsStableUnderBaseChangeEpimorphisms</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty.epimorphisms">MorphismProperty.epimorphisms</a> <span class="fn">C</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/MorphismProperty/Limits.html#CategoryTheory.MorphismProperty.IsStableUnderBaseChange">IsStableUnderBaseChange</a></span></div></div></div></div><div class="decl" id="CategoryTheory.IsPushout.exact_shortComplex"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Abelian/CommSq.lean#L55-L57">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Abelian/CommSq.html#CategoryTheory.IsPushout.exact_shortComplex"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">exact_shortComplex</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X₁ </span><span class="fn">X₂ </span><span class="fn">X₃ </span><span class="fn">X₄</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn">X₂</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">X₃</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">t</span> <span class="fn">l</span> <span class="fn">r</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">⋯</span>.<a href="../../.././Mathlib/Algebra/Homology/CommSq.html#CategoryTheory.CommSq.shortComplex">shortComplex</a></span>.<a href="../../.././Mathlib/Algebra/Homology/ShortComplex/Exact.html#CategoryTheory.ShortComplex.Exact">Exact</a></span></div></div></div></div><div class="decl" id="CategoryTheory.IsPushout.hom_eq_add_up_to_refinements"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Abelian/CommSq.lean#L60-L79">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Abelian/CommSq.html#CategoryTheory.IsPushout.hom_eq_add_up_to_refinements"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">hom_eq_add_up_to_refinements</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X₁ </span><span class="fn">X₂ </span><span class="fn">X₃ </span><span class="fn">X₄</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn">X₂</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">X₃</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">t</span> <span class="fn">l</span> <span class="fn">r</span> <span class="fn">b</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x₄</span> : <span class="fn">T</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">T'</span> : <span class="fn">C</span>) (<span class="fn">π</span> : <span class="fn">T'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">T</span>) (_ : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Epi">Epi</a> <span class="fn">π</span></span>) (<span class="fn">x₂</span> : <span class="fn">T'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₂</span>) (<span class="fn">x₃</span> : <span class="fn">T'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₃</span>),
+  <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">π</span> <span class="fn">x₄</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">x₂</span> <span class="fn">r</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">x₃</span> <span class="fn">b</span></span></span></div></div><p>Given a pushout square in an abelian category</p><pre><code>X₁ ⟶ X₂
+|    |
+v    v
+X₃ ⟶ X₄
+</code></pre><p>the morphism <code>X₂ ⊞ X₃ ⟶ X₄</code> is an epimorphism. This lemma translates this
+as the existence of liftings up to refinements: a morphism <code>z : T ⟶ X₄</code>
+can be written as a sum of a morphism to <code>X₂</code> and a morphism to <code>X₃</code>,
+at least if we allow a precomposition with an epimorphism <code>π : T' ⟶ T</code>.</p></div></div><div class="decl" id="CategoryTheory.IsPushout.mono_of_isPullback_of_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Abelian/CommSq.lean#L81-L112">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Abelian/CommSq.html#CategoryTheory.IsPushout.mono_of_isPullback_of_mono"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">mono_of_isPullback_of_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X₁ </span><span class="fn">X₂ </span><span class="fn">X₃ </span><span class="fn">X₄</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn">X₂</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">X₃</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">t</span> <span class="fn">l</span> <span class="fn">r</span> <span class="fn">b</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X₅</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r'</span> : <span class="fn">X₂</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₅</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b'</span> : <span class="fn">X₃</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₅</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">t</span> <span class="fn">l</span> <span class="fn">r'</span> <span class="fn">b'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <span class="fn">X₄</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₅</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">fac₁</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">r</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">r'</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">fac₂</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">b</span> <span class="fn">k</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b'</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">r'</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">k</span></span></div></div><p>Given a commutative diagram in an abelian category</p><pre><code>X₁ ⟶ X₂
+|    |  \
+v    v   \
+X₃ ⟶ X₄   \
+ \     \   v
+  \     \&gt; X₅
+   \_____&gt;
+</code></pre><p>where the top/left square is a pushout square,
+the outer square involving <code>X₁</code>, <code>X₂</code>, <code>X₃</code> and <code>X₅</code>
+is a pullback square, and <code>X₂ ⟶ X₅</code> is mono,
+then <code>X₄ ⟶ X₅</code> is a mono.</p></div></div><div class="decl" id="CategoryTheory.IsPullback.exact_shortComplex'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Abelian/CommSq.lean#L118-L120">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Abelian/CommSq.html#CategoryTheory.IsPullback.exact_shortComplex'"><span class="name">CategoryTheory</span>.<span class="name">IsPullback</span>.<span class="name">exact_shortComplex'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X₁ </span><span class="fn">X₂ </span><span class="fn">X₃ </span><span class="fn">X₄</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn">X₂</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">X₃</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">t</span> <span class="fn">l</span> <span class="fn">r</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">⋯</span>.<a href="../../.././Mathlib/Algebra/Homology/CommSq.html#CategoryTheory.CommSq.shortComplex'">shortComplex'</a></span>.<a href="../../.././Mathlib/Algebra/Homology/ShortComplex/Exact.html#CategoryTheory.ShortComplex.Exact">Exact</a></span></div></div></div></div><div class="mod_doc"><p>Note: if <code>h : IsPullback t l r b</code>, then <code>X₁ ⟶ X₂ ⊞ X₃</code> is a monomorphism,
+which can be translated in concrete terms thanks to the lemma <code>IsPullback.hom_ext</code>:
+if a morphism <code>f : Z ⟶ X₁</code> becomes zero after composing with <code>X₁ ⟶ X₂</code> and
+<code>X₁ ⟶ X₃</code>, then <code>f = 0</code>. This is the reason why we do not state the dual
+statement to <code><a href="../../.././Mathlib/CategoryTheory/Abelian/CommSq.html#CategoryTheory.IsPushout.hom_eq_add_up_to_refinements">IsPushout.hom_eq_add_up_to_refinements</a></code>.</p></div><div class="decl" id="CategoryTheory.Abelian.mono_cokernel_map_of_isPullback"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Abelian/CommSq.lean#L136-L147">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Abelian/CommSq.html#CategoryTheory.Abelian.mono_cokernel_map_of_isPullback"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">mono_cokernel_map_of_isPullback</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X₁ </span><span class="fn">X₂ </span><span class="fn">X₃ </span><span class="fn">X₄</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn">X₂</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">X₃</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">t</span> <span class="fn">l</span> <span class="fn">r</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Kernels.html#CategoryTheory.Limits.cokernel.map">Limits.cokernel.map</a> <span class="fn">t</span> <span class="fn">b</span> <span class="fn">l</span> <span class="fn">r</span> <span class="fn">⋯</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Abelian.epi_kernel_map_of_isPushout"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Abelian/CommSq.lean#L150-L161">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Abelian/CommSq.html#CategoryTheory.Abelian.epi_kernel_map_of_isPushout"><span class="name">CategoryTheory</span>.<span class="name">Abelian</span>.<span class="name">epi_kernel_map_of_isPushout</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Abelian/Basic.html#CategoryTheory.Abelian">Abelian</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X₁ </span><span class="fn">X₂ </span><span class="fn">X₃ </span><span class="fn">X₄</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₂</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">l</span> : <span class="fn">X₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₃</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn">X₂</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">X₃</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X₄</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">t</span> <span class="fn">l</span> <span class="fn">r</span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Epi">Epi</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Kernels.html#CategoryTheory.Limits.kernel.map">Limits.kernel.map</a> <span class="fn">t</span> <span class="fn">b</span> <span class="fn">l</span> <span class="fn">r</span> <span class="fn">⋯</span>)</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

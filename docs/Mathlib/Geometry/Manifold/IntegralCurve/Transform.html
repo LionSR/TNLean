@@ -1,0 +1,439 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Geometry.Manifold.IntegralCurve.Transform</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Geometry.Manifold.IntegralCurve.Transform";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Geometry</span>.<span class="name">Manifold</span>.<span class="name">IntegralCurve</span>.<span class="name">Transform</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html">Mathlib.Geometry.Manifold.IntegralCurve.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Geometry.Manifold.IntegralCurve.Transform" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsMIntegralCurveOn.comp_add"><span class="name">IsMIntegralCurveOn</span>.<span class="name">comp_add</span></a></div><div class="nav_link"><a class="break_within" href="#isMIntegralCurveOn_comp_add"><span class="name">isMIntegralCurveOn_comp_add</span></a></div><div class="nav_link"><a class="break_within" href="#isMIntegralCurveOn_comp_sub"><span class="name">isMIntegralCurveOn_comp_sub</span></a></div><div class="nav_link"><a class="break_within" href="#IsMIntegralCurveAt.comp_add"><span class="name">IsMIntegralCurveAt</span>.<span class="name">comp_add</span></a></div><div class="nav_link"><a class="break_within" href="#isMIntegralCurveAt_comp_add"><span class="name">isMIntegralCurveAt_comp_add</span></a></div><div class="nav_link"><a class="break_within" href="#isMIntegralCurveAt_comp_sub"><span class="name">isMIntegralCurveAt_comp_sub</span></a></div><div class="nav_link"><a class="break_within" href="#IsMIntegralCurve.comp_add"><span class="name">IsMIntegralCurve</span>.<span class="name">comp_add</span></a></div><div class="nav_link"><a class="break_within" href="#isMIntegralCurve_comp_add"><span class="name">isMIntegralCurve_comp_add</span></a></div><div class="nav_link"><a class="break_within" href="#isMIntegralCurve_comp_sub"><span class="name">isMIntegralCurve_comp_sub</span></a></div><div class="nav_link"><a class="break_within" href="#IsMIntegralCurveOn.comp_mul"><span class="name">IsMIntegralCurveOn</span>.<span class="name">comp_mul</span></a></div><div class="nav_link"><a class="break_within" href="#isMIntegralCurveOn_comp_mul_ne_zero"><span class="name">isMIntegralCurveOn_comp_mul_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#IsMIntegralCurveAt.comp_mul_ne_zero"><span class="name">IsMIntegralCurveAt</span>.<span class="name">comp_mul_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#isMIntegralCurveAt_comp_mul_ne_zero"><span class="name">isMIntegralCurveAt_comp_mul_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#IsMIntegralCurve.comp_mul"><span class="name">IsMIntegralCurve</span>.<span class="name">comp_mul</span></a></div><div class="nav_link"><a class="break_within" href="#isMIntegralCurve_comp_mul_ne_zero"><span class="name">isMIntegralCurve_comp_mul_ne_zero</span></a></div><div class="nav_link"><a class="break_within" href="#isMIntegralCurve_const"><span class="name">isMIntegralCurve_const</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Translation-and-scaling-of-integral-curves" class="markdown-heading">Translation and scaling of integral curves <a class="hover-link" href="#Translation-and-scaling-of-integral-curves">#</a></h1><p>New integral curves may be constructed by translating or scaling the domain of an existing integral
+curve.</p><p>This file mirrors <code>Mathlib/Analysis/ODE/Transform</code>.</p><h2 id="Reference" class="markdown-heading">Reference <a class="hover-link" href="#Reference">#</a></h2><ul><li>[Lee, J. M. (2012). <em>Introduction to Smooth Manifolds</em>. Springer New York.][lee2012]</li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>integral curve, vector field</p></div><div class="mod_doc"><h3 id="Translation-lemmas" class="markdown-heading">Translation lemmas <a class="hover-link" href="#Translation-lemmas">#</a></h3></div><div class="decl" id="IsMIntegralCurveOn.comp_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L41-L48">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#IsMIntegralCurveOn.comp_add"><span class="name">IsMIntegralCurveOn</span>.<span class="name">comp_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hγ</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveOn">IsMIntegralCurveOn</a> <span class="fn">γ</span> <span class="fn">v</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">dt</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveOn">IsMIntegralCurveOn</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">dt</span></span>) <span class="fn">v</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">t</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">t</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">dt</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="isMIntegralCurveOn_comp_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L50-L56">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#isMIntegralCurveOn_comp_add"><span class="name">isMIntegralCurveOn_comp_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">dt</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveOn">IsMIntegralCurveOn</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">dt</span></span>) <span class="fn">v</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">t</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">t</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">dt</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveOn">IsMIntegralCurveOn</a> <span class="fn">γ</span> <span class="fn">v</span> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="isMIntegralCurveOn_comp_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L58-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#isMIntegralCurveOn_comp_sub"><span class="name">isMIntegralCurveOn_comp_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">dt</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveOn">IsMIntegralCurveOn</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">dt</span></span>) <span class="fn">v</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">t</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">t</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">dt</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveOn">IsMIntegralCurveOn</a> <span class="fn">γ</span> <span class="fn">v</span> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="IsMIntegralCurveAt.comp_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L62-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#IsMIntegralCurveAt.comp_add"><span class="name">IsMIntegralCurveAt</span>.<span class="name">comp_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t₀</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hγ</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveAt">IsMIntegralCurveAt</a> <span class="fn">γ</span> <span class="fn">v</span> <span class="fn">t₀</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">dt</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveAt">IsMIntegralCurveAt</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">dt</span></span>) <span class="fn">v</span> (<span class="fn">t₀</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">dt</span>)</span></div></div></div></div><div class="decl" id="isMIntegralCurveAt_comp_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L71-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#isMIntegralCurveAt_comp_add"><span class="name">isMIntegralCurveAt_comp_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t₀ </span><span class="fn">dt</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveAt">IsMIntegralCurveAt</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">dt</span></span>) <span class="fn">v</span> (<span class="fn">t₀</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">dt</span>)</span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveAt">IsMIntegralCurveAt</a> <span class="fn">γ</span> <span class="fn">v</span> <span class="fn">t₀</span></span></div></div></div></div><div class="decl" id="isMIntegralCurveAt_comp_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L79-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#isMIntegralCurveAt_comp_sub"><span class="name">isMIntegralCurveAt_comp_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t₀ </span><span class="fn">dt</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveAt">IsMIntegralCurveAt</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">dt</span></span>) <span class="fn">v</span> (<span class="fn">t₀</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">dt</span>)</span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveAt">IsMIntegralCurveAt</a> <span class="fn">γ</span> <span class="fn">v</span> <span class="fn">t₀</span></span></div></div></div></div><div class="decl" id="IsMIntegralCurve.comp_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L83-L86">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#IsMIntegralCurve.comp_add"><span class="name">IsMIntegralCurve</span>.<span class="name">comp_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hγ</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> <span class="fn">γ</span> <span class="fn">v</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">dt</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">dt</span></span>) <span class="fn">v</span></span></div></div></div></div><div class="decl" id="isMIntegralCurve_comp_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L88-L93">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#isMIntegralCurve_comp_add"><span class="name">isMIntegralCurve_comp_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">dt</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">dt</span></span>) <span class="fn">v</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> <span class="fn">γ</span> <span class="fn">v</span></span></div></div></div></div><div class="decl" id="isMIntegralCurve_comp_sub"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L95-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#isMIntegralCurve_comp_sub"><span class="name">isMIntegralCurve_comp_sub</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">dt</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">dt</span></span>) <span class="fn">v</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> <span class="fn">γ</span> <span class="fn">v</span></span></div></div></div></div><div class="mod_doc"><h3 id="Scaling-lemmas" class="markdown-heading">Scaling lemmas <a class="hover-link" href="#Scaling-lemmas">#</a></h3></div><div class="decl" id="IsMIntegralCurveOn.comp_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L105-L113">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#IsMIntegralCurveOn.comp_mul"><span class="name">IsMIntegralCurveOn</span>.<span class="name">comp_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hγ</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveOn">IsMIntegralCurveOn</a> <span class="fn">γ</span> <span class="fn">v</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveOn">IsMIntegralCurveOn</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span></span>) (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">v</span>) <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">t</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">t</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div></div></div><div class="decl" id="isMIntegralCurveOn_comp_mul_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L115-L122">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#isMIntegralCurveOn_comp_mul_ne_zero"><span class="name">isMIntegralCurveOn_comp_mul_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveOn">IsMIntegralCurveOn</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span></span>) (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">v</span>) <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">t</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">t</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">s</span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveOn">IsMIntegralCurveOn</a> <span class="fn">γ</span> <span class="fn">v</span> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="IsMIntegralCurveAt.comp_mul_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L124-L132">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#IsMIntegralCurveAt.comp_mul_ne_zero"><span class="name">IsMIntegralCurveAt</span>.<span class="name">comp_mul_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t₀</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hγ</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveAt">IsMIntegralCurveAt</a> <span class="fn">γ</span> <span class="fn">v</span> <span class="fn">t₀</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveAt">IsMIntegralCurveAt</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span></span>) (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">v</span>) (<span class="fn">t₀</span> <a href="../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">a</span>)</span></div></div></div></div><div class="decl" id="isMIntegralCurveAt_comp_mul_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L134-L141">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#isMIntegralCurveAt_comp_mul_ne_zero"><span class="name">isMIntegralCurveAt_comp_mul_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t₀ </span><span class="fn">a</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveAt">IsMIntegralCurveAt</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span></span>) (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">v</span>) (<span class="fn">t₀</span> <a href="../../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">a</span>)</span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurveAt">IsMIntegralCurveAt</a> <span class="fn">γ</span> <span class="fn">v</span> <span class="fn">t₀</span></span></div></div></div></div><div class="decl" id="IsMIntegralCurve.comp_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L143-L146">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#IsMIntegralCurve.comp_mul"><span class="name">IsMIntegralCurve</span>.<span class="name">comp_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hγ</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> <span class="fn">γ</span> <span class="fn">v</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span></span>) (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">v</span>)</span></div></div></div></div><div class="decl" id="isMIntegralCurve_comp_mul_ne_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L148-L154">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#isMIntegralCurve_comp_mul_ne_zero"><span class="name">isMIntegralCurve_comp_mul_ne_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> → <span class="fn">M</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ha</span> : <span class="fn">a</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> (<span class="fn">γ</span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">fun (<span class="fn">x</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">a</span></span>) (<span class="fn">a</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">v</span>)</span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> <span class="fn">γ</span> <span class="fn">v</span></span></div></div></div></div><div class="decl" id="isMIntegralCurve_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/IntegralCurve/Transform.lean#L157-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Transform.html#isMIntegralCurve_const"><span class="name">isMIntegralCurve_const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">v</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">v</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Geometry/Manifold/IntegralCurve/Basic.html#IsMIntegralCurve">IsMIntegralCurve</a> <span class="fn">(fun (<span class="fn">x_1</span> : <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>) =&gt; <span class="fn">x</span>)</span> <span class="fn">v</span></span></div></div><p>If the vector field <code>v</code> vanishes at <code>x₀</code>, then the constant curve at <code>x₀</code>
+is a global integral curve of <code>v</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

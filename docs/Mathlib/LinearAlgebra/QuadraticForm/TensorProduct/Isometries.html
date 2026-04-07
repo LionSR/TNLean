@@ -1,0 +1,726 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.LinearAlgebra.QuadraticForm.TensorProduct.Isometries</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.LinearAlgebra.QuadraticForm.TensorProduct.Isometries";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">LinearAlgebra</span>.<span class="name">QuadraticForm</span>.<span class="name">TensorProduct</span>.<span class="name">Isometries</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html">Mathlib.LinearAlgebra.QuadraticForm.IsometryEquiv</a></li><li><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html">Mathlib.LinearAlgebra.QuadraticForm.TensorProduct</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.LinearAlgebra.QuadraticForm.TensorProduct.Isometries" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tmul_comp_tensorMap"><span class="name">QuadraticForm</span>.<span class="name">tmul_comp_tensorMap</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tmul_tensorMap_apply"><span class="name">QuadraticForm</span>.<span class="name">tmul_tensorMap_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.Isometry.tmul"><span class="name">QuadraticMap</span>.<span class="name">Isometry</span>.<span class="name">tmul</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.Isometry.tmul_apply"><span class="name">QuadraticMap</span>.<span class="name">Isometry</span>.<span class="name">tmul_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tmul_comp_tensorComm"><span class="name">QuadraticForm</span>.<span class="name">tmul_comp_tensorComm</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tmul_tensorComm_apply"><span class="name">QuadraticForm</span>.<span class="name">tmul_tensorComm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorComm"><span class="name">QuadraticForm</span>.<span class="name">tensorComm</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorComm_toLinearEquiv"><span class="name">QuadraticForm</span>.<span class="name">tensorComm_toLinearEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorComm_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorComm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorComm_symm"><span class="name">QuadraticForm</span>.<span class="name">tensorComm_symm</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tmul_comp_tensorAssoc"><span class="name">QuadraticForm</span>.<span class="name">tmul_comp_tensorAssoc</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tmul_tensorAssoc_apply"><span class="name">QuadraticForm</span>.<span class="name">tmul_tensorAssoc_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorAssoc"><span class="name">QuadraticForm</span>.<span class="name">tensorAssoc</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorAssoc_toLinearEquiv"><span class="name">QuadraticForm</span>.<span class="name">tensorAssoc_toLinearEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorAssoc_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorAssoc_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorAssoc_symm_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorAssoc_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.comp_tensorRId_eq"><span class="name">QuadraticForm</span>.<span class="name">comp_tensorRId_eq</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tmul_tensorRId_apply"><span class="name">QuadraticForm</span>.<span class="name">tmul_tensorRId_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorRId"><span class="name">QuadraticForm</span>.<span class="name">tensorRId</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorRId_toLinearEquiv"><span class="name">QuadraticForm</span>.<span class="name">tensorRId_toLinearEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorRId_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorRId_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorRId_symm_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorRId_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.comp_tensorLId_eq"><span class="name">QuadraticForm</span>.<span class="name">comp_tensorLId_eq</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tmul_tensorLId_apply"><span class="name">QuadraticForm</span>.<span class="name">tmul_tensorLId_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorLId"><span class="name">QuadraticForm</span>.<span class="name">tensorLId</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorLId_toLinearEquiv"><span class="name">QuadraticForm</span>.<span class="name">tensorLId_toLinearEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorLId_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorLId_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticForm.tensorLId_symm_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorLId_symm_apply</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Linear-equivalences-of-tensor-products-as-isometries" class="markdown-heading">Linear equivalences of tensor products as isometries <a class="hover-link" href="#Linear-equivalences-of-tensor-products-as-isometries">#</a></h1><p>These results are separate from the definition of <code><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">QuadraticForm.tmul</a></code> as that file is very slow.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code>QuadraticForm.Isometry.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticMap.Isometry.tmul">tmul</a></code>: <code><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a></code> as a <code>QuadraticForm.<a href="../../../.././Mathlib/Topology/MetricSpace/Isometry.html#Isometry">Isometry</a></code></li><li><code><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorComm">QuadraticForm.tensorComm</a></code>: <code><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Basic.html#TensorProduct.comm">TensorProduct.comm</a></code> as a <code>QuadraticForm.<a href="../../../.././Mathlib/Topology/MetricSpace/Isometry.html#IsometryEquiv">IsometryEquiv</a></code></li><li><code><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorAssoc">QuadraticForm.tensorAssoc</a></code>: <code><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.assoc">TensorProduct.assoc</a></code> as a <code>QuadraticForm.<a href="../../../.././Mathlib/Topology/MetricSpace/Isometry.html#IsometryEquiv">IsometryEquiv</a></code></li><li><code><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorRId">QuadraticForm.tensorRId</a></code>: <code><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.rid">TensorProduct.rid</a></code> as a <code>QuadraticForm.<a href="../../../.././Mathlib/Topology/MetricSpace/Isometry.html#IsometryEquiv">IsometryEquiv</a></code></li><li><code><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorLId">QuadraticForm.tensorLId</a></code>: <code><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.lid">TensorProduct.lid</a></code> as a <code>QuadraticForm.<a href="../../../.././Mathlib/Topology/MetricSpace/Isometry.html#IsometryEquiv">IsometryEquiv</a></code></li></ul></div><div class="decl" id="QuadraticForm.tmul_comp_tensorMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L40-L50">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tmul_comp_tensorMap"><span class="name">QuadraticForm</span>.<span class="name">tmul_comp_tensorMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₃</span> : <a href="../../../.././foundational_types.html">Type</a> uM₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₄</span> : <a href="../../../.././foundational_types.html">Type</a> uM₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₃</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₄</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">Q₁</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry">→qᵢ</a> <span class="fn">Q₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">Q₃</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry">→qᵢ</a> <span class="fn">Q₄</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.comp">QuadraticMap.comp</a> <span class="fn">(<span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₄</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry.toLinearMap">toLinearMap</a></span> <span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry.toLinearMap">toLinearMap</a></span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₃</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tmul_tensorMap_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L52-L58">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tmul_tensorMap_apply"><span class="name">QuadraticForm</span>.<span class="name">tmul_tensorMap_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₃</span> : <a href="../../../.././foundational_types.html">Type</a> uM₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₄</span> : <a href="../../../.././foundational_types.html">Type</a> uM₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₃</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₄</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">Q₁</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry">→qᵢ</a> <span class="fn">Q₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">Q₃</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry">→qᵢ</a> <span class="fn">Q₄</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₃</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₄</span>)</span> <span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry.toLinearMap">toLinearMap</a></span> <span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry.toLinearMap">toLinearMap</a></span>)</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₃</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticMap.Isometry.tmul"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L62-L68">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticMap.Isometry.tmul"><span class="name">QuadraticMap</span>.<span class="name">Isometry</span>.<span class="name">tmul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₃</span> : <a href="../../../.././foundational_types.html">Type</a> uM₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₄</span> : <a href="../../../.././foundational_types.html">Type</a> uM₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₃</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₄</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">Q₁</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry">→qᵢ</a> <span class="fn">Q₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">Q₃</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry">→qᵢ</a> <span class="fn">Q₄</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₃</span></span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry">→qᵢ</a> <span class="fn"><span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₄</span></span></div></div><p><code><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a></code> for <code>QuadraticForm.<a href="../../../.././Mathlib/Topology/MetricSpace/Isometry.html#Isometry">Isometry</a></code>s</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticMap.Isometry.tmul">tmul</a></span> <span class="fn">g</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry.mk">{</a> <span class="fn">toLinearMap</span> := <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry.toLinearMap">toLinearMap</a></span> <span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry.toLinearMap">toLinearMap</a></span></span>, <span class="fn">map_app'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry.mk">}</a></li></ul></details><details id="instances-for-list-QuadraticMap.Isometry.tmul" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="QuadraticMap.Isometry.tmul_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L70-L76">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticMap.Isometry.tmul_apply"><span class="name">QuadraticMap</span>.<span class="name">Isometry</span>.<span class="name">tmul_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₃</span> : <a href="../../../.././foundational_types.html">Type</a> uM₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₄</span> : <a href="../../../.././foundational_types.html">Type</a> uM₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₃</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Q₄</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">Q₁</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry">→qᵢ</a> <span class="fn">Q₂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">Q₃</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry">→qᵢ</a> <span class="fn">Q₄</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₃</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticMap.Isometry.tmul">tmul</a></span> <span class="fn">g</span>)</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry.toLinearMap">toLinearMap</a></span> <span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Isometry.html#QuadraticMap.Isometry.toLinearMap">toLinearMap</a></span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tmul_comp_tensorComm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L82-L89">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tmul_comp_tensorComm"><span class="name">QuadraticForm</span>.<span class="name">tmul_comp_tensorComm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.comp">QuadraticMap.comp</a> <span class="fn">(<span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₁</span>)</span> <span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Basic.html#TensorProduct.comm">TensorProduct.comm</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span>)</span></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₂</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tmul_tensorComm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L91-L95">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tmul_tensorComm_apply"><span class="name">QuadraticForm</span>.<span class="name">tmul_tensorComm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₁</span>)</span> <span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Basic.html#TensorProduct.comm">TensorProduct.comm</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₂</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorComm"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L97-L102">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorComm"><span class="name">QuadraticForm</span>.<span class="name">tensorComm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv">QuadraticMap.IsometryEquiv</a> <span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₂</span>)</span> <span class="fn">(<span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₁</span>)</span></span></div></div><p><code><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Basic.html#TensorProduct.comm">TensorProduct.comm</a></code> preserves tensor products of quadratic forms.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorComm">tensorComm</a></span> <span class="fn">Q₂</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.mk">{</a> <span class="fn">toLinearEquiv</span> := <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Basic.html#TensorProduct.comm">TensorProduct.comm</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span></span>, <span class="fn">map_app'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.mk">}</a></li></ul></details><details id="instances-for-list-QuadraticForm.tensorComm" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="QuadraticForm.tensorComm_toLinearEquiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L98-L98">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorComm_toLinearEquiv"><span class="name">QuadraticForm</span>.<span class="name">tensorComm_toLinearEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorComm">tensorComm</a></span> <span class="fn">Q₂</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.toLinearEquiv">toLinearEquiv</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Basic.html#TensorProduct.comm">TensorProduct.comm</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorComm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L104-L107">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorComm_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorComm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorComm">tensorComm</a></span> <span class="fn">Q₂</span>)</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Basic.html#TensorProduct.comm">TensorProduct.comm</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorComm_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L109-L111">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorComm_symm"><span class="name">QuadraticForm</span>.<span class="name">tensorComm_symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorComm">tensorComm</a></span> <span class="fn">Q₂</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.symm">symm</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorComm">tensorComm</a></span> <span class="fn">Q₁</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tmul_comp_tensorAssoc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L117-L125">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tmul_comp_tensorAssoc"><span class="name">QuadraticForm</span>.<span class="name">tmul_comp_tensorAssoc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₃</span> : <a href="../../../.././foundational_types.html">Type</a> uM₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₃</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₃</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.comp">QuadraticMap.comp</a> <span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">(<span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₃</span>)</span>)</span> <span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.assoc">TensorProduct.assoc</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span> <span class="fn">M₃</span>)</span></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₂</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₃</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tmul_tensorAssoc_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L127-L132">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tmul_tensorAssoc_apply"><span class="name">QuadraticForm</span>.<span class="name">tmul_tensorAssoc_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₃</span> : <a href="../../../.././foundational_types.html">Type</a> uM₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₃</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₃</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span>)</span> <span class="fn">M₃</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">(<span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₃</span>)</span>)</span> <span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.assoc">TensorProduct.assoc</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span> <span class="fn">M₃</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₂</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₃</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorAssoc"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L134-L139">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorAssoc"><span class="name">QuadraticForm</span>.<span class="name">tensorAssoc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₃</span> : <a href="../../../.././foundational_types.html">Type</a> uM₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₃</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₃</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv">QuadraticMap.IsometryEquiv</a> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₂</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₃</span>)</span> <span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">(<span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <span class="fn">Q₃</span>)</span>)</span></span></div></div><p><code><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.assoc">TensorProduct.assoc</a></code> preserves tensor products of quadratic forms.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorAssoc">tensorAssoc</a></span> <span class="fn">Q₂</span> <span class="fn">Q₃</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.mk">{</a> <span class="fn">toLinearEquiv</span> := <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.assoc">TensorProduct.assoc</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span> <span class="fn">M₃</span></span>, <span class="fn">map_app'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.mk">}</a></li></ul></details><details id="instances-for-list-QuadraticForm.tensorAssoc" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="QuadraticForm.tensorAssoc_toLinearEquiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L135-L135">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorAssoc_toLinearEquiv"><span class="name">QuadraticForm</span>.<span class="name">tensorAssoc_toLinearEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₃</span> : <a href="../../../.././foundational_types.html">Type</a> uM₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₃</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₃</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorAssoc">tensorAssoc</a></span> <span class="fn">Q₂</span> <span class="fn">Q₃</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.toLinearEquiv">toLinearEquiv</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.assoc">TensorProduct.assoc</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span> <span class="fn">M₃</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorAssoc_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L141-L145">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorAssoc_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorAssoc_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₃</span> : <a href="../../../.././foundational_types.html">Type</a> uM₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₃</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₃</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span>)</span> <span class="fn">M₃</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorAssoc">tensorAssoc</a></span> <span class="fn">Q₂</span> <span class="fn">Q₃</span>)</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.assoc">TensorProduct.assoc</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span> <span class="fn">M₃</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorAssoc_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L147-L151">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorAssoc_symm_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorAssoc_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₃</span> : <a href="../../../.././foundational_types.html">Type</a> uM₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₃</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₃</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">M₂</span> <span class="fn">M₃</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorAssoc">tensorAssoc</a></span> <span class="fn">Q₂</span> <span class="fn">Q₃</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.symm">symm</a></span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.assoc">TensorProduct.assoc</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">M₂</span> <span class="fn">M₃</span>)</span>.<a href="../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.comp_tensorRId_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L157-L163">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.comp_tensorRId_eq"><span class="name">QuadraticForm</span>.<span class="name">comp_tensorRId_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.comp">QuadraticMap.comp</a> <span class="fn">Q₁</span> <span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.rid">TensorProduct.rid</a> <span class="fn">R</span> <span class="fn">M₁</span>)</span></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.sq">QuadraticMap.sq</a></span></div></div></div></div><div class="decl" id="QuadraticForm.tmul_tensorRId_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L165-L169">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tmul_tensorRId_apply"><span class="name">QuadraticForm</span>.<span class="name">tmul_tensorRId_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">Q₁</span> <span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.rid">TensorProduct.rid</a> <span class="fn">R</span> <span class="fn">M₁</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.sq">QuadraticMap.sq</a>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorRId"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L171-L176">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorRId"><span class="name">QuadraticForm</span>.<span class="name">tensorRId</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv">QuadraticMap.IsometryEquiv</a> <span class="fn">(<span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">tmul</a></span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.sq">QuadraticMap.sq</a>)</span> <span class="fn">Q₁</span></span></div></div><p><code><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.rid">TensorProduct.rid</a></code> preserves tensor products of quadratic forms.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorRId">tensorRId</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.mk">{</a> <span class="fn">toLinearEquiv</span> := <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.rid">TensorProduct.rid</a> <span class="fn">R</span> <span class="fn">M₁</span></span>, <span class="fn">map_app'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.mk">}</a></li></ul></details><details id="instances-for-list-QuadraticForm.tensorRId" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="QuadraticForm.tensorRId_toLinearEquiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L172-L172">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorRId_toLinearEquiv"><span class="name">QuadraticForm</span>.<span class="name">tensorRId_toLinearEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorRId">tensorRId</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.toLinearEquiv">toLinearEquiv</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.rid">TensorProduct.rid</a> <span class="fn">R</span> <span class="fn">M₁</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorRId_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L178-L180">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorRId_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorRId_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">M₁</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorRId">tensorRId</a></span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.rid">TensorProduct.rid</a> <span class="fn">R</span> <span class="fn">M₁</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorRId_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L182-L184">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorRId_symm_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorRId_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₁</span> : <a href="../../../.././foundational_types.html">Type</a> uM₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M₁</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn">Q₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorRId">tensorRId</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.symm">symm</a></span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.rid">TensorProduct.rid</a> <span class="fn">R</span> <span class="fn">M₁</span>)</span>.<a href="../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.comp_tensorLId_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L190-L193">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.comp_tensorLId_eq"><span class="name">QuadraticForm</span>.<span class="name">comp_tensorLId_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.comp">QuadraticMap.comp</a> <span class="fn">Q₂</span> <span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.lid">TensorProduct.lid</a> <span class="fn">R</span> <span class="fn">M₂</span>)</span></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">QuadraticForm.tmul</a> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.sq">QuadraticMap.sq</a> <span class="fn">Q₂</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tmul_tensorLId_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L195-L199">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tmul_tensorLId_apply"><span class="name">QuadraticForm</span>.<span class="name">tmul_tensorLId_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">Q₂</span> <span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.lid">TensorProduct.lid</a> <span class="fn">R</span> <span class="fn">M₂</span>)</span> <span class="fn">x</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">QuadraticForm.tmul</a> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.sq">QuadraticMap.sq</a> <span class="fn">Q₂</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorLId"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L201-L206">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorLId"><span class="name">QuadraticForm</span>.<span class="name">tensorLId</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv">QuadraticMap.IsometryEquiv</a> <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct.html#QuadraticForm.tmul">QuadraticForm.tmul</a> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.sq">QuadraticMap.sq</a> <span class="fn">Q₂</span>)</span> <span class="fn">Q₂</span></span></div></div><p><code><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.lid">TensorProduct.lid</a></code> preserves tensor products of quadratic forms.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorLId">tensorLId</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.mk">{</a> <span class="fn">toLinearEquiv</span> := <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.lid">TensorProduct.lid</a> <span class="fn">R</span> <span class="fn">M₂</span></span>, <span class="fn">map_app'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.mk">}</a></li></ul></details><details id="instances-for-list-QuadraticForm.tensorLId" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="QuadraticForm.tensorLId_toLinearEquiv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L202-L202">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorLId_toLinearEquiv"><span class="name">QuadraticForm</span>.<span class="name">tensorLId_toLinearEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorLId">tensorLId</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.toLinearEquiv">toLinearEquiv</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.lid">TensorProduct.lid</a> <span class="fn">R</span> <span class="fn">M₂</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorLId_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L208-L210">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorLId_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorLId_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorLId">tensorLId</a></span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.lid">TensorProduct.lid</a> <span class="fn">R</span> <span class="fn">M₂</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticForm.tensorLId_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.lean#L212-L214">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorLId_symm_apply"><span class="name">QuadraticForm</span>.<span class="name">tensorLId_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> uR}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M₂</span> : <a href="../../../.././foundational_types.html">Type</a> uM₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> <span class="fn">2</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticForm">QuadraticForm</a> <span class="fn">R</span> <span class="fn">M₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M₂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn">Q₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/TensorProduct/Isometries.html#QuadraticForm.tensorLId">tensorLId</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/QuadraticForm/IsometryEquiv.html#QuadraticMap.IsometryEquiv.symm">symm</a></span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/TensorProduct/Associator.html#TensorProduct.lid">TensorProduct.lid</a> <span class="fn">R</span> <span class="fn">M₂</span>)</span>.<a href="../../../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">x</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

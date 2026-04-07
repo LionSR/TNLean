@@ -1,0 +1,221 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Proper</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Proper";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">AlgebraicGeometry</span>.<span class="name">ProjectiveSpectrum</span>.<span class="name">Proper</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/AlgebraicGeometry/ValuativeCriterion.html">Mathlib.AlgebraicGeometry.ValuativeCriterion</a></li><li><a href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Basic.html">Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Basic</a></li><li><a href="../../.././Mathlib/Algebra/Order/BigOperators/Ring/Finset.html">Mathlib.Algebra.Order.BigOperators.Ring.Finset</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Proper" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#AlgebraicGeometry.Proj.lift_awayMapₐ_awayMapₐ_surjective"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">lift_awayMapₐ_awayMapₐ_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicGeometry.Proj.isSeparated"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">isSeparated</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicGeometry.Proj.instIsSeparated"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">instIsSeparated</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicGeometry.Proj.instLocallyOfFiniteTypeToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">instLocallyOfFiniteTypeToSpecZeroOfFiniteTypeSubtypeMemOfNatNat</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicGeometry.Proj.instQuasiCompactToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">instQuasiCompactToSpecZeroOfFiniteTypeSubtypeMemOfNatNat</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicGeometry.Proj.valuativeCriterion_existence_aux"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">valuativeCriterion_existence_aux</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicGeometry.Proj.valuativeCriterion_existence"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">valuativeCriterion_existence</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicGeometry.Proj.instUniversallyClosedToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">instUniversallyClosedToSpecZeroOfFiniteTypeSubtypeMemOfNatNat</span></a></div><div class="nav_link"><a class="break_within" href="#AlgebraicGeometry.Proj.instIsProperToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">instIsProperToSpecZeroOfFiniteTypeSubtypeMemOfNatNat</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Properness-of-Proj-A" class="markdown-heading">Properness of <code>Proj A</code> <a class="hover-link" href="#Properness-of-Proj-A">#</a></h1><p>We show that <code>Proj 𝒜</code> is proper over <code>Spec 𝒜₀</code>.</p><h2 id="Notes" class="markdown-heading">Notes <a class="hover-link" href="#Notes">#</a></h2><p>This contribution was created as part of the Durham Computational Algebraic Geometry Workshop</p></div><div class="decl" id="AlgebraicGeometry.Proj.lift_awayMapₐ_awayMapₐ_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.lean#L37-L79">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.html#AlgebraicGeometry.Proj.lift_awayMapₐ_awayMapₐ_surjective"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">lift_awayMapₐ_awayMapₐ_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝒜</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d </span><span class="fn">e</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn">f</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">𝒜</span> <span class="fn">d</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn">g</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">𝒜</span> <span class="fn">e</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">A</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hd</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">d</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a>
+  <span class="fn">⇑<span class="fn">(<a href="../../.././Mathlib/RingTheory/TensorProduct/Maps.html#Algebra.TensorProduct.lift">Algebra.TensorProduct.lift</a> <span class="fn">(<a href="../../.././Mathlib/RingTheory/GradedAlgebra/HomogeneousLocalization.html#HomogeneousLocalization.awayMapₐ">HomogeneousLocalization.awayMapₐ</a> <span class="fn">𝒜</span> <span class="fn">hg</span> <span class="fn">hx</span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/GradedAlgebra/HomogeneousLocalization.html#HomogeneousLocalization.awayMapₐ">HomogeneousLocalization.awayMapₐ</a> <span class="fn">𝒜</span> <span class="fn">hf</span> <span class="fn">⋯</span>)</span> <span class="fn">⋯</span>)</span></span></span></div></div></div></div><div class="decl" id="AlgebraicGeometry.Proj.isSeparated"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.lean#L83-L126">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.html#AlgebraicGeometry.Proj.isSeparated"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">isSeparated</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝒜</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/AlgebraicGeometry/Morphisms/Separated.html#AlgebraicGeometry.IsSeparated">IsSeparated</a> <span class="fn">(<a href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Basic.html#AlgebraicGeometry.Proj.toSpecZero">toSpecZero</a> <span class="fn">𝒜</span>)</span></span></div></div></div></div><div class="decl" id="AlgebraicGeometry.Proj.instIsSeparated"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.lean#L128-L130">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.html#AlgebraicGeometry.Proj.instIsSeparated"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">instIsSeparated</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝒜</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Scheme.html#AlgebraicGeometry.Proj">Proj</a> <span class="fn">𝒜</span>)</span>.<a href="../../.././Mathlib/AlgebraicGeometry/Morphisms/Separated.html#AlgebraicGeometry.Scheme.IsSeparated">IsSeparated</a></span></div></div><p><a href="https://stacks.math.columbia.edu/tag/01MC">Stacks Tag 01MC</a></p></div></div><div class="decl" id="AlgebraicGeometry.Proj.instLocallyOfFiniteTypeToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.lean#L136-L145">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.html#AlgebraicGeometry.Proj.instLocallyOfFiniteTypeToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">instLocallyOfFiniteTypeToSpecZeroOfFiniteTypeSubtypeMemOfNatNat</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝒜</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">Algebra.FiniteType</a> <span class="fn">(↥<span class="fn">(<span class="fn">𝒜</span> <span class="fn">0</span>)</span>)</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/AlgebraicGeometry/Morphisms/FiniteType.html#AlgebraicGeometry.LocallyOfFiniteType">LocallyOfFiniteType</a> <span class="fn">(<a href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Basic.html#AlgebraicGeometry.Proj.toSpecZero">toSpecZero</a> <span class="fn">𝒜</span>)</span></span></div></div></div></div><div class="decl" id="AlgebraicGeometry.Proj.instQuasiCompactToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.lean#L151-L163">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.html#AlgebraicGeometry.Proj.instQuasiCompactToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">instQuasiCompactToSpecZeroOfFiniteTypeSubtypeMemOfNatNat</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝒜</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">Algebra.FiniteType</a> <span class="fn">(↥<span class="fn">(<span class="fn">𝒜</span> <span class="fn">0</span>)</span>)</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/AlgebraicGeometry/Morphisms/QuasiCompact.html#AlgebraicGeometry.QuasiCompact">QuasiCompact</a> <span class="fn">(<a href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Basic.html#AlgebraicGeometry.Proj.toSpecZero">toSpecZero</a> <span class="fn">𝒜</span>)</span></span></div></div></div></div><div class="decl" id="AlgebraicGeometry.Proj.valuativeCriterion_existence_aux"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.lean#L170-L309">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.html#AlgebraicGeometry.Proj.valuativeCriterion_existence_aux"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">valuativeCriterion_existence_aux</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝒜</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">O</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Valuation/ValuationRing.html#ValuationRing">ValuationRing</a> <span class="fn">O</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">O</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Localization/FractionRing.html#IsFractionRing">IsFractionRing</a> <span class="fn">O</span> <span class="fn">K</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ₀</span> : <span class="fn">↥<span class="fn">(<span class="fn">𝒜</span> <span class="fn">0</span>)</span></span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">O</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_5)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h2</span> : <span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Subalgebra/Lattice.html#Algebra.adjoin">Algebra.adjoin</a> <span class="fn">(↥<span class="fn">(<span class="fn">𝒜</span> <span class="fn">0</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">j</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/HomogeneousLocalization.html#HomogeneousLocalization.Away">HomogeneousLocalization.Away</a> <span class="fn">𝒜</span> <span class="fn">(<span class="fn">x</span> <span class="fn">j</span>)</span></span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">K</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hcomm</span> : <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">K</span>)</span>.<a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn">φ₀</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">φ</span>.<a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/GradedAlgebra/HomogeneousLocalization.html#HomogeneousLocalization.fromZeroRingHom">HomogeneousLocalization.fromZeroRingHom</a> <span class="fn">𝒜</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Group/Submonoid/Membership.html#Submonoid.powers">Submonoid.powers</a> <span class="fn">(<span class="fn">x</span> <span class="fn">j</span>)</span>)</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><span class="fn">ι</span> → <a href="../../.././Init/Prelude.html#Nat">ℕ</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hdi</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">d</span> <span class="fn">i</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hxdi</span> : <span class="fn">∀ (<span class="fn">i</span> : <span class="fn">ι</span>), <span class="fn"><span class="fn">x</span> <span class="fn">i</span></span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">𝒜</span> <span class="fn">(<span class="fn">d</span> <span class="fn">i</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">j₀</span> : <span class="fn">ι</span>) (<span class="fn">φ'</span> : <span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/HomogeneousLocalization.html#HomogeneousLocalization.Away">HomogeneousLocalization.Away</a> <span class="fn">𝒜</span> (<span class="fn"><span class="fn">x</span> <span class="fn">j</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">x</span> <span class="fn">j₀</span></span>)</span> <a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">K</span>),
+  <span class="fn"><span class="fn"><span class="fn">φ'</span>.<a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/GradedAlgebra/HomogeneousLocalization.html#HomogeneousLocalization.awayMap">HomogeneousLocalization.awayMap</a> <span class="fn">𝒜</span> <span class="fn">⋯</span> <span class="fn">⋯</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">φ</span> <a href="../../.././Init/Prelude.html#And">∧</a>     <span class="fn"><span class="fn">(<span class="fn"><span class="fn">φ'</span>.<a href="../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom.comp">comp</a></span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/GradedAlgebra/HomogeneousLocalization.html#HomogeneousLocalization.awayMap">HomogeneousLocalization.awayMap</a> <span class="fn">𝒜</span> <span class="fn">⋯</span> <span class="fn">⋯</span>)</span>)</span>.<a href="../../.././Mathlib/Algebra/Ring/Subring/Basic.html#RingHom.range">range</a></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Algebra/Algebra/Defs.html#algebraMap">algebraMap</a> <span class="fn">O</span> <span class="fn">K</span>)</span>.<a href="../../.././Mathlib/Algebra/Ring/Subring/Basic.html#RingHom.range">range</a></span></span></div></div><p>Let <code>𝒜</code> be a graded ring generated over <code>𝒜₀</code> by finitely many homogeneous elements.
+Suppose we have the following diagram for some homogeneous <code>x</code>
+with <code>O</code> a valuation ring and <code>K = Frac(O)</code>.</p><pre><code>    φ
+K ←--- 𝒜_{(x)}
+↑       ↑
+|       |
+|       |
+O ←---- 𝒜₀
+    φ₀
+</code></pre><p>Then there exists a lift <code>φₗ : 𝒜_{(x₀)} →+* O</code> for some <code>x₀</code>
+such that these two diagrams exist and commute.</p><pre><code>    φ'                      φ'
+K ←--- 𝒜_{(x x₀)}       K ←--- 𝒜_{(x x₀)}
+↑       ↑                 ↖       ↑
+|       |                 φ ⟍     |
+|       |                     ⟍   |
+O ←---- 𝒜_{(x₀)}                𝒜_{(x)}
+    φₗ
+</code></pre><p>This is the underlying algebraic statement of the valuative criterion for <code>Proj 𝒜</code>.</p></div></div><div class="decl" id="AlgebraicGeometry.Proj.valuativeCriterion_existence"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.lean#L311-L359">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.html#AlgebraicGeometry.Proj.valuativeCriterion_existence"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">valuativeCriterion_existence</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝒜</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">Algebra.FiniteType</a> <span class="fn">(↥<span class="fn">(<span class="fn">𝒜</span> <span class="fn">0</span>)</span>)</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/AlgebraicGeometry/ValuativeCriterion.html#AlgebraicGeometry.ValuativeCriterion.Existence">ValuativeCriterion.Existence</a> <span class="fn">(<a href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Basic.html#AlgebraicGeometry.Proj.toSpecZero">toSpecZero</a> <span class="fn">𝒜</span>)</span></span></div></div><p><a href="https://stacks.math.columbia.edu/tag/01MF">Stacks Tag 01MF</a></p></div></div><div class="decl" id="AlgebraicGeometry.Proj.instUniversallyClosedToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.lean#L361-L363">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.html#AlgebraicGeometry.Proj.instUniversallyClosedToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">instUniversallyClosedToSpecZeroOfFiniteTypeSubtypeMemOfNatNat</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝒜</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">Algebra.FiniteType</a> <span class="fn">(↥<span class="fn">(<span class="fn">𝒜</span> <span class="fn">0</span>)</span>)</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/AlgebraicGeometry/Morphisms/UniversallyClosed.html#AlgebraicGeometry.UniversallyClosed">UniversallyClosed</a> <span class="fn">(<a href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Basic.html#AlgebraicGeometry.Proj.toSpecZero">toSpecZero</a> <span class="fn">𝒜</span>)</span></span></div></div></div></div><div class="decl" id="AlgebraicGeometry.Proj.instIsProperToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.lean#L367-L367">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Proper.html#AlgebraicGeometry.Proj.instIsProperToSpecZeroOfFiniteTypeSubtypeMemOfNatNat"><span class="name">AlgebraicGeometry</span>.<span class="name">Proj</span>.<span class="name">instIsProperToSpecZeroOfFiniteTypeSubtypeMemOfNatNat</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/SetLike/Basic.html#SetLike">SetLike</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroupClass">AddSubgroupClass</a> <span class="fn">σ</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝒜</span> : <span class="fn"><a href="../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">σ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/GradedAlgebra/Basic.html#GradedRing">GradedRing</a> <span class="fn">𝒜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/FiniteType.html#Algebra.FiniteType">Algebra.FiniteType</a> <span class="fn">(↥<span class="fn">(<span class="fn">𝒜</span> <span class="fn">0</span>)</span>)</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/AlgebraicGeometry/Morphisms/Proper.html#AlgebraicGeometry.IsProper">IsProper</a> <span class="fn">(<a href="../../.././Mathlib/AlgebraicGeometry/ProjectiveSpectrum/Basic.html#AlgebraicGeometry.Proj.toSpecZero">toSpecZero</a> <span class="fn">𝒜</span>)</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

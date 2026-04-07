@@ -1,0 +1,259 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.Coalgebra.MonoidAlgebra</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.Coalgebra.MonoidAlgebra";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">Coalgebra</span>.<span class="name">MonoidAlgebra</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html">Mathlib.Algebra.Polynomial.Laurent</a></li><li><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html">Mathlib.RingTheory.Coalgebra.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.Coalgebra.MonoidAlgebra" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MonoidAlgebra.instCoalgebra"><span class="name">MonoidAlgebra</span>.<span class="name">instCoalgebra</span></a></div><div class="nav_link"><a class="break_within" href="#AddMonoidAlgebra.instCoalgebra"><span class="name">AddMonoidAlgebra</span>.<span class="name">instCoalgebra</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidAlgebra.instIsCocomm"><span class="name">MonoidAlgebra</span>.<span class="name">instIsCocomm</span></a></div><div class="nav_link"><a class="break_within" href="#AddMonoidAlgebra.instIsCocomm"><span class="name">AddMonoidAlgebra</span>.<span class="name">instIsCocomm</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidAlgebra.counit_single"><span class="name">MonoidAlgebra</span>.<span class="name">counit_single</span></a></div><div class="nav_link"><a class="break_within" href="#AddMonoidAlgebra.counit_single"><span class="name">AddMonoidAlgebra</span>.<span class="name">counit_single</span></a></div><div class="nav_link"><a class="break_within" href="#MonoidAlgebra.comul_single"><span class="name">MonoidAlgebra</span>.<span class="name">comul_single</span></a></div><div class="nav_link"><a class="break_within" href="#AddMonoidAlgebra.comul_single"><span class="name">AddMonoidAlgebra</span>.<span class="name">comul_single</span></a></div><div class="nav_link"><a class="break_within" href="#LaurentPolynomial.instCoalgebra"><span class="name">LaurentPolynomial</span>.<span class="name">instCoalgebra</span></a></div><div class="nav_link"><a class="break_within" href="#LaurentPolynomial.instIsCocomm"><span class="name">LaurentPolynomial</span>.<span class="name">instIsCocomm</span></a></div><div class="nav_link"><a class="break_within" href="#LaurentPolynomial.comul_C"><span class="name">LaurentPolynomial</span>.<span class="name">comul_C</span></a></div><div class="nav_link"><a class="break_within" href="#LaurentPolynomial.comul_C_mul_T"><span class="name">LaurentPolynomial</span>.<span class="name">comul_C_mul_T</span></a></div><div class="nav_link"><a class="break_within" href="#LaurentPolynomial.comul_C_mul_T_self"><span class="name">LaurentPolynomial</span>.<span class="name">comul_C_mul_T_self</span></a></div><div class="nav_link"><a class="break_within" href="#LaurentPolynomial.counit_C"><span class="name">LaurentPolynomial</span>.<span class="name">counit_C</span></a></div><div class="nav_link"><a class="break_within" href="#LaurentPolynomial.counit_C_mul_T"><span class="name">LaurentPolynomial</span>.<span class="name">counit_C_mul_T</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="The-coalgebra-structure-on-monoid-algebras" class="markdown-heading">The coalgebra structure on monoid algebras <a class="hover-link" href="#The-coalgebra-structure-on-monoid-algebras">#</a></h1><p>Given a type <code>X</code>, a commutative semiring <code>R</code> and a semiring <code>A</code> which is also an <code>R</code>-coalgebra,
+this file collects results about the <code>R</code>-coalgebra instance on <code>A[X]</code> inherited from the
+corresponding structure on its coefficients, defined in <code><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html">Mathlib/RingTheory/Coalgebra/Basic.lean</a></code>.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code>(Add)MonoidAlgebra.<a href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#MonoidAlgebra.instCoalgebra">instCoalgebra</a></code>: the <code>R</code>-coalgebra structure on <code>A[X]</code> when <code>A</code> is an
+<code>R</code>-coalgebra.</li><li><code><a href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#LaurentPolynomial.instCoalgebra">LaurentPolynomial.instCoalgebra</a></code>: the <code>R</code>-coalgebra structure on the Laurent polynomials
+<code>A[T;T⁻¹]</code> when <code>A</code> is an <code>R</code>-coalgebra.</li></ul></div><div class="decl" id="MonoidAlgebra.instCoalgebra"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L38-L39">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#MonoidAlgebra.instCoalgebra"><span class="name">MonoidAlgebra</span>.<span class="name">instCoalgebra</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#MonoidAlgebra">MonoidAlgebra</a> <span class="fn">A</span> <span class="fn">X</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#MonoidAlgebra.instCoalgebra">MonoidAlgebra.instCoalgebra</a> <span class="fn">R</span> <span class="fn">A</span> <span class="fn">X</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Finsupp.instCoalgebra">Finsupp.instCoalgebra</a> <span class="fn">R</span> <span class="fn">X</span> <span class="fn">A</span></span></li></ul></details></div></div><div class="decl" id="AddMonoidAlgebra.instCoalgebra"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L38-L38">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#AddMonoidAlgebra.instCoalgebra"><span class="name">AddMonoidAlgebra</span>.<span class="name">instCoalgebra</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#AddMonoidAlgebra">AddMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">X</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#AddMonoidAlgebra.instCoalgebra">AddMonoidAlgebra.instCoalgebra</a> <span class="fn">R</span> <span class="fn">A</span> <span class="fn">X</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Finsupp.instCoalgebra">Finsupp.instCoalgebra</a> <span class="fn">R</span> <span class="fn">X</span> <span class="fn">A</span></span></li></ul></details></div></div><div class="decl" id="MonoidAlgebra.instIsCocomm"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L41-L42">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#MonoidAlgebra.instIsCocomm"><span class="name">MonoidAlgebra</span>.<span class="name">instIsCocomm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra.IsCocomm">Coalgebra.IsCocomm</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra.IsCocomm">Coalgebra.IsCocomm</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#MonoidAlgebra">MonoidAlgebra</a> <span class="fn">A</span> <span class="fn">X</span>)</span></span></div></div></div></div><div class="decl" id="AddMonoidAlgebra.instIsCocomm"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L41-L41">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#AddMonoidAlgebra.instIsCocomm"><span class="name">AddMonoidAlgebra</span>.<span class="name">instIsCocomm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra.IsCocomm">Coalgebra.IsCocomm</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra.IsCocomm">Coalgebra.IsCocomm</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#AddMonoidAlgebra">AddMonoidAlgebra</a> <span class="fn">A</span> <span class="fn">X</span>)</span></span></div></div></div></div><div class="decl" id="MonoidAlgebra.counit_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L44-L47">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#MonoidAlgebra.counit_single"><span class="name">MonoidAlgebra</span>.<span class="name">counit_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.counit">CoalgebraStruct.counit</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#MonoidAlgebra.single">single</a> <span class="fn">x</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.counit">CoalgebraStruct.counit</a> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="AddMonoidAlgebra.counit_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L44-L44">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#AddMonoidAlgebra.counit_single"><span class="name">AddMonoidAlgebra</span>.<span class="name">counit_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.counit">CoalgebraStruct.counit</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#AddMonoidAlgebra.single">single</a> <span class="fn">x</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.counit">CoalgebraStruct.counit</a> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="MonoidAlgebra.comul_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L49-L53">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#MonoidAlgebra.comul_single"><span class="name">MonoidAlgebra</span>.<span class="name">comul_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.comul">CoalgebraStruct.comul</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#MonoidAlgebra.single">single</a> <span class="fn">x</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Module.html#MonoidAlgebra.lsingle">lsingle</a> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Module.html#MonoidAlgebra.lsingle">lsingle</a> <span class="fn">x</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.comul">CoalgebraStruct.comul</a> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="AddMonoidAlgebra.comul_single"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L49-L49">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#AddMonoidAlgebra.comul_single"><span class="name">AddMonoidAlgebra</span>.<span class="name">comul_single</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">X</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.comul">CoalgebraStruct.comul</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Defs.html#AddMonoidAlgebra.single">single</a> <span class="fn">x</span> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Module.html#AddMonoidAlgebra.lsingle">lsingle</a> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Module.html#AddMonoidAlgebra.lsingle">lsingle</a> <span class="fn">x</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.comul">CoalgebraStruct.comul</a> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="LaurentPolynomial.instCoalgebra"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L63-L63">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#LaurentPolynomial.instCoalgebra"><span class="name">LaurentPolynomial</span>.<span class="name">instCoalgebra</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial">LaurentPolynomial</a> <span class="fn">A</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details></div></div><div class="decl" id="LaurentPolynomial.instIsCocomm"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L66-L66">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#LaurentPolynomial.instIsCocomm"><span class="name">LaurentPolynomial</span>.<span class="name">instIsCocomm</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra.IsCocomm">Coalgebra.IsCocomm</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra.IsCocomm">Coalgebra.IsCocomm</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial">LaurentPolynomial</a> <span class="fn">A</span>)</span></span></div></div></div></div><div class="decl" id="LaurentPolynomial.comul_C"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L70-L74">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#LaurentPolynomial.comul_C"><span class="name">LaurentPolynomial</span>.<span class="name">comul_C</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.comul">CoalgebraStruct.comul</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.C">C</a> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Module.html#AddMonoidAlgebra.lsingle">AddMonoidAlgebra.lsingle</a> <span class="fn">0</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Module.html#AddMonoidAlgebra.lsingle">AddMonoidAlgebra.lsingle</a> <span class="fn">0</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.comul">CoalgebraStruct.comul</a> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="LaurentPolynomial.comul_C_mul_T"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L76-L80">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#LaurentPolynomial.comul_C_mul_T"><span class="name">LaurentPolynomial</span>.<span class="name">comul_C_mul_T</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.comul">CoalgebraStruct.comul</a> (<span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.C">C</a> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.T">T</a> <span class="fn">n</span></span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Module.html#AddMonoidAlgebra.lsingle">AddMonoidAlgebra.lsingle</a> <span class="fn">n</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Algebra/MonoidAlgebra/Module.html#AddMonoidAlgebra.lsingle">AddMonoidAlgebra.lsingle</a> <span class="fn">n</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.comul">CoalgebraStruct.comul</a> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="LaurentPolynomial.comul_C_mul_T_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L82-L84">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#LaurentPolynomial.comul_C_mul_T_self"><span class="name">LaurentPolynomial</span>.<span class="name">comul_C_mul_T_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.comul">CoalgebraStruct.comul</a> (<span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.C">C</a> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.T">T</a> <span class="fn">n</span></span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.T">T</a> <span class="fn">n</span></span> <a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> (<span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.C">C</a> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.T">T</a> <span class="fn">n</span></span>)</div></div></div></div><div class="decl" id="LaurentPolynomial.counit_C"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L86-L89">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#LaurentPolynomial.counit_C"><span class="name">LaurentPolynomial</span>.<span class="name">counit_C</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.counit">CoalgebraStruct.counit</a> <span class="fn">(<a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.C">C</a> <span class="fn">a</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.counit">CoalgebraStruct.counit</a> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="LaurentPolynomial.counit_C_mul_T"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Coalgebra/MonoidAlgebra.lean#L91-L94">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/RingTheory/Coalgebra/MonoidAlgebra.html#LaurentPolynomial.counit_C_mul_T"><span class="name">LaurentPolynomial</span>.<span class="name">counit_C_mul_T</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#Coalgebra">Coalgebra</a> <span class="fn">R</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Data/Int/Basic.html#Int">ℤ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.counit">CoalgebraStruct.counit</a> (<span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.C">C</a> <span class="fn">a</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Algebra/Polynomial/Laurent.html#LaurentPolynomial.T">T</a> <span class="fn">n</span></span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/RingTheory/Coalgebra/Basic.html#CoalgebraStruct.counit">CoalgebraStruct.counit</a> <span class="fn">a</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

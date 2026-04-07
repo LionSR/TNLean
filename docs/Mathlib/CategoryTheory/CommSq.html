@@ -1,0 +1,745 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.CommSq</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.CommSq";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">CommSq</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/CategoryTheory/Comma/Arrow.html">Mathlib.CategoryTheory.Comma.Arrow</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.CommSq" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.w_assoc"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">w_assoc</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.flip"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">flip</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.of_arrow"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">of_arrow</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.op"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">op</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.unop"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">unop</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.vert_inv"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">vert_inv</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.horiz_inv"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">horiz_inv</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.horiz_comp"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">horiz_comp</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.vert_comp"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">vert_comp</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.eq_of_mono"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">eq_of_mono</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.eq_of_epi"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">eq_of_epi</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.map_commSq"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">map_commSq</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.map"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">map</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct.ext_iff"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">ext_iff</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct.ext"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">ext</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct.op"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">op</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct.op_l"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">op_l</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct.unop"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">unop</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct.unop_l"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">unop_l</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct.opEquiv"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">opEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct.opEquiv_symm_apply"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">opEquiv_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct.opEquiv_apply"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">opEquiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.LiftStruct.unopEquiv"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">unopEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.subsingleton_liftStruct_of_epi"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">subsingleton_liftStruct_of_epi</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.subsingleton_liftStruct_of_mono"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">subsingleton_liftStruct_of_mono</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.HasLift"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">HasLift</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.HasLift.mk'"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">HasLift</span>.<span class="name">mk'</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.HasLift.iff"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">HasLift</span>.<span class="name">iff</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.HasLift.iff_op"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">HasLift</span>.<span class="name">iff_op</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.HasLift.iff_unop"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">HasLift</span>.<span class="name">iff_unop</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.lift"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">lift</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.fac_left"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">fac_left</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.fac_left_assoc"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">fac_left_assoc</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.fac_right"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">fac_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.CommSq.fac_right_assoc"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">fac_right_assoc</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Commutative-squares" class="markdown-heading">Commutative squares <a class="hover-link" href="#Commutative-squares">#</a></h1><p>This file provides an API for commutative squares in categories.
+If <code>top</code>, <code>left</code>, <code>right</code> and <code>bottom</code> are four morphisms which are the edges
+of a square, <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> top left right bottom</code> is the predicate that this
+square is commutative.</p><p>The structure <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a></code> is extended in
+<code><a href="../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html">Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.lean</a></code>
+as <code>IsPullback</code> and <code>IsPushout</code> in order to define pullback and pushout squares.</p><h2 id="Future-work" class="markdown-heading">Future work <a class="hover-link" href="#Future-work">#</a></h2><p>Refactor <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></code> from <code>Arrow.lean</code> and lifting properties using <code>CommSq.lean</code>.</p></div><div class="decl" id="CategoryTheory.CommSq"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L35-L49">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>The proposition that a square</p><pre><code>  W ---f---&gt; X
+  |          |
+  g          h
+  |          |
+  v          v
+  Y ---i---&gt; Z
+
+</code></pre><p>is a commuting square.</p><ul class="structure_fields" id="CategoryTheory.CommSq.mk"><li id="CategoryTheory.CommSq.w" class="structure_field"><div class="structure_field_info">w : <span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">f</span> <span class="fn">h</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">g</span> <span class="fn">i</span></span></div><div class="structure_field_doc"><p>The square commutes.</p></div></li></ul><details id="instances-for-list-CategoryTheory.CommSq" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.CommSq.w_assoc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L51-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.w_assoc"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">w_assoc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">self</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z✝</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h✝</span> : <span class="fn">Z</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z✝</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">h</span> <span class="fn">h✝</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">g</span> <span class="fn">(<a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">i</span> <span class="fn">h✝</span>)</span></span></div></div><p>The square commutes.</p></div></div><div class="decl" id="CategoryTheory.CommSq.flip"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L58-L59">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.flip"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">flip</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">g</span> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">h</span></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.of_arrow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L61-L62">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.of_arrow"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">of_arrow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/Comma/Arrow.html#CategoryTheory.Arrow">Arrow</a> <span class="fn">C</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span> <span class="fn"><span class="fn">h</span>.<a href="../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.left">left</a></span> <span class="fn"><span class="fn">h</span>.<a href="../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.CommaMorphism.right">right</a></span> <span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.op"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L64-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.op"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">op</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn"><span class="fn">i</span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.op">op</a></span> <span class="fn"><span class="fn">h</span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.op">op</a></span> <span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.op">op</a></span> <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.op">op</a></span></span></div></div><p>The commutative square in the opposite category associated to a commutative square.</p></div></div><div class="decl" id="CategoryTheory.CommSq.unop"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L68-L71">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.unop"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">unop</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span><a href="../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn"><span class="fn">i</span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.unop">unop</a></span> <span class="fn"><span class="fn">h</span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.unop">unop</a></span> <span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.unop">unop</a></span> <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.unop">unop</a></span></span></div></div><p>The commutative square associated to a commutative square in the opposite category.</p></div></div><div class="decl" id="CategoryTheory.CommSq.vert_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L73-L75">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.vert_inv"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">vert_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">Z</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span> <span class="fn"><span class="fn">h</span>.<a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">i</span> <span class="fn"><span class="fn">g</span>.<a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span> <span class="fn"><span class="fn">h</span>.<a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.horiz_inv"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L77-L79">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.horiz_inv"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">horiz_inv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn">Z</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn"><span class="fn">i</span>.<a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span> <span class="fn">h</span> <span class="fn">g</span> <span class="fn"><span class="fn">i</span>.<a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.horiz_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L81-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.horiz_comp"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">horiz_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">X' </span><span class="fn">Y </span><span class="fn">Z </span><span class="fn">Z'</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f'</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X'</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h'</span> : <span class="fn">X'</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i'</span> : <span class="fn">Z</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hsq₁</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsq₂</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f'</span> <span class="fn">h</span> <span class="fn">h'</span> <span class="fn">i'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">(<a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">f</span> <span class="fn">f'</span>)</span> <span class="fn">g</span> <span class="fn">h'</span> <span class="fn">(<a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">i</span> <span class="fn">i'</span>)</span></span></div></div><p>The horizontal composition of two commutative squares as below is a commutative square.</p><pre><code>  W ---f---&gt; X ---f'--&gt; X'
+  |          |          |
+  g          h          h'
+  |          |          |
+  v          v          v
+  Y ---i---&gt; Z ---i'--&gt; Z'
+
+</code></pre></div></div><div class="decl" id="CategoryTheory.CommSq.vert_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L97-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.vert_comp"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">vert_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Y' </span><span class="fn">Z </span><span class="fn">Z'</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g'</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y'</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h'</span> : <span class="fn">Z</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i'</span> : <span class="fn">Y'</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hsq₁</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsq₂</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">i</span> <span class="fn">g'</span> <span class="fn">h'</span> <span class="fn">i'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">(<a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">g</span> <span class="fn">g'</span>)</span> <span class="fn">(<a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">h</span> <span class="fn">h'</span>)</span> <span class="fn">i'</span></span></div></div><p>The vertical composition of two commutative squares as below is a commutative square.</p><pre><code>  W ---f---&gt; X
+  |          |
+  g          h
+  |          |
+  v          v
+  Y ---i---&gt; Z
+  |          |
+  g'         h'
+  |          |
+  v          v
+  Y'---i'--&gt; Z'
+
+</code></pre></div></div><div class="decl" id="CategoryTheory.CommSq.eq_of_mono"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L123-L124">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.eq_of_mono"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">eq_of_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">i</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">i</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.eq_of_epi"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L126-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.eq_of_epi"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">eq_of_epi</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h </span><span class="fn">i</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Epi">Epi</a> <span class="fn">f</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">f</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">h</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">i</span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.map_commSq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L138-L139">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.Functor.map_commSq"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">map_commSq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">f</span>)</span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">h</span>)</span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">i</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L143-L143">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.map"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_2, u_2}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">f</span>)</span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">h</span>)</span> <span class="fn">(<span class="fn"><span class="fn">F</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">i</span>)</span></span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.Functor.map_commSq">CategoryTheory.Functor.map_commSq</a></code>.</p></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L150-L169">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Type</a> v_1</div></div><p>Now we consider a square:</p><pre><code>  A ---f---&gt; X
+  |          |
+  i          p
+  |          |
+  v          v
+  B ---g---&gt; Y
+</code></pre><p>The datum of a lift in a commutative square, i.e. an up-right-diagonal
+morphism which makes both triangles commute.</p><ul class="structure_fields" id="CategoryTheory.CommSq.LiftStruct.mk"><li id="CategoryTheory.CommSq.LiftStruct.l" class="structure_field"><div class="structure_field_info">l : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span></div><div class="structure_field_doc"><p>The lift.</p></div></li><li id="CategoryTheory.CommSq.LiftStruct.fac_left" class="structure_field"><div class="structure_field_info">fac_left : <span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">i</span> <span class="fn"><span class="fn">self</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div><div class="structure_field_doc"><p>The upper left triangle commutes.</p></div></li><li id="CategoryTheory.CommSq.LiftStruct.fac_right" class="structure_field"><div class="structure_field_info">fac_right : <span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn"><span class="fn">self</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span> <span class="fn">p</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div><div class="structure_field_doc"><p>The lower right triangle commutes.</p></div></li></ul><details id="instances-for-list-CategoryTheory.CommSq.LiftStruct" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct.ext_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L162-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.ext_iff"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">ext_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">inst✝</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">x</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">y</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L162-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.ext"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">inst✝</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><span class="fn">x</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">y</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct.op"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L173-L179">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.op"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">op</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">⋯</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span></div></div><p>A <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></code> for a commutative square gives a <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></code> for the
+corresponding square in the opposite category.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">l</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.op">op</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.mk">{</a> <span class="fn">l</span> := <span class="fn"><span class="fn"><span class="fn">l</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.op">op</a></span>, <span class="fn">fac_left</span> := <span class="fn">⋯</span>, <span class="fn">fac_right</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.mk">}</a></li></ul></details><details id="instances-for-list-CategoryTheory.CommSq.LiftStruct.op" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct.op_l"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L175-L175">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.op_l"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">op_l</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">l</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.op">op</a></span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">l</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.op">op</a></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct.unop"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L181-L188">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.unop"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">unop</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span><a href="../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">⋯</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span></div></div><p>A <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></code> for a commutative square in the opposite category
+gives a <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></code> for the corresponding square in the original category.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">l</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.unop">unop</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.mk">{</a> <span class="fn">l</span> := <span class="fn"><span class="fn"><span class="fn">l</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.unop">unop</a></span>, <span class="fn">fac_left</span> := <span class="fn">⋯</span>, <span class="fn">fac_right</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.mk">}</a></li></ul></details><details id="instances-for-list-CategoryTheory.CommSq.LiftStruct.unop" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct.unop_l"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L183-L183">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.unop_l"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">unop_l</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span><a href="../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">l</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.unop">unop</a></span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">l</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span>.<a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom.unop">unop</a></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct.opEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L190-L197">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.opEquiv"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">opEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span> <a href="../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn"><span class="fn">⋯</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span></div></div><p>Equivalences of <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></code> for a square and the corresponding square
+in the opposite category.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.opEquiv">CategoryTheory.CommSq.LiftStruct.opEquiv</a> <span class="fn">sq</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Logic/Equiv/Defs.html#Equiv.mk">{</a> <span class="fn">toFun</span> := <a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.op">CategoryTheory.CommSq.LiftStruct.op</a>, <span class="fn">invFun</span> := <a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.unop">CategoryTheory.CommSq.LiftStruct.unop</a>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>,
+    <span class="fn">right_inv</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Logic/Equiv/Defs.html#Equiv.mk">}</a></li></ul></details><details id="instances-for-list-CategoryTheory.CommSq.LiftStruct.opEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct.opEquiv_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L192-L192">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.opEquiv_symm_apply"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">opEquiv_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><span class="fn">⋯</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.opEquiv">opEquiv</a> <span class="fn">sq</span>)</span>.<a href="../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">l</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">l</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.unop">unop</a></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct.opEquiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L192-L192">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.opEquiv_apply"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">opEquiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.opEquiv">opEquiv</a> <span class="fn">sq</span>)</span> <span class="fn">l</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">l</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.op">op</a></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.LiftStruct.unopEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L199-L206">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.unopEquiv"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">LiftStruct</span>.<span class="name">unopEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span><a href="../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span> <a href="../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn"><span class="fn">⋯</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span></div></div><p>Equivalences of <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></code> for a square in the opposite category and
+the corresponding square in the original category.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.unopEquiv">CategoryTheory.CommSq.LiftStruct.unopEquiv</a> <span class="fn">sq</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Logic/Equiv/Defs.html#Equiv.mk">{</a> <span class="fn">toFun</span> := <a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.unop">CategoryTheory.CommSq.LiftStruct.unop</a>, <span class="fn">invFun</span> := <a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.op">CategoryTheory.CommSq.LiftStruct.op</a>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>,
+    <span class="fn">right_inv</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Logic/Equiv/Defs.html#Equiv.mk">}</a></li></ul></details><details id="instances-for-list-CategoryTheory.CommSq.LiftStruct.unopEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.CommSq.subsingleton_liftStruct_of_epi"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L210-L215">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.subsingleton_liftStruct_of_epi"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">subsingleton_liftStruct_of_epi</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Epi">Epi</a> <span class="fn">i</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.subsingleton_liftStruct_of_mono"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L217-L222">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.subsingleton_liftStruct_of_mono"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">subsingleton_liftStruct_of_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Core.html#Subsingleton">Subsingleton</a> <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.HasLift"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L226-L229">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">HasLift</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>The assertion that a square has a <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></code>.</p><ul class="structure_fields" id="CategoryTheory.CommSq.HasLift.mk"><li id="CategoryTheory.CommSq.HasLift.exists_lift" class="structure_field"><div class="structure_field_info">exists_lift : <span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span></span></div><div class="structure_field_doc"><p>Square has a <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></code>.</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-CategoryTheory.CommSq.HasLift" class="instances-list"></ul></details></div></div><div class="decl" id="CategoryTheory.CommSq.HasLift.mk'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L234-L235">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift.mk'"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">HasLift</span>.<span class="name">mk'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.HasLift.iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L237-L239">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift.iff"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">HasLift</span>.<span class="name">iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.HasLift.iff_op"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L241-L243">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift.iff_op"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">HasLift</span>.<span class="name">iff_op</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">⋯</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.HasLift.iff_unop"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L245-L248">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift.iff_unop"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">HasLift</span>.<span class="name">iff_unop</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span><a href="../.././Mathlib/Data/Opposite.html#Opposite">ᵒᵖ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">⋯</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.lift"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L252-L255">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.lift"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">lift</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hsq</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span></div></div><p>A choice of a diagonal morphism that is part of a <code><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct">LiftStruct</a></code> when
+the square has a lift.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.lift">lift</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">⋯</span>.<a href="../.././Mathlib/Logic/Nonempty.html#Nonempty.some">some</a></span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.LiftStruct.l">l</a></span></li></ul></details><details id="instances-for-list-CategoryTheory.CommSq.lift" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.CommSq.fac_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L257-L259">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.fac_left"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">fac_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hsq</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">i</span> <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.lift">lift</a></span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.fac_left_assoc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L257-L257">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.fac_left_assoc"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">fac_left_assoc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hsq</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">i</span> <span class="fn">(<a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.lift">lift</a></span> <span class="fn">h</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">f</span> <span class="fn">h</span></span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.fac_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L261-L263">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.fac_right"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">fac_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hsq</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.lift">lift</a></span> <span class="fn">p</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="CategoryTheory.CommSq.fac_right_assoc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/CommSq.lean#L261-L261">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.fac_right_assoc"><span class="name">CategoryTheory</span>.<span class="name">CommSq</span>.<span class="name">fac_right_assoc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B </span><span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">p</span> : <span class="fn">X</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">sq</span> : <span class="fn"><a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn">i</span> <span class="fn">p</span> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hsq</span> : <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.HasLift">HasLift</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">Y</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn"><span class="fn">sq</span>.<a href="../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq.lift">lift</a></span> <span class="fn">(<a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">p</span> <span class="fn">h</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">g</span> <span class="fn">h</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,228 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Dynamics.BirkhoffSum.NormedSpace</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Dynamics.BirkhoffSum.NormedSpace";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Dynamics</span>.<span class="name">BirkhoffSum</span>.<span class="name">NormedSpace</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Analysis/RCLike/Basic.html">Mathlib.Analysis.RCLike.Basic</a></li><li><a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html">Mathlib.Dynamics.BirkhoffSum.Average</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Dynamics.BirkhoffSum.NormedSpace" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Function.IsFixedPt.tendsto_birkhoffAverage"><span class="name">Function</span>.<span class="name">IsFixedPt</span>.<span class="name">tendsto_birkhoffAverage</span></a></div><div class="nav_link"><a class="break_within" href="#dist_birkhoffSum_apply_birkhoffSum"><span class="name">dist_birkhoffSum_apply_birkhoffSum</span></a></div><div class="nav_link"><a class="break_within" href="#dist_birkhoffSum_birkhoffSum_le"><span class="name">dist_birkhoffSum_birkhoffSum_le</span></a></div><div class="nav_link"><a class="break_within" href="#dist_birkhoffAverage_birkhoffAverage"><span class="name">dist_birkhoffAverage_birkhoffAverage</span></a></div><div class="nav_link"><a class="break_within" href="#dist_birkhoffAverage_birkhoffAverage_le"><span class="name">dist_birkhoffAverage_birkhoffAverage_le</span></a></div><div class="nav_link"><a class="break_within" href="#dist_birkhoffAverage_apply_birkhoffAverage"><span class="name">dist_birkhoffAverage_apply_birkhoffAverage</span></a></div><div class="nav_link"><a class="break_within" href="#tendsto_birkhoffAverage_apply_sub_birkhoffAverage"><span class="name">tendsto_birkhoffAverage_apply_sub_birkhoffAverage</span></a></div><div class="nav_link"><a class="break_within" href="#tendsto_birkhoffAverage_apply_sub_birkhoffAverage'"><span class="name">tendsto_birkhoffAverage_apply_sub_birkhoffAverage'</span></a></div><div class="nav_link"><a class="break_within" href="#uniformEquicontinuous_birkhoffAverage"><span class="name">uniformEquicontinuous_birkhoffAverage</span></a></div><div class="nav_link"><a class="break_within" href="#isClosed_setOf_tendsto_birkhoffAverage"><span class="name">isClosed_setOf_tendsto_birkhoffAverage</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Birkhoff-average-in-a-normed-space" class="markdown-heading">Birkhoff average in a normed space <a class="hover-link" href="#Birkhoff-average-in-a-normed-space">#</a></h1><p>In this file we prove some lemmas about the Birkhoff average (<code><a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a></code>)
+of a function which takes values in a normed space over <code>ℝ</code> or <code>ℂ</code>.</p><p>At the time of writing, all lemmas in this file
+are motivated by the proof of the von Neumann Mean Ergodic Theorem,
+see <code>LinearIsometry.tendsto_birkhoffAverage_orthogonalProjection</code>.</p></div><div class="decl" id="Function.IsFixedPt.tendsto_birkhoffAverage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean#L31-L42">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#Function.IsFixedPt.tendsto_birkhoffAverage"><span class="name">Function</span>.<span class="name">IsFixedPt</span>.<span class="name">tendsto_birkhoffAverage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Field/Defs.html#DivisionSemiring">DivisionSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Logic/Function/Defs.html#Function.IsFixedPt">IsFixedPt</a> <span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">x_1</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">R</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">x_1</span> <span class="fn">x</span></span>)</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">(<span class="fn">g</span> <span class="fn">x</span>)</span>)</span></span></div></div><p>The Birkhoff averages of a function <code>g</code> over the orbit of a fixed point <code>x</code> of <code>f</code>
+tend to <code>g x</code> as <code>N → ∞</code>. In fact, they are equal to <code>g x</code> for all <code>N ≠ 0</code>,
+see <code><a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#Function.IsFixedPt.birkhoffAverage_eq">Function.IsFixedPt.birkhoffAverage_eq</a></code>.</p><p>TODO: add a version for a periodic orbit.</p></div></div><div class="decl" id="dist_birkhoffSum_apply_birkhoffSum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean#L46-L48">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#dist_birkhoffSum_apply_birkhoffSum"><span class="name">dist_birkhoffSum_apply_birkhoffSum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Basic.html#birkhoffSum">birkhoffSum</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Basic.html#birkhoffSum">birkhoffSum</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">g</span> <span class="fn">(<span class="fn">f</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span>)</span>)</span> <span class="fn">(<span class="fn">g</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="dist_birkhoffSum_birkhoffSum_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean#L50-L53">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#dist_birkhoffSum_birkhoffSum_le"><span class="name">dist_birkhoffSum_birkhoffSum_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Basic.html#birkhoffSum">birkhoffSum</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Basic.html#birkhoffSum">birkhoffSum</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">∑ <span class="fn">k</span> ∈ <span class="fn"><a href="../../.././Mathlib/Data/Finset/Range.html#Finset.range">Finset.range</a> <span class="fn">n</span></span>, <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">g</span> <span class="fn">(<span class="fn">f</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">k</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span>)</span>)</span> <span class="fn">(<span class="fn">g</span> <span class="fn">(<span class="fn">f</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">k</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">y</span>)</span>)</span></span></span></div></div></div></div><div class="decl" id="dist_birkhoffAverage_birkhoffAverage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean#L57-L60">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#dist_birkhoffAverage_birkhoffAverage"><span class="name">dist_birkhoffAverage_birkhoffAverage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Basic.html#birkhoffSum">birkhoffSum</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Basic.html#birkhoffSum">birkhoffSum</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">↑<span class="fn">n</span></span></div></div></div></div><div class="decl" id="dist_birkhoffAverage_birkhoffAverage_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean#L62-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#dist_birkhoffAverage_birkhoffAverage_le"><span class="name">dist_birkhoffAverage_birkhoffAverage_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">y</span>)</span></span> <a href="../../.././Init/Prelude.html#LE.le">≤</a>   <span class="fn">(∑ <span class="fn">k</span> ∈ <span class="fn"><a href="../../.././Mathlib/Data/Finset/Range.html#Finset.range">Finset.range</a> <span class="fn">n</span></span>, <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">g</span> <span class="fn">(<span class="fn">f</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">k</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span>)</span>)</span> <span class="fn">(<span class="fn">g</span> <span class="fn">(<span class="fn">f</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">k</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">y</span>)</span>)</span></span>)</span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">↑<span class="fn">n</span></span></div></div></div></div><div class="decl" id="dist_birkhoffAverage_apply_birkhoffAverage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean#L68-L71">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#dist_birkhoffAverage_apply_birkhoffAverage"><span class="name">dist_birkhoffAverage_apply_birkhoffAverage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/Topology/MetricSpace/Pseudo/Defs.html#Dist.dist">dist</a> <span class="fn">(<span class="fn">g</span> <span class="fn">(<span class="fn">f</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span>)</span>)</span> <span class="fn">(<span class="fn">g</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">↑<span class="fn">n</span></span></div></div></div></div><div class="decl" id="tendsto_birkhoffAverage_apply_sub_birkhoffAverage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean#L73-L88">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#tendsto_birkhoffAverage_apply_sub_birkhoffAverage"><span class="name">tendsto_birkhoffAverage_apply_sub_birkhoffAverage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Bornology/Basic.html#Bornology.IsBounded">Bornology.IsBounded</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">fun (<span class="fn">x_1</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">x_1</span><a href="../../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span>)</span></span></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">x</span></span>)</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span></span></div></div><p>If a function <code>g</code> is bounded along the positive orbit of <code>x</code> under <code>f</code>,
+then the difference between Birkhoff averages of <code>g</code>
+along the orbit of <code>f x</code> and along the orbit of <code>x</code>
+tends to zero.</p><p>See also <code><a href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#tendsto_birkhoffAverage_apply_sub_birkhoffAverage'">tendsto_birkhoffAverage_apply_sub_birkhoffAverage'</a></code>.</p></div></div><div class="decl" id="tendsto_birkhoffAverage_apply_sub_birkhoffAverage'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean#L90-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#tendsto_birkhoffAverage_apply_sub_birkhoffAverage'"><span class="name">tendsto_birkhoffAverage_apply_sub_birkhoffAverage'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Bornology/Basic.html#Bornology.IsBounded">Bornology.IsBounded</a> <span class="fn">(<a href="../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">g</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">n</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">n</span> <span class="fn">x</span></span>)</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span></span></div></div><p>If a function <code>g</code> is bounded,
+then the difference between Birkhoff averages of <code>g</code>
+along the orbit of <code>f x</code> and along the orbit of <code>x</code>
+tends to zero.</p><p>See also <code><a href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#tendsto_birkhoffAverage_apply_sub_birkhoffAverage">tendsto_birkhoffAverage_apply_sub_birkhoffAverage</a></code>.</p></div></div><div class="decl" id="uniformEquicontinuous_birkhoffAverage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean#L107-L126">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#uniformEquicontinuous_birkhoffAverage"><span class="name">uniformEquicontinuous_birkhoffAverage</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#PseudoEMetricSpace">PseudoEMetricSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Lipschitz.html#LipschitzWith">LipschitzWith</a> <span class="fn">1</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuous">UniformContinuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Equicontinuity.html#UniformEquicontinuous">UniformEquicontinuous</a> <span class="fn">(<a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span>)</span></span></div></div><p>If <code>f</code> is a non-strictly contracting map (i.e., it is Lipschitz with constant <code>1</code>)
+and <code>g</code> is a uniformly continuous, then the Birkhoff averages of <code>g</code> along orbits of <code>f</code>
+is a uniformly equicontinuous family of functions.</p></div></div><div class="decl" id="isClosed_setOf_tendsto_birkhoffAverage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/BirkhoffSum/NormedSpace.lean#L128-L136">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Dynamics/BirkhoffSum/NormedSpace.html#isClosed_setOf_tendsto_birkhoffAverage"><span class="name">isClosed_setOf_tendsto_birkhoffAverage</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#PseudoEMetricSpace">PseudoEMetricSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">X</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g </span><span class="fn">l</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Lipschitz.html#LipschitzWith">LipschitzWith</a> <span class="fn">1</span> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformContinuous">UniformContinuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hl</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">l</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#IsClosed">IsClosed</a> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">x</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../.././Mathlib/Order/Filter/Defs.html#Filter.Tendsto">Filter.Tendsto</a> <span class="fn">(fun (<span class="fn">x_1</span> : <a href="../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><a href="../../.././Mathlib/Dynamics/BirkhoffSum/Average.html#birkhoffAverage">birkhoffAverage</a> <span class="fn">𝕜</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">x_1</span> <span class="fn">x</span></span>)</span> <a href="../../.././Mathlib/Order/Filter/AtTopBot/Defs.html#Filter.atTop">Filter.atTop</a> <span class="fn">(<a href="../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">(<span class="fn">l</span> <span class="fn">x</span>)</span>)</span></span><a href="../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span></div></div><p>If <code>f : X → X</code> is a non-strictly contracting map (i.e., it is Lipschitz with constant <code>1</code>),
+<code>g : X → E</code> is a uniformly continuous, and <code>l : X → E</code> is a continuous function,
+then the set of points <code>x</code>
+such that the Birkhoff average of <code>g</code> along the orbit of <code>x</code> tends to <code>l x</code>
+is a closed set.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

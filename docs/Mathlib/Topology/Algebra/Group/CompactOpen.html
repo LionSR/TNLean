@@ -1,0 +1,723 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.Algebra.Group.CompactOpen</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.Algebra.Group.CompactOpen";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">Algebra</span>.<span class="name">Group</span>.<span class="name">CompactOpen</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html">Mathlib.Topology.Algebra.ContinuousMonoidHom</a></li><li><a href="../../../.././Mathlib/Topology/Algebra/Equicontinuity.html">Mathlib.Topology.Algebra.Equicontinuity</a></li><li><a href="../../../.././Mathlib/Topology/ContinuousMap/Algebra.html">Mathlib.Topology.ContinuousMap.Algebra</a></li><li><a href="../../../.././Mathlib/Topology/UniformSpace/Ascoli.html">Mathlib.Topology.UniformSpace.Ascoli</a></li><li><a href="../../../.././Mathlib/Topology/Algebra/Group/Compact.html">Mathlib.Topology.Algebra.Group.Compact</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.Algebra.Group.CompactOpen" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.instTopologicalSpace"><span class="name">ContinuousMonoidHom</span>.<span class="name">instTopologicalSpace</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.instTopologicalSpace"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instTopologicalSpace</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.isInducing_toContinuousMap"><span class="name">ContinuousMonoidHom</span>.<span class="name">isInducing_toContinuousMap</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.isInducing_toContinuousMap"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">isInducing_toContinuousMap</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.isEmbedding_toContinuousMap"><span class="name">ContinuousMonoidHom</span>.<span class="name">isEmbedding_toContinuousMap</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.isEmbedding_toContinuousMap"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">isEmbedding_toContinuousMap</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.instContinuousEvalConst"><span class="name">ContinuousMonoidHom</span>.<span class="name">instContinuousEvalConst</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.instContinuousEvalConst"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instContinuousEvalConst</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.instContinuousEval"><span class="name">ContinuousMonoidHom</span>.<span class="name">instContinuousEval</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.instContinuousEval"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instContinuousEval</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.range_toContinuousMap"><span class="name">ContinuousMonoidHom</span>.<span class="name">range_toContinuousMap</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.range_toContinuousMap"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">range_toContinuousMap</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.isClosedEmbedding_toContinuousMap"><span class="name">ContinuousMonoidHom</span>.<span class="name">isClosedEmbedding_toContinuousMap</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.isClosedEmbedding_toContinuousMap"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">isClosedEmbedding_toContinuousMap</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.instT2Space"><span class="name">ContinuousMonoidHom</span>.<span class="name">instT2Space</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.instT2Space"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instT2Space</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.instIsTopologicalGroup"><span class="name">ContinuousMonoidHom</span>.<span class="name">instIsTopologicalGroup</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.instIsTopologicalAddGroup"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instIsTopologicalAddGroup</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.continuous_of_continuous_uncurry"><span class="name">ContinuousMonoidHom</span>.<span class="name">continuous_of_continuous_uncurry</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.continuous_of_continuous_uncurry"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">continuous_of_continuous_uncurry</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.continuous_comp"><span class="name">ContinuousMonoidHom</span>.<span class="name">continuous_comp</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.continuous_comp"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">continuous_comp</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.continuous_comp_left"><span class="name">ContinuousMonoidHom</span>.<span class="name">continuous_comp_left</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.continuous_comp_left"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">continuous_comp_left</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.continuous_comp_right"><span class="name">ContinuousMonoidHom</span>.<span class="name">continuous_comp_right</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.continuous_comp_right"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">continuous_comp_right</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.compLeft"><span class="name">ContinuousMonoidHom</span>.<span class="name">compLeft</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.compLeft"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">compLeft</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.compRight"><span class="name">ContinuousMonoidHom</span>.<span class="name">compRight</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.compRight"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">compRight</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.isClosedEmbedding_coe"><span class="name">ContinuousMonoidHom</span>.<span class="name">isClosedEmbedding_coe</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.isClosedEmbedding_coe"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">isClosedEmbedding_coe</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.instCompactSpace"><span class="name">ContinuousMonoidHom</span>.<span class="name">instCompactSpace</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.instCompactSpace"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instCompactSpace</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.locallyCompactSpace_of_equicontinuousAt"><span class="name">ContinuousMonoidHom</span>.<span class="name">locallyCompactSpace_of_equicontinuousAt</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.locallyCompactSpace_of_equicontinuousAt"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">locallyCompactSpace_of_equicontinuousAt</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousMonoidHom.locallyCompactSpace_of_hasBasis"><span class="name">ContinuousMonoidHom</span>.<span class="name">locallyCompactSpace_of_hasBasis</span></a></div><div class="nav_link"><a class="break_within" href="#ContinuousAddMonoidHom.locallyCompactSpace_of_hasBasis"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">locallyCompactSpace_of_hasBasis</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="The-compact-open-topology-on-continuous-monoid-morphisms" class="markdown-heading">The compact-open topology on continuous monoid morphisms. <a class="hover-link" href="#The-compact-open-topology-on-continuous-monoid-morphisms">#</a></h1></div><div class="decl" id="ContinuousMonoidHom.instTopologicalSpace"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L29-L31">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.instTopologicalSpace"><span class="name">ContinuousMonoidHom</span>.<span class="name">instTopologicalSpace</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>)</span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.instTopologicalSpace">ContinuousMonoidHom.instTopologicalSpace</a> <span class="fn">A</span> <span class="fn">B</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#TopologicalSpace.induced">TopologicalSpace.induced</a> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.toContinuousMap">ContinuousMonoidHom.toContinuousMap</a> <a href="../../../.././Mathlib/Topology/CompactOpen.html#ContinuousMap.compactOpen">ContinuousMap.compactOpen</a></span></li></ul></details></div></div><div class="decl" id="ContinuousAddMonoidHom.instTopologicalSpace"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L29-L29">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.instTopologicalSpace"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instTopologicalSpace</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>)</span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.instTopologicalSpace">ContinuousAddMonoidHom.instTopologicalSpace</a> <span class="fn">A</span> <span class="fn">B</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#TopologicalSpace.induced">TopologicalSpace.induced</a> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.toContinuousMap">ContinuousAddMonoidHom.toContinuousMap</a> <a href="../../../.././Mathlib/Topology/CompactOpen.html#ContinuousMap.compactOpen">ContinuousMap.compactOpen</a></span></li></ul></details></div></div><div class="decl" id="ContinuousMonoidHom.isInducing_toContinuousMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L33-L35">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.isInducing_toContinuousMap"><span class="name">ContinuousMonoidHom</span>.<span class="name">isInducing_toContinuousMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsInducing">Topology.IsInducing</a> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.toContinuousMap">toContinuousMap</a></span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.isInducing_toContinuousMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L33-L33">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.isInducing_toContinuousMap"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">isInducing_toContinuousMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsInducing">Topology.IsInducing</a> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.toContinuousMap">toContinuousMap</a></span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.isEmbedding_toContinuousMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L37-L40">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.isEmbedding_toContinuousMap"><span class="name">ContinuousMonoidHom</span>.<span class="name">isEmbedding_toContinuousMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsEmbedding">Topology.IsEmbedding</a> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.toContinuousMap">toContinuousMap</a></span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.isEmbedding_toContinuousMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L37-L37">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.isEmbedding_toContinuousMap"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">isEmbedding_toContinuousMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsEmbedding">Topology.IsEmbedding</a> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.toContinuousMap">toContinuousMap</a></span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.instContinuousEvalConst"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L42-L44">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.instContinuousEvalConst"><span class="name">ContinuousMonoidHom</span>.<span class="name">instContinuousEvalConst</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Hom/ContinuousEvalConst.html#ContinuousEvalConst">ContinuousEvalConst</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>) <span class="fn">A</span> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.instContinuousEvalConst"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L42-L42">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.instContinuousEvalConst"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instContinuousEvalConst</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Hom/ContinuousEvalConst.html#ContinuousEvalConst">ContinuousEvalConst</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>) <span class="fn">A</span> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.instContinuousEval"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L46-L49">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.instContinuousEval"><span class="name">ContinuousMonoidHom</span>.<span class="name">instContinuousEval</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactPair">LocallyCompactPair</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Hom/ContinuousEval.html#ContinuousEval">ContinuousEval</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>) <span class="fn">A</span> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.instContinuousEval"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L46-L46">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.instContinuousEval"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instContinuousEval</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactPair">LocallyCompactPair</a> <span class="fn">A</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Hom/ContinuousEval.html#ContinuousEval">ContinuousEval</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>) <span class="fn">A</span> <span class="fn">B</span></span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.range_toContinuousMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L51-L57">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.range_toContinuousMap"><span class="name">ContinuousMonoidHom</span>.<span class="name">range_toContinuousMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.toContinuousMap">toContinuousMap</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">f</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">A</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">B</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">f</span> <span class="fn">1</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">A</span>), <span class="fn"><span class="fn">f</span> (<span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">y</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span></span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.range_toContinuousMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L51-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.range_toContinuousMap"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">range_toContinuousMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.toContinuousMap">toContinuousMap</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">f</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">C(</a><span class="fn">A</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">,</a> <span class="fn">B</span><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMap">)</a> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><span class="fn">f</span> <span class="fn">0</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">A</span>), <span class="fn"><span class="fn">f</span> (<span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">y</span>)</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span></span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></div></div></div></div><div class="decl" id="ContinuousMonoidHom.isClosedEmbedding_toContinuousMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L59-L68">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.isClosedEmbedding_toContinuousMap"><span class="name">ContinuousMonoidHom</span>.<span class="name">isClosedEmbedding_toContinuousMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousMul">ContinuousMul</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsClosedEmbedding">Topology.IsClosedEmbedding</a> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.toContinuousMap">toContinuousMap</a></span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.isClosedEmbedding_toContinuousMap"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L59-L59">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.isClosedEmbedding_toContinuousMap"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">isClosedEmbedding_toContinuousMap</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsClosedEmbedding">Topology.IsClosedEmbedding</a> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.toContinuousMap">toContinuousMap</a></span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.instT2Space"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L72-L74">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.instT2Space"><span class="name">ContinuousMonoidHom</span>.<span class="name">instT2Space</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>)</span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.instT2Space"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L72-L72">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.instT2Space"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instT2Space</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>)</span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.instIsTopologicalGroup"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L76-L81">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.instIsTopologicalGroup"><span class="name">ContinuousMonoidHom</span>.<span class="name">instIsTopologicalGroup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">E</span>)</span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.instIsTopologicalAddGroup"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L76-L76">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.instIsTopologicalAddGroup"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instIsTopologicalAddGroup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">E</span>)</span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.continuous_of_continuous_uncurry"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L83-L88">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.continuous_of_continuous_uncurry"><span class="name">ContinuousMonoidHom</span>.<span class="name">continuous_of_continuous_uncurry</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">(<a href="../../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">A</span>) (<span class="fn">y</span> : <span class="fn">B</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">y</span></span></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.continuous_of_continuous_uncurry"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L83-L83">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.continuous_of_continuous_uncurry"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">continuous_of_continuous_uncurry</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">A</span> → <span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">C</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">(<a href="../../../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">A</span>) (<span class="fn">y</span> : <span class="fn">B</span>) =&gt; <span class="fn"><span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span> <span class="fn">y</span></span></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.continuous_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L90-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.continuous_comp"><span class="name">ContinuousMonoidHom</span>.<span class="name">continuous_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">f</span> : (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>) <a href="../../../.././Init/Prelude.html#Prod">×</a> (<span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">C</span>)) =&gt; <span class="fn"><span class="fn"><span class="fn"><span class="fn">f</span>.2</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.comp">comp</a></span> <span class="fn"><span class="fn">f</span>.1</span></span></span></span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.continuous_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L90-L90">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.continuous_comp"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">continuous_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">f</span> : (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>) <a href="../../../.././Init/Prelude.html#Prod">×</a> (<span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">C</span>)) =&gt; <span class="fn"><span class="fn"><span class="fn"><span class="fn">f</span>.2</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.comp">comp</a></span> <span class="fn"><span class="fn">f</span>.1</span></span></span></span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.continuous_comp_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L97-L101">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.continuous_comp_left"><span class="name">ContinuousMonoidHom</span>.<span class="name">continuous_comp_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">g</span> : <span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">C</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.comp">comp</a></span> <span class="fn">f</span></span></span></span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.continuous_comp_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L97-L97">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.continuous_comp_left"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">continuous_comp_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">g</span> : <span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">C</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.comp">comp</a></span> <span class="fn">f</span></span></span></span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.continuous_comp_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L103-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.continuous_comp_right"><span class="name">ContinuousMonoidHom</span>.<span class="name">continuous_comp_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">C</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">g</span> : <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.comp">comp</a></span> <span class="fn">g</span></span></span></span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.continuous_comp_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L103-L103">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.continuous_comp_right"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">continuous_comp_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">C</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">g</span> : <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.comp">comp</a></span> <span class="fn">g</span></span></span></span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.compLeft"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L110-L117">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.compLeft"><span class="name">ContinuousMonoidHom</span>.<span class="name">compLeft</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">E</span>) <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">E</span></div></div><p><code><a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">ContinuousMonoidHom</a> _ f</code> is a functor.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.compLeft">ContinuousMonoidHom.compLeft</a> <span class="fn">E</span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">g</span> : <span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">E</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.comp">comp</a></span> <span class="fn">f</span></span></span>, <span class="fn">map_one'</span> := <span class="fn">⋯</span>, <span class="fn">map_mul'</span> := <span class="fn">⋯</span>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.mk">}</a></li></ul></details><details id="instances-for-list-ContinuousMonoidHom.compLeft" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousAddMonoidHom.compLeft"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L111-L111">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.compLeft"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">compLeft</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">E</span>) <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">E</span></div></div><p><code><a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">ContinuousAddMonoidHom</a> _ f</code> is a functor.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.compLeft">ContinuousAddMonoidHom.compLeft</a> <span class="fn">E</span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">g</span> : <span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">E</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.comp">comp</a></span> <span class="fn">f</span></span></span>, <span class="fn">map_zero'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.mk">}</a></li></ul></details><details id="instances-for-list-ContinuousAddMonoidHom.compLeft" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousMonoidHom.compRight"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L120-L128">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.compRight"><span class="name">ContinuousMonoidHom</span>.<span class="name">compRight</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">E</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>) <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">E</span></div></div><p><code><a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">ContinuousMonoidHom</a> f _</code> is a functor.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.compRight">ContinuousMonoidHom.compRight</a> <span class="fn">A</span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">g</span> : <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.comp">comp</a></span> <span class="fn">g</span></span></span>, <span class="fn">map_one'</span> := <span class="fn">⋯</span>, <span class="fn">map_mul'</span> := <span class="fn">⋯</span>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom.mk">}</a></li></ul></details><details id="instances-for-list-ContinuousMonoidHom.compRight" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousAddMonoidHom.compRight"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L121-L121">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.compRight"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">compRight</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">B</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">E</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>) <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">E</span></div></div><p><code><a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">ContinuousAddMonoidHom</a> f _</code> is a functor.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.compRight">ContinuousAddMonoidHom.compRight</a> <span class="fn">A</span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">g</span> : <span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.comp">comp</a></span> <span class="fn">g</span></span></span>, <span class="fn">map_zero'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom.mk">}</a></li></ul></details><details id="instances-for-list-ContinuousAddMonoidHom.compRight" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ContinuousMonoidHom.isClosedEmbedding_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L133-L135">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.isClosedEmbedding_coe"><span class="name">ContinuousMonoidHom</span>.<span class="name">isClosedEmbedding_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousMul">ContinuousMul</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsClosedEmbedding">Topology.IsClosedEmbedding</a> <a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a></span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.isClosedEmbedding_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L133-L133">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.isClosedEmbedding_coe"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">isClosedEmbedding_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsClosedEmbedding">Topology.IsClosedEmbedding</a> <a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.coe">DFunLike.coe</a></span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.instCompactSpace"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L137-L139">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.instCompactSpace"><span class="name">ContinuousMonoidHom</span>.<span class="name">instCompactSpace</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousMul">ContinuousMul</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">B</span>)</span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.instCompactSpace"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L137-L137">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.instCompactSpace"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">instCompactSpace</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order.html#DiscreteTopology">DiscreteTopology</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> (<span class="fn">A</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">B</span>)</span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.locallyCompactSpace_of_equicontinuousAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L148-L184">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.locallyCompactSpace_of_equicontinuousAt"><span class="name">ContinuousMonoidHom</span>.<span class="name">locallyCompactSpace_of_equicontinuousAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformGroup">IsUniformGroup</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Basic.html#T0Space">T0Space</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hU</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hV</span> : <span class="fn">V</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">1</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Equicontinuity.html#EquicontinuousAt">EquicontinuousAt</a> <span class="fn">(fun (<span class="fn">f</span> : <span class="fn">↑<a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">f</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">Y</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">(⇑<span class="fn">f</span>)</span> <span class="fn">U</span> <span class="fn">V</span></span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span>) =&gt; <span class="fn">⇑<span class="fn">↑<span class="fn">f</span></span></span>)</span> <span class="fn">1</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> (<span class="fn">X</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">Y</span>)</span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.locallyCompactSpace_of_equicontinuousAt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L148-L148">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.locallyCompactSpace_of_equicontinuousAt"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">locallyCompactSpace_of_equicontinuousAt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Basic.html#T0Space">T0Space</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">U</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">X</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hU</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#IsCompact">IsCompact</a> <span class="fn">U</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hV</span> : <span class="fn">V</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Equicontinuity.html#EquicontinuousAt">EquicontinuousAt</a> <span class="fn">(fun (<span class="fn">f</span> : <span class="fn">↑<a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">f</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn">X</span> <a href="../../../.././Mathlib/Algebra/Group/Hom/Defs.html#AddMonoidHom">→+</a> <span class="fn">Y</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn"><a href="../../../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">(⇑<span class="fn">f</span>)</span> <span class="fn">U</span> <span class="fn">V</span></span><a href="../../../.././Mathlib/Data/Set/Defs.html#setOf">}</a></span>) =&gt; <span class="fn">⇑<span class="fn">↑<span class="fn">f</span></span></span>)</span> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> (<span class="fn">X</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">Y</span>)</span></div></div></div></div><div class="decl" id="ContinuousMonoidHom.locallyCompactSpace_of_hasBasis"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L188-L213">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousMonoidHom.locallyCompactSpace_of_hasBasis"><span class="name">ContinuousMonoidHom</span>.<span class="name">locallyCompactSpace_of_hasBasis</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#CommGroup">CommGroup</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformGroup">IsUniformGroup</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Basic.html#T0Space">T0Space</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hV</span> : <span class="fn">∀ {<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>} {<span class="fn">x</span> : <span class="fn">Y</span>}, <span class="fn"><span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">V</span> <span class="fn">n</span></span> → <span class="fn"><span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">V</span> <span class="fn">n</span></span> → <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">V</span> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hVo</span> : <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">1</span>)</span>.<a href="../../../.././Mathlib/Order/Filter/Bases/Basic.html#Filter.HasBasis">HasBasis</a></span> <span class="fn">(fun (<span class="fn">x</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <a href="../../../.././Init/Prelude.html#True">True</a>)</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> (<span class="fn">X</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousMonoidHom">→ₜ*</a> <span class="fn">Y</span>)</span></div></div></div></div><div class="decl" id="ContinuousAddMonoidHom.locallyCompactSpace_of_hasBasis"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Group/CompactOpen.lean#L188-L188">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Group/CompactOpen.html#ContinuousAddMonoidHom.locallyCompactSpace_of_hasBasis"><span class="name">ContinuousAddMonoidHom</span>.<span class="name">locallyCompactSpace_of_hasBasis</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Basic.html#T0Space">T0Space</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">V</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">Y</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hV</span> : <span class="fn">∀ {<span class="fn">n</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>} {<span class="fn">x</span> : <span class="fn">Y</span>}, <span class="fn"><span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">V</span> <span class="fn">n</span></span> → <span class="fn"><span class="fn">x</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">V</span> <span class="fn">n</span></span> → <span class="fn">x</span> <a href="../../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">V</span> (<span class="fn">n</span> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hVo</span> : <span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Filter.html#nhds">nhds</a> <span class="fn">0</span>)</span>.<a href="../../../.././Mathlib/Order/Filter/Bases/Basic.html#Filter.HasBasis">HasBasis</a></span> <span class="fn">(fun (<span class="fn">x</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <a href="../../../.././Init/Prelude.html#True">True</a>)</span> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> (<span class="fn">X</span> <a href="../../../.././Mathlib/Topology/Algebra/ContinuousMonoidHom.html#ContinuousAddMonoidHom">→ₜ+</a> <span class="fn">Y</span>)</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

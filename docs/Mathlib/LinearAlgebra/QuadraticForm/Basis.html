@@ -1,0 +1,393 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.LinearAlgebra.QuadraticForm.Basis</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.LinearAlgebra.QuadraticForm.Basis";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">LinearAlgebra</span>.<span class="name">QuadraticForm</span>.<span class="name">Basis</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Algebra/BigOperators/Sym.html">Mathlib.Algebra.BigOperators.Sym</a></li><li><a href="../../.././Mathlib/Data/Finsupp/Pointwise.html">Mathlib.Data.Finsupp.Pointwise</a></li><li><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html">Mathlib.LinearAlgebra.QuadraticForm.Basic</a></li><li><a href="../../.././Mathlib/Data/Sym/Sym2/Finsupp.html">Mathlib.Data.Sym.Sym2.Finsupp</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.LinearAlgebra.QuadraticForm.Basis" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.map_finsuppSum'"><span class="name">QuadraticMap</span>.<span class="name">map_finsuppSum'</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.apply_linearCombination'"><span class="name">QuadraticMap</span>.<span class="name">apply_linearCombination'</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.sum_polar_sub_repr_sq"><span class="name">QuadraticMap</span>.<span class="name">sum_polar_sub_repr_sq</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.map_finsuppSum"><span class="name">QuadraticMap</span>.<span class="name">map_finsuppSum</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.apply_linearCombination"><span class="name">QuadraticMap</span>.<span class="name">apply_linearCombination</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.sum_repr_sq_add_sum_repr_mul_polar"><span class="name">QuadraticMap</span>.<span class="name">sum_repr_sq_add_sum_repr_mul_polar</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.toBilin"><span class="name">QuadraticMap</span>.<span class="name">toBilin</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.toBilin_apply"><span class="name">QuadraticMap</span>.<span class="name">toBilin_apply</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.toQuadraticMap_toBilin"><span class="name">QuadraticMap</span>.<span class="name">toQuadraticMap_toBilin</span></a></div><div class="nav_link"><a class="break_within" href="#LinearMap.BilinMap.toQuadraticMap_surjective"><span class="name">LinearMap</span>.<span class="name">BilinMap</span>.<span class="name">toQuadraticMap_surjective</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.add_toBilin"><span class="name">QuadraticMap</span>.<span class="name">add_toBilin</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.smul_toBilin"><span class="name">QuadraticMap</span>.<span class="name">smul_toBilin</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.toBilinHom"><span class="name">QuadraticMap</span>.<span class="name">toBilinHom</span></a></div><div class="nav_link"><a class="break_within" href="#QuadraticMap.toBilinHom_apply"><span class="name">QuadraticMap</span>.<span class="name">toBilinHom_apply</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Constructing-a-bilinear-map-from-a-quadratic-map-given-a-basis" class="markdown-heading">Constructing a bilinear map from a quadratic map, given a basis <a class="hover-link" href="#Constructing-a-bilinear-map-from-a-quadratic-map-given-a-basis">#</a></h1><p>This file provides an alternative to <code><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.associated">QuadraticMap.associated</a></code>; unlike that definition, this one
+does not require <code><a href="../../.././Mathlib/Algebra/Group/Invertible/Defs.html#Invertible">Invertible</a> (2 : R)</code>. Unlike that definition, this only works in the presence of
+a basis.</p></div><div class="decl" id="QuadraticMap.map_finsuppSum'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L34-L37">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.map_finsuppSum'"><span class="name">QuadraticMap</span>.<span class="name">map_finsuppSum'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">R</span> → <span class="fn">M</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">Q</span> <span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/BigOperators/Finsupp/Basic.html#Finsupp.sum">sum</a></span> <span class="fn">g</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">∑ <span class="fn">p</span> ∈ <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span>.<a href="../../.././Mathlib/Data/Finset/Sym.html#Finset.sym2">sym2</a></span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.polarSym2">polarSym2</a> <span class="fn">(⇑<span class="fn">Q</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.map">Sym2.map</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">g</span> <span class="fn">i</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">p</span>)</span></span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/BigOperators/Finsupp/Basic.html#Finsupp.sum">sum</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) (<span class="fn">a</span> : <span class="fn">R</span>) =&gt; <span class="fn"><span class="fn">Q</span> <span class="fn">(<span class="fn">g</span> <span class="fn">i</span> <span class="fn">a</span>)</span></span></span></span></div></div></div></div><div class="decl" id="QuadraticMap.apply_linearCombination'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L39-L46">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.apply_linearCombination'"><span class="name">QuadraticMap</span>.<span class="name">apply_linearCombination'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">Q</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">R</span> <span class="fn">g</span>)</span> <span class="fn">l</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">R</span> (<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.polarSym2">polarSym2</a> <span class="fn">⇑<span class="fn">Q</span></span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn"><a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.map">Sym2.map</a> <span class="fn">g</span></span>))</span> <span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/Data/Sym/Sym2/Finsupp.html#Finsupp.sym2Mul">sym2Mul</a></span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">R</span> (<span class="fn">⇑<span class="fn">Q</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>))</span> (<span class="fn">l</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">l</span>)</span></div></div></div></div><div class="decl" id="QuadraticMap.sum_polar_sub_repr_sq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L48-L51">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.sum_polar_sub_repr_sq"><span class="name">QuadraticMap</span>.<span class="name">sum_polar_sub_repr_sq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bm</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">R</span> (<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.polarSym2">polarSym2</a> <span class="fn">⇑<span class="fn">Q</span></span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn"><a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.map">Sym2.map</a> <span class="fn">⇑<span class="fn">bm</span></span></span>))</span> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">bm</span>.<a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.repr">repr</a></span> <span class="fn">x</span>)</span>.<a href="../../.././Mathlib/Data/Sym/Sym2/Finsupp.html#Finsupp.sym2Mul">sym2Mul</a></span></span> <a href="../../.././Init/Prelude.html#HSub.hSub">-</a>     <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">R</span> (<span class="fn">⇑<span class="fn">Q</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">bm</span></span>))</span> (<span class="fn"><span class="fn"><span class="fn">bm</span>.<a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.repr">repr</a></span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn"><span class="fn">bm</span>.<a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.repr">repr</a></span> <span class="fn">x</span></span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">Q</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="QuadraticMap.map_finsuppSum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L55-L58">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.map_finsuppSum"><span class="name">QuadraticMap</span>.<span class="name">map_finsuppSum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">R</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn"><span class="fn">R</span> → <span class="fn">M</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">Q</span> <span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/BigOperators/Finsupp/Basic.html#Finsupp.sum">sum</a></span> <span class="fn">g</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Algebra/BigOperators/Finsupp/Basic.html#Finsupp.sum">sum</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) (<span class="fn">r</span> : <span class="fn">R</span>) =&gt; <span class="fn"><span class="fn">Q</span> <span class="fn">(<span class="fn">g</span> <span class="fn">i</span> <span class="fn">r</span>)</span></span></span>)</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a>     <span class="fn">∑ <span class="fn">p</span> ∈ <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span>.<a href="../../.././Mathlib/Data/Finset/Sym.html#Finset.sym2">sym2</a></span> with <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.IsDiag">IsDiag</a></span>, <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.polarSym2">polarSym2</a> <span class="fn">(⇑<span class="fn">Q</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.map">Sym2.map</a> <span class="fn">(fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt; <span class="fn"><span class="fn">g</span> <span class="fn">i</span> <span class="fn">(<span class="fn">f</span> <span class="fn">i</span>)</span></span>)</span> <span class="fn">p</span>)</span></span></span></div></div><p>The quadratic version of <code>_root_.map_finsupp_sum</code>.</p></div></div><div class="decl" id="QuadraticMap.apply_linearCombination"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L60-L66">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.apply_linearCombination"><span class="name">QuadraticMap</span>.<span class="name">apply_linearCombination</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">l</span> : <span class="fn">ι</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">Q</span> <span class="fn">(<span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">R</span> <span class="fn">g</span>)</span> <span class="fn">l</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">R</span> (<span class="fn">⇑<span class="fn">Q</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>))</span> (<span class="fn">l</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">l</span>)</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a>     <span class="fn">∑ <span class="fn">p</span> ∈ <span class="fn"><span class="fn"><span class="fn">l</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span>.<a href="../../.././Mathlib/Data/Finset/Sym.html#Finset.sym2">sym2</a></span> with <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.IsDiag">IsDiag</a></span>, <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.map">Sym2.map</a> <span class="fn">(⇑<span class="fn">l</span>)</span> <span class="fn">p</span>)</span>.<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.mul">mul</a></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.polarSym2">polarSym2</a> <span class="fn">(⇑<span class="fn">Q</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.map">Sym2.map</a> <span class="fn">g</span> <span class="fn">p</span>)</span></span></span></div></div><p>The quadratic version of <code><a href="../../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.apply_linearCombination">Finsupp.apply_linearCombination</a></code>.</p></div></div><div class="decl" id="QuadraticMap.sum_repr_sq_add_sum_repr_mul_polar"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L68-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.sum_repr_sq_add_sum_repr_mul_polar"><span class="name">QuadraticMap</span>.<span class="name">sum_repr_sq_add_sum_repr_mul_polar</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bm</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">R</span> (<span class="fn">⇑<span class="fn">Q</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">bm</span></span>))</span> (<span class="fn"><span class="fn"><span class="fn">bm</span>.<a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.repr">repr</a></span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn"><span class="fn">bm</span>.<a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.repr">repr</a></span> <span class="fn">x</span></span>)</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a>     <span class="fn">∑ <span class="fn">p</span> ∈ <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">bm</span>.<a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.repr">repr</a></span> <span class="fn">x</span>)</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span>.<a href="../../.././Mathlib/Data/Finset/Sym.html#Finset.sym2">sym2</a></span> with <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn">p</span>.<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.IsDiag">IsDiag</a></span>, <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.map">Sym2.map</a> <span class="fn">(⇑<span class="fn">(<span class="fn"><span class="fn">bm</span>.<a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.repr">repr</a></span> <span class="fn">x</span>)</span>)</span> <span class="fn">p</span>)</span>.<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.mul">mul</a></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.polarSym2">polarSym2</a> <span class="fn">(⇑<span class="fn">Q</span>)</span> <span class="fn">(<a href="../../.././Mathlib/Data/Sym/Sym2.html#Sym2.map">Sym2.map</a> <span class="fn">(⇑<span class="fn">bm</span>)</span> <span class="fn">p</span>)</span></span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">Q</span> <span class="fn">x</span></span></div></div><p>The quadratic version of <code><a href="../../.././Mathlib/LinearAlgebra/Basis/Bilinear.html#LinearMap.sum_repr_mul_repr_mul">LinearMap.sum_repr_mul_repr_mul</a></code>.</p></div></div><div class="decl" id="QuadraticMap.toBilin"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L80-L87">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin"><span class="name">QuadraticMap</span>.<span class="name">toBilin</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bm</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/BilinearMap.html#LinearMap.BilinMap">LinearMap.BilinMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span></div></div><p>Given an ordered basis, produce a bilinear form associated with the quadratic form.</p><p>Unlike <code><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.associated">QuadraticMap.associated</a></code>, this is not symmetric; however, as a result it can be used even
+in characteristic two. When considered as a matrix, the form is triangular.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">toBilin</a></span> <span class="fn">bm</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<span class="fn"><span class="fn">bm</span>.<a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.constr">constr</a></span> <span class="fn">R</span>)</span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">ι</span>) =&gt;
+    <span class="fn"><span class="fn">(<span class="fn"><span class="fn">bm</span>.<a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis.constr">constr</a></span> <span class="fn">R</span>)</span> <span class="fn">fun (<span class="fn">j</span> : <span class="fn">ι</span>) =&gt; <a href="../../.././Init/Prelude.html#ite">if</a> <span class="fn">i</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">j</span> <a href="../../.././Init/Prelude.html#ite">then</a> <span class="fn"><span class="fn">Q</span> <span class="fn">(<span class="fn">bm</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#ite">else</a> <a href="../../.././Init/Prelude.html#ite">if</a> <span class="fn">i</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">j</span> <a href="../../.././Init/Prelude.html#ite">then</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.polar">QuadraticMap.polar</a> <span class="fn">(⇑<span class="fn">Q</span>)</span> <span class="fn">(<span class="fn">bm</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">bm</span> <span class="fn">j</span>)</span></span> <a href="../../.././Init/Prelude.html#ite">else</a> <span class="fn">0</span></span></span></span></span></li></ul></details><details id="instances-for-list-QuadraticMap.toBilin" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="QuadraticMap.toBilin_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L89-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin_apply"><span class="name">QuadraticMap</span>.<span class="name">toBilin_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bm</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i </span><span class="fn">j</span> : <span class="fn">ι</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">toBilin</a></span> <span class="fn">bm</span>)</span> <span class="fn">(<span class="fn">bm</span> <span class="fn">i</span>)</span>)</span> <span class="fn">(<span class="fn">bm</span> <span class="fn">j</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Init/Prelude.html#ite">if</a> <span class="fn">i</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">j</span> <a href="../../.././Init/Prelude.html#ite">then</a> <span class="fn"><span class="fn">Q</span> <span class="fn">(<span class="fn">bm</span> <span class="fn">i</span>)</span></span> <a href="../../.././Init/Prelude.html#ite">else</a> <a href="../../.././Init/Prelude.html#ite">if</a> <span class="fn">i</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">j</span> <a href="../../.././Init/Prelude.html#ite">then</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap.polar">polar</a> <span class="fn">(⇑<span class="fn">Q</span>)</span> <span class="fn">(<span class="fn">bm</span> <span class="fn">i</span>)</span> <span class="fn">(<span class="fn">bm</span> <span class="fn">j</span>)</span></span> <a href="../../.././Init/Prelude.html#ite">else</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="QuadraticMap.toQuadraticMap_toBilin"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L94-L109">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toQuadraticMap_toBilin"><span class="name">QuadraticMap</span>.<span class="name">toQuadraticMap_toBilin</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bm</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">toBilin</a></span> <span class="fn">bm</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#LinearMap.BilinMap.toQuadraticMap">toQuadraticMap</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">Q</span></div></div></div></div><div class="decl" id="LinearMap.BilinMap.toQuadraticMap_surjective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L111-L120">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#LinearMap.BilinMap.toQuadraticMap_surjective"><span class="name">LinearMap</span>.<span class="name">BilinMap</span>.<span class="name">toQuadraticMap_surjective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FreeModule/Basic.html#Module.Free">Module.Free</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#LinearMap.BilinMap.toQuadraticMap">toQuadraticMap</a></span></div></div><p>From a free module, every quadratic map can be built from a bilinear form.</p><p>See <code>BilinMap.not_forall_toQuadraticMap_surjective</code> for a counterexample when the module is
+not free.</p></div></div><div class="decl" id="QuadraticMap.add_toBilin"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L122-L129">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.add_toBilin"><span class="name">QuadraticMap</span>.<span class="name">add_toBilin</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">bm</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q₁ </span><span class="fn">Q₂</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">Q₁</span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">Q₂</span>).<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">toBilin</a></span> <span class="fn">bm</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">Q₁</span>.<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">toBilin</a></span> <span class="fn">bm</span></span> <a href="../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><span class="fn"><span class="fn">Q₂</span>.<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">toBilin</a></span> <span class="fn">bm</span></span></div></div></div></div><div class="decl" id="QuadraticMap.smul_toBilin"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L134-L141">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.smul_toBilin"><span class="name">QuadraticMap</span>.<span class="name">smul_toBilin</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">S</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">S</span> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">bm</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">Q</span>).<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">toBilin</a></span> <span class="fn">bm</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">s</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">toBilin</a></span> <span class="fn">bm</span></span></div></div></div></div><div class="decl" id="QuadraticMap.toBilinHom"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L143-L148">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilinHom"><span class="name">QuadraticMap</span>.<span class="name">toBilinHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">S</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">S</span> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">bm</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">S</span><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/BilinearMap.html#LinearMap.BilinMap">LinearMap.BilinMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span></div></div><p><code><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">QuadraticMap.toBilin</a></code> as an S-linear map</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilinHom">QuadraticMap.toBilinHom</a> <span class="fn">S</span> <span class="fn">bm</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>) =&gt; <span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">toBilin</a></span> <span class="fn">bm</span></span></span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">map_smul'</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.mk">}</a></li></ul></details><details id="instances-for-list-QuadraticMap.toBilinHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="QuadraticMap.toBilinHom_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/QuadraticForm/Basis.lean#L144-L144">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilinHom_apply"><span class="name">QuadraticMap</span>.<span class="name">toBilinHom_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">ι</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <a href="../../.././foundational_types.html">Type</a> u_5)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">S</span> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">S</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">S</span> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">bm</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis">Module.Basis</a> <span class="fn">ι</span> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">Q</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basic.html#QuadraticMap">QuadraticMap</a> <span class="fn">R</span> <span class="fn">M</span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilinHom">toBilinHom</a> <span class="fn">S</span> <span class="fn">bm</span>)</span> <span class="fn">Q</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">Q</span>.<a href="../../.././Mathlib/LinearAlgebra/QuadraticForm/Basis.html#QuadraticMap.toBilin">toBilin</a></span> <span class="fn">bm</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

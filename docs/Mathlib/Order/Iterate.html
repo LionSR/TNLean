@@ -1,0 +1,430 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Order.Iterate</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Order.Iterate";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Order</span>.<span class="name">Iterate</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Aesop.html">Aesop</a></li><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Logic/Function/Iterate.html">Mathlib.Logic.Function.Iterate</a></li><li><a href="../.././Mathlib/Order/Monotone/Basic.html">Mathlib.Order.Monotone.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Order.Iterate" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Monotone.seq_le_seq"><span class="name">Monotone</span>.<span class="name">seq_le_seq</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.seq_pos_lt_seq_of_lt_of_le"><span class="name">Monotone</span>.<span class="name">seq_pos_lt_seq_of_lt_of_le</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.seq_pos_lt_seq_of_le_of_lt"><span class="name">Monotone</span>.<span class="name">seq_pos_lt_seq_of_le_of_lt</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.seq_lt_seq_of_lt_of_le"><span class="name">Monotone</span>.<span class="name">seq_lt_seq_of_lt_of_le</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.seq_lt_seq_of_le_of_lt"><span class="name">Monotone</span>.<span class="name">seq_lt_seq_of_le_of_lt</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.le_iterate_comp_of_le"><span class="name">Monotone</span>.<span class="name">le_iterate_comp_of_le</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.iterate_comp_le_of_le"><span class="name">Monotone</span>.<span class="name">iterate_comp_le_of_le</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.iterate_le_of_le"><span class="name">Monotone</span>.<span class="name">iterate_le_of_le</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.le_iterate_of_le"><span class="name">Monotone</span>.<span class="name">le_iterate_of_le</span></a></div><div class="nav_link"><a class="break_within" href="#Function.id_le_iterate_of_id_le"><span class="name">Function</span>.<span class="name">id_le_iterate_of_id_le</span></a></div><div class="nav_link"><a class="break_within" href="#Function.iterate_le_id_of_le_id"><span class="name">Function</span>.<span class="name">iterate_le_id_of_le_id</span></a></div><div class="nav_link"><a class="break_within" href="#Function.monotone_iterate_of_id_le"><span class="name">Function</span>.<span class="name">monotone_iterate_of_id_le</span></a></div><div class="nav_link"><a class="break_within" href="#Function.antitone_iterate_of_le_id"><span class="name">Function</span>.<span class="name">antitone_iterate_of_le_id</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Commute.iterate_le_of_map_le"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_le_of_map_le</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Commute.iterate_pos_lt_of_map_lt"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_lt_of_map_lt</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Commute.iterate_pos_lt_of_map_lt'"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_lt_of_map_lt'</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Commute.iterate_pos_lt_iff_map_lt"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_lt_iff_map_lt</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Commute.iterate_pos_lt_iff_map_lt'"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_lt_iff_map_lt'</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Commute.iterate_pos_le_iff_map_le"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_le_iff_map_le</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Commute.iterate_pos_le_iff_map_le'"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_le_iff_map_le'</span></a></div><div class="nav_link"><a class="break_within" href="#Function.Commute.iterate_pos_eq_iff_map_eq"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_eq_iff_map_eq</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.monotone_iterate_of_le_map"><span class="name">Monotone</span>.<span class="name">monotone_iterate_of_le_map</span></a></div><div class="nav_link"><a class="break_within" href="#Monotone.antitone_iterate_of_map_le"><span class="name">Monotone</span>.<span class="name">antitone_iterate_of_map_le</span></a></div><div class="nav_link"><a class="break_within" href="#StrictMono.strictMono_iterate_of_lt_map"><span class="name">StrictMono</span>.<span class="name">strictMono_iterate_of_lt_map</span></a></div><div class="nav_link"><a class="break_within" href="#StrictMono.strictAnti_iterate_of_map_lt"><span class="name">StrictMono</span>.<span class="name">strictAnti_iterate_of_map_lt</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Inequalities-on-iterates" class="markdown-heading">Inequalities on iterates <a class="hover-link" href="#Inequalities-on-iterates">#</a></h1><p>In this file we prove some inequalities comparing <code>f^[n] x</code> and <code>g^[n] x</code> where <code>f</code> and <code>g</code> are
+two self-maps that commute with each other.</p><p>Current selection of inequalities is motivated by formalization of the rotation number of
+a circle homeomorphism.</p></div><div class="mod_doc"><h3 id="Comparison-of-two-sequences" class="markdown-heading">Comparison of two sequences <a class="hover-link" href="#Comparison-of-two-sequences">#</a></h3><p>If $f$ is a monotone function, then $∀ k, x_{k+1} ≤ f(x_k)$ implies that $x_k$ grows slower than
+$f^k(x_0)$, and similarly for the reversed inequalities. If $x_k$ and $y_k$ are two sequences such
+that $x_{k+1} ≤ f(x_k)$ and $y_{k+1} ≥ f(y_k)$ for all $k &lt; n$, then $x_0 ≤ y_0$ implies
+$x_n ≤ y_n$, see <code><a href="../.././Mathlib/Order/Iterate.html#Monotone.seq_le_seq">Monotone.seq_le_seq</a></code>.</p><p>If some of the inequalities in this lemma are strict, then we have $x_n &lt; y_n$. The rest of the
+lemmas in this section formalize this fact for different inequalities made strict.</p></div><div class="decl" id="Monotone.seq_le_seq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L45-L53">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.seq_le_seq"><span class="name">Monotone</span>.<span class="name">seq_le_seq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><span class="fn">x</span> <span class="fn">0</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">y</span> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">k</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn"><span class="fn">x</span> (<span class="fn">k</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">x</span> <span class="fn">k</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">k</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">y</span> <span class="fn">k</span>)</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">y</span> (<span class="fn">k</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">x</span> <span class="fn">n</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">y</span> <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Monotone.seq_pos_lt_seq_of_lt_of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L55-L65">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.seq_pos_lt_seq_of_lt_of_le"><span class="name">Monotone</span>.<span class="name">seq_pos_lt_seq_of_lt_of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><span class="fn">x</span> <span class="fn">0</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">y</span> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">k</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn"><span class="fn">x</span> (<span class="fn">k</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">x</span> <span class="fn">k</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">k</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">y</span> <span class="fn">k</span>)</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">y</span> (<span class="fn">k</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">x</span> <span class="fn">n</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">y</span> <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Monotone.seq_pos_lt_seq_of_le_of_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L67-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.seq_pos_lt_seq_of_le_of_lt"><span class="name">Monotone</span>.<span class="name">seq_pos_lt_seq_of_le_of_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><span class="fn">x</span> <span class="fn">0</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">y</span> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">k</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn"><span class="fn">x</span> (<span class="fn">k</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">x</span> <span class="fn">k</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">k</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">y</span> <span class="fn">k</span>)</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">y</span> (<span class="fn">k</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">x</span> <span class="fn">n</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">y</span> <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Monotone.seq_lt_seq_of_lt_of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L71-L74">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.seq_lt_seq_of_lt_of_le"><span class="name">Monotone</span>.<span class="name">seq_lt_seq_of_lt_of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><span class="fn">x</span> <span class="fn">0</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">y</span> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">k</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn"><span class="fn">x</span> (<span class="fn">k</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">x</span> <span class="fn">k</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">k</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">y</span> <span class="fn">k</span>)</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">y</span> (<span class="fn">k</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">x</span> <span class="fn">n</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">y</span> <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Monotone.seq_lt_seq_of_le_of_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L76-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.seq_lt_seq_of_le_of_lt"><span class="name">Monotone</span>.<span class="name">seq_lt_seq_of_le_of_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn"><a href="../.././Init/Prelude.html#Nat">ℕ</a> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₀</span> : <span class="fn"><span class="fn">x</span> <span class="fn">0</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">y</span> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">k</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn"><span class="fn">x</span> (<span class="fn">k</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">x</span> <span class="fn">k</span>)</span></span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hy</span> : <span class="fn">∀ (<span class="fn">k</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">k</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span> → <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">y</span> <span class="fn">k</span>)</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">y</span> (<span class="fn">k</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">1</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">x</span> <span class="fn">n</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">y</span> <span class="fn">n</span></span></div></div></div></div><div class="mod_doc"><h3 id="Iterates-of-two-functions" class="markdown-heading">Iterates of two functions <a class="hover-link" href="#Iterates-of-two-functions">#</a></h3><p>In this section we compare the iterates of a monotone function <code>f : α → α</code> to iterates of any
+function <code>g : β → β</code>. If <code>h : β → α</code> satisfies <code>h ∘ g ≤ f ∘ h</code>, then <code>h (g^[n] x)</code> grows slower
+than <code>f^[n] (h x)</code>, and similarly for the reversed inequality.</p><p>Then we specialize these two lemmas to the case <code>β = α</code>, <code>h = <a href="../.././Init/Prelude.html#id">id</a></code>.</p></div><div class="decl" id="Monotone.le_iterate_comp_of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L95-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.le_iterate_comp_of_le"><span class="name">Monotone</span>.<span class="name">le_iterate_comp_of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">h</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">h</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">h</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">h</span></div></div></div></div><div class="decl" id="Monotone.iterate_comp_le_of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L95-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.iterate_comp_le_of_le"><span class="name">Monotone</span>.<span class="name">iterate_comp_le_of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn">f</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">h</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">h</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">h</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">h</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a></div></div></div></div><div class="decl" id="Monotone.iterate_le_of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L101-L104">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.iterate_le_of_le"><span class="name">Monotone</span>.<span class="name">iterate_le_of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">g</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a></div></div><p>If <code>f ≤ g</code> and <code>f</code> is monotone, then <code>f^[n] ≤ g^[n]</code>.</p></div></div><div class="decl" id="Monotone.le_iterate_of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L102-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.le_iterate_of_le"><span class="name">Monotone</span>.<span class="name">le_iterate_of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">g</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">f</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a></div></div><p>If <code>f ≤ g</code> and <code>g</code> is monotone, then <code>f^[n] ≤ g^[n]</code>.</p></div></div><div class="mod_doc"><h3 id="Comparison-of-iterations-and-the-identity-function" class="markdown-heading">Comparison of iterations and the identity function <a class="hover-link" href="#Comparison-of-iterations-and-the-identity-function">#</a></h3><p>If $f(x) ≤ x$ for all $x$ (we express this as <code>f ≤ <a href="../.././Init/Prelude.html#id">id</a></code> in the code), then the same is true for
+any iterate of $f$, and similarly for the reversed inequality.</p></div><div class="decl" id="Function.id_le_iterate_of_id_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L122-L126">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.id_le_iterate_of_id_le"><span class="name">Function</span>.<span class="name">id_le_iterate_of_id_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <a href="../.././Init/Prelude.html#id">id</a> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">f</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#id">id</a> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a></div></div><p>If $x ≤ f x$ for all $x$ (we write this as <code><a href="../.././Init/Prelude.html#id">id</a> ≤ f</code>), then the same is true for any iterate
+<code>f^[n]</code> of <code>f</code>.</p></div></div><div class="decl" id="Function.iterate_le_id_of_le_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L124-L124">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.iterate_le_id_of_le_id"><span class="name">Function</span>.<span class="name">iterate_le_id_of_le_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <a href="../.././Init/Prelude.html#id">id</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <a href="../.././Init/Prelude.html#LE.le">≤</a> <a href="../.././Init/Prelude.html#id">id</a></div></div></div></div><div class="decl" id="Function.monotone_iterate_of_id_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L128-L131">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.monotone_iterate_of_id_le"><span class="name">Function</span>.<span class="name">monotone_iterate_of_id_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <a href="../.././Init/Prelude.html#id">id</a> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">f</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">fun (<span class="fn">m</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">m</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a></span></span></div></div></div></div><div class="decl" id="Function.antitone_iterate_of_le_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L133-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.antitone_iterate_of_le_id"><span class="name">Function</span>.<span class="name">antitone_iterate_of_le_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <a href="../.././Init/Prelude.html#id">id</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Antitone">Antitone</a> <span class="fn">fun (<span class="fn">m</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">m</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a></span></span></div></div></div></div><div class="mod_doc"><h3 id="Iterates-of-commuting-functions" class="markdown-heading">Iterates of commuting functions <a class="hover-link" href="#Iterates-of-commuting-functions">#</a></h3><p>If <code>f</code> and <code>g</code> are monotone and commute, then <code>f x ≤ g x</code> implies <code>f^[n] x ≤ g^[n] x</code>, see
+<code><a href="../.././Mathlib/Order/Iterate.html#Function.Commute.iterate_le_of_map_le">Function.Commute.iterate_le_of_map_le</a></code>. We also prove two strict inequality versions of this lemma,
+as well as <code>iff</code> versions.</p></div><div class="decl" id="Function.Commute.iterate_le_of_map_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L153-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.Commute.iterate_le_of_map_le"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_le_of_map_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Commute">Function.Commute</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Function.Commute.iterate_pos_lt_of_map_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L160-L165">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.Commute.iterate_pos_lt_of_map_lt"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_lt_of_map_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Commute">Function.Commute</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Function.Commute.iterate_pos_lt_of_map_lt'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L167-L169">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.Commute.iterate_pos_lt_of_map_lt'"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_lt_of_map_lt'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Commute">Function.Commute</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Function.Commute.iterate_pos_lt_iff_map_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L175-L180">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.Commute.iterate_pos_lt_iff_map_lt"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_lt_iff_map_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Commute">Function.Commute</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Function.Commute.iterate_pos_lt_iff_map_lt'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L182-L184">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.Commute.iterate_pos_lt_iff_map_lt'"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_lt_iff_map_lt'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Commute">Function.Commute</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Function.Commute.iterate_pos_le_iff_map_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L186-L188">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.Commute.iterate_pos_le_iff_map_le"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_le_iff_map_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Commute">Function.Commute</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Function.Commute.iterate_pos_le_iff_map_le'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L190-L192">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.Commute.iterate_pos_le_iff_map_le'"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_le_iff_map_le'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Commute">Function.Commute</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Function.Commute.iterate_pos_eq_iff_map_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L194-L197">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Function.Commute.iterate_pos_eq_iff_map_eq"><span class="name">Function</span>.<span class="name">Commute</span>.<span class="name">iterate_pos_eq_iff_map_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Commute">Function.Commute</a> <span class="fn">f</span> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">g</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hn</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Monotone.monotone_iterate_of_le_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L207-L212">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.monotone_iterate_of_le_map"><span class="name">Monotone</span>.<span class="name">monotone_iterate_of_le_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">fun (<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span></span></span></div></div><p>If <code>f</code> is a monotone map and <code>x ≤ f x</code> at some point <code>x</code>, then the iterates <code>f^[n] x</code> form
+a monotone sequence.</p></div></div><div class="decl" id="Monotone.antitone_iterate_of_map_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L214-L217">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#Monotone.antitone_iterate_of_map_le"><span class="name">Monotone</span>.<span class="name">antitone_iterate_of_map_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#Antitone">Antitone</a> <span class="fn">fun (<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span></span></span></div></div><p>If <code>f</code> is a monotone map and <code>f x ≤ x</code> at some point <code>x</code>, then the iterates <code>f^[n] x</code> form
+an antitone sequence.</p></div></div><div class="decl" id="StrictMono.strictMono_iterate_of_lt_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L225-L231">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#StrictMono.strictMono_iterate_of_lt_map"><span class="name">StrictMono</span>.<span class="name">strictMono_iterate_of_lt_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">fun (<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span></span></span></div></div><p>If <code>f</code> is a strictly monotone map and <code>x &lt; f x</code> at some point <code>x</code>, then the iterates <code>f^[n] x</code>
+form a strictly monotone sequence.</p></div></div><div class="decl" id="StrictMono.strictAnti_iterate_of_map_lt"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Iterate.lean#L233-L237">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Iterate.html#StrictMono.strictAnti_iterate_of_map_lt"><span class="name">StrictMono</span>.<span class="name">strictAnti_iterate_of_map_lt</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictMono">StrictMono</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">x</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Monotone/Defs.html#StrictAnti">StrictAnti</a> <span class="fn">fun (<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>) =&gt; <span class="fn"><span class="fn">f</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span></span></span></div></div><p>If <code>f</code> is a strictly antitone map and <code>f x &lt; x</code> at some point <code>x</code>, then the iterates <code>f^[n] x</code>
+form a strictly antitone sequence.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

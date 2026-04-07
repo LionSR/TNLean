@@ -1,0 +1,383 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RingTheory.Nakayama</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.RingTheory.Nakayama";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RingTheory</span>.<span class="name">Nakayama</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/RingTheory/Finiteness/Basic.html">Mathlib.RingTheory.Finiteness.Basic</a></li><li><a href="../.././Mathlib/RingTheory/Finiteness/Nakayama.html">Mathlib.RingTheory.Finiteness.Nakayama</a></li><li><a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html">Mathlib.RingTheory.Jacobson.Ideal</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RingTheory.Nakayama" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Submodule.eq_smul_of_le_smul_of_le_jacobson"><span class="name">Submodule</span>.<span class="name">eq_smul_of_le_smul_of_le_jacobson</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.eq_bot_of_eq_pointwise_smul_of_mem_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">eq_bot_of_eq_pointwise_smul_of_mem_jacobson_annihilator</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.eq_bot_of_set_smul_eq_of_subset_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">eq_bot_of_set_smul_eq_of_subset_jacobson_annihilator</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.top_ne_ideal_smul_of_le_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">top_ne_ideal_smul_of_le_jacobson_annihilator</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.top_ne_set_smul_of_subset_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">top_ne_set_smul_of_subset_jacobson_annihilator</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.top_ne_pointwise_smul_of_mem_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">top_ne_pointwise_smul_of_mem_jacobson_annihilator</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.eq_bot_of_le_smul_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">eq_bot_of_le_smul_of_le_jacobson_bot</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.sup_eq_sup_smul_of_le_smul_of_le_jacobson"><span class="name">Submodule</span>.<span class="name">sup_eq_sup_smul_of_le_smul_of_le_jacobson</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson"><span class="name">Submodule</span>.<span class="name">sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.le_of_le_smul_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">le_of_le_smul_of_le_jacobson_bot</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.smul_le_of_le_smul_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">smul_le_of_le_smul_of_le_jacobson_bot</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.exists_sub_one_mem_and_smul_le_of_fg_of_le_sup"><span class="name">Submodule</span>.<span class="name">exists_sub_one_mem_and_smul_le_of_fg_of_le_sup</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.le_span_of_map_mkQ_le_map_mkQ_span_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">le_span_of_map_mkQ_le_map_mkQ_span_of_le_jacobson_bot</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.eq_of_map_mkQ_eq_map_mkQ_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">eq_of_map_mkQ_eq_map_mkQ_of_le_jacobson_bot</span></a></div><div class="nav_link"><a class="break_within" href="#Submodule.exists_injOn_mkQ_image_span_eq_of_span_eq_map_mkQ_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">exists_injOn_mkQ_image_span_eq_of_span_eq_map_mkQ_of_le_jacobson_bot</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Nakayama-s-lemma" class="markdown-heading">Nakayama's lemma <a class="hover-link" href="#Nakayama-s-lemma">#</a></h1><p>This file contains some alternative statements of Nakayama's Lemma as found in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks: Nakayama's Lemma</a>.</p><h2 id="Main-statements" class="markdown-heading">Main statements <a class="hover-link" href="#Main-statements">#</a></h2><ul><li><p><code><a href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.eq_smul_of_le_smul_of_le_jacobson">Submodule.eq_smul_of_le_smul_of_le_jacobson</a></code> - A version of (2) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks: Nakayama's Lemma</a>,
+generalising to the Jacobson of any ideal.</p></li><li><p><code><a href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.eq_bot_of_le_smul_of_le_jacobson_bot">Submodule.eq_bot_of_le_smul_of_le_jacobson_bot</a></code> - Statement (2) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks: Nakayama's Lemma</a>.</p></li><li><p><code><a href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson">Submodule.sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson</a></code> - A version of (4) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks: Nakayama's Lemma</a>,
+generalising to the Jacobson of any ideal.</p></li><li><p><code><a href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.smul_le_of_le_smul_of_le_jacobson_bot">Submodule.smul_le_of_le_smul_of_le_jacobson_bot</a></code> - Statement (4) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks: Nakayama's Lemma</a>.</p></li><li><p><code><a href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.exists_injOn_mkQ_image_span_eq_of_span_eq_map_mkQ_of_le_jacobson_bot">Submodule.exists_injOn_mkQ_image_span_eq_of_span_eq_map_mkQ_of_le_jacobson_bot</a></code> -
+Statement (8) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks: Nakayama's Lemma</a>.</p></li></ul><p>Note that a version of Statement (1) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks: Nakayama's Lemma</a> can be found in
+<code>RingTheory.Finiteness</code> under the name
+<code><a href="../.././Mathlib/RingTheory/Finiteness/Nakayama.html#Submodule.exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul">Submodule.exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul</a></code></p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li><a href="https://stacks.math.columbia.edu/tag/00DV">Stacks: Nakayama's Lemma</a></li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>Nakayama, Jacobson</p></div><div class="decl" id="Submodule.eq_smul_of_le_smul_of_le_jacobson"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L57-L70">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.eq_smul_of_le_smul_of_le_jacobson"><span class="name">Submodule</span>.<span class="name">eq_smul_of_le_smul_of_le_jacobson</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN</span> : <span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIN</span> : <span class="fn">N</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIjac</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">J</span>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">N</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">J</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span></div></div><p><strong>Nakayama's Lemma</strong> - A slightly more general version of (2) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks 00DV</a>.
+See also <code><a href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.eq_bot_of_le_smul_of_le_jacobson_bot">eq_bot_of_le_smul_of_le_jacobson_bot</a></code> for the special case when <code>J = ⊥</code>.</p></div></div><div class="decl" id="Submodule.eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L72-L75">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN</span> : <span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIN</span> : <span class="fn">N</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIjac</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Submodule.annihilator">annihilator</a></span>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">N</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="Submodule.eq_bot_of_eq_pointwise_smul_of_mem_jacobson_annihilator"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L78-L83">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.eq_bot_of_eq_pointwise_smul_of_mem_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">eq_bot_of_eq_pointwise_smul_of_mem_jacobson_annihilator</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn">R</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN</span> : <span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrN</span> : <span class="fn">N</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">r</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hrJac</span> : <span class="fn">r</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Submodule.annihilator">annihilator</a></span>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">N</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="Submodule.eq_bot_of_set_smul_eq_of_subset_jacobson_annihilator"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L86-L90">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.eq_bot_of_set_smul_eq_of_subset_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">eq_bot_of_set_smul_eq_of_subset_jacobson_annihilator</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN</span> : <span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsN</span> : <span class="fn">N</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsJac</span> : <span class="fn">s</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">↑<span class="fn"><span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Submodule.annihilator">annihilator</a></span>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">N</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div></div></div><div class="decl" id="Submodule.top_ne_ideal_smul_of_le_jacobson_annihilator"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L92-L96">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.top_ne_ideal_smul_of_le_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">top_ne_ideal_smul_of_le_jacobson_annihilator</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Module.annihilator">Module.annihilator</a> <span class="fn">R</span> <span class="fn">M</span>)</span>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="Submodule.top_ne_set_smul_of_subset_jacobson_annihilator"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L99-L104">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.top_ne_set_smul_of_subset_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">top_ne_set_smul_of_subset_jacobson_annihilator</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">s</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">↑<span class="fn"><span class="fn">(<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Module.annihilator">Module.annihilator</a> <span class="fn">R</span> <span class="fn">M</span>)</span>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="Submodule.top_ne_pointwise_smul_of_mem_jacobson_annihilator"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L107-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.top_ne_pointwise_smul_of_mem_jacobson_annihilator"><span class="name">Submodule</span>.<span class="name">top_ne_pointwise_smul_of_mem_jacobson_annihilator</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Logic/Nontrivial/Defs.html#Nontrivial">Nontrivial</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Module.Finite">Module.Finite</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">r</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/RingTheory/Ideal/Maps.html#Module.annihilator">Module.annihilator</a> <span class="fn">R</span> <span class="fn">M</span>)</span>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">r</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a></div></div></div></div><div class="decl" id="Submodule.eq_bot_of_le_smul_of_le_jacobson_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L113-L120">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.eq_bot_of_le_smul_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">eq_bot_of_le_smul_of_le_jacobson_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">N</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hN</span> : <span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIN</span> : <span class="fn">N</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIjac</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">N</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a></div></div><p><strong>Nakayama's Lemma</strong> - Statement (2) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks 00DV</a>.
+See also <code><a href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.eq_smul_of_le_smul_of_le_jacobson">eq_smul_of_le_smul_of_le_jacobson</a></code> for a generalisation
+to the <code>jacobson</code> of any ideal</p></div></div><div class="decl" id="Submodule.sup_eq_sup_smul_of_le_smul_of_le_jacobson"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L122-L135">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.sup_eq_sup_smul_of_le_smul_of_le_jacobson"><span class="name">Submodule</span>.<span class="name">sup_eq_sup_smul_of_le_smul_of_le_jacobson</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N </span><span class="fn">N'</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN'</span> : <span class="fn"><span class="fn">N'</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIJ</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">J</span>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hNN</span> : <span class="fn">N'</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">N</span> ⊔ <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">N</span> ⊔ <span class="fn">N'</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">N</span> ⊔ <span class="fn">J</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N'</span></span></div></div></div></div><div class="decl" id="Submodule.sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L137-L144">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson"><span class="name">Submodule</span>.<span class="name">sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I </span><span class="fn">J</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N </span><span class="fn">N'</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN'</span> : <span class="fn"><span class="fn">N'</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIJ</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">J</span>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hNN</span> : <span class="fn">N'</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">N</span> ⊔ <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">N</span> ⊔ <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N'</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">N</span> ⊔ <span class="fn">J</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N'</span></span></div></div><p><strong>Nakayama's Lemma</strong> - A slightly more general version of (4) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks 00DV</a>.
+See also <code><a href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.smul_le_of_le_smul_of_le_jacobson_bot">smul_le_of_le_smul_of_le_jacobson_bot</a></code> for the special case when <code>J = ⊥</code>.</p></div></div><div class="decl" id="Submodule.le_of_le_smul_of_le_jacobson_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L146-L149">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.le_of_le_smul_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">le_of_le_smul_of_le_jacobson_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N </span><span class="fn">N'</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN'</span> : <span class="fn"><span class="fn">N'</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIJ</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hNN</span> : <span class="fn">N'</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">N</span> ⊔ <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">N'</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">N</span></div></div></div></div><div class="decl" id="Submodule.smul_le_of_le_smul_of_le_jacobson_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L151-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.smul_le_of_le_smul_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">smul_le_of_le_smul_of_le_jacobson_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N </span><span class="fn">N'</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN'</span> : <span class="fn"><span class="fn">N'</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIJ</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hNN</span> : <span class="fn">N'</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">N</span> ⊔ <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N'</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">N</span></div></div><p><strong>Nakayama's Lemma</strong> - Statement (4) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks 00DV</a>.
+See also <code><a href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson">sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson</a></code> for a generalisation
+to the <code>jacobson</code> of any ideal</p></div></div><div class="decl" id="Submodule.exists_sub_one_mem_and_smul_le_of_fg_of_le_sup"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L161-L186">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.exists_sub_one_mem_and_smul_le_of_fg_of_le_sup"><span class="name">Submodule</span>.<span class="name">exists_sub_one_mem_and_smul_le_of_fg_of_le_sup</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N </span><span class="fn">N' </span><span class="fn">P</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN'</span> : <span class="fn"><span class="fn">N'</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hN'le</span> : <span class="fn">N'</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">P</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hNN'</span> : <span class="fn">P</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">N</span> ⊔ <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">r</span> : <span class="fn">R</span>), <span class="fn">r</span> <a href="../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn">I</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">r</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">P</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">N</span></span></div></div><p><a href="https://stacks.math.columbia.edu/tag/00DV">Stacks Tag 00DV</a> ((3) see <code><a href="../.././Mathlib/Algebra/Module/LocalizedModule/Submodule.html#Submodule.localized₀_le_localized₀_of_smul_le">Submodule.localized₀_le_localized₀_of_smul_le</a></code> for the second conclusion.)</p></div></div><div class="decl" id="Submodule.le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L188-L195">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N </span><span class="fn">N'</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN</span> : <span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIjac</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hmaple</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Map.html#Submodule.map">map</a> <span class="fn">(<span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>).<a href="../.././Mathlib/LinearAlgebra/Quotient/Defs.html#Submodule.mkQ">mkQ</a></span> <span class="fn">N</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Map.html#Submodule.map">map</a> <span class="fn">(<span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>).<a href="../.././Mathlib/LinearAlgebra/Quotient/Defs.html#Submodule.mkQ">mkQ</a></span> <span class="fn">N'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">N</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">N'</span></div></div></div></div><div class="decl" id="Submodule.le_span_of_map_mkQ_le_map_mkQ_span_of_le_jacobson_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L197-L199">source</a></div><div class="attributes">@[deprecated Submodule.le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot (since := &quot;2026-01-03&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.le_span_of_map_mkQ_le_map_mkQ_span_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">le_span_of_map_mkQ_le_map_mkQ_span_of_le_jacobson_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N </span><span class="fn">N'</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN</span> : <span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIjac</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hmaple</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Map.html#Submodule.map">map</a> <span class="fn">(<span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>).<a href="../.././Mathlib/LinearAlgebra/Quotient/Defs.html#Submodule.mkQ">mkQ</a></span> <span class="fn">N</span></span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Map.html#Submodule.map">map</a> <span class="fn">(<span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>).<a href="../.././Mathlib/LinearAlgebra/Quotient/Defs.html#Submodule.mkQ">mkQ</a></span> <span class="fn">N'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">N</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">N'</span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot">Submodule.le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot</a></code>.</p></div></div><div class="decl" id="Submodule.eq_of_map_mkQ_eq_map_mkQ_of_le_jacobson_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L201-L208">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.eq_of_map_mkQ_eq_map_mkQ_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">eq_of_map_mkQ_eq_map_mkQ_of_le_jacobson_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N </span><span class="fn">N'</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hN</span> : <span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIjac</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hmaple</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Map.html#Submodule.map">map</a> <span class="fn">(<span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>).<a href="../.././Mathlib/LinearAlgebra/Quotient/Defs.html#Submodule.mkQ">mkQ</a></span> <span class="fn">N</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Map.html#Submodule.map">map</a> <span class="fn">(<span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>).<a href="../.././Mathlib/LinearAlgebra/Quotient/Defs.html#Submodule.mkQ">mkQ</a></span> <span class="fn">N'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">N</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">N'</span></div></div></div></div><div class="decl" id="Submodule.exists_injOn_mkQ_image_span_eq_of_span_eq_map_mkQ_of_le_jacobson_bot"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RingTheory/Nakayama.lean#L210-L229">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RingTheory/Nakayama.html#Submodule.exists_injOn_mkQ_image_span_eq_of_span_eq_map_mkQ_of_le_jacobson_bot"><span class="name">Submodule</span>.<span class="name">exists_injOn_mkQ_image_span_eq_of_span_eq_map_mkQ_of_le_jacobson_bot</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../.././Mathlib/RingTheory/Ideal/Defs.html#Ideal">Ideal</a> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">R</span> <span class="fn">M</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (<span class="fn">M</span> <a href="../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hN</span> : <span class="fn"><span class="fn">N</span>.<a href="../.././Mathlib/RingTheory/Finiteness/Defs.html#Submodule.FG">FG</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hIjac</span> : <span class="fn">I</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>.<a href="../.././Mathlib/RingTheory/Jacobson/Ideal.html#Ideal.jacobson">jacobson</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hsspan</span> : <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">span</a> <span class="fn">R</span> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Map.html#Submodule.map">map</a> <span class="fn">(<span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>).<a href="../.././Mathlib/LinearAlgebra/Quotient/Defs.html#Submodule.mkQ">mkQ</a></span> <span class="fn">N</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">t</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">M</span></span>), <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.InjOn">Set.InjOn</a> <span class="fn">(⇑<span class="fn">(<span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>).<a href="../.././Mathlib/LinearAlgebra/Quotient/Defs.html#Submodule.mkQ">mkQ</a></span>)</span> <span class="fn">t</span></span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn">⇑<span class="fn">(<span class="fn">I</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">N</span>).<a href="../.././Mathlib/LinearAlgebra/Quotient/Defs.html#Submodule.mkQ">mkQ</a></span></span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">t</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Span/Defs.html#Submodule.span">span</a> <span class="fn">R</span> <span class="fn">t</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">N</span></span></div></div><p><strong>Nakayama's Lemma</strong> - Statement (8) in
+<a href="https://stacks.math.columbia.edu/tag/00DV">Stacks 00DV</a>.</p><p>If <code>N</code> is a finitely generated <code>R</code>-submodule of <code>M</code>,
+<code>I</code> is an ideal contained in the Jacobson radical of <code>R</code>,
+<code>s</code> is a set of <code>M / (I • N)</code> that spans the quotient image of <code>N</code>,
+then there exists a spanning set <code>t</code> of <code>N</code> in bijection with <code>s</code> via the quotient map.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

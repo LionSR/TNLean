@@ -1,0 +1,932 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.Order.Hom.Esakia</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.Order.Hom.Esakia";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">Order</span>.<span class="name">Hom</span>.<span class="name">Esakia</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Order/Hom/Bounded.html">Mathlib.Order.Hom.Bounded</a></li><li><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html">Mathlib.Topology.Order.Hom.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.Order.Hom.Esakia" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism"><span class="name">PseudoEpimorphism</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom"><span class="name">EsakiaHom</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphismClass"><span class="name">PseudoEpimorphismClass</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHomClass"><span class="name">EsakiaHomClass</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphismClass.toTopHomClass"><span class="name">PseudoEpimorphismClass</span>.<span class="name">toTopHomClass</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHomClass.toPseudoEpimorphismClass"><span class="name">EsakiaHomClass</span>.<span class="name">toPseudoEpimorphismClass</span></a></div><div class="nav_link"><a class="break_within" href="#instCoeTCPseudoEpimorphismOfPseudoEpimorphismClass"><span class="name">instCoeTCPseudoEpimorphismOfPseudoEpimorphismClass</span></a></div><div class="nav_link"><a class="break_within" href="#instCoeTCEsakiaHomOfEsakiaHomClass"><span class="name">instCoeTCEsakiaHomOfEsakiaHomClass</span></a></div><div class="nav_link"><a class="break_within" href="#OrderIsoClass.toPseudoEpimorphismClass"><span class="name">OrderIsoClass</span>.<span class="name">toPseudoEpimorphismClass</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.instFunLike"><span class="name">PseudoEpimorphism</span>.<span class="name">instFunLike</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.instPseudoEpimorphismClass"><span class="name">PseudoEpimorphism</span>.<span class="name">instPseudoEpimorphismClass</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.toOrderHom_eq_coe"><span class="name">PseudoEpimorphism</span>.<span class="name">toOrderHom_eq_coe</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.toFun_eq_coe"><span class="name">PseudoEpimorphism</span>.<span class="name">toFun_eq_coe</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.ext"><span class="name">PseudoEpimorphism</span>.<span class="name">ext</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.ext_iff"><span class="name">PseudoEpimorphism</span>.<span class="name">ext_iff</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.copy"><span class="name">PseudoEpimorphism</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.coe_copy"><span class="name">PseudoEpimorphism</span>.<span class="name">coe_copy</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.copy_eq"><span class="name">PseudoEpimorphism</span>.<span class="name">copy_eq</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.id"><span class="name">PseudoEpimorphism</span>.<span class="name">id</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.instInhabited"><span class="name">PseudoEpimorphism</span>.<span class="name">instInhabited</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.coe_id"><span class="name">PseudoEpimorphism</span>.<span class="name">coe_id</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.coe_id_orderHom"><span class="name">PseudoEpimorphism</span>.<span class="name">coe_id_orderHom</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.id_apply"><span class="name">PseudoEpimorphism</span>.<span class="name">id_apply</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.comp"><span class="name">PseudoEpimorphism</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.coe_comp"><span class="name">PseudoEpimorphism</span>.<span class="name">coe_comp</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.coe_comp_orderHom"><span class="name">PseudoEpimorphism</span>.<span class="name">coe_comp_orderHom</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.comp_apply"><span class="name">PseudoEpimorphism</span>.<span class="name">comp_apply</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.comp_assoc"><span class="name">PseudoEpimorphism</span>.<span class="name">comp_assoc</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.comp_id"><span class="name">PseudoEpimorphism</span>.<span class="name">comp_id</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.id_comp"><span class="name">PseudoEpimorphism</span>.<span class="name">id_comp</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.cancel_right"><span class="name">PseudoEpimorphism</span>.<span class="name">cancel_right</span></a></div><div class="nav_link"><a class="break_within" href="#PseudoEpimorphism.cancel_left"><span class="name">PseudoEpimorphism</span>.<span class="name">cancel_left</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.toPseudoEpimorphism"><span class="name">EsakiaHom</span>.<span class="name">toPseudoEpimorphism</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.instFunLike"><span class="name">EsakiaHom</span>.<span class="name">instFunLike</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.instEsakiaHomClass"><span class="name">EsakiaHom</span>.<span class="name">instEsakiaHomClass</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.toContinuousOrderHom_coe"><span class="name">EsakiaHom</span>.<span class="name">toContinuousOrderHom_coe</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.toFun_eq_coe"><span class="name">EsakiaHom</span>.<span class="name">toFun_eq_coe</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.ext"><span class="name">EsakiaHom</span>.<span class="name">ext</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.ext_iff"><span class="name">EsakiaHom</span>.<span class="name">ext_iff</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.copy"><span class="name">EsakiaHom</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.coe_copy"><span class="name">EsakiaHom</span>.<span class="name">coe_copy</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.copy_eq"><span class="name">EsakiaHom</span>.<span class="name">copy_eq</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.id"><span class="name">EsakiaHom</span>.<span class="name">id</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.instInhabited"><span class="name">EsakiaHom</span>.<span class="name">instInhabited</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.coe_id"><span class="name">EsakiaHom</span>.<span class="name">coe_id</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.coe_id_pseudoEpimorphism"><span class="name">EsakiaHom</span>.<span class="name">coe_id_pseudoEpimorphism</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.id_apply"><span class="name">EsakiaHom</span>.<span class="name">id_apply</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.coe_id_continuousOrderHom"><span class="name">EsakiaHom</span>.<span class="name">coe_id_continuousOrderHom</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.comp"><span class="name">EsakiaHom</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.coe_comp_continuousOrderHom"><span class="name">EsakiaHom</span>.<span class="name">coe_comp_continuousOrderHom</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.coe_comp_pseudoEpimorphism"><span class="name">EsakiaHom</span>.<span class="name">coe_comp_pseudoEpimorphism</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.coe_comp"><span class="name">EsakiaHom</span>.<span class="name">coe_comp</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.comp_apply"><span class="name">EsakiaHom</span>.<span class="name">comp_apply</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.comp_assoc"><span class="name">EsakiaHom</span>.<span class="name">comp_assoc</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.comp_id"><span class="name">EsakiaHom</span>.<span class="name">comp_id</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.id_comp"><span class="name">EsakiaHom</span>.<span class="name">id_comp</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.cancel_right"><span class="name">EsakiaHom</span>.<span class="name">cancel_right</span></a></div><div class="nav_link"><a class="break_within" href="#EsakiaHom.cancel_left"><span class="name">EsakiaHom</span>.<span class="name">cancel_left</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Esakia-morphisms" class="markdown-heading">Esakia morphisms <a class="hover-link" href="#Esakia-morphisms">#</a></h1><p>This file defines pseudo-epimorphisms and Esakia morphisms.</p><p>We use the <code><a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike">DFunLike</a></code> design, so each type of morphisms has a companion typeclass which is meant to
+be satisfied by itself and all stricter types.</p><h2 id="Types-of-morphisms" class="markdown-heading">Types of morphisms <a class="hover-link" href="#Types-of-morphisms">#</a></h2><ul><li><code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a></code>: Pseudo-epimorphisms. Maps <code>f</code> such that <code>f a ≤ b</code> implies the existence of
+<code>a'</code> such that <code>a ≤ a'</code> and <code>f a' = b</code>.</li><li><code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a></code>: Esakia morphisms. Continuous pseudo-epimorphisms.</li></ul><h2 id="Typeclasses" class="markdown-heading">Typeclasses <a class="hover-link" href="#Typeclasses">#</a></h2><ul><li><code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphismClass">PseudoEpimorphismClass</a></code></li><li><code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHomClass">EsakiaHomClass</a></code></li></ul><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li><a href="https://en.wikipedia.org/wiki/Esakia_space">Wikipedia, <em>Esakia space</em></a></li></ul></div><div class="decl" id="PseudoEpimorphism"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L42-L44">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism"><span class="name">PseudoEpimorphism</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_7)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="PseudoEpimorphism.toOrderHom"><span class="fn">α</span> <a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom">→o</a> <span class="fn">β</span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Type</a> (max u_6 u_7)</div></div><p>The type of pseudo-epimorphisms, aka p-morphisms, aka bounded maps, from <code>α</code> to <code>β</code>.</p><ul class="structure_fields" id="PseudoEpimorphism.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.monotone'">monotone'</a> : <span class="fn"><a href="../../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn"><span class="fn">self</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span></span></div></li><li id="PseudoEpimorphism.exists_map_eq_of_map_le'" class="structure_field"><div class="structure_field_info">exists_map_eq_of_map_le'<span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">a</span> : <span class="fn">α</span>⦄</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">b</span> : <span class="fn">β</span>⦄</span></span>
+</span> : <span class="fn"><span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <span class="fn">∃ (<span class="fn">c</span> : <span class="fn">α</span>), <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span> <span class="fn">c</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span></span></span></div></li></ul><details id="instances-for-list-PseudoEpimorphism" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="EsakiaHom"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L46-L49">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom"><span class="name">EsakiaHom</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_7)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="EsakiaHom.toContinuousOrderHom"><span class="fn">α</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom">→Co</a> <span class="fn">β</span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Type</a> (max u_6 u_7)</div></div><p>The type of Esakia morphisms, aka continuous pseudo-epimorphisms, from <code>α</code> to <code>β</code>.</p><ul class="structure_fields" id="EsakiaHom.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.monotone'">monotone'</a> : <span class="fn"><a href="../../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn"><span class="fn">self</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.continuous_toFun">continuous_toFun</a> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn"><span class="fn">self</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span></span></div></li><li id="EsakiaHom.exists_map_eq_of_map_le'" class="structure_field"><div class="structure_field_info">exists_map_eq_of_map_le'<span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">a</span> : <span class="fn">α</span>⦄</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">b</span> : <span class="fn">β</span>⦄</span></span>
+</span> : <span class="fn"><span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <span class="fn">∃ (<span class="fn">c</span> : <span class="fn">α</span>), <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span> <span class="fn">c</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span></span></span></div></li></ul><details id="instances-for-list-EsakiaHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="PseudoEpimorphismClass"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L53-L59">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphismClass"><span class="name">PseudoEpimorphismClass</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../../.././foundational_types.html">(Type</a> u_7)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../../.././foundational_types.html">(Type</a> u_8)</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="PseudoEpimorphismClass.toRelHomClass"><span class="fn"><a href="../../../.././Mathlib/Order/RelIso/Basic.html#RelHomClass">RelHomClass</a> <span class="fn">F</span> <span class="fn">(fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">α</span>) =&gt; <span class="fn">x1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x2</span>)</span> <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">β</span>) =&gt; <span class="fn">x1</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">x2</span></span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Prop</a></div></div><p><code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphismClass">PseudoEpimorphismClass</a> F α β</code> states that <code>F</code> is a type of <code>⊔</code>-preserving morphisms.</p><p>You should extend this class when you extend <code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a></code>.</p><ul class="structure_fields" id="PseudoEpimorphismClass.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Order/RelIso/Basic.html#RelHomClass.map_rel">map_rel</a><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a </span><span class="fn">b</span> : <span class="fn">α</span>}</span></span>
+</span> : <span class="fn"><span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><span class="fn">f</span> <span class="fn">b</span></span></span></div></li><li id="PseudoEpimorphismClass.exists_map_eq_of_map_le" class="structure_field"><div class="structure_field_info">exists_map_eq_of_map_le<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">a</span> : <span class="fn">α</span>⦄</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">b</span> : <span class="fn">β</span>⦄</span></span>
+</span> : <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <span class="fn">∃ (<span class="fn">c</span> : <span class="fn">α</span>), <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">c</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-PseudoEpimorphismClass" class="instances-list"></ul></details></div></div><div class="decl" id="EsakiaHomClass"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L61-L67">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHomClass"><span class="name">EsakiaHomClass</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../../.././foundational_types.html">(Type</a> u_7)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../../.././foundational_types.html">(Type</a> u_8)</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_extends">extends</span> <span id="EsakiaHomClass.toContinuousOrderHomClass"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass">ContinuousOrderHomClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Prop</a></div></div><p><code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHomClass">EsakiaHomClass</a> F α β</code> states that <code>F</code> is a type of lattice morphisms.</p><p>You should extend this class when you extend <code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a></code>.</p><ul class="structure_fields" id="EsakiaHomClass.mk"><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Topology/ContinuousMap/Defs.html#ContinuousMapClass.map_continuous">map_continuous</a><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+ : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">⇑<span class="fn">f</span></span></span></div></li><li class="structure_field inherited_field"><div class="structure_field_info"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHomClass.map_monotone">map_monotone</a><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+ : <span class="fn"><a href="../../../.././Mathlib/Order/Monotone/Defs.html#Monotone">Monotone</a> <span class="fn">⇑<span class="fn">f</span></span></span></div></li><li id="EsakiaHomClass.exists_map_eq_of_map_le" class="structure_field"><div class="structure_field_info">exists_map_eq_of_map_le<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">a</span> : <span class="fn">α</span>⦄</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">⦃<span class="fn">b</span> : <span class="fn">β</span>⦄</span></span>
+</span> : <span class="fn"><span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">b</span> → <span class="fn">∃ (<span class="fn">c</span> : <span class="fn">α</span>), <span class="fn">a</span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">c</span> <a href="../../../.././Init/Prelude.html#And">∧</a> <span class="fn"><span class="fn">f</span> <span class="fn">c</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">b</span></span></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-EsakiaHomClass" class="instances-list"></ul></details></div></div><div class="decl" id="PseudoEpimorphismClass.toTopHomClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L78-L82">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphismClass.toTopHomClass"><span class="name">PseudoEpimorphismClass</span>.<span class="name">toTopHomClass</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderTop">OrderTop</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/BoundedOrder/Basic.html#OrderTop">OrderTop</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphismClass">PseudoEpimorphismClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Order/Hom/Bounded.html#TopHomClass">TopHomClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="EsakiaHomClass.toPseudoEpimorphismClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L85-L88">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHomClass.toPseudoEpimorphismClass"><span class="name">EsakiaHomClass</span>.<span class="name">toPseudoEpimorphismClass</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHomClass">EsakiaHomClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphismClass">PseudoEpimorphismClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="instCoeTCPseudoEpimorphismOfPseudoEpimorphismClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L90-L92">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#instCoeTCPseudoEpimorphismOfPseudoEpimorphismClass"><span class="name">instCoeTCPseudoEpimorphismOfPseudoEpimorphismClass</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphismClass">PseudoEpimorphismClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Coe.html#CoeTC">CoeTC</a> <span class="fn">F</span> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#instCoeTCPseudoEpimorphismOfPseudoEpimorphismClass">instCoeTCPseudoEpimorphismOfPseudoEpimorphismClass</a> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <a href="../../../.././Init/Coe.html#CoeTC.mk">{</a> <span class="fn">coe</span> := <span class="fn">fun (<span class="fn">f</span> : <span class="fn">F</span>) =&gt; <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">{</a> <span class="fn">toOrderHom</span> := <span class="fn">↑<span class="fn">f</span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">}</a></span> <a href="../../../.././Init/Coe.html#CoeTC.mk">}</a></li></ul></details></div></div><div class="decl" id="instCoeTCEsakiaHomOfEsakiaHomClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L94-L96">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#instCoeTCEsakiaHomOfEsakiaHomClass"><span class="name">instCoeTCEsakiaHomOfEsakiaHomClass</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHomClass">EsakiaHomClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Coe.html#CoeTC">CoeTC</a> <span class="fn">F</span> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#instCoeTCEsakiaHomOfEsakiaHomClass">instCoeTCEsakiaHomOfEsakiaHomClass</a> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <a href="../../../.././Init/Coe.html#CoeTC.mk">{</a> <span class="fn">coe</span> := <span class="fn">fun (<span class="fn">f</span> : <span class="fn">F</span>) =&gt; <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.mk">{</a> <span class="fn">toContinuousOrderHom</span> := <span class="fn">↑<span class="fn">f</span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.mk">}</a></span> <a href="../../../.././Init/Coe.html#CoeTC.mk">}</a></li></ul></details></div></div><div class="decl" id="OrderIsoClass.toPseudoEpimorphismClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L101-L104">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#OrderIsoClass.toPseudoEpimorphismClass"><span class="name">OrderIsoClass</span>.<span class="name">toPseudoEpimorphismClass</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Equiv.html#EquivLike">EquivLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderIsoClass">OrderIsoClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphismClass">PseudoEpimorphismClass</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span></div></div></div></div><div class="mod_doc"><h3 id="Pseudo-epimorphisms" class="markdown-heading">Pseudo-epimorphisms <a class="hover-link" href="#Pseudo-epimorphisms">#</a></h3></div><div class="decl" id="PseudoEpimorphism.instFunLike"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L113-L118">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.instFunLike"><span class="name">PseudoEpimorphism</span>.<span class="name">instFunLike</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span>)</span> <span class="fn">α</span> <span class="fn">β</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.instFunLike">PseudoEpimorphism.instFunLike</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.mk">{</a> <span class="fn">coe</span> := <span class="fn">fun (<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>) =&gt; <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span></span>, <span class="fn">coe_injective'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.mk">}</a></li></ul></details></div></div><div class="decl" id="PseudoEpimorphism.instPseudoEpimorphismClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L120-L122">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.instPseudoEpimorphismClass"><span class="name">PseudoEpimorphism</span>.<span class="name">instPseudoEpimorphismClass</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphismClass">PseudoEpimorphismClass</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span>)</span> <span class="fn">α</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="PseudoEpimorphism.toOrderHom_eq_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L124-L125">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.toOrderHom_eq_coe"><span class="name">PseudoEpimorphism</span>.<span class="name">toOrderHom_eq_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.toOrderHom">toOrderHom</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="PseudoEpimorphism.toFun_eq_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L127-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.toFun_eq_coe"><span class="name">PseudoEpimorphism</span>.<span class="name">toFun_eq_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="PseudoEpimorphism.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L129-L131">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.ext"><span class="name">PseudoEpimorphism</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">a</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="PseudoEpimorphism.ext_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L129-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.ext_iff"><span class="name">PseudoEpimorphism</span>.<span class="name">ext_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">a</span></span></span></div></div></div></div><div class="decl" id="PseudoEpimorphism.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L133-L136">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.copy"><span class="name">PseudoEpimorphism</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span></div></div><p>Copy of a <code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a></code> with a new <code>toFun</code> equal to the old one. Useful to fix
+definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">{</a> <span class="fn">toOrderHom</span> := <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">}</a></li></ul></details><details id="instances-for-list-PseudoEpimorphism.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="PseudoEpimorphism.coe_copy"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L138-L139">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.coe_copy"><span class="name">PseudoEpimorphism</span>.<span class="name">coe_copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f'</span></div></div></div></div><div class="decl" id="PseudoEpimorphism.copy_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L141-L142">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.copy_eq"><span class="name">PseudoEpimorphism</span>.<span class="name">copy_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="PseudoEpimorphism.id"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L146-L148">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id"><span class="name">PseudoEpimorphism</span>.<span class="name">id</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">α</span></span></div></div><p><code><a href="../../../.././Init/Prelude.html#id">id</a></code> as a <code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id">PseudoEpimorphism.id</a> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">{</a> <span class="fn">toOrderHom</span> := <a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.id">OrderHom.id</a>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">}</a></li></ul></details><details id="instances-for-list-PseudoEpimorphism.id" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="PseudoEpimorphism.instInhabited"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L150-L151">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.instInhabited"><span class="name">PseudoEpimorphism</span>.<span class="name">instInhabited</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Prelude.html#Inhabited">Inhabited</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">α</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.instInhabited">PseudoEpimorphism.instInhabited</a> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Init/Prelude.html#Inhabited.mk">{</a> <span class="fn">default</span> := <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id">PseudoEpimorphism.id</a> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Inhabited.mk">}</a></li></ul></details></div></div><div class="decl" id="PseudoEpimorphism.coe_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L153-L154">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.coe_id"><span class="name">PseudoEpimorphism</span>.<span class="name">coe_id</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id">PseudoEpimorphism.id</a> <span class="fn">α</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Init/Prelude.html#id">id</a></div></div></div></div><div class="decl" id="PseudoEpimorphism.coe_id_orderHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L156-L157">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.coe_id_orderHom"><span class="name">PseudoEpimorphism</span>.<span class="name">coe_id_orderHom</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id">PseudoEpimorphism.id</a> <span class="fn">α</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.id">OrderHom.id</a></div></div></div></div><div class="decl" id="PseudoEpimorphism.id_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L161-L162">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id_apply"><span class="name">PseudoEpimorphism</span>.<span class="name">id_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id">PseudoEpimorphism.id</a> <span class="fn">α</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="PseudoEpimorphism.comp"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L164-L169">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp"><span class="name">PseudoEpimorphism</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">γ</span></span></div></div><p>Composition of <code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a></code>s as a <code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">{</a> <span class="fn">toOrderHom</span> := <span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.comp">comp</a></span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.toOrderHom">toOrderHom</a></span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">}</a></li></ul></details><details id="instances-for-list-PseudoEpimorphism.comp" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="PseudoEpimorphism.coe_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L171-L173">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.coe_comp"><span class="name">PseudoEpimorphism</span>.<span class="name">coe_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">g</span></span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="PseudoEpimorphism.coe_comp_orderHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L175-L177">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.coe_comp_orderHom"><span class="name">PseudoEpimorphism</span>.<span class="name">coe_comp_orderHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">g</span>)</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.comp">comp</a></span> <span class="fn">↑<span class="fn">f</span></span></span></div></div></div></div><div class="decl" id="PseudoEpimorphism.comp_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L179-L181">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp_apply"><span class="name">PseudoEpimorphism</span>.<span class="name">comp_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="PseudoEpimorphism.comp_assoc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L183-L185">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp_assoc"><span class="name">PseudoEpimorphism</span>.<span class="name">comp_assoc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">δ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">γ</span> <span class="fn">δ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">h</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">g</span>)</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">h</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="PseudoEpimorphism.comp_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L187-L189">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp_id"><span class="name">PseudoEpimorphism</span>.<span class="name">comp_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id">PseudoEpimorphism.id</a> <span class="fn">α</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="PseudoEpimorphism.id_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L191-L193">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id_comp"><span class="name">PseudoEpimorphism</span>.<span class="name">id_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id">PseudoEpimorphism.id</a> <span class="fn">β</span>)</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="PseudoEpimorphism.cancel_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L195-L198">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.cancel_right"><span class="name">PseudoEpimorphism</span>.<span class="name">cancel_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁ </span><span class="fn">g₂</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">β</span> <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">g₁</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">g₂</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">g₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g₂</span></div></div></div></div><div class="decl" id="PseudoEpimorphism.cancel_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L200-L203">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.cancel_left"><span class="name">PseudoEpimorphism</span>.<span class="name">cancel_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">β</span> <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">g</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f₁</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <span class="fn">f₂</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">f₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f₂</span></div></div></div></div><div class="mod_doc"><h3 id="Esakia-morphisms" class="markdown-heading">Esakia morphisms <a class="hover-link" href="#Esakia-morphisms">#</a></h3></div><div class="decl" id="EsakiaHom.toPseudoEpimorphism"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L215-L216">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.toPseudoEpimorphism"><span class="name">EsakiaHom</span>.<span class="name">toPseudoEpimorphism</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism">PseudoEpimorphism</a> <span class="fn">α</span> <span class="fn">β</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.toPseudoEpimorphism">toPseudoEpimorphism</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">{</a> <span class="fn">toOrderHom</span> := <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.toOrderHom">toOrderHom</a></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">}</a></li></ul></details><details id="instances-for-list-EsakiaHom.toPseudoEpimorphism" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="EsakiaHom.instFunLike"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L218-L223">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.instFunLike"><span class="name">EsakiaHom</span>.<span class="name">instFunLike</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span>)</span> <span class="fn">α</span> <span class="fn">β</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.instFunLike">EsakiaHom.instFunLike</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.mk">{</a> <span class="fn">coe</span> := <span class="fn">fun (<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>) =&gt; <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span></span>, <span class="fn">coe_injective'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.mk">}</a></li></ul></details></div></div><div class="decl" id="EsakiaHom.instEsakiaHomClass"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L225-L228">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.instEsakiaHomClass"><span class="name">EsakiaHom</span>.<span class="name">instEsakiaHomClass</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHomClass">EsakiaHomClass</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span>)</span> <span class="fn">α</span> <span class="fn">β</span></span></div></div></div></div><div class="decl" id="EsakiaHom.toContinuousOrderHom_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L230-L232">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.toContinuousOrderHom_coe"><span class="name">EsakiaHom</span>.<span class="name">toContinuousOrderHom_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.toContinuousOrderHom">toContinuousOrderHom</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="EsakiaHom.toFun_eq_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L234-L234">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.toFun_eq_coe"><span class="name">EsakiaHom</span>.<span class="name">toFun_eq_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Order/Hom/Basic.html#OrderHom.toFun">toFun</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="EsakiaHom.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L236-L238">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.ext"><span class="name">EsakiaHom</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">a</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="EsakiaHom.ext_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L236-L236">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.ext_iff"><span class="name">EsakiaHom</span>.<span class="name">ext_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">a</span> : <span class="fn">α</span>), <span class="fn"><span class="fn">f</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">a</span></span></span></div></div></div></div><div class="decl" id="EsakiaHom.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L240-L244">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.copy"><span class="name">EsakiaHom</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span></div></div><p>Copy of an <code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a></code> with a new <code>toFun</code> equal to the old one. Useful to fix definitional
+equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.mk">{</a> <span class="fn">toContinuousOrderHom</span> := <span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.mk">}</a></li></ul></details><details id="instances-for-list-EsakiaHom.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="EsakiaHom.coe_copy"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L246-L247">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.coe_copy"><span class="name">EsakiaHom</span>.<span class="name">coe_copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f'</span></div></div></div></div><div class="decl" id="EsakiaHom.copy_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L249-L250">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.copy_eq"><span class="name">EsakiaHom</span>.<span class="name">copy_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">f'</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.copy">copy</a></span> <span class="fn">f'</span> <span class="fn">h</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="EsakiaHom.id"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L254-L256">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id"><span class="name">EsakiaHom</span>.<span class="name">id</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">α</span></span></div></div><p><code><a href="../../../.././Init/Prelude.html#id">id</a></code> as an <code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id">EsakiaHom.id</a> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.mk">{</a> <span class="fn">toContinuousOrderHom</span> := <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id">ContinuousOrderHom.id</a> <span class="fn">α</span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.mk">}</a></li></ul></details><details id="instances-for-list-EsakiaHom.id" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="EsakiaHom.instInhabited"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L258-L259">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.instInhabited"><span class="name">EsakiaHom</span>.<span class="name">instInhabited</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Init/Prelude.html#Inhabited">Inhabited</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">α</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.instInhabited">EsakiaHom.instInhabited</a> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Init/Prelude.html#Inhabited.mk">{</a> <span class="fn">default</span> := <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id">EsakiaHom.id</a> <span class="fn">α</span></span> <a href="../../../.././Init/Prelude.html#Inhabited.mk">}</a></li></ul></details></div></div><div class="decl" id="EsakiaHom.coe_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L261-L262">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.coe_id"><span class="name">EsakiaHom</span>.<span class="name">coe_id</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id">EsakiaHom.id</a> <span class="fn">α</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Init/Prelude.html#id">id</a></div></div></div></div><div class="decl" id="EsakiaHom.coe_id_pseudoEpimorphism"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L264-L266">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.coe_id_pseudoEpimorphism"><span class="name">EsakiaHom</span>.<span class="name">coe_id_pseudoEpimorphism</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">{</a> <span class="fn">toOrderHom</span> := <span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id">EsakiaHom.id</a> <span class="fn">α</span>)</span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">}</a> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.id">PseudoEpimorphism.id</a> <span class="fn">α</span></span></div></div></div></div><div class="decl" id="EsakiaHom.id_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L270-L271">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id_apply"><span class="name">EsakiaHom</span>.<span class="name">id_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id">EsakiaHom.id</a> <span class="fn">α</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">a</span></div></div></div></div><div class="decl" id="EsakiaHom.coe_id_continuousOrderHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L273-L274">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.coe_id_continuousOrderHom"><span class="name">EsakiaHom</span>.<span class="name">coe_id_continuousOrderHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id">EsakiaHom.id</a> <span class="fn">α</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.id">ContinuousOrderHom.id</a> <span class="fn">α</span></span></div></div></div></div><div class="decl" id="EsakiaHom.comp"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L276-L281">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp"><span class="name">EsakiaHom</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">γ</span></span></div></div><p>Composition of <code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a></code>s as an <code><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.mk">{</a> <span class="fn">toContinuousOrderHom</span> := <span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.toContinuousOrderHom">toContinuousOrderHom</a></span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.mk">}</a></li></ul></details><details id="instances-for-list-EsakiaHom.comp" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="EsakiaHom.coe_comp_continuousOrderHom"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L283-L285">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.coe_comp_continuousOrderHom"><span class="name">EsakiaHom</span>.<span class="name">coe_comp_continuousOrderHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(↑<span class="fn">g</span>)</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Basic.html#ContinuousOrderHom.comp">comp</a></span> <span class="fn">↑<span class="fn">f</span></span></span></div></div></div></div><div class="decl" id="EsakiaHom.coe_comp_pseudoEpimorphism"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L287-L289">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.coe_comp_pseudoEpimorphism"><span class="name">EsakiaHom</span>.<span class="name">coe_comp_pseudoEpimorphism</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">{</a> <span class="fn">toOrderHom</span> := <span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f</span>)</span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">}</a> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">{</a> <span class="fn">toOrderHom</span> := <span class="fn">↑<span class="fn">g</span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">}</a>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.comp">comp</a></span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">{</a> <span class="fn">toOrderHom</span> := <span class="fn">↑<span class="fn">f</span></span>, <span class="fn">exists_map_eq_of_map_le'</span> := <span class="fn">⋯</span> <a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#PseudoEpimorphism.mk">}</a></span></div></div></div></div><div class="decl" id="EsakiaHom.coe_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L291-L292">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.coe_comp"><span class="name">EsakiaHom</span>.<span class="name">coe_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">⇑<span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">⇑<span class="fn">g</span></span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">f</span></span></div></div></div></div><div class="decl" id="EsakiaHom.comp_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L294-L295">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp_apply"><span class="name">EsakiaHom</span>.<span class="name">comp_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f</span>)</span> <span class="fn">a</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">g</span> <span class="fn">(<span class="fn">f</span> <span class="fn">a</span>)</span></span></div></div></div></div><div class="decl" id="EsakiaHom.comp_assoc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L297-L299">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp_assoc"><span class="name">EsakiaHom</span>.<span class="name">comp_assoc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">δ</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">δ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">δ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">γ</span> <span class="fn">δ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">β</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">h</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">g</span>)</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">h</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">(<span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="EsakiaHom.comp_id"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L301-L303">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp_id"><span class="name">EsakiaHom</span>.<span class="name">comp_id</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">f</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id">EsakiaHom.id</a> <span class="fn">α</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="EsakiaHom.id_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L305-L307">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id_comp"><span class="name">EsakiaHom</span>.<span class="name">id_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.id">EsakiaHom.id</a> <span class="fn">β</span>)</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f</span></div></div></div></div><div class="decl" id="EsakiaHom.cancel_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L309-L312">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.cancel_right"><span class="name">EsakiaHom</span>.<span class="name">cancel_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g₁ </span><span class="fn">g₂</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">β</span> <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../../../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">⇑<span class="fn">f</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">g₁</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">g₂</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">g₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">g₂</span></div></div></div></div><div class="decl" id="EsakiaHom.cancel_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Order/Hom/Esakia.lean#L314-L317">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.cancel_left"><span class="name">EsakiaHom</span>.<span class="name">cancel_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">β</span> <span class="fn">γ</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom">EsakiaHom</a> <span class="fn">α</span> <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">g</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f₁</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">g</span>.<a href="../../../.././Mathlib/Topology/Order/Hom/Esakia.html#EsakiaHom.comp">comp</a></span> <span class="fn">f₂</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">f₁</span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f₂</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

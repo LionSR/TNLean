@@ -1,0 +1,716 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Geometry.Manifold.Bordism</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Geometry.Manifold.Bordism";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Geometry</span>.<span class="name">Manifold</span>.<span class="name">Bordism</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Analysis/SpecialFunctions/Pow/NNReal.html">Mathlib.Analysis.SpecialFunctions.Pow.NNReal</a></li><li><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/InteriorBoundary.html">Mathlib.Geometry.Manifold.IsManifold.InteriorBoundary</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Geometry.Manifold.Bordism" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#SingularManifold"><span class="name">SingularManifold</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.instTopologicalSpaceM"><span class="name">SingularManifold</span>.<span class="name">instTopologicalSpaceM</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.instChartedSpaceM"><span class="name">SingularManifold</span>.<span class="name">instChartedSpaceM</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.instIsManifoldRealM"><span class="name">SingularManifold</span>.<span class="name">instIsManifoldRealM</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.instCompactSpaceM"><span class="name">SingularManifold</span>.<span class="name">instCompactSpaceM</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.instBoundarylessManifoldRealM"><span class="name">SingularManifold</span>.<span class="name">instBoundarylessManifoldRealM</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.map"><span class="name">SingularManifold</span>.<span class="name">map</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.map_f"><span class="name">SingularManifold</span>.<span class="name">map_f</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.map_M"><span class="name">SingularManifold</span>.<span class="name">map_M</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.map_comp"><span class="name">SingularManifold</span>.<span class="name">map_comp</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.refl"><span class="name">SingularManifold</span>.<span class="name">refl</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.comap"><span class="name">SingularManifold</span>.<span class="name">comap</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.comap_M"><span class="name">SingularManifold</span>.<span class="name">comap_M</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.comap_f"><span class="name">SingularManifold</span>.<span class="name">comap_f</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.empty"><span class="name">SingularManifold</span>.<span class="name">empty</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.empty_M"><span class="name">SingularManifold</span>.<span class="name">empty_M</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.instIsEmptyMEmpty"><span class="name">SingularManifold</span>.<span class="name">instIsEmptyMEmpty</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.toPUnit"><span class="name">SingularManifold</span>.<span class="name">toPUnit</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.prod"><span class="name">SingularManifold</span>.<span class="name">prod</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.sum"><span class="name">SingularManifold</span>.<span class="name">sum</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.sum_M"><span class="name">SingularManifold</span>.<span class="name">sum_M</span></a></div><div class="nav_link"><a class="break_within" href="#SingularManifold.sum_f"><span class="name">SingularManifold</span>.<span class="name">sum_f</span></a></div></nav><main>
+<div class="mod_doc"><h2 id="Unoriented-bordism-theory" class="markdown-heading">(Unoriented) bordism theory <a class="hover-link" href="#Unoriented-bordism-theory">#</a></h2><p>This file defines the beginnings of unoriented bordism theory. We define singular manifolds,
+the building blocks of unoriented bordism groups. Future pull requests will define bordisms
+and the bordism groups of a topological space, and prove these are abelian groups.</p><p>The basic notion of bordism theory is that of a bordism between smooth manifolds.
+Two compact smooth <code>n</code>-dimensional manifolds <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> and <code>N</code> are <strong>bordant</strong> if there exists a smooth
+<strong>bordism</strong> between them: this is a compact <code>n+1</code>-dimensional manifold <code>W</code> whose boundary is
+(diffeomorphic to) the disjoint union <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a> ⊕ N</code>. Being bordant is an equivalence relation
+(transitivity follows from the collar neighbourhood theorem). The set of equivalence classes has an
+abelian group structure, with the group operation given as disjoint union of manifolds,
+and is called the <code>n</code>-th (unoriented) bordism group.</p><p>This construction can be generalised one step further, to produce an extraordinary homology theory.
+Given a topological space <code>X</code>, a <strong>singular manifold</strong> on <code>X</code> is a closed smooth manifold <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code>
+together with a continuous map <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a> → X</code>. (The word <em>singular</em> does not refer to singularities,
+but is by analogy to singular chains in the definition of singular homology.)</p><p>Given two <code>n</code>-dimensional singular manifolds <code>s</code> and <code>t</code>, an (oriented) bordism between <code>s</code> and <code>t</code>
+is a compact smooth <code>n+1</code>-dimensional manifold <code>W</code> whose boundary is (diffeomorphic to) the disjoint
+union of <code>s</code> and <code>t</code>, together with a map <code>W → X</code> which restricts to the maps on <code>s</code> and <code>t</code>.
+We call <code>s</code> and <code>t</code> bordant if there exists a bordism between them: again, this defines an
+equivalence relation. The <code>n</code>-th bordism group of <code>X</code> is the set of bordism classes of
+<code>n</code>-dimensional singular manifolds on <code>X</code>. If <code>X</code> is a single point, this recovers the bordism
+groups from the preceding paragraph.</p><p>These absolute bordism groups can be generalised further to relative bordism groups, for each
+topological pair <code>(X, A)</code>; in fact, these define an extra-ordinary homology theory.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><strong>SingularManifold X k I</strong>: a singular manifold on a topological space <code>X</code>, is a pair <code>(M, f)</code> of
+a closed <code>C^k</code>-manifold <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> modelled on <code>I</code> together with a continuous map <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a> → X</code>.
+We don't assume <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> to be modelled on <code>ℝⁿ</code>, but add the model topological space <code>H</code>,
+the vector space <code>E</code> and the model with corners <code>I</code> as type parameters.
+If we wish to emphasize the model, we will speak of a singular <code>I</code>-manifold.
+To define a disjoint union of singular manifolds, we require their domains to be manifolds
+over the same model with corners: this is why we make the model explicit.</li></ul><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map">SingularManifold.map</a></code>: a map <code>X → Y</code> of topological spaces induces a map between the spaces
+of singular manifolds. This will be used to define functoriality of bordism groups.</li><li><code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.comap">SingularManifold.comap</a></code>: if <code>(N, f)</code> is a singular manifold on <code>X</code>
+and <code>φ : <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a> → N</code> is continuous, the <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.comap">comap</a></code> of <code>(N, f)</code> and <code>φ</code>
+is the induced singular manifold <code>(M, <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a> ∘ φ)</code> on <code>X</code>.</li><li><code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.empty">SingularManifold.empty</a></code>: the empty set <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code>, viewed as a manifold,
+as a singular manifold over any space <code>X</code>.</li><li><code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.toPUnit">SingularManifold.toPUnit</a></code>: a smooth manifold induces a singular manifold on the one-point space.</li><li><code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.prod">SingularManifold.prod</a></code>: the product of a singular <code>I</code>-manifold and a singular <code>J</code>-manifold
+on the one-point space, is a singular <code>I.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.prod">prod</a> J</code>-manifold on the one-point space.</li><li><code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.sum">SingularManifold.sum</a></code>: the disjoint union of two singular <code>I</code>-manifolds
+is a singular <code>I</code>-manifold.</li></ul><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><ul><li>We choose a bundled design for singular manifolds (and also for bordisms): to construct the
+group structure on the set of bordism classes, having that be a type is useful.</li><li>The underlying model with corners is a type parameter, as defining a disjoint union of singular
+manifolds requires their domains to be manifolds over the same model with corners.
+Thus, either we restrict to manifolds modelled over <code>𝓡n</code> (which we prefer not to),
+or the model must be a type parameter.</li><li>Having <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a></code> contain the type <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> as explicit structure field is not ideal,
+as this adds a universe parameter to the structure. However, this is the best solution we found:
+we generally cannot have <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> live in the same universe as <code>X</code> (a common case is <code>X</code> being
+<code><a href="../../.././Init/Prelude.html#PUnit">PUnit</a></code>), and determining the universe of <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> from the universes of <code>E</code> and <code>H</code> would make
+<code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map">SingularManifold.map</a></code> painful to state (as that would require <code><a href="../../.././Init/Prelude.html#ULift">ULift</a></code>ing <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code>).</li></ul><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><ul><li>define bordisms and prove basic constructions (e.g. reflexivity, symmetry, transitivity)
+and operations (e.g. disjoint union, sum with the empty set)</li><li>define the bordism relation and prove it is an equivalence relation</li><li>define the unoriented bordism group (the set of bordism classes) and prove it is an abelian group</li><li>for bordisms on a one-point space, define multiplication and prove the bordism ring structure</li><li>define relative bordism groups (generalising the previous three points)</li><li>prove that relative unoriented bordism groups define an extraordinary homology theory</li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>singular manifold, bordism, bordism group</p></div><div class="decl" id="SingularManifold"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L102-L125">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold"><span class="name">SingularManifold</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Type</a> (max (max (u + 1) u_1) u_3)</div></div><p>A <strong>singular manifold</strong> on a topological space <code>X</code> is a pair <code>(M, f)</code> of a closed
+<code>C^k</code>-manifold <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> modelled on <code>I</code> together with a continuous map <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a> → X</code>.
+If we wish to emphasize the model, we will speak of a singular <code>I</code>-manifold.</p><p>In practice, one commonly wants to take <code>k=∞</code> (as then e.g. the intersection form is a powerful tool
+to compute bordism groups; for the definition, this makes no difference.)</p><p>This is parametrised on the universe <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> lives in; ensure <code>u</code> is the first universe argument.</p><ul class="structure_fields" id="SingularManifold.mk"><li id="SingularManifold.M" class="structure_field"><div class="structure_field_info">M : <a href="../../.././foundational_types.html">Type</a> u</div><div class="structure_field_doc"><p>The manifold <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> of a singular <code>n</code>-manifold <code>(M, f)</code></p></div></li><li id="SingularManifold.topSpaceM" class="structure_field"><div class="structure_field_info">topSpaceM : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div><div class="structure_field_doc"><p>The manifold <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> is a topological space.</p></div></li><li id="SingularManifold.chartedSpace" class="structure_field"><div class="structure_field_info">chartedSpace : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div><div class="structure_field_doc"><p>The manifold <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> is a charted space over <code>H</code>.</p></div></li><li id="SingularManifold.isManifold" class="structure_field"><div class="structure_field_info">isManifold : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">k</span> <span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div><div class="structure_field_doc"><p><code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> is a <code>C^k</code> manifold.</p></div></li><li id="SingularManifold.compactSpace" class="structure_field"><div class="structure_field_info">compactSpace : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div></li><li id="SingularManifold.boundaryless" class="structure_field"><div class="structure_field_info">boundaryless : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/InteriorBoundary.html#BoundarylessManifold">BoundarylessManifold</a> <span class="fn">I</span> <span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div></li><li id="SingularManifold.f" class="structure_field"><div class="structure_field_info">f : <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span> → <span class="fn">X</span></span></div><div class="structure_field_doc"><p>The underlying map <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a> → X</code> of a singular <code>n</code>-manifold <code>(M, f)</code> on <code>X</code></p></div></li><li id="SingularManifold.hf" class="structure_field"><div class="structure_field_info">hf : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn"><span class="fn">self</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span></span></div></li></ul><details id="instances-for-list-SingularManifold" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SingularManifold.instTopologicalSpaceM"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L135-L135">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.instTopologicalSpaceM"><span class="name">SingularManifold</span>.<span class="name">instTopologicalSpaceM</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.instTopologicalSpaceM">SingularManifold.instTopologicalSpaceM</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.topSpaceM">topSpaceM</a></span></li></ul></details></div></div><div class="decl" id="SingularManifold.instChartedSpaceM"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L137-L137">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.instChartedSpaceM"><span class="name">SingularManifold</span>.<span class="name">instChartedSpaceM</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.instChartedSpaceM">SingularManifold.instChartedSpaceM</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.chartedSpace">chartedSpace</a></span></li></ul></details></div></div><div class="decl" id="SingularManifold.instIsManifoldRealM"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L139-L139">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.instIsManifoldRealM"><span class="name">SingularManifold</span>.<span class="name">instIsManifoldRealM</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">k</span> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div></div></div></div><div class="decl" id="SingularManifold.instCompactSpaceM"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L141-L141">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.instCompactSpaceM"><span class="name">SingularManifold</span>.<span class="name">instCompactSpaceM</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div></div></div></div><div class="decl" id="SingularManifold.instBoundarylessManifoldRealM"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L143-L143">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.instBoundarylessManifoldRealM"><span class="name">SingularManifold</span>.<span class="name">instBoundarylessManifoldRealM</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/InteriorBoundary.html#BoundarylessManifold">BoundarylessManifold</a> <span class="fn">I</span> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div></div></div></div><div class="decl" id="SingularManifold.map"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L145-L153">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map"><span class="name">SingularManifold</span>.<span class="name">map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_9}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_10}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">Y</span> <span class="fn">k</span> <span class="fn">I</span></span></div></div><p>A map of topological spaces induces a corresponding map of singular manifolds.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map">map</a></span> <span class="fn">hφ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.mk">{</a> <span class="fn">M</span> := <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span>, <span class="fn">topSpaceM</span> := <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.topSpaceM">topSpaceM</a></span>, <span class="fn">chartedSpace</span> := <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.instChartedSpaceM">SingularManifold.instChartedSpaceM</a>, <span class="fn">isManifold</span> := <span class="fn">⋯</span>,
+    <span class="fn">compactSpace</span> := <span class="fn">⋯</span>, <span class="fn">boundaryless</span> := <span class="fn">⋯</span>, <span class="fn">f</span> := <span class="fn">φ</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span>, <span class="fn">hf</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.mk">}</a></li></ul></details><details id="instances-for-list-SingularManifold.map" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SingularManifold.map_f"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L155-L158">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map_f"><span class="name">SingularManifold</span>.<span class="name">map_f</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map">map</a></span> <span class="fn">hφ</span>)</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">φ</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span></div></div></div></div><div class="decl" id="SingularManifold.map_M"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L160-L163">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map_M"><span class="name">SingularManifold</span>.<span class="name">map_M</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map">map</a></span> <span class="fn">hφ</span>)</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></div></div></div></div><div class="decl" id="SingularManifold.map_comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L165-L168">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map_comp"><span class="name">SingularManifold</span>.<span class="name">map_comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Y</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">Z</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">X</span> → <span class="fn">Y</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ψ</span> : <span class="fn"><span class="fn">Y</span> → <span class="fn">Z</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">ψ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map">map</a></span> <span class="fn">hφ</span>)</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.map">map</a></span> <span class="fn">hψ</span>)</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> (<span class="fn">ψ</span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">φ</span>) <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span></div></div></div></div><div class="decl" id="SingularManifold.refl"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L173-L177">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.refl"><span class="name">SingularManifold</span>.<span class="name">refl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">k</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/InteriorBoundary.html#BoundarylessManifold">BoundarylessManifold</a> <span class="fn">I</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">M</span> <span class="fn">k</span> <span class="fn">I</span></span></div></div><p>If <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> is a closed <code>C^k</code> manifold, it is a singular manifold over itself.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.refl">SingularManifold.refl</a> <span class="fn">M</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.mk">{</a> <span class="fn">M</span> := <span class="fn">M</span>, <span class="fn">topSpaceM</span> := <span class="fn">inst✝⁴</span>, <span class="fn">chartedSpace</span> := <span class="fn">inst✝³</span>, <span class="fn">isManifold</span> := <span class="fn">inst✝²</span>, <span class="fn">compactSpace</span> := <span class="fn">inst✝¹</span>,
+    <span class="fn">boundaryless</span> := <span class="fn">inst✝</span>, <span class="fn">f</span> := <a href="../../.././Init/Prelude.html#id">id</a>, <span class="fn">hf</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.mk">}</a></li></ul></details><details id="instances-for-list-SingularManifold.refl" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SingularManifold.comap"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L179-L185">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.comap"><span class="name">SingularManifold</span>.<span class="name">comap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">k</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/InteriorBoundary.html#BoundarylessManifold">BoundarylessManifold</a> <span class="fn">I</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">M</span> → <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span></div></div><p>If <code>(N, f)</code> is a singular manifold on <code>X</code> and <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> another <code>C^k</code> manifold,
+a continuous map <code>φ : <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a> → N</code> induces a singular manifold structure <code>(M, <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a> ∘ φ)</code> on <code>X</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.comap">comap</a></span> <span class="fn">hφ</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.mk">{</a> <span class="fn">M</span> := <span class="fn">M</span>, <span class="fn">topSpaceM</span> := <span class="fn">inst✝⁴</span>, <span class="fn">chartedSpace</span> := <span class="fn">inst✝³</span>, <span class="fn">isManifold</span> := <span class="fn">inst✝²</span>, <span class="fn">compactSpace</span> := <span class="fn">inst✝¹</span>,
+    <span class="fn">boundaryless</span> := <span class="fn">inst✝</span>, <span class="fn">f</span> := <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">φ</span>, <span class="fn">hf</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.mk">}</a></li></ul></details><details id="instances-for-list-SingularManifold.comap" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SingularManifold.comap_M"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L187-L190">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.comap_M"><span class="name">SingularManifold</span>.<span class="name">comap_M</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">k</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/InteriorBoundary.html#BoundarylessManifold">BoundarylessManifold</a> <span class="fn">I</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">M</span> → <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.comap">comap</a></span> <span class="fn">hφ</span>)</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">M</span></div></div></div></div><div class="decl" id="SingularManifold.comap_f"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L192-L195">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.comap_f"><span class="name">SingularManifold</span>.<span class="name">comap_f</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">k</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/InteriorBoundary.html#BoundarylessManifold">BoundarylessManifold</a> <span class="fn">I</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn"><span class="fn">M</span> → <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">φ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.comap">comap</a></span> <span class="fn">hφ</span>)</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">φ</span></div></div></div></div><div class="decl" id="SingularManifold.empty"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L198-L205">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.empty"><span class="name">SingularManifold</span>.<span class="name">empty</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">k</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span></div></div><p>The canonical singular manifold associated to the empty set (seen as a smooth manifold)</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.empty">SingularManifold.empty</a> <span class="fn">X</span> <span class="fn">M</span> <span class="fn">I</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.mk">{</a> <span class="fn">M</span> := <span class="fn">M</span>, <span class="fn">topSpaceM</span> := <span class="fn">inst✝³</span>, <span class="fn">chartedSpace</span> := <span class="fn">inst✝²</span>, <span class="fn">isManifold</span> := <span class="fn">inst✝¹</span>, <span class="fn">compactSpace</span> := <span class="fn">⋯</span>, <span class="fn">boundaryless</span> := <span class="fn">⋯</span>,
+    <span class="fn">f</span> := <span class="fn">fun (<span class="fn">x</span> : <span class="fn">M</span>) =&gt; <span class="fn"><span class="fn">⋯</span>.<a href="../../.././Init/Prelude.html#False.elim">elim</a></span></span>, <span class="fn">hf</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.mk">}</a></li></ul></details><details id="instances-for-list-SingularManifold.empty" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SingularManifold.empty_M"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L208-L209">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.empty_M"><span class="name">SingularManifold</span>.<span class="name">empty_M</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">k</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.empty">empty</a> <span class="fn">X</span> <span class="fn">M</span> <span class="fn">I</span>)</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">M</span></div></div></div></div><div class="decl" id="SingularManifold.instIsEmptyMEmpty"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L211-L212">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.instIsEmptyMEmpty"><span class="name">SingularManifold</span>.<span class="name">instIsEmptyMEmpty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">k</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.empty">empty</a> <span class="fn">X</span> <span class="fn">M</span> <span class="fn">I</span>)</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span></span></div></div></div></div><div class="decl" id="SingularManifold.toPUnit"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L215-L219">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.toPUnit"><span class="name">SingularManifold</span>.<span class="name">toPUnit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <a href="../../.././foundational_types.html">Type</a> u_6)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">k</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Filter.html#CompactSpace">CompactSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/InteriorBoundary.html#BoundarylessManifold">BoundarylessManifold</a> <span class="fn">I</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <a href="../../.././Init/Prelude.html#PUnit">PUnit.{u_9 + 1}</a> <span class="fn">k</span> <span class="fn">I</span></span></div></div><p>A smooth manifold induces a singular manifold on the one-point space.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-SingularManifold.toPUnit" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SingularManifold.prod"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L223-L242">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.prod"><span class="name">SingularManifold</span>.<span class="name">prod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E'</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H'</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I'</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E'</span> <span class="fn">H'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <a href="../../.././Init/Prelude.html#PUnit">PUnit.{u_10 + 1}</a> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <a href="../../.././Init/Prelude.html#PUnit">PUnit.{u_12 + 1}</a> <span class="fn">k</span> <span class="fn">I'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <a href="../../.././Init/Prelude.html#PUnit">PUnit.{u_13 + 1}</a> <span class="fn">k</span> <span class="fn">(<span class="fn"><span class="fn">I</span>.<a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners.prod">prod</a></span> <span class="fn">I'</span>)</span></span></div></div><p>The product of a singular <code>I</code>- and a singular <code>J</code>-manifold into a one-point space
+is a singular <code>I.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.prod">prod</a> J</code>-manifold.
+This construction is used to prove that the bordism group of <code><a href="../../.././Init/Prelude.html#PUnit">PUnit</a></code> is a graded commutative ring.</p><p>NB. This definition as written makes sense more generally, for <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> X k I</code> whenever <code>X</code>
+is a topological (additive) group. However, this would not be the correct definition if <code>X</code> is not
+<code>(P)Unit</code>: the bordism ring can be defined for every <code>C^k</code> manifold <code>X</code>, but the product of two
+singular manifolds <code>(M, f)</code> and <code>(N, g)</code> is the fibre product of <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></code> and <code>N</code> w.r.t. <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></code> and <code>g</code>,
+with its induced map into <code>X</code>.
+(If <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></code> and <code>g</code> intersect transversely, this fibre product is a smooth manifold, of dimension
+<code>dim <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a> + dim N - dim X</code>. Otherwise, the transversality theorem proves that <code><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></code> (or <code>g</code>) admits an
+arbitrarily small perturbation <code>f'</code> so <code>f'</code> and <code>g</code> are transverse. One can prove that different
+perturbations yield bordant manifolds.)</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-SingularManifold.prod" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SingularManifold.sum"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L246-L250">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.sum"><span class="name">SingularManifold</span>.<span class="name">sum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span></div></div><p>The disjoint union of two singular <code>I</code>-manifolds on <code>X</code> is a singular <code>I</code>-manifold on <code>X</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.sum">sum</a></span> <span class="fn">t</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.mk">{</a> <span class="fn">M</span> := <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span>, <span class="fn">topSpaceM</span> := <a href="../../.././Mathlib/Topology/Constructions/SumProd.html#instTopologicalSpaceSum">instTopologicalSpaceSum</a>, <span class="fn">chartedSpace</span> := <a href="../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace.sum">ChartedSpace.sum</a>, <span class="fn">isManifold</span> := <span class="fn">⋯</span>,
+    <span class="fn">compactSpace</span> := <span class="fn">⋯</span>, <span class="fn">boundaryless</span> := <span class="fn">⋯</span>, <span class="fn">f</span> := <span class="fn"><a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span> <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span></span>, <span class="fn">hf</span> := <span class="fn">⋯</span> <a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.mk">}</a></li></ul></details><details id="instances-for-list-SingularManifold.sum" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="SingularManifold.sum_M"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L252-L253">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.sum_M"><span class="name">SingularManifold</span>.<span class="name">sum_M</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.sum">sum</a></span> <span class="fn">t</span>)</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> (<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.M">M</a></span>)</div></div></div></div><div class="decl" id="SingularManifold.sum_f"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/Bordism.lean#L255-L256">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.sum_f"><span class="name">SingularManifold</span>.<span class="name">sum_f</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">X</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <span class="fn"><a href="../../.././Mathlib/Order/TypeTags.html#WithTop">WithTop</a> <a href="../../.././Mathlib/Data/ENat/Defs.html#ENat">ℕ∞</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <a href="../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn"><a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold">SingularManifold</a> <span class="fn">X</span> <span class="fn">k</span> <span class="fn">I</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.sum">sum</a></span> <span class="fn">t</span>)</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> <span class="fn"><span class="fn">s</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span> <span class="fn"><span class="fn">t</span>.<a href="../../.././Mathlib/Geometry/Manifold/Bordism.html#SingularManifold.f">f</a></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

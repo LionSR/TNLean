@@ -1,0 +1,168 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.LiftingProperties.Limits</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.LiftingProperties.Limits";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">LiftingProperties</span>.<span class="name">Limits</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/LiftingProperties/Limits.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Products.html">Mathlib.CategoryTheory.Limits.Shapes.Products</a></li><li><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html">Mathlib.CategoryTheory.Limits.Shapes.Pullback.IsPullback.Defs</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.LiftingProperties.Limits" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.hasLiftingProperty"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">hasLiftingProperty</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPullback.hasLiftingProperty"><span class="name">CategoryTheory</span>.<span class="name">IsPullback</span>.<span class="name">hasLiftingProperty</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.instHasLiftingPropertyInl"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertyInl</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.instHasLiftingPropertyInr"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertyInr</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.instHasLiftingPropertySnd"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertySnd</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.instHasLiftingPropertyFst"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertyFst</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.instHasLiftingPropertyMap"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertyMap</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.instHasLiftingPropertyMap_1"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertyMap_1</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Lifting-properties-and-co-limits" class="markdown-heading">Lifting properties and (co)limits <a class="hover-link" href="#Lifting-properties-and-co-limits">#</a></h1><p>In this file, we show some consequences of lifting properties in the presence of
+certain (co)limits.</p></div><div class="decl" id="CategoryTheory.IsPushout.hasLiftingProperty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/LiftingProperties/Limits.lean#L30-L36">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/LiftingProperties/Limits.html#CategoryTheory.IsPushout.hasLiftingProperty"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">hasLiftingProperty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y </span><span class="fn">Z </span><span class="fn">W</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">Z</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">s</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">t</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z' </span><span class="fn">W'</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g'</span> : <span class="fn">Z'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W'</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">f</span> <span class="fn">g'</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">g</span> <span class="fn">g'</span></span></div></div></div></div><div class="decl" id="CategoryTheory.IsPullback.hasLiftingProperty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/LiftingProperties/Limits.lean#L38-L45">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/LiftingProperties/Limits.html#CategoryTheory.IsPullback.hasLiftingProperty"><span class="name">CategoryTheory</span>.<span class="name">IsPullback</span>.<span class="name">hasLiftingProperty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y </span><span class="fn">Z </span><span class="fn">W</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">Z</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">s</span> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">t</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X' </span><span class="fn">Y'</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f'</span> : <span class="fn">X'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y'</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">f'</span> <span class="fn">g</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">f'</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="CategoryTheory.instHasLiftingPropertyInl"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/LiftingProperties/Limits.lean#L47-L49">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/LiftingProperties/Limits.html#CategoryTheory.instHasLiftingPropertyInl"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertyInl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPushout">Limits.HasPushout</a> <span class="fn">s</span> <span class="fn">f</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T₁ </span><span class="fn">T₂</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">T₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">T₂</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">f</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.pushout.inl">Limits.pushout.inl</a> <span class="fn">s</span> <span class="fn">f</span>)</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="CategoryTheory.instHasLiftingPropertyInr"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/LiftingProperties/Limits.lean#L51-L53">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/LiftingProperties/Limits.html#CategoryTheory.instHasLiftingPropertyInr"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertyInr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPushout">Limits.HasPushout</a> <span class="fn">s</span> <span class="fn">f</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T₁ </span><span class="fn">T₂</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">T₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">T₂</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">s</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.pushout.inr">Limits.pushout.inr</a> <span class="fn">s</span> <span class="fn">f</span>)</span> <span class="fn">p</span></span></div></div></div></div><div class="decl" id="CategoryTheory.instHasLiftingPropertySnd"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/LiftingProperties/Limits.lean#L55-L57">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/LiftingProperties/Limits.html#CategoryTheory.instHasLiftingPropertySnd"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertySnd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y </span><span class="fn">Z </span><span class="fn">W</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">Z</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullback">Limits.HasPullback</a> <span class="fn">g</span> <span class="fn">t</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T₁ </span><span class="fn">T₂</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">T₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">T₂</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">p</span> <span class="fn">g</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.pullback.snd">Limits.pullback.snd</a> <span class="fn">g</span> <span class="fn">t</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.instHasLiftingPropertyFst"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/LiftingProperties/Limits.lean#L59-L61">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/LiftingProperties/Limits.html#CategoryTheory.instHasLiftingPropertyFst"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertyFst</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y </span><span class="fn">Z </span><span class="fn">W</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">Z</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullback">Limits.HasPullback</a> <span class="fn">g</span> <span class="fn">t</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T₁ </span><span class="fn">T₂</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">T₁</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">T₂</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">p</span> <span class="fn">t</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.pullback.fst">Limits.pullback.fst</a> <span class="fn">g</span> <span class="fn">t</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.instHasLiftingPropertyMap"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/LiftingProperties/Limits.lean#L64-L72">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/LiftingProperties/Limits.html#CategoryTheory.instHasLiftingPropertyMap"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertyMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><span class="fn">J</span> → <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Products.html#CategoryTheory.Limits.HasProduct">Limits.HasProduct</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Products.html#CategoryTheory.Limits.HasProduct">Limits.HasProduct</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">(<span class="fn">j</span> : <span class="fn">J</span>) → <span class="fn"><span class="fn">A</span> <span class="fn">j</span></span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn">B</span> <span class="fn">j</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">j</span> : <span class="fn">J</span>), <span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">p</span> <span class="fn">(<span class="fn">f</span> <span class="fn">j</span>)</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">p</span> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Products.html#CategoryTheory.Limits.Pi.map">Limits.Pi.map</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.instHasLiftingPropertyMap_1"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/LiftingProperties/Limits.lean#L75-L83">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/LiftingProperties/Limits.html#CategoryTheory.instHasLiftingPropertyMap_1"><span class="name">CategoryTheory</span>.<span class="name">instHasLiftingPropertyMap_1</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v_1, u_1}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">J</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><span class="fn">J</span> → <span class="fn">C</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Products.html#CategoryTheory.Limits.HasCoproduct">Limits.HasCoproduct</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Products.html#CategoryTheory.Limits.HasCoproduct">Limits.HasCoproduct</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">(<span class="fn">j</span> : <span class="fn">J</span>) → <span class="fn"><span class="fn">A</span> <span class="fn">j</span></span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn">B</span> <span class="fn">j</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">j</span> : <span class="fn">J</span>), <span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">(<span class="fn">f</span> <span class="fn">j</span>)</span> <span class="fn">p</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/LiftingProperties/Basic.html#CategoryTheory.HasLiftingProperty">HasLiftingProperty</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Products.html#CategoryTheory.Limits.Sigma.map">Limits.Sigma.map</a> <span class="fn">f</span>)</span> <span class="fn">p</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

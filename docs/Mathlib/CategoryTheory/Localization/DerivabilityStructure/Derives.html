@@ -1,0 +1,182 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.Localization.DerivabilityStructure.Derives</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.Localization.DerivabilityStructure.Derives";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">Localization</span>.<span class="name">DerivabilityStructure</span>.<span class="name">Derives</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/PointwiseRightDerived.html">Mathlib.CategoryTheory.Localization.DerivabilityStructure.PointwiseRightDerived</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.Localization.DerivabilityStructure.Derives" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LocalizerMorphism.Derives"><span class="name">CategoryTheory</span>.<span class="name">LocalizerMorphism</span>.<span class="name">Derives</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LocalizerMorphism.Derives.hasPointwiseRightDerivedFunctor"><span class="name">CategoryTheory</span>.<span class="name">LocalizerMorphism</span>.<span class="name">Derives</span>.<span class="name">hasPointwiseRightDerivedFunctor</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LocalizerMorphism.Derives.isIso"><span class="name">CategoryTheory</span>.<span class="name">LocalizerMorphism</span>.<span class="name">Derives</span>.<span class="name">isIso</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LocalizerMorphism.Derives.isRightDerivedFunctor_of_isIso"><span class="name">CategoryTheory</span>.<span class="name">LocalizerMorphism</span>.<span class="name">Derives</span>.<span class="name">isRightDerivedFunctor_of_isIso</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.LocalizerMorphism.Derives.isRightDerivedFunctor_iff_isIso"><span class="name">CategoryTheory</span>.<span class="name">LocalizerMorphism</span>.<span class="name">Derives</span>.<span class="name">isRightDerivedFunctor_iff_isIso</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Deriving-functors-using-a-derivability-structure" class="markdown-heading">Deriving functors using a derivability structure <a class="hover-link" href="#Deriving-functors-using-a-derivability-structure">#</a></h1><p>Let <code>Φ : LocalizerMorphism W₁ W₂</code> be a localizer morphism between classes
+of morphisms on categories <code>C₁</code> and <code>C₂</code>. Let <code>F : C₂ ⥤ H</code>.
+When <code>Φ</code> is a left or right derivability structure, it allows to derive
+the functor <code>F</code> (with respect to <code>W₂</code>) when <code>Φ.functor ⋙ F : C₁ ⥤ H</code>
+inverts <code>W₁</code> (this is the most favorable case when we can apply the lemma
+<code>hasPointwiseRightDerivedFunctor_iff_of_isRightDerivabilityStructure</code>).
+We define <code>Φ.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives">Derives</a> F</code> as an abbreviation for <code>W₁.IsInvertedBy (Φ.functor ⋙ F)</code>.</p><p>When <code>h : Φ.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives">Derives</a> F</code> holds and <code>Φ</code> is a right derivability structure,
+we show that <code>F</code> has a right derived functor with respect to <code>W₂</code>.
+Under this assumption, if <code>L₂ : C₂ ⥤ D₂</code> is a localization functor
+for <code>W₂</code>, then a functor <code>RF : D₂ ⥤ H</code> equipped with a natural
+transformation <code>α : F ⟶ L₂ ⋙ RF</code> is the right derived functor of <code>F</code> iff
+for any <code>X₁ : C₁</code>, the map <code>α.app (Φ.functor.obj X₁)</code> is an isomorphism.</p></div><div class="decl" id="CategoryTheory.LocalizerMorphism.Derives"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.lean#L47-L52">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives"><span class="name">CategoryTheory</span>.<span class="name">LocalizerMorphism</span>.<span class="name">Derives</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">Φ</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Localization/LocalizerMorphism.html#CategoryTheory.LocalizerMorphism">LocalizerMorphism</a> <span class="fn">W₁</span> <span class="fn">W₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././foundational_types.html">Prop</a></div></div><p>Given a localizer morphism <code>Φ : LocalizerMorphism W₁ W₂</code> between
+morphism properties on <code>C₁</code> and <code>C₂</code>, and a functor <code>C₂ ⥤ H</code>, this
+is the property that <code>W₁</code> is inverted by <code>Φ.functor ⋙ F</code>.
+In case <code>Φ</code> is a (left/right) derivability structure, this allows
+the construction of a derived functor for <code>F</code> relatively to <code>W₂</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives">Derives</a></span> <span class="fn">F</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">W₁</span>.<a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/IsInvertedBy.html#CategoryTheory.MorphismProperty.IsInvertedBy">IsInvertedBy</a></span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/LocalizerMorphism.html#CategoryTheory.LocalizerMorphism.functor">functor</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span>)</span></span></li></ul></details><details id="instances-for-list-CategoryTheory.LocalizerMorphism.Derives" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.LocalizerMorphism.Derives.hasPointwiseRightDerivedFunctor"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.lean#L60-L62">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives.hasPointwiseRightDerivedFunctor"><span class="name">CategoryTheory</span>.<span class="name">LocalizerMorphism</span>.<span class="name">Derives</span>.<span class="name">hasPointwiseRightDerivedFunctor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Φ</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Localization/LocalizerMorphism.html#CategoryTheory.LocalizerMorphism">LocalizerMorphism</a> <span class="fn">W₁</span> <span class="fn">W₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives">Derives</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Basic.html#CategoryTheory.LocalizerMorphism.IsRightDerivabilityStructure">IsRightDerivabilityStructure</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">F</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Derived/PointwiseRightDerived.html#CategoryTheory.Functor.HasPointwiseRightDerivedFunctor">HasPointwiseRightDerivedFunctor</a></span> <span class="fn">W₂</span></span></div></div></div></div><div class="decl" id="CategoryTheory.LocalizerMorphism.Derives.isIso"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.lean#L68-L75">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives.isIso"><span class="name">CategoryTheory</span>.<span class="name">LocalizerMorphism</span>.<span class="name">Derives</span>.<span class="name">isIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Φ</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Localization/LocalizerMorphism.html#CategoryTheory.LocalizerMorphism">LocalizerMorphism</a> <span class="fn">W₁</span> <span class="fn">W₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives">Derives</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Basic.html#CategoryTheory.LocalizerMorphism.IsRightDerivabilityStructure">IsRightDerivabilityStructure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">RF</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">RF</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₁</span> : <span class="fn">C₁</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">RF</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Derived/RightDerived.html#CategoryTheory.Functor.IsRightDerivedFunctor">IsRightDerivedFunctor</a></span> <span class="fn">α</span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">(<span class="fn"><span class="fn">α</span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/LocalizerMorphism.html#CategoryTheory.LocalizerMorphism.functor">functor</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.LocalizerMorphism.Derives.isRightDerivedFunctor_of_isIso"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.lean#L78-L95">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives.isRightDerivedFunctor_of_isIso"><span class="name">CategoryTheory</span>.<span class="name">LocalizerMorphism</span>.<span class="name">Derives</span>.<span class="name">isRightDerivedFunctor_of_isIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Φ</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Localization/LocalizerMorphism.html#CategoryTheory.LocalizerMorphism">LocalizerMorphism</a> <span class="fn">W₁</span> <span class="fn">W₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives">Derives</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Basic.html#CategoryTheory.LocalizerMorphism.IsRightDerivabilityStructure">IsRightDerivabilityStructure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">RF</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">RF</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hα</span> : <span class="fn">∀ (<span class="fn">X₁</span> : <span class="fn">C₁</span>), <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">(<span class="fn"><span class="fn">α</span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/LocalizerMorphism.html#CategoryTheory.LocalizerMorphism.functor">functor</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">RF</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Derived/RightDerived.html#CategoryTheory.Functor.IsRightDerivedFunctor">IsRightDerivedFunctor</a></span> <span class="fn">α</span> <span class="fn">W₂</span></span></div></div></div></div><div class="decl" id="CategoryTheory.LocalizerMorphism.Derives.isRightDerivedFunctor_iff_isIso"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.lean#L97-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives.isRightDerivedFunctor_iff_isIso"><span class="name">CategoryTheory</span>.<span class="name">LocalizerMorphism</span>.<span class="name">Derives</span>.<span class="name">isRightDerivedFunctor_iff_isIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D₂</span> : <a href="../../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">D₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₁</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₁</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/MorphismProperty/Basic.html#CategoryTheory.MorphismProperty">MorphismProperty</a> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Φ</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Localization/LocalizerMorphism.html#CategoryTheory.LocalizerMorphism">LocalizerMorphism</a> <span class="fn">W₁</span> <span class="fn">W₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Derives.html#CategoryTheory.LocalizerMorphism.Derives">Derives</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/DerivabilityStructure/Basic.html#CategoryTheory.LocalizerMorphism.IsRightDerivabilityStructure">IsRightDerivabilityStructure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L₂</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/Predicate.html#CategoryTheory.Functor.IsLocalization">IsLocalization</a></span> <span class="fn">W₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">RF</span> : <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D₂</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn">F</span> <a href="../../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn">L₂</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">RF</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">RF</span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Derived/RightDerived.html#CategoryTheory.Functor.IsRightDerivedFunctor">IsRightDerivedFunctor</a></span> <span class="fn">α</span> <span class="fn">W₂</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">X₁</span> : <span class="fn">C₁</span>), <span class="fn"><a href="../../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">(<span class="fn"><span class="fn">α</span>.<a href="../../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">Φ</span>.<a href="../../../.././Mathlib/CategoryTheory/Localization/LocalizerMorphism.html#CategoryTheory.LocalizerMorphism.functor">functor</a></span>.<a href="../../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₁</span>)</span>)</span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

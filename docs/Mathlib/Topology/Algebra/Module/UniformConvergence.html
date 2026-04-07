@@ -1,0 +1,126 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Topology.Algebra.Module.UniformConvergence</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.Topology.Algebra.Module.UniformConvergence";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Topology</span>.<span class="name">Algebra</span>.<span class="name">Module</span>.<span class="name">UniformConvergence</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Module/UniformConvergence.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Analysis/LocallyConvex/Bounded.html">Mathlib.Analysis.LocallyConvex.Bounded</a></li><li><a href="../../../.././Mathlib/Topology/Algebra/FilterBasis.html">Mathlib.Topology.Algebra.FilterBasis</a></li><li><a href="../../../.././Mathlib/Topology/Algebra/UniformConvergence.html">Mathlib.Topology.Algebra.UniformConvergence</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Topology.Algebra.Module.UniformConvergence" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#UniformFun.continuousSMul_induced_of_range_bounded"><span class="name">UniformFun</span>.<span class="name">continuousSMul_induced_of_range_bounded</span></a></div><div class="nav_link"><a class="break_within" href="#UniformOnFun.continuousSMul_induced_of_image_bounded"><span class="name">UniformOnFun</span>.<span class="name">continuousSMul_induced_of_image_bounded</span></a></div><div class="nav_link"><a class="break_within" href="#UniformOnFun.continuousSMul_submodule_of_image_bounded"><span class="name">UniformOnFun</span>.<span class="name">continuousSMul_submodule_of_image_bounded</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Algebraic-facts-about-the-topology-of-uniform-convergence" class="markdown-heading">Algebraic facts about the topology of uniform convergence <a class="hover-link" href="#Algebraic-facts-about-the-topology-of-uniform-convergence">#</a></h1><p>This file contains algebraic compatibility results about the uniform structure of uniform
+convergence / <code>𝔖</code>-convergence. They will mostly be useful for defining strong topologies on the
+space of continuous linear maps between two topological vector spaces.</p><h2 id="Main-statements" class="markdown-heading">Main statements <a class="hover-link" href="#Main-statements">#</a></h2><ul><li><code><a href="../../../.././Mathlib/Topology/Algebra/Module/UniformConvergence.html#UniformOnFun.continuousSMul_induced_of_image_bounded">UniformOnFun.continuousSMul_induced_of_image_bounded</a></code> : let <code>E</code> be a TVS, <code>𝔖 : <a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (Set α)</code> and
+<code>H</code> a submodule of <code>α →ᵤ[𝔖] E</code>. If the image of any <code>S ∈ 𝔖</code> by any <code>u ∈ H</code> is bounded (in the
+sense of <code><a href="../../../.././Mathlib/Analysis/LocallyConvex/Bounded.html#Bornology.IsVonNBounded">Bornology.IsVonNBounded</a></code>), then <code>H</code>, equipped with the topology induced from
+<code>α →ᵤ[𝔖] E</code>, is a TVS.</li></ul><h2 id="Implementation-notes" class="markdown-heading">Implementation notes <a class="hover-link" href="#Implementation-notes">#</a></h2><p>Like in <code><a href="../../../.././Mathlib/Topology/UniformSpace/UniformConvergenceTopology.html">Mathlib/Topology/UniformSpace/UniformConvergenceTopology.lean</a></code>, we use the type aliases
+<code><a href="../../../.././Mathlib/Topology/UniformSpace/UniformConvergenceTopology.html#UniformFun">UniformFun</a></code> (denoted <code>α →ᵤ β</code>) and <code><a href="../../../.././Mathlib/Topology/UniformSpace/UniformConvergenceTopology.html#UniformOnFun">UniformOnFun</a></code> (denoted <code>α →ᵤ[𝔖] β</code>) for functions from <code>α</code>
+to <code>β</code> endowed with the structures of uniform convergence and <code>𝔖</code>-convergence.</p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>[N. Bourbaki, <em>General Topology, Chapter X</em>][bourbaki1966]</li><li>[N. Bourbaki, <em>Topological Vector Spaces</em>][bourbaki1987]</li></ul><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>uniform convergence, strong dual</p></div><div class="decl" id="UniformFun.continuousSMul_induced_of_range_bounded"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Module/UniformConvergence.lean#L55-L87">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Module/UniformConvergence.html#UniformFun.continuousSMul_induced_of_range_bounded"><span class="name">UniformFun</span>.<span class="name">continuousSMul_induced_of_range_bounded</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hom</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">hom</span> <span class="fn">H</span> <span class="fn">(<span class="fn">α</span> → <span class="fn">E</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMapClass">LinearMapClass</a> <span class="fn">hom</span> <span class="fn">𝕜</span> <span class="fn">H</span> <span class="fn">(<span class="fn">α</span> → <span class="fn">E</span>)</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">hom</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsInducing">Topology.IsInducing</a> (<span class="fn">⇑<a href="../../../.././Mathlib/Topology/UniformSpace/UniformConvergenceTopology.html#UniformFun.ofFun">ofFun</a></span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">φ</span></span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">u</span> : <span class="fn">H</span>), <span class="fn"><a href="../../../.././Mathlib/Analysis/LocallyConvex/Bounded.html#Bornology.IsVonNBounded">Bornology.IsVonNBounded</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">(<span class="fn">φ</span> <span class="fn">u</span>)</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜</span> <span class="fn">H</span></span></div></div><p>Let <code>E</code> be a topological vector space over a normed field <code>𝕜</code>, let <code>α</code> be any type.
+Let <code>H</code> be a submodule of <code>α →ᵤ E</code> such that the range of each <code>f ∈ H</code> is von Neumann bounded.
+Then <code>H</code> is a topological vector space over <code>𝕜</code>,
+i.e., the pointwise scalar multiplication is continuous in both variables.</p><p>For convenience we require that <code>H</code> is a vector space over <code>𝕜</code>
+with a topology induced by <code><a href="../../../.././Mathlib/Topology/UniformSpace/UniformConvergenceTopology.html#UniformFun.ofFun">UniformFun.ofFun</a> ∘ φ</code>, where <code>φ : H →ₗ[𝕜] (α → E)</code>.</p></div></div><div class="decl" id="UniformOnFun.continuousSMul_induced_of_image_bounded"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Module/UniformConvergence.lean#L89-L110">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Module/UniformConvergence.html#UniformOnFun.continuousSMul_induced_of_image_bounded"><span class="name">UniformOnFun</span>.<span class="name">continuousSMul_induced_of_image_bounded</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <a href="../../../.././foundational_types.html">Type</a> u_4)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">hom</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔖</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">hom</span> <span class="fn">H</span> <span class="fn">(<span class="fn">α</span> → <span class="fn">E</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMapClass">LinearMapClass</a> <span class="fn">hom</span> <span class="fn">𝕜</span> <span class="fn">H</span> <span class="fn">(<span class="fn">α</span> → <span class="fn">E</span>)</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">hom</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hφ</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Induced.html#Topology.IsInducing">Topology.IsInducing</a> (<span class="fn">⇑<span class="fn">(<a href="../../../.././Mathlib/Topology/UniformSpace/UniformConvergenceTopology.html#UniformOnFun.ofFun">ofFun</a> <span class="fn">𝔖</span>)</span></span> <a href="../../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">⇑<span class="fn">φ</span></span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ (<span class="fn">u</span> : <span class="fn">H</span>), <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">𝔖</span>, <span class="fn"><a href="../../../.././Mathlib/Analysis/LocallyConvex/Bounded.html#Bornology.IsVonNBounded">Bornology.IsVonNBounded</a> <span class="fn">𝕜</span> (<span class="fn"><span class="fn">φ</span> <span class="fn">u</span></span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜</span> <span class="fn">H</span></span></div></div><p>Let <code>E</code> be a TVS, <code>𝔖 : <a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (Set α)</code> and <code>H</code> a submodule of <code>α →ᵤ[𝔖] E</code>. If the image of any
+<code>S ∈ 𝔖</code> by any <code>u ∈ H</code> is bounded (in the sense of <code><a href="../../../.././Mathlib/Analysis/LocallyConvex/Bounded.html#Bornology.IsVonNBounded">Bornology.IsVonNBounded</a></code>), then <code>H</code>,
+equipped with the topology of <code>𝔖</code>-convergence, is a TVS.</p><p>For convenience, we don't literally ask for <code>H : <a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> (α →ᵤ[𝔖] E)</code>. Instead, we prove the
+result for any vector space <code>H</code> equipped with a linear inducing to <code>α →ᵤ[𝔖] E</code>, which is often
+easier to use. We also state the <code><a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a></code> version as
+<code><a href="../../../.././Mathlib/Topology/Algebra/Module/UniformConvergence.html#UniformOnFun.continuousSMul_submodule_of_image_bounded">UniformOnFun.continuousSMul_submodule_of_image_bounded</a></code>.</p></div></div><div class="decl" id="UniformOnFun.continuousSMul_submodule_of_image_bounded"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Topology/Algebra/Module/UniformConvergence.lean#L112-L121">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/Topology/Algebra/Module/UniformConvergence.html#UniformOnFun.continuousSMul_submodule_of_image_bounded"><span class="name">UniformOnFun</span>.<span class="name">continuousSMul_submodule_of_image_bounded</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕜</span> : <a href="../../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_3)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/UniformSpace/Defs.html#UniformSpace">UniformSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/IsUniformGroup/Defs.html#IsUniformAddGroup">IsUniformAddGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔖</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">(<a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">𝕜</span> <span class="fn">(<a href="../../../.././Mathlib/Topology/UniformSpace/UniformConvergenceTopology.html#UniformOnFun">UniformOnFun</a> <span class="fn">α</span> <span class="fn">E</span> <span class="fn">𝔖</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">u</span> ∈ <span class="fn">H</span>, <span class="fn">∀ <span class="fn">s</span> ∈ <span class="fn">𝔖</span>, <span class="fn"><a href="../../../.././Mathlib/Analysis/LocallyConvex/Bounded.html#Bornology.IsVonNBounded">Bornology.IsVonNBounded</a> <span class="fn">𝕜</span> (<span class="fn">u</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕜</span> <span class="fn">↥<span class="fn">H</span></span></span></div></div><p>Let <code>E</code> be a TVS, <code>𝔖 : <a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (Set α)</code> and <code>H</code> a submodule of <code>α →ᵤ[𝔖] E</code>. If the image of any
+<code>S ∈ 𝔖</code> by any <code>u ∈ H</code> is bounded (in the sense of <code><a href="../../../.././Mathlib/Analysis/LocallyConvex/Bounded.html#Bornology.IsVonNBounded">Bornology.IsVonNBounded</a></code>), then <code>H</code>,
+equipped with the topology of <code>𝔖</code>-convergence, is a TVS.</p><p>If you have a hard time using this lemma, try the one above instead.</p></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

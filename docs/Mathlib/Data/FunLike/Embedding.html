@@ -1,0 +1,149 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Data.FunLike.Embedding</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Data.FunLike.Embedding";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Data</span>.<span class="name">FunLike</span>.<span class="name">Embedding</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Embedding.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Data/FunLike/Basic.html">Mathlib.Data.FunLike.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Data.FunLike.Embedding" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#EmbeddingLike"><span class="name">EmbeddingLike</span></a></div><div class="nav_link"><a class="break_within" href="#EmbeddingLike.injective"><span class="name">EmbeddingLike</span>.<span class="name">injective</span></a></div><div class="nav_link"><a class="break_within" href="#EmbeddingLike.apply_eq_iff_eq"><span class="name">EmbeddingLike</span>.<span class="name">apply_eq_iff_eq</span></a></div><div class="nav_link"><a class="break_within" href="#EmbeddingLike.comp_injective"><span class="name">EmbeddingLike</span>.<span class="name">comp_injective</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Typeclass-for-a-type-F-with-an-injective-map-to-A-↪-B" class="markdown-heading">Typeclass for a type <code>F</code> with an injective map to <code>A ↪ B</code> <a class="hover-link" href="#Typeclass-for-a-type-F-with-an-injective-map-to-A-↪-B">#</a></h1><p>This typeclass is primarily for use by embeddings such as <code><a href="../../.././Mathlib/Order/RelIso/Basic.html#RelEmbedding">RelEmbedding</a></code>.</p><h2 id="Basic-usage-of-EmbeddingLike" class="markdown-heading">Basic usage of <code><a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a></code> <a class="hover-link" href="#Basic-usage-of-EmbeddingLike">#</a></h2><p>A typical type of embeddings should be declared as:</p><pre><code>structure MyEmbedding (A B : Type*) [MyClass A] [MyClass B] where
+  (toFun : A → B)
+  (injective' : <a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> toFun)
+  (map_op' : ∀ (x y : A), toFun (MyClass.op x y) = MyClass.op (toFun x) (toFun y))
+
+namespace MyEmbedding
+
+variable (A B : Type*) [MyClass A] [MyClass B]
+
+instance : <a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> (MyEmbedding A B) A B where
+  coe := MyEmbedding.toFun
+  coe_injective' := fun f g h ↦ by cases f; cases g; <a href="../../.././Init/Prelude.html#congr">congr</a>
+
+-- This instance is <a href="../../.././Init/Control/Basic.html#optional">optional</a> if you follow the &quot;Embedding class&quot; design below:
+instance : <a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a> (MyEmbedding A B) A B where
+  <a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.injective'">injective'</a> := MyEmbedding.<a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.injective'">injective'</a>
+
+@[ext] theorem ext {f g : MyEmbedding A B} (h : ∀ x, f x = g x) : f = g := <a href="../../.././Mathlib/Data/FunLike/Basic.html#DFunLike.ext">DFunLike.ext</a> f g h
+
+/-- Copy of a `MyEmbedding` with a new `toFun` equal to the old one. Useful to fix definitional
+equalities. -/
+protected def copy (f : MyEmbedding A B) (f' : A → B) (h : f' = ⇑f) : MyEmbedding A B :=
+  { toFun := f'
+    <a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.injective'">injective'</a> := h.<a href="../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a> ▸ f.<a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.injective'">injective'</a>
+    map_op' := h.<a href="../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a> ▸ f.map_op' }
+
+end MyEmbedding
+</code></pre><p>This file will then provide a <code><a href="../../.././Init/Coe.html#CoeFun">CoeFun</a></code> instance and various
+extensionality and simp lemmas.</p><h2 id="Embedding-classes-extending-EmbeddingLike" class="markdown-heading">Embedding classes extending <code><a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a></code> <a class="hover-link" href="#Embedding-classes-extending-EmbeddingLike">#</a></h2><p>The <code><a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a></code> design provides further benefits if you put in a bit more work.
+The first step is to extend <code><a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a></code> to create a class of those types satisfying
+the axioms of your new type of morphisms.
+Continuing the example above:</p><pre><code>/-- `MyEmbeddingClass F A B` states that `F` is a type of `MyClass.op`-preserving embeddings.
+You should extend this class when you extend `MyEmbedding`. -/
+class MyEmbeddingClass (F : Type*) (A B : <a href="../../.././Init/Prelude.html#outParam">outParam</a> Type*) [MyClass A] [MyClass B]
+    [FunLike F A B]
+    extends <a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a> F A B where
+  map_op : ∀ (f : F) (x y : A), f (MyClass.op x y) = MyClass.op (f x) (f y)
+
+@[simp]
+<a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> map_op {F A B : Type*} [MyClass A] [MyClass B] [FunLike F A B] [MyEmbeddingClass F A B]
+    (f : F) (x y : A) :
+    f (MyClass.op x y) = MyClass.op (f x) (f y) :=
+  MyEmbeddingClass.map_op _ _ _
+
+namespace MyEmbedding
+
+variable {A B : Type*} [MyClass A] [MyClass B]
+
+-- You can replace `MyEmbedding.EmbeddingLike` with the below instance:
+instance : MyEmbeddingClass (MyEmbedding A B) A B where
+  <a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.injective'">injective'</a> := MyEmbedding.<a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.injective'">injective'</a>
+  map_op := MyEmbedding.map_op'
+
+end MyEmbedding
+</code></pre><p>The second step is to add instances of your new <code>MyEmbeddingClass</code> for all types extending
+<code>MyEmbedding</code>.
+Typically, you can just declare a new class analogous to <code>MyEmbeddingClass</code>:</p><pre><code>structure CoolerEmbedding (A B : Type*) [CoolClass A] [CoolClass B] extends MyEmbedding A B where
+  (map_cool' : toFun CoolClass.cool = CoolClass.cool)
+
+class CoolerEmbeddingClass (F : Type*) (A B : <a href="../../.././Init/Prelude.html#outParam">outParam</a> Type*) [CoolClass A] [CoolClass B]
+    [FunLike F A B]
+    extends MyEmbeddingClass F A B where
+  (map_cool : ∀ (f : F), f CoolClass.cool = CoolClass.cool)
+
+@[simp]
+<a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> map_cool {F A B : Type*} [CoolClass A] [CoolClass B]
+    [FunLike F A B] [CoolerEmbeddingClass F A B] (f : F) :
+    f CoolClass.cool = CoolClass.cool :=
+  CoolerEmbeddingClass.map_cool _
+
+variable {A B : Type*} [CoolClass A] [CoolClass B]
+
+instance : <a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> (CoolerEmbedding A B) A B where
+  coe f := f.toFun
+  coe_injective' f g h := by cases f; cases g; congr; apply DFunLike.coe_injective; <a href="../../.././Init/Prelude.html#congr">congr</a>
+
+instance : CoolerEmbeddingClass (CoolerEmbedding A B) A B where
+  <a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.injective'">injective'</a> f := f.<a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.injective'">injective'</a>
+  map_op f := f.map_op'
+  map_cool f := f.map_cool'
+
+-- [Insert `ext` and `copy` here]
+</code></pre><p>Then any declaration taking a specific type of morphisms as parameter can instead take the
+class you just defined:</p><pre><code>-- Compare with: <a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> do_something (f : MyEmbedding A B) : sorry := sorry
+<a href="../../.././Mathlib/Tactic/Lemma.html#lemma">lemma</a> do_something {F : Type*} [FunLike F A B] [MyEmbeddingClass F A B] (f : F) : sorry := sorry
+</code></pre><p>This means anything set up for <code>MyEmbedding</code>s will automatically work for <code>CoolerEmbeddingClass</code>es,
+and defining <code>CoolerEmbeddingClass</code> only takes a constant amount of effort,
+instead of linearly increasing the work per <code>MyEmbedding</code>-related declaration.</p></div><div class="decl" id="EmbeddingLike"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Embedding.lean#L132-L137">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike"><span class="name">EmbeddingLike</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <span class="fn"><a href="../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../.././foundational_types.html">(Sort</a> u_2)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">β</span> : <span class="fn"><a href="../../.././Init/Prelude.html#outParam">outParam</a> <a href="../../.././foundational_types.html">(Sort</a> u_3)</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>The class <code><a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a> F α β</code> expresses that terms of type <code>F</code> have an
+injective coercion to injective functions <code>α ↪ β</code>.</p><ul class="structure_fields" id="EmbeddingLike.mk"><li id="EmbeddingLike.injective'" class="structure_field"><div class="structure_field_info">injective'<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+ : <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">f</span></span></span></div><div class="structure_field_doc"><p>The coercion to functions must produce injective functions.</p></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-EmbeddingLike" class="instances-list"></ul></details></div></div><div class="decl" id="EmbeddingLike.injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Embedding.lean#L143-L144">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.injective"><span class="name">EmbeddingLike</span>.<span class="name">injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">⇑<span class="fn">f</span></span></span></div></div></div></div><div class="decl" id="EmbeddingLike.apply_eq_iff_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Embedding.lean#L146-L148">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.apply_eq_iff_eq"><span class="name">EmbeddingLike</span>.<span class="name">apply_eq_iff_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a> <span class="fn">F</span> <span class="fn">α</span> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">F</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">y</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">y</span></div></div></div></div><div class="decl" id="EmbeddingLike.comp_injective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/FunLike/Embedding.lean#L150-L153">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike.comp_injective"><span class="name">EmbeddingLike</span>.<span class="name">comp_injective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Sort</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../../.././foundational_types.html">Sort</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../../.././foundational_types.html">Sort</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../../.././foundational_types.html">Sort</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Basic.html#FunLike">FunLike</a> <span class="fn">F</span> <span class="fn">β</span> <span class="fn">γ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/FunLike/Embedding.html#EmbeddingLike">EmbeddingLike</a> <span class="fn">F</span> <span class="fn">β</span> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">F</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> (<span class="fn">⇑<span class="fn">e</span></span> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>)</span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Init/Data/Function.html#Function.Injective">Function.Injective</a> <span class="fn">f</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

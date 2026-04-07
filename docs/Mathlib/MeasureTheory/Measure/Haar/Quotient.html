@@ -1,0 +1,1041 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.MeasureTheory.Measure.Haar.Quotient</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.MeasureTheory.Measure.Haar.Quotient";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">MeasureTheory</span>.<span class="name">Measure</span>.<span class="name">Haar</span>.<span class="name">Quotient</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/Algebra/Group/Opposite.html">Mathlib.Algebra.Group.Opposite</a></li><li><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html">Mathlib.MeasureTheory.Group.FundamentalDomain</a></li><li><a href="../../../.././Mathlib/MeasureTheory/Integral/DominatedConvergence.html">Mathlib.MeasureTheory.Integral.DominatedConvergence</a></li><li><a href="../../../.././Mathlib/MeasureTheory/Constructions/Polish/Basic.html">Mathlib.MeasureTheory.Constructions.Polish.Basic</a></li><li><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Basic.html">Mathlib.MeasureTheory.Measure.Haar.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.MeasureTheory.Measure.Haar.Quotient" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#QuotientGroup.measurableSMul"><span class="name">QuotientGroup</span>.<span class="name">measurableSMul</span></a></div><div class="nav_link"><a class="break_within" href="#QuotientAddGroup.measurableVAdd"><span class="name">QuotientAddGroup</span>.<span class="name">measurableVAdd</span></a></div><div class="nav_link"><a class="break_within" href="#measurePreserving_quotientGroup_mk_of_QuotientMeasureEqMeasurePreimage"><span class="name">measurePreserving_quotientGroup_mk_of_QuotientMeasureEqMeasurePreimage</span></a></div><div class="nav_link"><a class="break_within" href="#measurePreserving_quotientAddGroup_mk_of_AddQuotientMeasureEqMeasurePreimage"><span class="name">measurePreserving_quotientAddGroup_mk_of_AddQuotientMeasureEqMeasurePreimage</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">QuotientMeasureEqMeasurePreimage</span>.<span class="name">smulInvariantMeasure_quotient</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.AddQuotientMeasureEqMeasurePreimage.vaddInvariantMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">AddQuotientMeasureEqMeasurePreimage</span>.<span class="name">vaddInvariantMeasure_quotient</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">QuotientMeasureEqMeasurePreimage</span>.<span class="name">mulInvariantMeasure_quotient</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.AddQuotientMeasureEqMeasurePreimage.addInvariantMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">AddQuotientMeasureEqMeasurePreimage</span>.<span class="name">addInvariantMeasure_quotient</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.Measure.IsMulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set"><span class="name">MeasureTheory</span>.<span class="name">Measure</span>.<span class="name">IsMulLeftInvariant</span>.<span class="name">quotientMeasureEqMeasurePreimage_of_set</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.Measure.IsAddLeftInvariant.addQuotientMeasureEqMeasurePreimage_of_set"><span class="name">MeasureTheory</span>.<span class="name">Measure</span>.<span class="name">IsAddLeftInvariant</span>.<span class="name">addQuotientMeasureEqMeasurePreimage_of_set</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.leftInvariantIsQuotientMeasureEqMeasurePreimage"><span class="name">MeasureTheory</span>.<span class="name">leftInvariantIsQuotientMeasureEqMeasurePreimage</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.leftInvariantIsAddQuotientMeasureEqMeasurePreimage"><span class="name">MeasureTheory</span>.<span class="name">leftInvariantIsAddQuotientMeasureEqMeasurePreimage</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">QuotientMeasureEqMeasurePreimage</span>.<span class="name">haarMeasure_quotient</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.AddQuotientMeasureEqMeasurePreimage.addHaarMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">AddQuotientMeasureEqMeasurePreimage</span>.<span class="name">addHaarMeasure_quotient</span></a></div><div class="nav_link"><a class="break_within" href="#IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure"><span class="name">IsFundamentalDomain</span>.<span class="name">QuotientMeasureEqMeasurePreimage_HaarMeasure</span></a></div><div class="nav_link"><a class="break_within" href="#IsFundamentalDomain.AddQuotientMeasureEqMeasurePreimage_AddHaarMeasure"><span class="name">IsFundamentalDomain</span>.<span class="name">AddQuotientMeasureEqMeasurePreimage_AddHaarMeasure</span></a></div><div class="nav_link"><a class="break_within" href="#IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_smulHaarMeasure"><span class="name">IsFundamentalDomain</span>.<span class="name">QuotientMeasureEqMeasurePreimage_smulHaarMeasure</span></a></div><div class="nav_link"><a class="break_within" href="#IsFundamentalDomain.AddQuotientMeasureEqMeasurePreimage_vaddAddHaarMeasure"><span class="name">IsFundamentalDomain</span>.<span class="name">AddQuotientMeasureEqMeasurePreimage_vaddAddHaarMeasure</span></a></div><div class="nav_link"><a class="break_within" href="#essSup_comp_quotientGroup_mk"><span class="name">essSup_comp_quotientGroup_mk</span></a></div><div class="nav_link"><a class="break_within" href="#essSup_comp_quotientAddGroup_mk"><span class="name">essSup_comp_quotientAddGroup_mk</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.IsFundamentalDomain.absolutelyContinuous_map"><span class="name">MeasureTheory</span>.<span class="name">IsFundamentalDomain</span>.<span class="name">absolutelyContinuous_map</span></a></div><div class="nav_link"><a class="break_within" href="#MeasureTheory.IsAddFundamentalDomain.absolutelyContinuous_map"><span class="name">MeasureTheory</span>.<span class="name">IsAddFundamentalDomain</span>.<span class="name">absolutelyContinuous_map</span></a></div><div class="nav_link"><a class="break_within" href="#QuotientGroup.integral_eq_integral_automorphize"><span class="name">QuotientGroup</span>.<span class="name">integral_eq_integral_automorphize</span></a></div><div class="nav_link"><a class="break_within" href="#QuotientAddGroup.integral_eq_integral_automorphize"><span class="name">QuotientAddGroup</span>.<span class="name">integral_eq_integral_automorphize</span></a></div><div class="nav_link"><a class="break_within" href="#QuotientGroup.integral_mul_eq_integral_automorphize_mul"><span class="name">QuotientGroup</span>.<span class="name">integral_mul_eq_integral_automorphize_mul</span></a></div><div class="nav_link"><a class="break_within" href="#QuotientAddGroup.integral_mul_eq_integral_automorphize_mul"><span class="name">QuotientAddGroup</span>.<span class="name">integral_mul_eq_integral_automorphize_mul</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Haar-quotient-measure" class="markdown-heading">Haar quotient measure <a class="hover-link" href="#Haar-quotient-measure">#</a></h1><p>In this file, we consider properties of fundamental domains and measures for the action of a
+subgroup <code>Γ</code> of a topological group <code>G</code> on <code>G</code> itself. Let <code>μ</code> be a measure on <code>G ⧸ Γ</code>.</p><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotient">MeasureTheory.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotient</a></code>: If <code>μ</code> satisfies
+<code>QuotientMeasureEqMeasurePreimage</code> relative to a both left- and right-invariant measure on <code>G</code>,
+then it is a <code>G</code> invariant measure on <code>G ⧸ Γ</code>.</li></ul><p>The next two results assume that <code>Γ</code> is normal, and that <code>G</code> is equipped with a left- and
+right-invariant measure.</p><ul><li><p><code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient">MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient</a></code>: If <code>μ</code> satisfies
+<code>QuotientMeasureEqMeasurePreimage</code>, then <code>μ</code> is a left-invariant measure.</p></li><li><p><code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.leftInvariantIsQuotientMeasureEqMeasurePreimage">MeasureTheory.leftInvariantIsQuotientMeasureEqMeasurePreimage</a></code>: If <code>μ</code> is left-invariant, and
+the action of <code>Γ</code> on <code>G</code> has finite covolume, and <code>μ</code> satisfies the right scaling condition, then
+it satisfies <code>QuotientMeasureEqMeasurePreimage</code>. This is a converse to
+<code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient">MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient</a></code>.</p></li></ul><p>The last result assumes that <code>G</code> is locally compact, that <code>Γ</code> is countable and normal, that its
+action on <code>G</code> has a fundamental domain, and that <code>μ</code> is a finite measure. We also assume that <code>G</code>
+is equipped with a sigma-finite Haar measure.</p><ul><li><code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient">MeasureTheory.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient</a></code>: If <code>μ</code> satisfies
+<code>QuotientMeasureEqMeasurePreimage</code>, then it is itself Haar. This is a variant of
+<code><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient">MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient</a></code>.</li></ul><p>Note that a group <code>G</code> with Haar measure that is both left and right invariant is called
+<strong>unimodular</strong>.</p></div><div class="decl" id="QuotientGroup.measurableSMul"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L57-L62">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#QuotientGroup.measurableSMul"><span class="name">QuotientGroup</span>.<span class="name">measurableSMul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableSMul">MeasurableSMul</a> <span class="fn">G</span> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span></div></div><p>Measurability of the action of the topological group <code>G</code> on the left-coset space <code>G / Γ</code>.</p></div></div><div class="decl" id="QuotientAddGroup.measurableVAdd"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L58-L59">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#QuotientAddGroup.measurableVAdd"><span class="name">QuotientAddGroup</span>.<span class="name">measurableVAdd</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/Arithmetic.html#MeasurableVAdd">MeasurableVAdd</a> <span class="fn">G</span> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span></div></div><p>Measurability of the action of the additive topological group <code>G</code> on the
+left-coset space <code>G / Γ</code>.</p></div></div><div class="decl" id="measurePreserving_quotientGroup_mk_of_QuotientMeasureEqMeasurePreimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L72-L80">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#measurePreserving_quotientGroup_mk_of_QuotientMeasureEqMeasurePreimage"><span class="name">measurePreserving_quotientGroup_mk_of_QuotientMeasureEqMeasurePreimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsFundamentalDomain">MeasureTheory.IsFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">ν</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.QuotientMeasureEqMeasurePreimage">MeasureTheory.QuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Dynamics/Ergodic/MeasurePreserving.html#MeasureTheory.MeasurePreserving">MeasureTheory.MeasurePreserving</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">QuotientGroup.mk</a> <span class="fn">(<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span> <span class="fn">μ</span></span></div></div><p>Given a subgroup <code>Γ</code> of a topological group <code>G</code> with measure <code>ν</code>, and a measure 'μ' on the
+quotient <code>G ⧸ Γ</code> satisfying <code>QuotientMeasureEqMeasurePreimage</code>, the restriction
+of <code>ν</code> to a fundamental domain is measure-preserving with respect to <code>μ</code>.</p></div></div><div class="decl" id="measurePreserving_quotientAddGroup_mk_of_AddQuotientMeasureEqMeasurePreimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L75-L75">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#measurePreserving_quotientAddGroup_mk_of_AddQuotientMeasureEqMeasurePreimage"><span class="name">measurePreserving_quotientAddGroup_mk_of_AddQuotientMeasureEqMeasurePreimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsAddFundamentalDomain">MeasureTheory.IsAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">ν</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage">MeasureTheory.AddQuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Dynamics/Ergodic/MeasurePreserving.html#MeasureTheory.MeasurePreserving">MeasureTheory.MeasurePreserving</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">QuotientAddGroup.mk</a> <span class="fn">(<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span> <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotient"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L87-L111">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">QuotientMeasureEqMeasurePreimage</span>.<span class="name">smulInvariantMeasure_quotient</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.QuotientMeasureEqMeasurePreimage">QuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulLeftInvariant">IsMulLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hasFun</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.HasFundamentalDomain">HasFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">G</span> <span class="fn">ν</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.SMulInvariantMeasure">SMulInvariantMeasure</a> <span class="fn">G</span> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>) <span class="fn">μ</span></span></div></div><p>If <code>μ</code> satisfies <code>QuotientMeasureEqMeasurePreimage</code> relative to a both left- and right-
+invariant measure <code>ν</code> on <code>G</code>, then it is a <code>G</code> invariant measure on <code>G ⧸ Γ</code>.</p></div></div><div class="decl" id="MeasureTheory.AddQuotientMeasureEqMeasurePreimage.vaddInvariantMeasure_quotient"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L89-L89">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage.vaddInvariantMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">AddQuotientMeasureEqMeasurePreimage</span>.<span class="name">vaddInvariantMeasure_quotient</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage">AddQuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddLeftInvariant">IsAddLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hasFun</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.HasAddFundamentalDomain">HasAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">G</span> <span class="fn">ν</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.VAddInvariantMeasure">VAddInvariantMeasure</a> <span class="fn">G</span> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>) <span class="fn">μ</span></span></div></div></div></div><div class="decl" id="MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L125-L140">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">QuotientMeasureEqMeasurePreimage</span>.<span class="name">mulInvariantMeasure_quotient</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulLeftInvariant">IsMulLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hasFun</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.HasFundamentalDomain">HasFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">G</span> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.QuotientMeasureEqMeasurePreimage">QuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulLeftInvariant">IsMulLeftInvariant</a></span></div></div><p>If <code>μ</code> on <code>G ⧸ Γ</code> satisfies <code>QuotientMeasureEqMeasurePreimage</code> relative to a both left- and
+right-invariant measure on <code>G</code> and <code>Γ</code> is a normal subgroup, then <code>μ</code> is a left-invariant
+measure.</p></div></div><div class="decl" id="MeasureTheory.AddQuotientMeasureEqMeasurePreimage.addInvariantMeasure_quotient"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L128-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage.addInvariantMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">AddQuotientMeasureEqMeasurePreimage</span>.<span class="name">addInvariantMeasure_quotient</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddLeftInvariant">IsAddLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hasFun</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.HasAddFundamentalDomain">HasAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">G</span> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage">AddQuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddLeftInvariant">IsAddLeftInvariant</a></span></div></div><p>If <code>μ</code> on <code>G ⧸ Γ</code> satisfies <code>AddQuotientMeasureEqMeasurePreimage</code> relative to a
+both left- and right-invariant measure on <code>G</code> and <code>Γ</code> is a normal subgroup, then <code>μ</code> is a
+left-invariant measure.</p></div></div><div class="decl" id="MeasureTheory.Measure.IsMulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L147-L182">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.Measure.IsMulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set"><span class="name">MeasureTheory</span>.<span class="name">Measure</span>.<span class="name">IsMulLeftInvariant</span>.<span class="name">quotientMeasureEqMeasurePreimage_of_set</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulLeftInvariant">IsMulLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulRightInvariant">IsMulRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">SigmaFinite</a> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulLeftInvariant">IsMulLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">SigmaFinite</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">fund_dom_s</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsFundamentalDomain">IsFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">s</span> <span class="fn">ν</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">meas_V</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">neZeroV</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">V</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hV</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">V</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">ν</span> (<a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">QuotientGroup.mk</a> <a href="../../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">V</span> <a href="../../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">s</span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">neTopV</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">V</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.QuotientMeasureEqMeasurePreimage">QuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span></div></div><p>Assume that a measure <code>μ</code> is <code>IsMulLeftInvariant</code>, that the action of <code>Γ</code> on <code>G</code> has a
+measurable fundamental domain <code>s</code> with positive finite volume, and that there is a single measurable
+set <code>V ⊆ G ⧸ Γ</code> along which the pullback of <code>μ</code> and <code>ν</code> agree (so the scaling is right). Then
+<code>μ</code> satisfies <code>QuotientMeasureEqMeasurePreimage</code>. The main tool of the proof is the uniqueness of
+left invariant measures, if normalized by a single positive finite-measured set.</p></div></div><div class="decl" id="MeasureTheory.Measure.IsAddLeftInvariant.addQuotientMeasureEqMeasurePreimage_of_set"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L152-L157">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.Measure.IsAddLeftInvariant.addQuotientMeasureEqMeasurePreimage_of_set"><span class="name">MeasureTheory</span>.<span class="name">Measure</span>.<span class="name">IsAddLeftInvariant</span>.<span class="name">addQuotientMeasureEqMeasurePreimage_of_set</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddLeftInvariant">IsAddLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddRightInvariant">IsAddRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">SigmaFinite</a> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddLeftInvariant">IsAddLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">SigmaFinite</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">fund_dom_s</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsAddFundamentalDomain">IsAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">s</span> <span class="fn">ν</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">meas_V</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">neZeroV</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">V</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hV</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">V</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">ν</span> (<a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">QuotientAddGroup.mk</a> <a href="../../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">V</span> <a href="../../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">s</span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">neTopV</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">V</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage">AddQuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span></div></div><p>Assume that a measure <code>μ</code> is <code>IsAddLeftInvariant</code>, that the action of <code>Γ</code> on <code>G</code> has a
+measurable fundamental domain <code>s</code> with positive finite volume, and that there is a single measurable
+set <code>V ⊆ G ⧸ Γ</code> along which the pullback of <code>μ</code> and <code>ν</code> agree (so the scaling is right). Then
+<code>μ</code> satisfies <code>AddQuotientMeasureEqMeasurePreimage</code>. The main tool of the proof is the uniqueness of
+left invariant measures, if normalized by a single positive finite-measured set.</p></div></div><div class="decl" id="MeasureTheory.leftInvariantIsQuotientMeasureEqMeasurePreimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L184-L205">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.leftInvariantIsQuotientMeasureEqMeasurePreimage"><span class="name">MeasureTheory</span>.<span class="name">leftInvariantIsQuotientMeasureEqMeasurePreimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulLeftInvariant">IsMulLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulRightInvariant">IsMulRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">SigmaFinite</a> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulLeftInvariant">IsMulLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">SigmaFinite</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hasFun</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.HasFundamentalDomain">HasFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">G</span> <span class="fn">ν</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.covolume">covolume</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">G</span> <span class="fn">ν</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">μ</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.QuotientMeasureEqMeasurePreimage">QuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span></div></div><p>If a measure <code>μ</code> is left-invariant and satisfies the right scaling condition, then it
+satisfies <code>QuotientMeasureEqMeasurePreimage</code>.</p></div></div><div class="decl" id="MeasureTheory.leftInvariantIsAddQuotientMeasureEqMeasurePreimage"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L186-L188">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.leftInvariantIsAddQuotientMeasureEqMeasurePreimage"><span class="name">MeasureTheory</span>.<span class="name">leftInvariantIsAddQuotientMeasureEqMeasurePreimage</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddLeftInvariant">IsAddLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddRightInvariant">IsAddRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">SigmaFinite</a> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddLeftInvariant">IsAddLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">SigmaFinite</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hasFun</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.HasAddFundamentalDomain">HasAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">G</span> <span class="fn">ν</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.addCovolume">addCovolume</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">G</span> <span class="fn">ν</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">μ</span> <a href="../../../.././Mathlib/Data/Set/Defs.html#Set.univ">Set.univ</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage">AddQuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span></div></div><p>If a measure <code>μ</code> is
+left-invariant and satisfies the right scaling condition, then it satisfies
+<code>AddQuotientMeasureEqMeasurePreimage</code>.</p></div></div><div class="decl" id="MeasureTheory.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L215-L253">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">QuotientMeasureEqMeasurePreimage</span>.<span class="name">haarMeasure_quotient</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsHaarMeasure">IsHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulRightInvariant">IsMulRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.QuotientMeasureEqMeasurePreimage">QuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.HasFundamentalDomain">HasFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">G</span> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsHaarMeasure">IsHaarMeasure</a></span></div></div><p>If a measure <code>μ</code> on the quotient <code>G ⧸ Γ</code> of a group <code>G</code> by a discrete normal subgroup <code>Γ</code> having
+fundamental domain, satisfies <code>QuotientMeasureEqMeasurePreimage</code> relative to a standardized choice
+of Haar measure on <code>G</code>, and assuming <code>μ</code> is finite, then <code>μ</code> is itself Haar.
+TODO: Is it possible to drop the assumption that <code>μ</code> is finite?</p></div></div><div class="decl" id="MeasureTheory.AddQuotientMeasureEqMeasurePreimage.addHaarMeasure_quotient"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L219-L222">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage.addHaarMeasure_quotient"><span class="name">MeasureTheory</span>.<span class="name">AddQuotientMeasureEqMeasurePreimage</span>.<span class="name">addHaarMeasure_quotient</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsAddHaarMeasure">IsAddHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddRightInvariant">IsAddRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Filter.html#LocallyCompactSpace">LocallyCompactSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage">AddQuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">i</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.HasAddFundamentalDomain">HasAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">G</span> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/Finite.html#MeasureTheory.IsFiniteMeasure">IsFiniteMeasure</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsAddHaarMeasure">IsAddHaarMeasure</a></span></div></div><p>If a measure <code>μ</code> on the quotient <code>G ⧸ Γ</code> of an additive group <code>G</code> by a discrete
+normal subgroup <code>Γ</code> having fundamental domain, satisfies <code>AddQuotientMeasureEqMeasurePreimage</code>
+relative to a standardized choice of Haar measure on <code>G</code>, and assuming <code>μ</code> is finite, then <code>μ</code> is
+itself Haar.</p></div></div><div class="decl" id="IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L257-L282">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure"><span class="name">IsFundamentalDomain</span>.<span class="name">QuotientMeasureEqMeasurePreimage_HaarMeasure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsHaarMeasure">IsHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulRightInvariant">IsMulRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">MeasureTheory.SigmaFinite</a> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsFundamentalDomain">MeasureTheory.IsFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">ν</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulLeftInvariant">IsMulLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">MeasureTheory.SigmaFinite</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hV</span> : <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Basic.html#interior">interior</a> <span class="fn">V</span>)</span>.<a href="../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">meas_V</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμK</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">V</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">ν</span> (<a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">QuotientGroup.mk</a> <a href="../../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">V</span> <a href="../../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">𝓕</span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">neTopV</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">V</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.QuotientMeasureEqMeasurePreimage">MeasureTheory.QuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span></div></div><p>Given a normal subgroup <code>Γ</code> of a topological group <code>G</code> with Haar measure <code>μ</code>, which is also
+right-invariant, and a finite volume fundamental domain <code>𝓕</code>, the quotient map to <code>G ⧸ Γ</code>,
+properly normalized, satisfies <code>QuotientMeasureEqMeasurePreimage</code>.</p></div></div><div class="decl" id="IsFundamentalDomain.AddQuotientMeasureEqMeasurePreimage_AddHaarMeasure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L260-L263">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#IsFundamentalDomain.AddQuotientMeasureEqMeasurePreimage_AddHaarMeasure"><span class="name">IsFundamentalDomain</span>.<span class="name">AddQuotientMeasureEqMeasurePreimage_AddHaarMeasure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsAddHaarMeasure">IsAddHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddRightInvariant">IsAddRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">MeasureTheory.SigmaFinite</a> <span class="fn">ν</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsAddFundamentalDomain">MeasureTheory.IsAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">ν</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddLeftInvariant">IsAddLeftInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">MeasureTheory.SigmaFinite</a> <span class="fn">μ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">V</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hV</span> : <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Topology/Defs/Basic.html#interior">interior</a> <span class="fn">V</span>)</span>.<a href="../../../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">meas_V</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSet">MeasurableSet</a> <span class="fn">V</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμK</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">V</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">ν</span> (<a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">QuotientAddGroup.mk</a> <a href="../../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">V</span> <a href="../../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">𝓕</span>)</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">neTopV</span> : <span class="fn"><span class="fn">μ</span> <span class="fn">V</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage">MeasureTheory.AddQuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> <span class="fn">μ</span></span></div></div><p>Given a normal
+subgroup <code>Γ</code> of an additive topological group <code>G</code> with Haar measure <code>μ</code>, which is also
+right-invariant, and a finite volume fundamental domain <code>𝓕</code>, the quotient map to <code>G ⧸ Γ</code>,
+properly normalized, satisfies <code>AddQuotientMeasureEqMeasurePreimage</code>.</p></div></div><div class="decl" id="IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_smulHaarMeasure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L286-L310">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_smulHaarMeasure"><span class="name">IsFundamentalDomain</span>.<span class="name">QuotientMeasureEqMeasurePreimage_smulHaarMeasure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsHaarMeasure">IsHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulRightInvariant">IsMulRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">MeasureTheory.SigmaFinite</a> <span class="fn">ν</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Sets/Compacts.html#TopologicalSpace.PositiveCompacts">TopologicalSpace.PositiveCompacts</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsFundamentalDomain">MeasureTheory.IsFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">ν</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕_finite</span> : <span class="fn"><span class="fn">ν</span> <span class="fn">𝓕</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.QuotientMeasureEqMeasurePreimage">MeasureTheory.QuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span> (<span class="fn"><span class="fn">ν</span> (<a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">QuotientGroup.mk</a> <a href="../../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">↑<span class="fn">K</span></span> <a href="../../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">𝓕</span>)</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Basic.html#MeasureTheory.Measure.haarMeasure">MeasureTheory.Measure.haarMeasure</a> <span class="fn">K</span></span>)</span></div></div><p>Given a normal subgroup <code>Γ</code> of a topological group <code>G</code> with Haar measure <code>μ</code>, which is also
+right-invariant, and a finite volume fundamental domain <code>𝓕</code>, the quotient map to <code>G ⧸ Γ</code>,
+properly normalized, satisfies <code>QuotientMeasureEqMeasurePreimage</code>.</p></div></div><div class="decl" id="IsFundamentalDomain.AddQuotientMeasureEqMeasurePreimage_vaddAddHaarMeasure"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L289-L292">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#IsFundamentalDomain.AddQuotientMeasureEqMeasurePreimage_vaddAddHaarMeasure"><span class="name">IsFundamentalDomain</span>.<span class="name">AddQuotientMeasureEqMeasurePreimage_vaddAddHaarMeasure</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/MetricSpace/Polish.html#PolishSpace">PolishSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup.Normal">Normal</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Separation/Hausdorff.html#T2Space">T2Space</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Bases.html#SecondCountableTopology">SecondCountableTopology</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ν</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Measure.html#MeasureTheory.Measure.IsAddHaarMeasure">IsAddHaarMeasure</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">ν</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddRightInvariant">IsAddRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Typeclasses/SFinite.html#MeasureTheory.SigmaFinite">MeasureTheory.SigmaFinite</a> <span class="fn">ν</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">K</span> : <span class="fn"><a href="../../../.././Mathlib/Topology/Sets/Compacts.html#TopologicalSpace.PositiveCompacts">TopologicalSpace.PositiveCompacts</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsAddFundamentalDomain">MeasureTheory.IsAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">ν</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕_finite</span> : <span class="fn"><span class="fn">ν</span> <span class="fn">𝓕</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.AddQuotientMeasureEqMeasurePreimage">MeasureTheory.AddQuotientMeasureEqMeasurePreimage</a> <span class="fn">ν</span>
+  (<span class="fn"><span class="fn">ν</span> (<a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">QuotientAddGroup.mk</a> <a href="../../../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">↑<span class="fn">K</span></span> <a href="../../../.././Init/Core.html#Inter.inter">∩</a> <span class="fn">𝓕</span>)</span> <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Basic.html#MeasureTheory.Measure.addHaarMeasure">MeasureTheory.Measure.addHaarMeasure</a> <span class="fn">K</span></span>)</span></div></div><p>Given a
+normal subgroup <code>Γ</code> of an additive topological group <code>G</code> with Haar measure <code>μ</code>, which is also
+right-invariant, and a finite volume fundamental domain <code>𝓕</code>, the quotient map to <code>G ⧸ Γ</code>,
+properly normalized, satisfies <code>AddQuotientMeasureEqMeasurePreimage</code>.</p></div></div><div class="decl" id="essSup_comp_quotientGroup_mk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L328-L343">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#essSup_comp_quotientGroup_mk"><span class="name">essSup_comp_quotientGroup_mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsFundamentalDomain">MeasureTheory.IsFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">μ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulRightInvariant">IsMulRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span> → <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g_ae_measurable</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#AEMeasurable">AEMeasurable</a> <span class="fn">g</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">QuotientGroup.mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/EssSup.html#essSup">essSup</a> <span class="fn">g</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">QuotientGroup.mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/EssSup.html#essSup">essSup</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">G</span>) =&gt; <span class="fn"><span class="fn">g</span> <span class="fn">↑<span class="fn">x</span></span></span>)</span> <span class="fn">μ</span></span></div></div><p>The <code><a href="../../../.././Mathlib/MeasureTheory/Function/EssSup.html#essSup">essSup</a></code> of a function <code>g</code> on the quotient space <code>G ⧸ Γ</code> with respect to the pushforward
+of the restriction, <code>μ_𝓕</code>, of a right-invariant measure <code>μ</code> to a fundamental domain <code>𝓕</code>, is the
+same as the <code><a href="../../../.././Mathlib/MeasureTheory/Function/EssSup.html#essSup">essSup</a></code> of <code>g</code>'s lift to the universal cover <code>G</code> with respect to <code>μ</code>.</p></div></div><div class="decl" id="essSup_comp_quotientAddGroup_mk"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L331-L334">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#essSup_comp_quotientAddGroup_mk"><span class="name">essSup_comp_quotientAddGroup_mk</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsAddFundamentalDomain">MeasureTheory.IsAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">μ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddRightInvariant">IsAddRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span> → <a href="../../../.././Mathlib/Data/ENNReal/Basic.html#ENNReal">ENNReal</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">g_ae_measurable</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#AEMeasurable">AEMeasurable</a> <span class="fn">g</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">QuotientAddGroup.mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/EssSup.html#essSup">essSup</a> <span class="fn">g</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">QuotientAddGroup.mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/EssSup.html#essSup">essSup</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">G</span>) =&gt; <span class="fn"><span class="fn">g</span> <span class="fn">↑<span class="fn">x</span></span></span>)</span> <span class="fn">μ</span></span></div></div><p>The <code><a href="../../../.././Mathlib/MeasureTheory/Function/EssSup.html#essSup">essSup</a></code> of a function <code>g</code> on the additive quotient space <code>G ⧸ Γ</code> with respect
+to the pushforward of the restriction, <code>μ_𝓕</code>, of a right-invariant measure <code>μ</code> to a fundamental
+domain <code>𝓕</code>, is the same as the <code><a href="../../../.././Mathlib/MeasureTheory/Function/EssSup.html#essSup">essSup</a></code> of <code>g</code>'s lift to the universal cover <code>G</code> with respect
+to <code>μ</code>.</p></div></div><div class="decl" id="MeasureTheory.IsFundamentalDomain.absolutelyContinuous_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L345-L370">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.IsFundamentalDomain.absolutelyContinuous_map"><span class="name">MeasureTheory</span>.<span class="name">IsFundamentalDomain</span>.<span class="name">absolutelyContinuous_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsFundamentalDomain">IsFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">μ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulRightInvariant">IsMulRightInvariant</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">QuotientGroup.mk</a> <span class="fn">μ</span>)</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/AbsolutelyContinuous.html#MeasureTheory.Measure.AbsolutelyContinuous">AbsolutelyContinuous</a></span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">QuotientGroup.mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span></div></div><p>Given a quotient space <code>G ⧸ Γ</code> where <code>Γ</code> is <code><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a></code>, and the restriction,
+<code>μ_𝓕</code>, of a right-invariant measure <code>μ</code> on <code>G</code> to a fundamental domain <code>𝓕</code>, a set
+in the quotient which has <code>μ_𝓕</code>-measure zero, also has measure zero under the
+folding of <code>μ</code> under the quotient. Note that, if <code>Γ</code> is infinite, then the folded map
+will take the value <code>∞</code> on any open set in the quotient!</p></div></div><div class="decl" id="MeasureTheory.IsAddFundamentalDomain.absolutelyContinuous_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L350-L354">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#MeasureTheory.IsAddFundamentalDomain.absolutelyContinuous_map"><span class="name">MeasureTheory</span>.<span class="name">IsAddFundamentalDomain</span>.<span class="name">absolutelyContinuous_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">Measure</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsAddFundamentalDomain">IsAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">μ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddRightInvariant">IsAddRightInvariant</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">QuotientAddGroup.mk</a> <span class="fn">μ</span>)</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/AbsolutelyContinuous.html#MeasureTheory.Measure.AbsolutelyContinuous">AbsolutelyContinuous</a></span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">QuotientAddGroup.mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span></div></div><p>Given an additive quotient space <code>G ⧸ Γ</code> where <code>Γ</code> is <code><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a></code>, and the
+restriction, <code>μ_𝓕</code>, of a right-invariant measure <code>μ</code> on <code>G</code> to a fundamental domain <code>𝓕</code>, a set
+in the quotient which has <code>μ_𝓕</code>-measure zero, also has measure zero under the
+folding of <code>μ</code> under the quotient. Note that, if <code>Γ</code> is infinite, then the folded map
+will take the value <code>∞</code> on any open set in the quotient!</p></div></div><div class="decl" id="QuotientGroup.integral_eq_integral_automorphize"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L374-L393">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#QuotientGroup.integral_eq_integral_automorphize"><span class="name">QuotientGroup</span>.<span class="name">integral_eq_integral_automorphize</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsFundamentalDomain">MeasureTheory.IsFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">μ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulRightInvariant">IsMulRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">G</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₂</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/StronglyMeasurable/AEStronglyMeasurable.html#MeasureTheory.AEStronglyMeasurable">MeasureTheory.AEStronglyMeasurable</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Module.html#QuotientGroup.automorphize">automorphize</a> <span class="fn">f</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Module.html#QuotientGroup.automorphize">automorphize</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span></span></span></div></div><p>This is a simple version of the <strong>Unfolding Trick</strong>: Given a subgroup <code>Γ</code> of a group <code>G</code>, the
+integral of a function <code>f</code> on <code>G</code> with respect to a right-invariant measure <code>μ</code> is equal to the
+integral over the quotient <code>G ⧸ Γ</code> of the automorphization of <code>f</code>.</p></div></div><div class="decl" id="QuotientAddGroup.integral_eq_integral_automorphize"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L377-L379">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#QuotientAddGroup.integral_eq_integral_automorphize"><span class="name">QuotientAddGroup</span>.<span class="name">integral_eq_integral_automorphize</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsAddFundamentalDomain">MeasureTheory.IsAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">μ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddRightInvariant">IsAddRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">G</span> → <span class="fn">E</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf₁</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hf₂</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/StronglyMeasurable/AEStronglyMeasurable.html#MeasureTheory.AEStronglyMeasurable">MeasureTheory.AEStronglyMeasurable</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Module.html#QuotientAddGroup.automorphize">automorphize</a> <span class="fn">f</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Module.html#QuotientAddGroup.automorphize">automorphize</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span></span></span></div></div><p>This is a simple version of the <strong>Unfolding Trick</strong>: Given a subgroup <code>Γ</code> of an
+additive group <code>G</code>, the integral of a function <code>f</code> on <code>G</code> with respect to a right-invariant
+measure <code>μ</code> is equal to the integral over the quotient <code>G ⧸ Γ</code> of the automorphization of <code>f</code>.</p></div></div><div class="decl" id="QuotientGroup.integral_mul_eq_integral_automorphize_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L396-L424">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#QuotientGroup.integral_mul_eq_integral_automorphize_mul"><span class="name">QuotientGroup</span>.<span class="name">integral_mul_eq_integral_automorphize_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalGroup">IsTopologicalGroup</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsFundamentalDomain">MeasureTheory.IsFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#Subgroup.op">op</a></span>)</span> <span class="fn">𝓕</span> <span class="fn">μ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> (<span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsMulRightInvariant">IsMulRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">G</span> → <span class="fn">K</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f_ℒ_1</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span> → <span class="fn">K</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/StronglyMeasurable/AEStronglyMeasurable.html#MeasureTheory.AEStronglyMeasurable">MeasureTheory.AEStronglyMeasurable</a> <span class="fn">g</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g_ℒ_infinity</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/EssSup.html#essSup">essSup</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>) =&gt; <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖</a><span class="fn"><span class="fn">g</span> <span class="fn">x</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖ₑ</a>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F_ae_measurable</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/StronglyMeasurable/AEStronglyMeasurable.html#MeasureTheory.AEStronglyMeasurable">MeasureTheory.AEStronglyMeasurable</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Module.html#QuotientGroup.automorphize">automorphize</a> <span class="fn">f</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">G</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">g</span> <span class="fn">↑<span class="fn">x</span></span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">G</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Module.html#QuotientGroup.automorphize">automorphize</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕</span>)</span></span></span></div></div><p>This is the <strong>Unfolding Trick</strong>: Given a subgroup <code>Γ</code> of a group <code>G</code>, the integral of a
+function <code>f</code> on <code>G</code> times the lift to <code>G</code> of a function <code>g</code> on the quotient <code>G ⧸ Γ</code> with respect
+to a right-invariant measure <code>μ</code> on <code>G</code>, is equal to the integral over the quotient of the
+automorphization of <code>f</code> times <code>g</code>.</p></div></div><div class="decl" id="QuotientAddGroup.integral_mul_eq_integral_automorphize_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/MeasureTheory/Measure/Haar/Quotient.lean#L438-L466">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/MeasureTheory/Measure/Haar/Quotient.html#QuotientAddGroup.integral_mul_eq_integral_automorphize_mul"><span class="name">QuotientAddGroup</span>.<span class="name">integral_mul_eq_integral_automorphize_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G'</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Defs.html#AddGroup">AddGroup</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> <span class="fn">G'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ'</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/MeasureSpaceDef.html#MeasureTheory.Measure">MeasureTheory.Measure</a> <span class="fn">G'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Γ'</span> : <span class="fn"><a href="../../../.././Mathlib/Algebra/Group/Subgroup/Defs.html#AddSubgroup">AddSubgroup</a> <span class="fn">G'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝓕'</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">G'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h𝓕</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Group/FundamentalDomain.html#MeasureTheory.IsAddFundamentalDomain">MeasureTheory.IsAddFundamentalDomain</a> <span class="fn">(↥<span class="fn"><span class="fn">Γ'</span>.<a href="../../../.././Mathlib/Algebra/Group/Subgroup/MulOpposite.html#AddSubgroup.op">op</a></span>)</span> <span class="fn">𝓕'</span> <span class="fn">μ'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Countable/Defs.html#Countable">Countable</a> <span class="fn">↥<span class="fn">Γ'</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/MeasurableSpace/Defs.html#MeasurableSpace">MeasurableSpace</a> (<span class="fn">G'</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ'</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Constructions/BorelSpace/Basic.html#BorelSpace">BorelSpace</a> (<span class="fn">G'</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ'</span>)</span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">K</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NormedField">NormedField</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <a href="../../../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a> <span class="fn">K</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">μ'</span>.<a href="../../../.././Mathlib/MeasureTheory/Group/Defs.html#MeasureTheory.Measure.IsAddRightInvariant">IsAddRightInvariant</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">G'</span> → <span class="fn">K</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f_ℒ_1</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/L1Space/Integrable.html#MeasureTheory.Integrable">MeasureTheory.Integrable</a> <span class="fn">f</span> <span class="fn">μ'</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">G'</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ'</span> → <span class="fn">K</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/StronglyMeasurable/AEStronglyMeasurable.html#MeasureTheory.AEStronglyMeasurable">MeasureTheory.AEStronglyMeasurable</a> <span class="fn">g</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ'</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕'</span>)</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g_ℒ_infinity</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/EssSup.html#essSup">essSup</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">G'</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ'</span>) =&gt; <a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖</a><span class="fn"><span class="fn">g</span> <span class="fn">x</span></span><a href="../../../.././Mathlib/Analysis/Normed/Group/Defs.html#ENorm.enorm">‖ₑ</a>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ'</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕'</span>)</span>)</span></span> <a href="../../../.././Init/Core.html#Ne">≠</a> <a href="../../../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F_ae_measurable</span> : <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Function/StronglyMeasurable/AEStronglyMeasurable.html#MeasureTheory.AEStronglyMeasurable">MeasureTheory.AEStronglyMeasurable</a> <span class="fn">(<a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Module.html#QuotientAddGroup.automorphize">automorphize</a> <span class="fn">f</span>)</span> <span class="fn">(<a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ'</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕'</span>)</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">G'</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">g</span> <span class="fn">↑<span class="fn">x</span></span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn">μ'</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∫</a> (<span class="fn">x</span> : <span class="fn">G'</span> <a href="../../../.././Mathlib/Algebra/Quotient.html#HasQuotient.Quotient">⧸</a> <span class="fn">Γ'</span>)<a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">,</a> <span class="fn"><span class="fn">g</span> <span class="fn">x</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../../.././Mathlib/Topology/Algebra/InfiniteSum/Module.html#QuotientAddGroup.automorphize">automorphize</a> <span class="fn">f</span> <span class="fn">x</span></span> <a href="../../../.././Mathlib/MeasureTheory/Integral/Bochner/Basic.html#MeasureTheory.integral">∂</a><span class="fn"><a href="../../../.././Mathlib/MeasureTheory/Measure/Map.html#MeasureTheory.Measure.map">MeasureTheory.Measure.map</a> <a href="../../../.././Mathlib/GroupTheory/Coset/Defs.html#QuotientAddGroup.mk">mk</a> <span class="fn">(<span class="fn"><span class="fn">μ'</span>.<a href="../../../.././Mathlib/MeasureTheory/Measure/Restrict.html#MeasureTheory.Measure.restrict">restrict</a></span> <span class="fn">𝓕'</span>)</span></span></span></div></div><p>This is the <strong>Unfolding Trick</strong>: Given an additive subgroup <code>Γ'</code> of an additive group <code>G'</code>, the
+integral of a function <code>f</code> on <code>G'</code> times the lift to <code>G'</code> of a function <code>g</code> on the quotient
+<code>G' ⧸ Γ'</code> with respect to a right-invariant measure <code>μ</code> on <code>G'</code>, is equal to the integral over
+the quotient of the automorphization of <code>f</code> times <code>g</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

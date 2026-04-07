@@ -1,0 +1,684 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../.././style.css"></link><link rel="icon" href="../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.LinearAlgebra.Matrix.Charpoly.Basic</title><script defer="true" src="../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../.././";</script><script>const MODULE_NAME="Mathlib.LinearAlgebra.Matrix.Charpoly.Basic";</script><script type="module" src="../../../.././jump-src.js"></script><script type="module" src="../../../.././search.js"></script><script type="module" src="../../../.././expand-nav.js"></script><script type="module" src="../../../.././how-about.js"></script><script type="module" src="../../../.././instances.js"></script><script type="module" src="../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">LinearAlgebra</span>.<span class="name">Matrix</span>.<span class="name">Charpoly</span>.<span class="name">Basic</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../.././Init.html">Init</a></li><li><a href="../../../.././Mathlib/RingTheory/MatrixPolynomialAlgebra.html">Mathlib.RingTheory.MatrixPolynomialAlgebra</a></li><li><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Adjugate.html">Mathlib.LinearAlgebra.Matrix.Adjugate</a></li><li><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Block.html">Mathlib.LinearAlgebra.Matrix.Block</a></li><li><a href="../../../.././Mathlib/Algebra/Polynomial/Eval/SMul.html">Mathlib.Algebra.Polynomial.Eval.SMul</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.LinearAlgebra.Matrix.Charpoly.Basic" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix"><span class="name">Matrix</span>.<span class="name">charmatrix</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_apply"><span class="name">Matrix</span>.<span class="name">charmatrix_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_apply_eq"><span class="name">Matrix</span>.<span class="name">charmatrix_apply_eq</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_apply_ne"><span class="name">Matrix</span>.<span class="name">charmatrix_apply_ne</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_zero"><span class="name">Matrix</span>.<span class="name">charmatrix_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_diagonal"><span class="name">Matrix</span>.<span class="name">charmatrix_diagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_one"><span class="name">Matrix</span>.<span class="name">charmatrix_one</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_natCast"><span class="name">Matrix</span>.<span class="name">charmatrix_natCast</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_ofNat"><span class="name">Matrix</span>.<span class="name">charmatrix_ofNat</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_transpose"><span class="name">Matrix</span>.<span class="name">charmatrix_transpose</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.matPolyEquiv_charmatrix"><span class="name">Matrix</span>.<span class="name">matPolyEquiv_charmatrix</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_reindex"><span class="name">Matrix</span>.<span class="name">charmatrix_reindex</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_map"><span class="name">Matrix</span>.<span class="name">charmatrix_map</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_fromBlocks"><span class="name">Matrix</span>.<span class="name">charmatrix_fromBlocks</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_blockTriangular_iff"><span class="name">Matrix</span>.<span class="name">charmatrix_blockTriangular_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.BlockTriangular.charmatrix"><span class="name">Matrix</span>.<span class="name">BlockTriangular</span>.<span class="name">charmatrix</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.BlockTriangular.of_charmatrix"><span class="name">Matrix</span>.<span class="name">BlockTriangular</span>.<span class="name">of_charmatrix</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly"><span class="name">Matrix</span>.<span class="name">charpoly</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.eval_charpoly"><span class="name">Matrix</span>.<span class="name">eval_charpoly</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_isEmpty"><span class="name">Matrix</span>.<span class="name">charpoly_isEmpty</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_zero"><span class="name">Matrix</span>.<span class="name">charpoly_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_diagonal"><span class="name">Matrix</span>.<span class="name">charpoly_diagonal</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_one"><span class="name">Matrix</span>.<span class="name">charpoly_one</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_natCast"><span class="name">Matrix</span>.<span class="name">charpoly_natCast</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_ofNat"><span class="name">Matrix</span>.<span class="name">charpoly_ofNat</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_transpose"><span class="name">Matrix</span>.<span class="name">charpoly_transpose</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_reindex"><span class="name">Matrix</span>.<span class="name">charpoly_reindex</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_map"><span class="name">Matrix</span>.<span class="name">charpoly_map</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_fromBlocks_zero₁₂"><span class="name">Matrix</span>.<span class="name">charpoly_fromBlocks_zero₁₂</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_fromBlocks_zero₂₁"><span class="name">Matrix</span>.<span class="name">charpoly_fromBlocks_zero₂₁</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charmatrix_toSquareBlock"><span class="name">Matrix</span>.<span class="name">charmatrix_toSquareBlock</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.BlockTriangular.charpoly"><span class="name">Matrix</span>.<span class="name">BlockTriangular</span>.<span class="name">charpoly</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_of_upperTriangular"><span class="name">Matrix</span>.<span class="name">charpoly_of_upperTriangular</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.aeval_self_charpoly"><span class="name">Matrix</span>.<span class="name">aeval_self_charpoly</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_mul_comm'"><span class="name">Matrix</span>.<span class="name">charpoly_mul_comm'</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_mul_comm_of_le"><span class="name">Matrix</span>.<span class="name">charpoly_mul_comm_of_le</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_mul_comm"><span class="name">Matrix</span>.<span class="name">charpoly_mul_comm</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_vecMulVec"><span class="name">Matrix</span>.<span class="name">charpoly_vecMulVec</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_units_conj"><span class="name">Matrix</span>.<span class="name">charpoly_units_conj</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_units_conj'"><span class="name">Matrix</span>.<span class="name">charpoly_units_conj'</span></a></div><div class="nav_link"><a class="break_within" href="#Matrix.charpoly_sub_scalar"><span class="name">Matrix</span>.<span class="name">charpoly_sub_scalar</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Characteristic-polynomials-and-the-Cayley-Hamilton-theorem" class="markdown-heading">Characteristic polynomials and the Cayley-Hamilton theorem <a class="hover-link" href="#Characteristic-polynomials-and-the-Cayley-Hamilton-theorem">#</a></h1><p>We define characteristic polynomials of matrices and
+prove the Cayley–Hamilton theorem over arbitrary commutative rings.</p><p>See the file <code><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Coeff.html">Mathlib/LinearAlgebra/Matrix/Charpoly/Coeff.lean</a></code> for corollaries of this theorem.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">Matrix.charpoly</a></code> is the characteristic polynomial of a matrix.</li></ul><h2 id="Implementation-details" class="markdown-heading">Implementation details <a class="hover-link" href="#Implementation-details">#</a></h2><p>We follow a nice proof from <a href="http://drorbn.net/AcademicPensieve/2015-12/CayleyHamilton.pdf">http://drorbn.net/AcademicPensieve/2015-12/CayleyHamilton.pdf</a></p></div><div class="decl" id="Matrix.charmatrix"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L46-L50">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix"><span class="name">Matrix</span>.<span class="name">charmatrix</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span>)</span></span></div></div><p>The &quot;characteristic matrix&quot; of <code>M : <a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> n n R</code> is the matrix of polynomials $t I - M$.
+The determinant of this matrix is the characteristic polynomial.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Basic.html#Matrix.scalar">Matrix.scalar</a> <span class="fn">n</span>)</span> <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a>.<a href="../../../.././Mathlib/Data/Matrix/Basic.html#RingHom.mapMatrix">mapMatrix</a></span> <span class="fn">M</span></span></li></ul></details><details id="instances-for-list-Matrix.charmatrix" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Matrix.charmatrix_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L52-L54">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_apply"><span class="name">Matrix</span>.<span class="name">charmatrix_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i </span><span class="fn">j</span> : <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <span class="fn">i</span> <span class="fn">j</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">n</span>) =&gt; <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a>)</span> <span class="fn">i</span> <span class="fn">j</span></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span> <span class="fn">j</span>)</span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_apply_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L56-L59">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_apply_eq"><span class="name">Matrix</span>.<span class="name">charmatrix_apply_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">n</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <span class="fn">i</span> <span class="fn">i</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span> <span class="fn">i</span>)</span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_apply_ne"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L61-L64">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_apply_ne"><span class="name">Matrix</span>.<span class="name">charmatrix_apply_ne</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i </span><span class="fn">j</span> : <span class="fn">n</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">i</span> <a href="../../../.././Init/Core.html#Ne">≠</a> <span class="fn">j</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <span class="fn">i</span> <span class="fn">j</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span> <span class="fn">j</span>)</span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L66-L68">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_zero"><span class="name">Matrix</span>.<span class="name">charmatrix_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a> <span class="fn">0</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Basic.html#Matrix.scalar">scalar</a> <span class="fn">n</span>)</span> <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_diagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L70-L73">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_diagonal"><span class="name">Matrix</span>.<span class="name">charmatrix_diagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">d</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">n</span>) =&gt; <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a> <span class="fn">(<span class="fn">d</span> <span class="fn">i</span>)</span></span></span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L75-L77">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_one"><span class="name">Matrix</span>.<span class="name">charmatrix_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a> <span class="fn">1</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">n</span>) =&gt; <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span></span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_natCast"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L79-L82">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_natCast"><span class="name">Matrix</span>.<span class="name">charmatrix_natCast</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(↑<span class="fn">k</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">n</span>) =&gt; <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">↑<span class="fn">k</span></span></span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_ofNat"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L84-L87">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_ofNat"><span class="name">Matrix</span>.<span class="name">charmatrix_ofNat</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">k</span>.<a href="../../../.././Mathlib/Data/Nat/Init.html#Nat.AtLeastTwo">AtLeastTwo</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Init/Prelude.html#OfNat.ofNat">OfNat.ofNat</a> <span class="fn">k</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">n</span>) =&gt; <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../.././Init/Prelude.html#OfNat.ofNat">OfNat.ofNat</a> <span class="fn">k</span></span></span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_transpose"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L89-L91">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_transpose"><span class="name">Matrix</span>.<span class="name">charmatrix_transpose</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.transpose">transpose</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.transpose">transpose</a></span></div></div></div></div><div class="decl" id="Matrix.matPolyEquiv_charmatrix"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L93-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.matPolyEquiv_charmatrix"><span class="name">Matrix</span>.<span class="name">matPolyEquiv_charmatrix</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/RingTheory/MatrixPolynomialAlgebra.html#matPolyEquiv">matPolyEquiv</a> <span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a> <span class="fn">M</span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_reindex"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L104-L108">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_reindex"><span class="name">Matrix</span>.<span class="name">charmatrix_reindex</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">n</span> <a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">m</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.reindex">reindex</a> <span class="fn">e</span> <span class="fn">e</span>)</span> <span class="fn">M</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.reindex">reindex</a> <span class="fn">e</span> <span class="fn">e</span>)</span> <span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L110-L113">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_map"><span class="name">Matrix</span>.<span class="name">charmatrix_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R</span> <a href="../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.map">map</a></span> <span class="fn">⇑<span class="fn">f</span></span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.map">map</a></span> <span class="fn">(<a href="../../../.././Mathlib/Algebra/Polynomial/Eval/Defs.html#Polynomial.map">Polynomial.map</a> <span class="fn">f</span>)</span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_fromBlocks"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L115-L119">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_fromBlocks"><span class="name">Matrix</span>.<span class="name">charmatrix_fromBlocks</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M₁₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M₁₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M₂₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">m</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M₂₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.fromBlocks">fromBlocks</a> <span class="fn">M₁₁</span> <span class="fn">M₁₂</span> <span class="fn">M₂₁</span> <span class="fn">M₂₂</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.fromBlocks">fromBlocks</a> <span class="fn"><span class="fn">M₁₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> (<a href="../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><span class="fn"><span class="fn">M₁₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.map">map</a></span> <span class="fn">⇑<a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a></span></span>) (<a href="../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><span class="fn"><span class="fn">M₂₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.map">map</a></span> <span class="fn">⇑<a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a></span></span>) <span class="fn"><span class="fn">M₂₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_blockTriangular_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L123-L127">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_blockTriangular_iff"><span class="name">Matrix</span>.<span class="name">charmatrix_blockTriangular_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Block.html#Matrix.BlockTriangular">BlockTriangular</a></span> <span class="fn">b</span></span> <a href="../../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Block.html#Matrix.BlockTriangular">BlockTriangular</a></span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="Matrix.BlockTriangular.charmatrix"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L129-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.BlockTriangular.charmatrix"><span class="name">Matrix</span>.<span class="name">BlockTriangular</span>.<span class="name">charmatrix</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Block.html#Matrix.BlockTriangular">BlockTriangular</a></span> <span class="fn">b</span></span> → <span class="fn"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Block.html#Matrix.BlockTriangular">BlockTriangular</a></span> <span class="fn">b</span></span></span></div></div><p><strong>Alias</strong> of the reverse direction of <code><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_blockTriangular_iff">Matrix.charmatrix_blockTriangular_iff</a></code>.</p></div></div><div class="decl" id="Matrix.BlockTriangular.of_charmatrix"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L129-L129">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.BlockTriangular.of_charmatrix"><span class="name">Matrix</span>.<span class="name">BlockTriangular</span>.<span class="name">of_charmatrix</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Block.html#Matrix.BlockTriangular">BlockTriangular</a></span> <span class="fn">b</span></span> → <span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Block.html#Matrix.BlockTriangular">BlockTriangular</a></span> <span class="fn">b</span></span></span></div></div><p><strong>Alias</strong> of the forward direction of <code><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_blockTriangular_iff">Matrix.charmatrix_blockTriangular_iff</a></code>.</p></div></div><div class="decl" id="Matrix.charpoly"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L131-L133">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly"><span class="name">Matrix</span>.<span class="name">charpoly</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial">Polynomial</a> <span class="fn">R</span></span></div></div><p>The characteristic polynomial of a matrix <code>M</code> is given by $\det (t I - M)$.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Determinant/Basic.html#Matrix.det">det</a></span></li></ul></details><details id="instances-for-list-Matrix.charpoly" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Matrix.eval_charpoly"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L135-L140">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.eval_charpoly"><span class="name">Matrix</span>.<span class="name">eval_charpoly</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Eval/Defs.html#Polynomial.eval">Polynomial.eval</a> <span class="fn">t</span> <span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Basic.html#Matrix.scalar">scalar</a> <span class="fn">m</span>)</span> <span class="fn">t</span></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">M</span>).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Determinant/Basic.html#Matrix.det">det</a></span></div></div></div></div><div class="decl" id="Matrix.charpoly_isEmpty"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L142-L144">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_isEmpty"><span class="name">Matrix</span>.<span class="name">charpoly_isEmpty</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Logic/IsEmpty/Defs.html#IsEmpty">IsEmpty</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">1</span></div></div></div></div><div class="decl" id="Matrix.charpoly_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L146-L148">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_zero"><span class="name">Matrix</span>.<span class="name">charpoly_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a> <span class="fn">0</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Matrix.charpoly_diagonal"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L150-L151">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_diagonal"><span class="name">Matrix</span>.<span class="name">charpoly_diagonal</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Diagonal.html#Matrix.diagonal">diagonal</a> <span class="fn">d</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∏ <span class="fn">i</span> : <span class="fn">n</span>, (<a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a> <span class="fn">(<span class="fn">d</span> <span class="fn">i</span>)</span></span>)</span></div></div></div></div><div class="decl" id="Matrix.charpoly_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L153-L154">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_one"><span class="name">Matrix</span>.<span class="name">charpoly_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a> <span class="fn">1</span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> (<a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Matrix.charpoly_natCast"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L156-L158">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_natCast"><span class="name">Matrix</span>.<span class="name">charpoly_natCast</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(↑<span class="fn">k</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> (<a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">↑<span class="fn">k</span></span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Matrix.charpoly_ofNat"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L160-L162">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_ofNat"><span class="name">Matrix</span>.<span class="name">charpoly_ofNat</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../../../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">k</span>.<a href="../../../.././Mathlib/Data/Nat/Init.html#Nat.AtLeastTwo">AtLeastTwo</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Init/Prelude.html#OfNat.ofNat">OfNat.ofNat</a> <span class="fn">k</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> (<a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../.././Init/Prelude.html#OfNat.ofNat">OfNat.ofNat</a> <span class="fn">k</span></span>) <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">n</span></span></div></div></div></div><div class="decl" id="Matrix.charpoly_transpose"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L164-L166">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_transpose"><span class="name">Matrix</span>.<span class="name">charpoly_transpose</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.transpose">transpose</a></span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></div></div></div></div><div class="decl" id="Matrix.charpoly_reindex"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L168-L171">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_reindex"><span class="name">Matrix</span>.<span class="name">charpoly_reindex</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">e</span> : <span class="fn">n</span> <a href="../../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">m</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.reindex">reindex</a> <span class="fn">e</span> <span class="fn">e</span>)</span> <span class="fn">M</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></div></div></div></div><div class="decl" id="Matrix.charpoly_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L173-L176">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_map"><span class="name">Matrix</span>.<span class="name">charpoly_map</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">S</span> : <a href="../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">S</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">R</span> <a href="../../../.././Mathlib/Algebra/Ring/Hom/Defs.html#RingHom">→+*</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix.map">map</a></span> <span class="fn">⇑<span class="fn">f</span></span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Eval/Defs.html#Polynomial.map">Polynomial.map</a> <span class="fn">f</span> <span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></span></div></div></div></div><div class="decl" id="Matrix.charpoly_fromBlocks_zero₁₂"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L178-L182">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_fromBlocks_zero₁₂"><span class="name">Matrix</span>.<span class="name">charpoly_fromBlocks_zero₁₂</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M₁₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M₂₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">m</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M₂₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.fromBlocks">fromBlocks</a> <span class="fn">M₁₁</span> <span class="fn">0</span> <span class="fn">M₂₁</span> <span class="fn">M₂₂</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">M₁₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">M₂₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></div></div></div></div><div class="decl" id="Matrix.charpoly_fromBlocks_zero₂₁"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L184-L188">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_fromBlocks_zero₂₁"><span class="name">Matrix</span>.<span class="name">charpoly_fromBlocks_zero₂₁</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M₁₁</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">m</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M₁₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">M₂₂</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.fromBlocks">fromBlocks</a> <span class="fn">M₁₁</span> <span class="fn">M₁₂</span> <span class="fn">0</span> <span class="fn">M₂₂</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">M₁₁</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">M₂₂</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></div></div></div></div><div class="decl" id="Matrix.charmatrix_toSquareBlock"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L190-L193">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix_toSquareBlock"><span class="name">Matrix</span>.<span class="name">charmatrix_toSquareBlock</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.toSquareBlock">toSquareBlock</a></span> <span class="fn">b</span> <span class="fn">a</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charmatrix">charmatrix</a></span>.<a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.toSquareBlock">toSquareBlock</a></span> <span class="fn">b</span> <span class="fn">a</span></span></div></div></div></div><div class="decl" id="Matrix.BlockTriangular.charpoly"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L195-L197">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.BlockTriangular.charpoly"><span class="name">Matrix</span>.<span class="name">BlockTriangular</span>.<span class="name">charpoly</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Block.html#Matrix.BlockTriangular">BlockTriangular</a></span> <span class="fn">b</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∏ <span class="fn">a</span> ∈ <span class="fn"><a href="../../../.././Mathlib/Data/Finset/Image.html#Finset.image">Finset.image</a> <span class="fn">b</span> <a href="../../../.././Mathlib/Data/Fintype/Defs.html#Finset.univ">Finset.univ</a></span>, <span class="fn"><span class="fn">(<span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/Data/Matrix/Block.html#Matrix.toSquareBlock">toSquareBlock</a></span> <span class="fn">b</span> <span class="fn">a</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></span></div></div></div></div><div class="decl" id="Matrix.charpoly_of_upperTriangular"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L199-L201">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_of_upperTriangular"><span class="name">Matrix</span>.<span class="name">charpoly_of_upperTriangular</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Block.html#Matrix.BlockTriangular">BlockTriangular</a></span> <a href="../../../.././Init/Prelude.html#id">id</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">∏ <span class="fn">i</span> : <span class="fn">n</span>, (<a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a> <span class="fn">(<span class="fn">M</span> <span class="fn">i</span> <span class="fn">i</span>)</span></span>)</span></div></div></div></div><div class="decl" id="Matrix.aeval_self_charpoly"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L204-L231">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.aeval_self_charpoly"><span class="name">Matrix</span>.<span class="name">aeval_self_charpoly</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Algebra/Polynomial/AlgebraMap.html#Polynomial.aeval">Polynomial.aeval</a> <span class="fn">M</span>)</span> <span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div><p>The <strong>Cayley-Hamilton Theorem</strong>, that the characteristic polynomial of a matrix,
+applied to the matrix itself, is zero.</p><p>This holds over any commutative ring.</p><p>See <code><a href="../../../.././Mathlib/LinearAlgebra/Charpoly/Basic.html#LinearMap.aeval_self_charpoly">LinearMap.aeval_self_charpoly</a></code> for the equivalent statement about endomorphisms.</p></div></div><div class="decl" id="Matrix.charpoly_mul_comm'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L233-L258">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_mul_comm'"><span class="name">Matrix</span>.<span class="name">charpoly_mul_comm'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">m</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">(<span class="fn">A</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">B</span>).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">m</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">(<span class="fn">B</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span>).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></div></div><p>A version of <code><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_mul_comm">Matrix.charpoly_mul_comm</a></code> for rectangular matrices.
+See also <code><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_mul_comm_of_le">Matrix.charpoly_mul_comm_of_le</a></code> which has just <code>(A * B).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></code> as the LHS.</p></div></div><div class="decl" id="Matrix.charpoly_mul_comm_of_le"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L260-L264">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_mul_comm_of_le"><span class="name">Matrix</span>.<span class="name">charpoly_mul_comm_of_le</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">m</span> : <a href="../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">m</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">m</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">m</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hle</span> : <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#LE.le">≤</a> <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">m</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">A</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">B</span>).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">m</span></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">n</span></span>) <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">(<span class="fn">B</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span>).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></div></div></div></div><div class="decl" id="Matrix.charpoly_mul_comm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L266-L268">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_mul_comm"><span class="name">Matrix</span>.<span class="name">charpoly_mul_comm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">A</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">B</span>).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<span class="fn">B</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">A</span>).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></div></div><p>A version of <code><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_mul_comm'">charpoly_mul_comm'</a></code> for square matrices.</p></div></div><div class="decl" id="Matrix.charpoly_vecMulVec"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L270-L276">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_vecMulVec"><span class="name">Matrix</span>.<span class="name">charpoly_vecMulVec</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">u </span><span class="fn">v</span> : <span class="fn"><span class="fn">n</span> → <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Mul.html#Matrix.vecMulVec">vecMulVec</a> <span class="fn">u</span> <span class="fn">v</span>)</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> (<span class="fn">u</span> <a href="../../../.././Mathlib/Data/Matrix/Mul.html#dotProduct">⬝ᵥ</a> <span class="fn">v</span>) <a href="../../../.././Init/Prelude.html#HSMul.hSMul">•</a> <a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">n</span></span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)</div></div></div></div><div class="decl" id="Matrix.charpoly_units_conj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L278-L281">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_units_conj"><span class="name">Matrix</span>.<span class="name">charpoly_units_conj</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span>)</span><a href="../../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">N</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">↑<span class="fn">M</span></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">N</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">M</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span>).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">N</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></div></div></div></div><div class="decl" id="Matrix.charpoly_units_conj'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L283-L285">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_units_conj'"><span class="name">Matrix</span>.<span class="name">charpoly_units_conj'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn">(<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span>)</span><a href="../../../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">N</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">↑<span class="fn">M</span><a href="../../../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">N</span> <a href="../../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">M</span></span>).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">N</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span></div></div></div></div><div class="decl" id="Matrix.charpoly_sub_scalar"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean#L288-L293">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly_sub_scalar"><span class="name">Matrix</span>.<span class="name">charpoly_sub_scalar</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">n</span> : <a href="../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Init/Prelude.html#DecidableEq">DecidableEq</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">n</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">M</span> : <span class="fn"><a href="../../../.././Mathlib/LinearAlgebra/Matrix/Defs.html#Matrix">Matrix</a> <span class="fn">n</span> <span class="fn">n</span> <span class="fn">R</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">μ</span> : <span class="fn">R</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">(<span class="fn">M</span> <a href="../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">(<a href="../../../.././Mathlib/Data/Matrix/Basic.html#Matrix.scalar">scalar</a> <span class="fn">n</span>)</span> <span class="fn">μ</span></span>).<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span> <a href="../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn"><span class="fn">M</span>.<a href="../../../.././Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.html#Matrix.charpoly">charpoly</a></span>.<a href="../../../.././Mathlib/Algebra/Polynomial/Eval/Defs.html#Polynomial.comp">comp</a></span> (<a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.X">Polynomial.X</a> <a href="../../../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn"><a href="../../../.././Mathlib/Algebra/Polynomial/Basic.html#Polynomial.C">Polynomial.C</a> <span class="fn">μ</span></span>)</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

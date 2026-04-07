@@ -1,0 +1,605 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.Adhesive.Basic</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.Adhesive.Basic";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">Basic</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/CategoryTheory/Extensive.html">Mathlib.CategoryTheory.Extensive</a></li><li><a href="../../.././Mathlib/CategoryTheory/Limits/Constructions/EpiMono.html">Mathlib.CategoryTheory.Limits.Constructions.EpiMono</a></li><li><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/KernelPair.html">Mathlib.CategoryTheory.Limits.Shapes.KernelPair</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.Adhesive.Basic" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.IsVanKampen"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.IsVanKampen.exists_cube_filling"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">exists_cube_filling</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.IsVanKampen.flip"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">flip</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.isVanKampen_iff"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">isVanKampen_iff</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.isVanKampen_iff'"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">isVanKampen_iff'</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.isVanKampen_isPullback_isPullback_hom_ext"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">isVanKampen_isPullback_isPullback_hom_ext</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.is_coprod_iff_isPushout"><span class="name">CategoryTheory</span>.<span class="name">is_coprod_iff_isPushout</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.isVanKampen_inl"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">isVanKampen_inl</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.IsVanKampen.isPullback_of_mono_left"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">isPullback_of_mono_left</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.IsVanKampen.isPullback_of_mono_right"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">isPullback_of_mono_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.IsVanKampen.mono_of_mono_left"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">mono_of_mono_left</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.IsPushout.IsVanKampen.mono_of_mono_right"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">mono_of_mono_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Adhesive"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Adhesive.van_kampen'"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">van_kampen'</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Adhesive.isPullback_of_isPushout_of_mono_left"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">isPullback_of_isPushout_of_mono_left</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Adhesive.isPullback_of_isPushout_of_mono_right"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">isPullback_of_isPushout_of_mono_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Adhesive.mono_of_isPushout_of_mono_left"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">mono_of_isPushout_of_mono_left</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Adhesive.mono_of_isPushout_of_mono_right"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">mono_of_isPushout_of_mono_right</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Adhesive.isPushout_isPullback_isPullback_hom_ext"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">isPushout_isPullback_isPullback_hom_ext</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Adhesive.desc_mono_of_mono"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">desc_mono_of_mono</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Type.adhesive"><span class="name">CategoryTheory</span>.<span class="name">Type</span>.<span class="name">adhesive</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Adhesive.toRegularMonoCategory"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">toRegularMonoCategory</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.adhesive_functor"><span class="name">CategoryTheory</span>.<span class="name">adhesive_functor</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.adhesive_of_preserves_and_reflects"><span class="name">CategoryTheory</span>.<span class="name">adhesive_of_preserves_and_reflects</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.adhesive_of_preserves_and_reflects_isomorphism"><span class="name">CategoryTheory</span>.<span class="name">adhesive_of_preserves_and_reflects_isomorphism</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.adhesive_of_reflective"><span class="name">CategoryTheory</span>.<span class="name">adhesive_of_reflective</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Adhesive-categories" class="markdown-heading">Adhesive categories <a class="hover-link" href="#Adhesive-categories">#</a></h1><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">CategoryTheory.IsPushout.IsVanKampen</a></code>: A convenience formulation for a pushout being
+a van Kampen colimit.</li><li><code><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">CategoryTheory.Adhesive</a></code>: A category is adhesive if it has pushouts and pullbacks along
+monomorphisms, and such pushouts are van Kampen.</li></ul><h2 id="Main-Results" class="markdown-heading">Main Results <a class="hover-link" href="#Main-Results">#</a></h2><ul><li><code><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Type.adhesive">CategoryTheory.Type.adhesive</a></code>: The category of <code>Type</code> is adhesive.</li><li><code><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.isPullback_of_isPushout_of_mono_left">CategoryTheory.Adhesive.isPullback_of_isPushout_of_mono_left</a></code>: In adhesive categories,
+pushouts along monomorphisms are pullbacks.</li><li><code><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.mono_of_isPushout_of_mono_left">CategoryTheory.Adhesive.mono_of_isPushout_of_mono_left</a></code>: In adhesive categories,
+monomorphisms are stable under pushouts.</li><li><code><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.toRegularMonoCategory">CategoryTheory.Adhesive.toRegularMonoCategory</a></code>: Monomorphisms in adhesive categories are
+regular (this implies that adhesive categories are balanced).</li><li><code><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.adhesive_functor">CategoryTheory.adhesive_functor</a></code>: The category <code>C ⥤ D</code> is adhesive if <code>D</code>
+has all pullbacks and all pushouts and is adhesive</li></ul><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>https://ncatlab.org/nlab/show/adhesive+category</li><li>[Stephen Lack and Paweł Sobociński, Adhesive Categories][adhesive2004]</li></ul></div><div class="decl" id="CategoryTheory.IsPushout.IsVanKampen"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L52-L60">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span> → <a href="../../.././foundational_types.html">Prop</a></span></div></div><p>A convenient formulation for a pushout being a van Kampen colimit. For any commutative cube of
+which a van Kampen pushout forms the bottom face and the back faces are pullbacks, the front faces
+are pullbacks if and only if the top face is a pushout. See <code><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.isVanKampen_iff">IsPushout.isVanKampen_iff</a></code> below.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.IsPushout.IsVanKampen" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.IsPushout.IsVanKampen.exists_cube_filling"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L62-L82">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen.exists_cube_filling"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">exists_cube_filling</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H'</span> : <span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X' </span><span class="fn">Y' </span><span class="fn">Z'</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h'</span> : <span class="fn">X'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i'</span> : <span class="fn">Y'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">αX</span> : <span class="fn">X'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">αY</span> : <span class="fn">Y'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">αZ</span> : <span class="fn">Z'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullback">Limits.HasPullback</a> <span class="fn">αX</span> <span class="fn">f</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hh</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">h'</span> <span class="fn">αX</span> <span class="fn">αZ</span> <span class="fn">h</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">i'</span> <span class="fn">αY</span> <span class="fn">αZ</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">∃ (<span class="fn">W'</span> : <span class="fn">C</span>) (<span class="fn">f'</span> : <span class="fn">W'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X'</span>) (<span class="fn">g'</span> : <span class="fn">W'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y'</span>) (<span class="fn">αW</span> : <span class="fn">W'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W</span>),
+  <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">f'</span> <span class="fn">αW</span> <span class="fn">αX</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">g'</span> <span class="fn">αW</span> <span class="fn">αY</span> <span class="fn">g</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f'</span> <span class="fn">g'</span> <span class="fn">h'</span> <span class="fn">i'</span></span></span></div></div><p>If a van Kampen pushout forms the bottom face of a commutative &quot;half-cube&quot; whose front faces
+are pullbacks, then there exist two back faces which are pullbacks and a top face which is a
+pushout.</p></div></div><div class="decl" id="CategoryTheory.IsPushout.IsVanKampen.flip"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L84-L88">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen.flip"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">flip</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H'</span> : <span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">⋯</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span></div></div></div></div><div class="decl" id="CategoryTheory.IsPushout.isVanKampen_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L91-L135">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.isVanKampen_iff"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">isVanKampen_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/VanKampen.html#CategoryTheory.IsVanKampenColimit">IsVanKampenColimit</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/PullbackCone.html#CategoryTheory.Limits.PushoutCocone.mk">Limits.PushoutCocone.mk</a> <span class="fn">h</span> <span class="fn">i</span> <span class="fn">⋯</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.IsPushout.isVanKampen_iff'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L137-L166">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.isVanKampen_iff'"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">isVanKampen_iff'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn">∀ ⦃<span class="fn">X' </span><span class="fn">Y' </span><span class="fn">Z'</span> : <span class="fn">C</span>⦄ (<span class="fn">h'</span> : <span class="fn">X'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>) (<span class="fn">i'</span> : <span class="fn">Y'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>) (<span class="fn">αX</span> : <span class="fn">X'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>) (<span class="fn">αY</span> : <span class="fn">Y'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>) (<span class="fn">αZ</span> : <span class="fn">Z'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>),
+    <span class="fn"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">h'</span> <span class="fn">αX</span> <span class="fn">αZ</span> <span class="fn">h</span></span> →
+      <span class="fn"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">i'</span> <span class="fn">αY</span> <span class="fn">αZ</span> <span class="fn">i</span></span> →
+        <span class="fn">∀ [<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullback">Limits.HasPullback</a> <span class="fn">αX</span> <span class="fn">f</span></span>],
+          <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">h'</span> <span class="fn">αX</span> <span class="fn">αZ</span> <span class="fn">h</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">i'</span> <span class="fn">αY</span> <span class="fn">αZ</span> <span class="fn">i</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>             <span class="fn">∃ (<span class="fn">W'</span> : <span class="fn">C</span>) (<span class="fn">f'</span> : <span class="fn">W'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X'</span>) (<span class="fn">g'</span> : <span class="fn">W'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y'</span>) (<span class="fn">αW</span> : <span class="fn">W'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W</span>),
+              <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">f'</span> <span class="fn">αW</span> <span class="fn">αX</span> <span class="fn">f</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">g'</span> <span class="fn">αW</span> <span class="fn">αY</span> <span class="fn">g</span></span> <a href="../../.././Init/Prelude.html#And">∧</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f'</span> <span class="fn">g'</span> <span class="fn">h'</span> <span class="fn">i'</span></span></span></span></span></span></span></div></div><p>A pushout is van Kampen if and only if whenever it forms the bottom face of a commutative
+&quot;half-cube&quot;, the front faces are pullbacks if and only if there exist back faces which are pullbacks
+and a top face which is a pushout.</p></div></div><div class="decl" id="CategoryTheory.IsPushout.isVanKampen_isPullback_isPullback_hom_ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L168-L175">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.isVanKampen_isPullback_isPullback_hom_ext"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">isVanKampen_isPullback_isPullback_hom_ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H'</span> : <span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X' </span><span class="fn">Y' </span><span class="fn">Z'</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h'</span> : <span class="fn">X'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i'</span> : <span class="fn">Y'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">αX</span> : <span class="fn">X'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullback">Limits.HasPullback</a> <span class="fn">αX</span> <span class="fn">f</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">αY</span> : <span class="fn">Y'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">αZ</span> : <span class="fn">Z'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W✝</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn">Z'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W✝</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hh</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">h'</span> <span class="fn">αX</span> <span class="fn">αZ</span> <span class="fn">h</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">i'</span> <span class="fn">αY</span> <span class="fn">αZ</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h'_w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">h'</span> <span class="fn">f₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">h'</span> <span class="fn">f₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i'_w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">i'</span> <span class="fn">f₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">i'</span> <span class="fn">f₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f₂</span></div></div></div></div><div class="decl" id="CategoryTheory.is_coprod_iff_isPushout"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L178-L214">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.is_coprod_iff_isPushout"><span class="name">CategoryTheory</span>.<span class="name">is_coprod_iff_isPushout</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">E </span><span class="fn">Y </span><span class="fn">YE</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/BinaryProducts.html#CategoryTheory.Limits.BinaryCofan">Limits.BinaryCofan</a> <span class="fn">X</span> <span class="fn">E</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/IsLimit.html#CategoryTheory.Limits.IsColimit">Limits.IsColimit</a> <span class="fn">c</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">iY</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">YE</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">fE</span> : <span class="fn"><span class="fn">c</span>.<a href="../../.././Mathlib/CategoryTheory/Limits/Cones.html#CategoryTheory.Limits.Cocone.pt">pt</a></span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">YE</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/CommSq.html#CategoryTheory.CommSq">CommSq</a> <span class="fn">f</span> <span class="fn"><span class="fn">c</span>.<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/BinaryProducts.html#CategoryTheory.Limits.BinaryCofan.inl">inl</a></span> <span class="fn">iY</span> <span class="fn">fE</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/IsLimit.html#CategoryTheory.Limits.IsColimit">Limits.IsColimit</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/BinaryProducts.html#CategoryTheory.Limits.BinaryCofan.mk">Limits.BinaryCofan.mk</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn"><span class="fn">c</span>.<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/BinaryProducts.html#CategoryTheory.Limits.BinaryCofan.inr">inr</a></span> <span class="fn">fE</span>)</span> <span class="fn">iY</span>)</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn"><span class="fn">c</span>.<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/BinaryProducts.html#CategoryTheory.Limits.BinaryCofan.inl">inl</a></span> <span class="fn">iY</span> <span class="fn">fE</span></span></div></div></div></div><div class="decl" id="CategoryTheory.IsPushout.isVanKampen_inl"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L217-L255">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.isVanKampen_inl"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">isVanKampen_inl</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">E </span><span class="fn">X </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/BinaryProducts.html#CategoryTheory.Limits.BinaryCofan">Limits.BinaryCofan</a> <span class="fn">W</span> <span class="fn">E</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Extensive.html#CategoryTheory.FinitaryExtensive">FinitaryExtensive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullbacks">Limits.HasPullbacks</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hc</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/IsLimit.html#CategoryTheory.Limits.IsColimit">Limits.IsColimit</a> <span class="fn">c</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn"><span class="fn">c</span>.<a href="../../.././Mathlib/CategoryTheory/Limits/Cones.html#CategoryTheory.Limits.Cocone.pt">pt</a></span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn"><span class="fn">c</span>.<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/BinaryProducts.html#CategoryTheory.Limits.BinaryCofan.inl">inl</a></span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span></div></div></div></div><div class="decl" id="CategoryTheory.IsPushout.IsVanKampen.isPullback_of_mono_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L257-L261">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen.isPullback_of_mono_left"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">isPullback_of_mono_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H'</span> : <span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="CategoryTheory.IsPushout.IsVanKampen.isPullback_of_mono_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L263-L267">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen.isPullback_of_mono_right"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">isPullback_of_mono_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">g</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H'</span> : <span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="CategoryTheory.IsPushout.IsVanKampen.mono_of_mono_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L269-L274">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen.mono_of_mono_left"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">mono_of_mono_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H'</span> : <span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="CategoryTheory.IsPushout.IsVanKampen.mono_of_mono_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L276-L281">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen.mono_of_mono_right"><span class="name">CategoryTheory</span>.<span class="name">IsPushout</span>.<span class="name">IsVanKampen</span>.<span class="name">mono_of_mono_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">g</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H'</span> : <span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">h</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Adhesive"><div class="class"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L283-L289">source</a></div><div class="decl_header"><span class="decl_kind">class</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././foundational_types.html">Prop</a></div></div><p>A category is adhesive if it has pushouts and pullbacks along monomorphisms,
+and such pushouts are van Kampen.</p><ul class="structure_fields" id="CategoryTheory.Adhesive.mk"><li id="CategoryTheory.Adhesive.hasPullback_of_mono_left" class="structure_field"><div class="structure_field_info">hasPullback_of_mono_left<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y </span><span class="fn">S</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">S</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">S</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>]</span></span>
+</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullback">Limits.HasPullback</a> <span class="fn">f</span> <span class="fn">g</span></span></div></li><li id="CategoryTheory.Adhesive.hasPushout_of_mono_left" class="structure_field"><div class="structure_field_info">hasPushout_of_mono_left<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y </span><span class="fn">S</span> : <span class="fn">C</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">S</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">g</span> : <span class="fn">S</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>]</span></span>
+</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPushout">Limits.HasPushout</a> <span class="fn">f</span> <span class="fn">g</span></span></div></li><li id="CategoryTheory.Adhesive.van_kampen" class="structure_field"><div class="structure_field_info">van_kampen<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+ : <span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span></div></li></ul><details class="instances"><summary>Instances</summary><ul id="instances-list-CategoryTheory.Adhesive" class="instances-list"></ul></details></div></div><div class="decl" id="CategoryTheory.Adhesive.van_kampen'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L293-L294">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.van_kampen'"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">van_kampen'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">g</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">H</span>.<a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.IsPushout.IsVanKampen">IsVanKampen</a></span></div></div></div></div><div class="decl" id="CategoryTheory.Adhesive.isPullback_of_isPushout_of_mono_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L296-L298">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.isPullback_of_isPushout_of_mono_left"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">isPullback_of_isPushout_of_mono_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Adhesive.isPullback_of_isPushout_of_mono_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L300-L302">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.isPullback_of_isPushout_of_mono_right"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">isPullback_of_isPushout_of_mono_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">g</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Adhesive.mono_of_isPushout_of_mono_left"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L304-L306">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.mono_of_isPushout_of_mono_left"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">mono_of_isPushout_of_mono_left</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">i</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Adhesive.mono_of_isPushout_of_mono_right"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L308-L310">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.mono_of_isPushout_of_mono_right"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">mono_of_isPushout_of_mono_right</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">g</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">h</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Adhesive.isPushout_isPullback_isPullback_hom_ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L313-L319">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.isPushout_isPullback_isPullback_hom_ext"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">isPushout_isPullback_isPullback_hom_ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W </span><span class="fn">X </span><span class="fn">Y </span><span class="fn">Z</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn">W</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">H</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPushout">IsPushout</a> <span class="fn">f</span> <span class="fn">g</span> <span class="fn">h</span> <span class="fn">i</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X' </span><span class="fn">Y' </span><span class="fn">Z'</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h'</span> : <span class="fn">X'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">i'</span> : <span class="fn">Y'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z'</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">αX</span> : <span class="fn">X'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">αY</span> : <span class="fn">Y'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">αZ</span> : <span class="fn">Z'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">W✝</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f₁ </span><span class="fn">f₂</span> : <span class="fn">Z'</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">W✝</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hh</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">h'</span> <span class="fn">αX</span> <span class="fn">αZ</span> <span class="fn">h</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hi</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/IsPullback/Defs.html#CategoryTheory.IsPullback">IsPullback</a> <span class="fn">i'</span> <span class="fn">αY</span> <span class="fn">αZ</span> <span class="fn">i</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h'_w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">h'</span> <span class="fn">f₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">h'</span> <span class="fn">f₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i'_w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">i'</span> <span class="fn">f₁</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryStruct.comp</a> <span class="fn">i'</span> <span class="fn">f₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f₁</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">f₂</span></div></div></div></div><div class="decl" id="CategoryTheory.Adhesive.desc_mono_of_mono"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L323-L420">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.desc_mono_of_mono"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">desc_mono_of_mono</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Z </span><span class="fn">A </span><span class="fn">B</span> : <span class="fn">C</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">A</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">b</span> : <span class="fn">B</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Z</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">a</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">b</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.pushout.desc">Limits.pushout.desc</a> <span class="fn">a</span> <span class="fn">b</span> <span class="fn">⋯</span>)</span></span></div></div><p>If <code>a : A ⟶ Z</code> and <code>b : B ⟶ Z</code> are monomorphisms in an adhesive category, then the map
+<code>pushout (pullback.fst a b) (pullback.snd a b) ⟶ Z</code> induced by their pullback is a monomorphism.
+See Theorem 5.1 in Lack and Sobociński.</p></div></div><div class="decl" id="CategoryTheory.Type.adhesive"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L422-L424">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Type.adhesive"><span class="name">CategoryTheory</span>.<span class="name">Type</span>.<span class="name">adhesive</span></a></span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <a href="../../.././foundational_types.html">(Type</a> u)</span></div></div></div></div><div class="decl" id="CategoryTheory.Adhesive.toRegularMonoCategory"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L426-L434">source</a></div><div class="attributes">@[instance 100]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive.toRegularMonoCategory"><span class="name">CategoryTheory</span>.<span class="name">Adhesive</span>.<span class="name">toRegularMonoCategory</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/RegularMono.html#CategoryTheory.IsRegularMonoCategory">IsRegularMonoCategory</a> <span class="fn">C</span></span></div></div></div></div><div class="decl" id="CategoryTheory.adhesive_functor"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L446-L456">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.adhesive_functor"><span class="name">CategoryTheory</span>.<span class="name">adhesive_functor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u''}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v'', u''}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullbacks">Limits.HasPullbacks</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPushouts">Limits.HasPushouts</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">C</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.adhesive_of_preserves_and_reflects"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L458-L473">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.adhesive_of_preserves_and_reflects"><span class="name">CategoryTheory</span>.<span class="name">adhesive_of_preserves_and_reflects</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u''}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v'', u''}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">H₁</span> : <span class="fn">∀ {<span class="fn">X </span><span class="fn">Y </span><span class="fn">S</span> : <span class="fn">C</span>} (<span class="fn">f</span> : <span class="fn">X</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">S</span>) (<span class="fn">g</span> : <span class="fn">Y</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">S</span>) [<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>], <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullback">Limits.HasPullback</a> <span class="fn">f</span> <span class="fn">g</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">H₂</span> : <span class="fn">∀ {<span class="fn">X </span><span class="fn">Y </span><span class="fn">S</span> : <span class="fn">C</span>} (<span class="fn">f</span> : <span class="fn">S</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>) (<span class="fn">g</span> : <span class="fn">S</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>) [<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>], <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPushout">Limits.HasPushout</a> <span class="fn">f</span> <span class="fn">g</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesLimitsOfShape">Limits.PreservesLimitsOfShape</a> <a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/Cospan.html#CategoryTheory.Limits.WalkingCospan">Limits.WalkingCospan</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.ReflectsLimitsOfShape">Limits.ReflectsLimitsOfShape</a> <a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/Cospan.html#CategoryTheory.Limits.WalkingCospan">Limits.WalkingCospan</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesColimitsOfShape">Limits.PreservesColimitsOfShape</a> <a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/Cospan.html#CategoryTheory.Limits.WalkingSpan">Limits.WalkingSpan</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.ReflectsColimitsOfShape">Limits.ReflectsColimitsOfShape</a> <a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/Cospan.html#CategoryTheory.Limits.WalkingSpan">Limits.WalkingSpan</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span></div></div></div></div><div class="decl" id="CategoryTheory.adhesive_of_preserves_and_reflects_isomorphism"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L475-L485">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.adhesive_of_preserves_and_reflects_isomorphism"><span class="name">CategoryTheory</span>.<span class="name">adhesive_of_preserves_and_reflects_isomorphism</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u''}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v'', u''}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullbacks">Limits.HasPullbacks</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPushouts">Limits.HasPushouts</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesLimitsOfShape">Limits.PreservesLimitsOfShape</a> <a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/Cospan.html#CategoryTheory.Limits.WalkingCospan">Limits.WalkingCospan</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesColimitsOfShape">Limits.PreservesColimitsOfShape</a> <a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/Cospan.html#CategoryTheory.Limits.WalkingSpan">Limits.WalkingSpan</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">F</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/ReflectsIso/Basic.html#CategoryTheory.Functor.ReflectsIsomorphisms">ReflectsIsomorphisms</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span></div></div></div></div><div class="decl" id="CategoryTheory.adhesive_of_reflective"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/Adhesive/Basic.lean#L487-L503">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.adhesive_of_reflective"><span class="name">CategoryTheory</span>.<span class="name">adhesive_of_reflective</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C</span> : <a href="../../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v, u}</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u''}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v'', u''}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullbacks">Limits.HasPullbacks</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPullbacks">Limits.HasPullbacks</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPushouts">Limits.HasPushouts</a> <span class="fn">C</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">H₂</span> : <span class="fn">∀ {<span class="fn">X </span><span class="fn">Y </span><span class="fn">S</span> : <span class="fn">D</span>} (<span class="fn">f</span> : <span class="fn">S</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>) (<span class="fn">g</span> : <span class="fn">S</span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y</span>) [<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Mono">Mono</a> <span class="fn">f</span></span>], <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/HasPullback.html#CategoryTheory.Limits.HasPushout">Limits.HasPushout</a> <span class="fn">f</span> <span class="fn">g</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Gl</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Gr</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">D</span> <span class="fn">C</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">adj</span> : <span class="fn">Gl</span> <a href="../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn">Gr</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Gr</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/FullyFaithful.html#CategoryTheory.Functor.Full">Full</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">Gr</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/FullyFaithful.html#CategoryTheory.Functor.Faithful">Faithful</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Limits/Preserves/Basic.html#CategoryTheory.Limits.PreservesLimitsOfShape">Limits.PreservesLimitsOfShape</a> <a href="../../.././Mathlib/CategoryTheory/Limits/Shapes/Pullback/Cospan.html#CategoryTheory.Limits.WalkingCospan">Limits.WalkingCospan</a> <span class="fn">Gl</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Adhesive/Basic.html#CategoryTheory.Adhesive">Adhesive</a> <span class="fn">D</span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

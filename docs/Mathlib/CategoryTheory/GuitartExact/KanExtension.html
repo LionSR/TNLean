@@ -1,0 +1,600 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.CategoryTheory.GuitartExact.KanExtension</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.CategoryTheory.GuitartExact.KanExtension";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">CategoryTheory</span>.<span class="name">GuitartExact</span>.<span class="name">KanExtension</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html">Mathlib.CategoryTheory.GuitartExact.Basic</a></li><li><a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html">Mathlib.CategoryTheory.Functor.KanExtension.Adjunction</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.CategoryTheory.GuitartExact.KanExtension" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.LeftExtension.compTwoSquare"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">compTwoSquare</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionAtCompTwoSquareEquiv"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">isPointwiseLeftKanExtensionAtCompTwoSquareEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.LeftExtension.nonempty_isPointwiseLeftKanExtensionAt_compTwoSquare_iff"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">nonempty_isPointwiseLeftKanExtensionAt_compTwoSquare_iff</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension.compTwoSquare"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">IsPointwiseLeftKanExtension</span>.<span class="name">compTwoSquare</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionOfCompTwoSquare"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">isPointwiseLeftKanExtensionOfCompTwoSquare</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionEquivOfGuitartExact"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">isPointwiseLeftKanExtensionEquivOfGuitartExact</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.TwoSquare.hasPointwiseLeftKanExtensionAt_iff"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">hasPointwiseLeftKanExtensionAt_iff</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.TwoSquare.hasPointwiseLeftKanExtension_iff"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">hasPointwiseLeftKanExtension_iff</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.TwoSquare.hasPointwiseLeftKanExtension"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">hasPointwiseLeftKanExtension</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.TwoSquare.hasLeftKanExtension"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">hasLeftKanExtension</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.TwoSquare.lanBaseChange"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">lanBaseChange</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.TwoSquare.lanBaseChange_app"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">lanBaseChange_app</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.TwoSquare.isIso_lanBaseChange_app_iff"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">isIso_lanBaseChange_app_iff</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.TwoSquare.isIso_lanBaseChange_app"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">isIso_lanBaseChange_app</span></a></div><div class="nav_link"><a class="break_within" href="#CategoryTheory.TwoSquare.instIsIsoFunctorLanBaseChangeOfGuitartExact"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">instIsIsoFunctorLanBaseChangeOfGuitartExact</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Guitart-exact-squares-and-Kan-extensions" class="markdown-heading">Guitart exact squares and Kan extensions <a class="hover-link" href="#Guitart-exact-squares-and-Kan-extensions">#</a></h1><p>Given a Guitart exact square <code>w : T ⋙ R ⟶ L ⋙ B</code>,</p><pre><code>     T
+  C₁ ⥤ C₂
+L |     | R
+  v     v
+  C₃ ⥤ C₄
+     B
+</code></pre><p>we show that an extension <code>F' : C₄ ⥤ D</code> of <code>F : C₂ ⥤ D</code> along <code>R</code>
+is a pointwise left Kan extension at <code>B.obj X₃</code> iff
+the composition <code>T ⋙ F'</code> is a pointwise left Kan extension at <code>X₃</code>
+of <code>B ⋙ F'</code>.</p><p>When suitable (pointwise) left Kan extensions exist, we also show that
+the natural transformation of functors <code>(C₂ ⥤ D) ⥤ C₃ ⥤ D</code>
+<code>(whiskeringLeft C₁ C₂ D).obj T ⋙ L.lan ⟶ R.lan ⋙ (whiskeringLeft C₃ C₄ D).obj B</code>
+induced by a Guitart exact square <code>w</code> is an isomorphism.</p><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>https://ncatlab.org/nlab/show/exact+square</li></ul></div><div class="decl" id="CategoryTheory.Functor.LeftExtension.compTwoSquare"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L56-L62">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">abbrev</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">compTwoSquare</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.LeftExtension">LeftExtension</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.LeftExtension">LeftExtension</a></span> <span class="fn">(<span class="fn"><span class="fn">T</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span>)</span></span></div></div><p>Given a square <code>w : TwoSquare T L R B</code> (consisting of a natural transformation
+<code>T ⋙ R ⟶ L ⋙ B</code>), this is the obvious map <code>R.LeftExtension F → L.LeftExtension (T ⋙ F)</code>
+obtained by the precomposition with <code>B</code> and the postcomposition with <code>w</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Functor.LeftExtension.compTwoSquare" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionAtCompTwoSquareEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L64-L73">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionAtCompTwoSquareEquiv"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">isPointwiseLeftKanExtensionAtCompTwoSquareEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.LeftExtension">LeftExtension</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₃</span> : <span class="fn">C₃</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">(<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.costructuredArrowRightwards">costructuredArrowRightwards</a></span> <span class="fn">X₃</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Limits/Final.html#CategoryTheory.Functor.Final">Final</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a></span> <span class="fn">w</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtensionAt">IsPointwiseLeftKanExtensionAt</a></span> <span class="fn">X₃</span></span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn"><span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtensionAt">IsPointwiseLeftKanExtensionAt</a></span> <span class="fn">(<span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₃</span>)</span></span></div></div><p>If <code>w : TwoSquare T L R B</code> is a Guitart exact square, and <code>E</code> is a left extension
+of <code>F</code> along <code>R</code>, then <code>E</code> is a pointwise left Kan extension of <code>F</code> along <code>R</code> at
+<code>B.obj X₃</code> iff <code>E.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a> w</code> is a pointwise left Kan extension
+of <code>T ⋙ F</code> along <code>L</code> at <code>X₃</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionAtCompTwoSquareEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Functor.LeftExtension.nonempty_isPointwiseLeftKanExtensionAt_compTwoSquare_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L75-L79">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.nonempty_isPointwiseLeftKanExtensionAt_compTwoSquare_iff"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">nonempty_isPointwiseLeftKanExtensionAt_compTwoSquare_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.LeftExtension">LeftExtension</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₃</span> : <span class="fn">C₃</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">(<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.costructuredArrowRightwards">costructuredArrowRightwards</a></span> <span class="fn">X₃</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Limits/Final.html#CategoryTheory.Functor.Final">Final</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a></span> <span class="fn">w</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtensionAt">IsPointwiseLeftKanExtensionAt</a></span> <span class="fn">X₃</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../../.././Init/Prelude.html#Nonempty">Nonempty</a> <span class="fn">(<span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtensionAt">IsPointwiseLeftKanExtensionAt</a></span> <span class="fn">(<span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₃</span>)</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension.compTwoSquare"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L82-L88">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension.compTwoSquare"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">IsPointwiseLeftKanExtension</span>.<span class="name">compTwoSquare</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.LeftExtension">LeftExtension</a></span> <span class="fn">F</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension">IsPointwiseLeftKanExtension</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.GuitartExact">GuitartExact</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a></span> <span class="fn">w</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension">IsPointwiseLeftKanExtension</a></span></div></div><p>If <code>w : TwoSquare T L R B</code> is a Guitart exact square, and <code>E</code> is a pointwise
+left Kan extension of <code>F</code> along <code>R</code>, then <code>E.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a> w</code> is a pointwise left
+Kan extension of <code>T ⋙ F</code> along <code>L</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">h</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension.compTwoSquare">compTwoSquare</a></span> <span class="fn">w</span> <span class="fn">X₃</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionAtCompTwoSquareEquiv">isPointwiseLeftKanExtensionAtCompTwoSquareEquiv</a></span> <span class="fn">w</span> <span class="fn">X₃</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span> <span class="fn">(<span class="fn">h</span> <span class="fn">(<span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₃</span>)</span>)</span></span></li></ul></details><details id="instances-for-list-CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension.compTwoSquare" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionOfCompTwoSquare"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L90-L100">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionOfCompTwoSquare"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">isPointwiseLeftKanExtensionOfCompTwoSquare</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.LeftExtension">LeftExtension</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.GuitartExact">GuitartExact</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/CategoryTheory/EssentialImage.html#CategoryTheory.Functor.EssSurj">EssSurj</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><span class="fn">(<span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a></span> <span class="fn">w</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension">IsPointwiseLeftKanExtension</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension">IsPointwiseLeftKanExtension</a></span></div></div><p>If <code>w : TwoSquare T L R B</code> is a Guitart exact square, with <code>B</code> essentially surjective,
+and <code>E</code> is a left extension of <code>F</code> along <code>R</code>, then <code>E</code> is a pointwise
+left Kan extension of <code>F</code> along <code>R</code> provided <code>E.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a> w</code> is a pointwise left
+Kan extension of <code>T ⋙ F</code> along <code>L</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionOfCompTwoSquare" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionEquivOfGuitartExact"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L102-L113">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionEquivOfGuitartExact"><span class="name">CategoryTheory</span>.<span class="name">Functor</span>.<span class="name">LeftExtension</span>.<span class="name">isPointwiseLeftKanExtensionEquivOfGuitartExact</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">E</span> : <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.LeftExtension">LeftExtension</a></span> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.GuitartExact">GuitartExact</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/CategoryTheory/EssentialImage.html#CategoryTheory.Functor.EssSurj">EssSurj</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a></span> <span class="fn">w</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension">IsPointwiseLeftKanExtension</a></span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn"><span class="fn">E</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension">IsPointwiseLeftKanExtension</a></span></div></div><p>If <code>w : TwoSquare T L R B</code> is a Guitart exact square, with <code>B</code> essentially surjective,
+and <code>E</code> is a left extension of <code>F</code> along <code>R</code>, then <code>E</code> is a pointwise left Kan extension
+of <code>F</code> along <code>R</code> iff <code>E.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a> w</code> is a pointwise left Kan extension
+of <code>T ⋙ F</code> along <code>L</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.Functor.LeftExtension.isPointwiseLeftKanExtensionEquivOfGuitartExact" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.TwoSquare.hasPointwiseLeftKanExtensionAt_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L124-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.hasPointwiseLeftKanExtensionAt_iff"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">hasPointwiseLeftKanExtensionAt_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₃</span> : <span class="fn">C₃</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">(<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.costructuredArrowRightwards">costructuredArrowRightwards</a></span> <span class="fn">X₃</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Limits/Final.html#CategoryTheory.Functor.Final">Final</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.HasPointwiseLeftKanExtensionAt">HasPointwiseLeftKanExtensionAt</a></span> <span class="fn">(<span class="fn"><span class="fn">T</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span>)</span> <span class="fn">X₃</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.HasPointwiseLeftKanExtensionAt">HasPointwiseLeftKanExtensionAt</a></span> <span class="fn">F</span> <span class="fn">(<span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">X₃</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.TwoSquare.hasPointwiseLeftKanExtension_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L132-L139">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.hasPointwiseLeftKanExtension_iff"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">hasPointwiseLeftKanExtension_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.GuitartExact">GuitartExact</a></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">B</span>.<a href="../../.././Mathlib/CategoryTheory/EssentialImage.html#CategoryTheory.Functor.EssSurj">EssSurj</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.HasPointwiseLeftKanExtension">HasPointwiseLeftKanExtension</a></span> <span class="fn">(<span class="fn"><span class="fn">T</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a> <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.HasPointwiseLeftKanExtension">HasPointwiseLeftKanExtension</a></span> <span class="fn">F</span></span></div></div></div></div><div class="decl" id="CategoryTheory.TwoSquare.hasPointwiseLeftKanExtension"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L141-L145">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.hasPointwiseLeftKanExtension"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">hasPointwiseLeftKanExtension</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.GuitartExact">GuitartExact</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.HasPointwiseLeftKanExtension">HasPointwiseLeftKanExtension</a></span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.HasPointwiseLeftKanExtension">HasPointwiseLeftKanExtension</a></span> <span class="fn">(<span class="fn"><span class="fn">T</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.TwoSquare.hasLeftKanExtension"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L147-L151">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.hasLeftKanExtension"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">hasLeftKanExtension</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.GuitartExact">GuitartExact</a></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.HasPointwiseLeftKanExtension">HasPointwiseLeftKanExtension</a></span> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.HasLeftKanExtension">HasLeftKanExtension</a></span> <span class="fn">(<span class="fn"><span class="fn">T</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">F</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.TwoSquare.lanBaseChange"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L162-L177">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.lanBaseChange"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">lanBaseChange</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D</span></span>), <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.HasLeftKanExtension">HasLeftKanExtension</a></span> <span class="fn">F</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>), <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.HasLeftKanExtension">HasLeftKanExtension</a></span> <span class="fn">F</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskeringLeft">Functor.whiskeringLeft</a> <span class="fn">C₁</span> <span class="fn">C₂</span> <span class="fn">D</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">T</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html#CategoryTheory.Functor.lan">lan</a></span></span> <a href="../../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html#CategoryTheory.Functor.lan">lan</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskeringLeft">Functor.whiskeringLeft</a> <span class="fn">C₃</span> <span class="fn">C₄</span> <span class="fn">D</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">B</span>)</span></span></div></div><p>The base change natural transformation for left Kan extensions associated to
+a 2-square.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CategoryTheory.TwoSquare.lanBaseChange" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CategoryTheory.TwoSquare.lanBaseChange_app"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L164-L164">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.lanBaseChange_app"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">lanBaseChange_app</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D</span></span>), <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.HasLeftKanExtension">HasLeftKanExtension</a></span> <span class="fn">F</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>), <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.HasLeftKanExtension">HasLeftKanExtension</a></span> <span class="fn">F</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.lanBaseChange">lanBaseChange</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">F</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html#CategoryTheory.Functor.lanAdjunction">lanAdjunction</a></span> <span class="fn">D</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction.homEquiv">homEquiv</a></span> <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskeringLeft">Functor.whiskeringLeft</a> <span class="fn">C₁</span> <span class="fn">C₂</span> <span class="fn">D</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">T</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">F</span>)</span>
+        <span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html#CategoryTheory.Functor.lan">lan</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.comp">comp</a></span> <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Whiskering.html#CategoryTheory.Functor.whiskeringLeft">Functor.whiskeringLeft</a> <span class="fn">C₃</span> <span class="fn">C₄</span> <span class="fn">D</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">B</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">F</span>)</span>)</span>.<a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv.symm">symm</a></span>
+    <span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.LeftExtension.mk">Functor.LeftExtension.mk</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html#CategoryTheory.Functor.lan">lan</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">F</span>)</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html#CategoryTheory.Functor.lanUnit">lanUnit</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">F</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a></span> <span class="fn">w</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.TwoSquare.isIso_lanBaseChange_app_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L180-L184">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.isIso_lanBaseChange_app_iff"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">isIso_lanBaseChange_app_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D</span></span>), <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.HasLeftKanExtension">HasLeftKanExtension</a></span> <span class="fn">F</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>), <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.HasLeftKanExtension">HasLeftKanExtension</a></span> <span class="fn">F</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.lanBaseChange">lanBaseChange</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">F</span>)</span></span> <a href="../../.././Init/Core.html#Iff">↔</a>   <span class="fn"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.LeftExtension.mk">Functor.LeftExtension.mk</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html#CategoryTheory.Functor.lan">lan</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">F</span>)</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html#CategoryTheory.Functor.lanUnit">lanUnit</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">F</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a></span> <span class="fn">w</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.right">right</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.IsLeftKanExtension">IsLeftKanExtension</a></span>
+    <span class="fn"><span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.LeftExtension.mk">Functor.LeftExtension.mk</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html#CategoryTheory.Functor.lan">lan</a></span>.<a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">F</span>)</span> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Adjunction.html#CategoryTheory.Functor.lanUnit">lanUnit</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">F</span>)</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.Functor.LeftExtension.compTwoSquare">compTwoSquare</a></span> <span class="fn">w</span>)</span>.<a href="../../.././Mathlib/CategoryTheory/Comma/Basic.html#CategoryTheory.Comma.hom">hom</a></span></span></div></div></div></div><div class="decl" id="CategoryTheory.TwoSquare.isIso_lanBaseChange_app"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L187-L192">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.isIso_lanBaseChange_app"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">isIso_lanBaseChange_app</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D</span></span>), <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.HasLeftKanExtension">HasLeftKanExtension</a></span> <span class="fn">F</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>), <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.HasLeftKanExtension">HasLeftKanExtension</a></span> <span class="fn">F</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.HasPointwiseLeftKanExtension">HasPointwiseLeftKanExtension</a></span> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.GuitartExact">GuitartExact</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.lanBaseChange">lanBaseChange</a></span>.<a href="../../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">F</span>)</span></span></div></div></div></div><div class="decl" id="CategoryTheory.TwoSquare.instIsIsoFunctorLanBaseChangeOfGuitartExact"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/CategoryTheory/GuitartExact/KanExtension.lean#L196-L200">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.instIsIsoFunctorLanBaseChangeOfGuitartExact"><span class="name">CategoryTheory</span>.<span class="name">TwoSquare</span>.<span class="name">instIsIsoFunctorLanBaseChangeOfGuitartExact</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₁</span> : <a href="../../.././foundational_types.html">Type</a> u₁}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₂</span> : <a href="../../.././foundational_types.html">Type</a> u₂}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₃</span> : <a href="../../.././foundational_types.html">Type</a> u₃}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">C₄</span> : <a href="../../.././foundational_types.html">Type</a> u₄}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">D</span> : <a href="../../.././foundational_types.html">Type</a> u₅}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₁, u₁}</a> <span class="fn">C₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₂, u₂}</a> <span class="fn">C₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₃, u₃}</a> <span class="fn">C₃</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₄, u₄}</a> <span class="fn">C₄</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.Category">Category.{v₅, u₅}</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">T</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₂</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">L</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">C₃</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₃</span> <span class="fn">C₄</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">w</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/TwoSquare.html#CategoryTheory.TwoSquare">TwoSquare</a> <span class="fn">T</span> <span class="fn">L</span> <span class="fn">R</span> <span class="fn">B</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₁</span> <span class="fn">D</span></span>), <span class="fn"><span class="fn"><span class="fn">L</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Basic.html#CategoryTheory.Functor.HasLeftKanExtension">HasLeftKanExtension</a></span> <span class="fn">F</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">∀ (<span class="fn">F</span> : <span class="fn"><a href="../../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">Functor</a> <span class="fn">C₂</span> <span class="fn">D</span></span>), <span class="fn"><span class="fn"><span class="fn">R</span>.<a href="../../.././Mathlib/CategoryTheory/Functor/KanExtension/Pointwise.html#CategoryTheory.Functor.HasPointwiseLeftKanExtension">HasPointwiseLeftKanExtension</a></span> <span class="fn">F</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/Basic.html#CategoryTheory.TwoSquare.GuitartExact">GuitartExact</a></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.IsIso">IsIso</a> <span class="fn"><span class="fn">w</span>.<a href="../../.././Mathlib/CategoryTheory/GuitartExact/KanExtension.html#CategoryTheory.TwoSquare.lanBaseChange">lanBaseChange</a></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

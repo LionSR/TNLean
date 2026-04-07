@@ -1,0 +1,998 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Dynamics.Flow</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Dynamics.Flow";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Dynamics</span>.<span class="name">Flow</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Logic/Function/Iterate.html">Mathlib.Logic.Function.Iterate</a></li><li><a href="../.././Mathlib/Topology/Algebra/Monoid.html">Mathlib.Topology.Algebra.Monoid</a></li><li><a href="../.././Mathlib/Algebra/Order/Monoid/Submonoid.html">Mathlib.Algebra.Order.Monoid.Submonoid</a></li><li><a href="../.././Mathlib/Topology/Algebra/Group/Defs.html">Mathlib.Topology.Algebra.Group.Defs</a></li><li><a href="../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html">Mathlib.Algebra.Order.Monoid.Canonical.Defs</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Dynamics.Flow" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsInvariant"><span class="name">IsInvariant</span></a></div><div class="nav_link"><a class="break_within" href="#isInvariant_iff_image"><span class="name">isInvariant_iff_image</span></a></div><div class="nav_link"><a class="break_within" href="#IsForwardInvariant"><span class="name">IsForwardInvariant</span></a></div><div class="nav_link"><a class="break_within" href="#IsFwInvariant"><span class="name">IsFwInvariant</span></a></div><div class="nav_link"><a class="break_within" href="#IsInvariant.isForwardInvariant"><span class="name">IsInvariant</span>.<span class="name">isForwardInvariant</span></a></div><div class="nav_link"><a class="break_within" href="#IsInvariant.isFwInvariant"><span class="name">IsInvariant</span>.<span class="name">isFwInvariant</span></a></div><div class="nav_link"><a class="break_within" href="#IsForwardInvariant.isInvariant"><span class="name">IsForwardInvariant</span>.<span class="name">isInvariant</span></a></div><div class="nav_link"><a class="break_within" href="#IsFwInvariant.isInvariant"><span class="name">IsFwInvariant</span>.<span class="name">isInvariant</span></a></div><div class="nav_link"><a class="break_within" href="#isForwardInvariant_iff_isInvariant"><span class="name">isForwardInvariant_iff_isInvariant</span></a></div><div class="nav_link"><a class="break_within" href="#isFwInvariant_iff_isInvariant"><span class="name">isFwInvariant_iff_isInvariant</span></a></div><div class="nav_link"><a class="break_within" href="#Flow"><span class="name">Flow</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.instInhabited"><span class="name">Flow</span>.<span class="name">instInhabited</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.instCoeFunForallForall"><span class="name">Flow</span>.<span class="name">instCoeFunForallForall</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.ext"><span class="name">Flow</span>.<span class="name">ext</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.ext_iff"><span class="name">Flow</span>.<span class="name">ext_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.continuous"><span class="name">Flow</span>.<span class="name">continuous</span></a></div><div class="nav_link"><a class="break_within" href="#Continuous.flow"><span class="name">Continuous</span>.<span class="name">flow</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.map_add"><span class="name">Flow</span>.<span class="name">map_add</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.map_zero"><span class="name">Flow</span>.<span class="name">map_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.map_zero_apply"><span class="name">Flow</span>.<span class="name">map_zero_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.fromIter"><span class="name">Flow</span>.<span class="name">fromIter</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.restrict"><span class="name">Flow</span>.<span class="name">restrict</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.coe_restrict_apply"><span class="name">Flow</span>.<span class="name">coe_restrict_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.toAddAction"><span class="name">Flow</span>.<span class="name">toAddAction</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.restrictAddSubmonoid"><span class="name">Flow</span>.<span class="name">restrictAddSubmonoid</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.restrictAddSubmonoid_apply"><span class="name">Flow</span>.<span class="name">restrictAddSubmonoid_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.orbit"><span class="name">Flow</span>.<span class="name">orbit</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.orbit_eq_range"><span class="name">Flow</span>.<span class="name">orbit_eq_range</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.mem_orbit_iff"><span class="name">Flow</span>.<span class="name">mem_orbit_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.mem_orbit"><span class="name">Flow</span>.<span class="name">mem_orbit</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.mem_orbit_self"><span class="name">Flow</span>.<span class="name">mem_orbit_self</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.nonempty_orbit"><span class="name">Flow</span>.<span class="name">nonempty_orbit</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.mem_orbit_of_mem_orbit"><span class="name">Flow</span>.<span class="name">mem_orbit_of_mem_orbit</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.isInvariant_orbit"><span class="name">Flow</span>.<span class="name">isInvariant_orbit</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.orbit_restrict"><span class="name">Flow</span>.<span class="name">orbit_restrict</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.restrictNonneg"><span class="name">Flow</span>.<span class="name">restrictNonneg</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.forwardOrbit"><span class="name">Flow</span>.<span class="name">forwardOrbit</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.forwardOrbit_eq_range_nonneg"><span class="name">Flow</span>.<span class="name">forwardOrbit_eq_range_nonneg</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.isForwardInvariant_forwardOrbit"><span class="name">Flow</span>.<span class="name">isForwardInvariant_forwardOrbit</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.forwardOrbit_subset_orbit"><span class="name">Flow</span>.<span class="name">forwardOrbit_subset_orbit</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.mem_orbit_of_mem_forwardOrbit"><span class="name">Flow</span>.<span class="name">mem_orbit_of_mem_forwardOrbit</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.IsSemiconjugacy"><span class="name">Flow</span>.<span class="name">IsSemiconjugacy</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.IsSemiconjugacy.comp"><span class="name">Flow</span>.<span class="name">IsSemiconjugacy</span>.<span class="name">comp</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.isSemiconjugacy_id_iff_eq"><span class="name">Flow</span>.<span class="name">isSemiconjugacy_id_iff_eq</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.IsFactorOf"><span class="name">Flow</span>.<span class="name">IsFactorOf</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.IsSemiconjugacy.isFactorOf"><span class="name">Flow</span>.<span class="name">IsSemiconjugacy</span>.<span class="name">isFactorOf</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.IsFactorOf.trans"><span class="name">Flow</span>.<span class="name">IsFactorOf</span>.<span class="name">trans</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.IsFactorOf.self"><span class="name">Flow</span>.<span class="name">IsFactorOf</span>.<span class="name">self</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.isInvariant_iff_image_eq"><span class="name">Flow</span>.<span class="name">isInvariant_iff_image_eq</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.reverse"><span class="name">Flow</span>.<span class="name">reverse</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.continuous_toFun"><span class="name">Flow</span>.<span class="name">continuous_toFun</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.toHomeomorph"><span class="name">Flow</span>.<span class="name">toHomeomorph</span></a></div><div class="nav_link"><a class="break_within" href="#Flow.image_eq_preimage_symm"><span class="name">Flow</span>.<span class="name">image_eq_preimage_symm</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Flows-and-invariant-sets" class="markdown-heading">Flows and invariant sets <a class="hover-link" href="#Flows-and-invariant-sets">#</a></h1><p>This file defines a flow on a topological space <code>α</code> by a topological
+monoid <code>τ</code> as a continuous monoid-action of <code>τ</code> on <code>α</code>. Anticipating the
+cases where <code>τ</code> is one of <code>ℕ</code>, <code>ℤ</code>, <code>ℝ⁺</code>, or <code>ℝ</code>, we use additive
+notation for the monoids, though the definition does not require
+commutativity.</p><p>A subset <code>s</code> of <code>α</code> is invariant under a family of maps <code>ϕₜ : α → α</code>
+if <code>ϕₜ s ⊆ s</code> for all <code>t</code>. In many cases <code>ϕ</code> will be a flow on
+<code>α</code>. For the cases where <code>ϕ</code> is a flow by an ordered (additive,
+commutative) monoid, we additionally define forward invariance, where
+<code>t</code> ranges over those elements which are nonnegative.</p><p>Additionally, we define such constructions as the (forward) orbit, a
+semiconjugacy between flows, a factor of a flow, the restriction of a
+flow onto an invariant subset, and the time-reversal of a flow by a group.</p></div><div class="mod_doc"><h3 id="Invariant-sets" class="markdown-heading">Invariant sets <a class="hover-link" href="#Invariant-sets">#</a></h3></div><div class="decl" id="IsInvariant"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L46-L48">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#IsInvariant"><span class="name">IsInvariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A set <code>s ⊆ α</code> is invariant under <code>ϕ : τ → α → α</code> if <code>ϕ t s ⊆ s</code> for all <code>t</code> in <code>τ</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ (<span class="fn">t</span> : <span class="fn">τ</span>), <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">(<span class="fn">ϕ</span> <span class="fn">t</span>)</span> <span class="fn">s</span> <span class="fn">s</span></span></span></li></ul></details><details id="instances-for-list-IsInvariant" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="isInvariant_iff_image"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L52-L53">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#isInvariant_iff_image"><span class="name">isInvariant_iff_image</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">t</span> : <span class="fn">τ</span>), <span class="fn"><span class="fn">ϕ</span> <span class="fn">t</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="IsForwardInvariant"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L55-L57">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant"><span class="name">IsForwardInvariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A set <code>s ⊆ α</code> is forward-invariant under <code>ϕ : τ → α → α</code> if <code>ϕ t s ⊆ s</code> for all <code>t ≥ 0</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∀ ⦃<span class="fn">t</span> : <span class="fn">τ</span>⦄, <span class="fn"><span class="fn">0</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">t</span> → <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.MapsTo">Set.MapsTo</a> <span class="fn">(<span class="fn">ϕ</span> <span class="fn">t</span>)</span> <span class="fn">s</span> <span class="fn">s</span></span></span></span></li></ul></details><details id="instances-for-list-IsForwardInvariant" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="IsFwInvariant"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L59-L59">source</a></div><div class="attributes">@[deprecated IsForwardInvariant (since := &quot;2025-09-25&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#IsFwInvariant"><span class="name">IsFwInvariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a></code>.</p><hr>
+<p>A set <code>s ⊆ α</code> is forward-invariant under <code>ϕ : τ → α → α</code> if <code>ϕ t s ⊆ s</code> for all <code>t ≥ 0</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">@<a href="../.././Mathlib/Dynamics/Flow.html#IsFwInvariant">IsFwInvariant</a> <a href="../.././Init/Prelude.html#Eq">=</a> @<a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a></li></ul></details><details id="instances-for-list-IsFwInvariant" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="IsInvariant.isForwardInvariant"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L61-L62">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#IsInvariant.isForwardInvariant"><span class="name">IsInvariant</span>.<span class="name">isForwardInvariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϕ</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="IsInvariant.isFwInvariant"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L64-L65">source</a></div><div class="attributes">@[deprecated IsInvariant.isForwardInvariant (since := &quot;2025-09-25&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#IsInvariant.isFwInvariant"><span class="name">IsInvariant</span>.<span class="name">isFwInvariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϕ</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant.isForwardInvariant">IsInvariant.isForwardInvariant</a></code>.</p></div></div><div class="decl" id="IsForwardInvariant.isInvariant"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L67-L71">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant.isInvariant"><span class="name">IsForwardInvariant</span>.<span class="name">isInvariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϕ</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span></div></div><p>If <code>τ</code> is a <code><a href="../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a></code> monoid (e.g., <code>ℕ</code> or <code>ℝ≥0</code>), then the notions
+<code><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a></code> and <code><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a></code> are equivalent.</p></div></div><div class="decl" id="IsFwInvariant.isInvariant"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L73-L74">source</a></div><div class="attributes">@[deprecated IsForwardInvariant.isInvariant (since := &quot;2025-09-25&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#IsFwInvariant.isInvariant"><span class="name">IsFwInvariant</span>.<span class="name">isInvariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϕ</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant.isInvariant">IsForwardInvariant.isInvariant</a></code>.</p><hr>
+<p>If <code>τ</code> is a <code><a href="../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a></code> monoid (e.g., <code>ℕ</code> or <code>ℝ≥0</code>), then the notions
+<code><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a></code> and <code><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a></code> are equivalent.</p></div></div><div class="decl" id="isForwardInvariant_iff_isInvariant"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L76-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#isForwardInvariant_iff_isInvariant"><span class="name">isForwardInvariant_iff_isInvariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϕ</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span></div></div><p>If <code>τ</code> is a <code><a href="../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a></code> monoid (e.g., <code>ℕ</code> or <code>ℝ≥0</code>), then the notions
+<code><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a></code> and <code><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a></code> are equivalent.</p></div></div><div class="decl" id="isFwInvariant_iff_isInvariant"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L83-L84">source</a></div><div class="attributes">@[deprecated isForwardInvariant_iff_isInvariant (since := &quot;2025-09-25&quot;)]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#isFwInvariant_iff_isInvariant"><span class="name">isFwInvariant_iff_isInvariant</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϕ</span> : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn">ϕ</span> <span class="fn">s</span></span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/Dynamics/Flow.html#isForwardInvariant_iff_isInvariant">isForwardInvariant_iff_isInvariant</a></code>.</p><hr>
+<p>If <code>τ</code> is a <code><a href="../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a></code> monoid (e.g., <code>ℕ</code> or <code>ℝ≥0</code>), then the notions
+<code><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a></code> and <code><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a></code> are equivalent.</p></div></div><div class="mod_doc"><h3 id="Flows" class="markdown-heading">Flows <a class="hover-link" href="#Flows">#</a></h3></div><div class="decl" id="Flow"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L92-L100">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow"><span class="name">Flow</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Type</a> (max u_1 u_2)</div></div><p>A flow on a topological space <code>α</code> by an additive topological
+monoid <code>τ</code> is a continuous monoid action of <code>τ</code> on <code>α</code>.</p><ul class="structure_fields" id="Flow.mk"><li id="Flow.toFun" class="structure_field"><div class="structure_field_info">toFun : <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span></div><div class="structure_field_doc"><p>The map <code>τ → α → α</code> underlying a flow of <code>τ</code> on <code>α</code>.</p></div></li><li id="Flow.cont'" class="structure_field"><div class="structure_field_info">cont' : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">(<a href="../.././Init/Data/Function.html#Function.uncurry">Function.uncurry</a> <span class="fn"><span class="fn">self</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span>)</span></span></div></li><li id="Flow.map_add'" class="structure_field"><div class="structure_field_info">map_add'<span class="decl_args">
+<span class="fn">(<span class="fn">t₁ </span><span class="fn">t₂</span> : <span class="fn">τ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+ : <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> (<span class="fn">t₁</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">t₂</span>) <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t₁</span> <span class="fn">(<span class="fn"><span class="fn">self</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t₂</span> <span class="fn">x</span>)</span></span></div></li><li id="Flow.map_zero'" class="structure_field"><div class="structure_field_info">map_zero'<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+ : <span class="fn"><span class="fn"><span class="fn">self</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">0</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">x</span></div></li></ul><details id="instances-for-list-Flow" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.instInhabited"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L108-L112">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.instInhabited"><span class="name">Flow</span>.<span class="name">instInhabited</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Prelude.html#Inhabited">Inhabited</a> <span class="fn">(<a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span>)</span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../.././Mathlib/Dynamics/Flow.html#Flow.instInhabited">Flow.instInhabited</a> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Inhabited.mk">{</a> <span class="fn">default</span> := <a href="../.././Mathlib/Dynamics/Flow.html#Flow.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">x</span> : <span class="fn">τ</span>) (<span class="fn">x_1</span> : <span class="fn">α</span>) =&gt; <span class="fn">x_1</span></span>, <span class="fn">cont'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">map_zero'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Dynamics/Flow.html#Flow.mk">}</a> <a href="../.././Init/Prelude.html#Inhabited.mk">}</a></li></ul></details></div></div><div class="decl" id="Flow.instCoeFunForallForall"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L114-L114">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.instCoeFunForallForall"><span class="name">Flow</span>.<span class="name">instCoeFunForallForall</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Init/Coe.html#CoeFun">CoeFun</a> <span class="fn">(<a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span>)</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>) =&gt; <span class="fn"><span class="fn">τ</span> → <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span></span></span></span></div></div><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../.././Mathlib/Dynamics/Flow.html#Flow.instCoeFunForallForall">Flow.instCoeFunForallForall</a> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Coe.html#CoeFun.mk">{</a> <span class="fn">coe</span> := <a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">Flow.toFun</a> <a href="../.././Init/Coe.html#CoeFun.mk">}</a></li></ul></details></div></div><div class="decl" id="Flow.ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L116-L121">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.ext"><span class="name">Flow</span>.<span class="name">ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϕ₁ </span><span class="fn">ϕ₂</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(∀ (<span class="fn">t</span> : <span class="fn">τ</span>) (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><span class="fn"><span class="fn">ϕ₁</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">ϕ₂</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">x</span></span>)</span> → <span class="fn">ϕ₁</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">ϕ₂</span></span></div></div></div></div><div class="decl" id="Flow.ext_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L116-L116">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.ext_iff"><span class="name">Flow</span>.<span class="name">ext_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ϕ₁ </span><span class="fn">ϕ₂</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">ϕ₁</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">ϕ₂</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">t</span> : <span class="fn">τ</span>) (<span class="fn">x</span> : <span class="fn">α</span>), <span class="fn"><span class="fn"><span class="fn">ϕ₁</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">ϕ₂</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">x</span></span></span></div></div></div></div><div class="decl" id="Flow.continuous"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L123-L126">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.continuous"><span class="name">Flow</span>.<span class="name">continuous</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">t</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">(<span class="fn">t</span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span></span></div></div></div></div><div class="decl" id="Continuous.flow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L128-L128">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Continuous.flow"><span class="name">Continuous</span>.<span class="name">flow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">t</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">τ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ht</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">t</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hf</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">f</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">β</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">(<span class="fn">t</span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">x</span>)</span></span></span></span></div></div><p><strong>Alias</strong> of <code><a href="../.././Mathlib/Dynamics/Flow.html#Flow.continuous">Flow.continuous</a></code>.</p></div></div><div class="decl" id="Flow.map_add"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L130-L130">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.map_add"><span class="name">Flow</span>.<span class="name">map_add</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t₁ </span><span class="fn">t₂</span> : <span class="fn">τ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> (<span class="fn">t₁</span> <a href="../.././Init/Prelude.html#HAdd.hAdd">+</a> <span class="fn">t₂</span>) <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t₁</span> <span class="fn">(<span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t₂</span> <span class="fn">x</span>)</span></span></div></div></div></div><div class="decl" id="Flow.map_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L132-L133">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.map_zero"><span class="name">Flow</span>.<span class="name">map_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">0</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#id">id</a></div></div></div></div><div class="decl" id="Flow.map_zero_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L135-L135">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.map_zero_apply"><span class="name">Flow</span>.<span class="name">map_zero_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">0</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">x</span></div></div></div></div><div class="decl" id="Flow.fromIter"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L137-L143">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.fromIter"><span class="name">Flow</span>.<span class="name">fromIter</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">g</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">g</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <a href="../.././Init/Prelude.html#Nat">ℕ</a> <span class="fn">α</span></span></div></div><p>Iterations of a continuous function from a topological space <code>α</code>
+to itself defines a semiflow by <code>ℕ</code> on <code>α</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow.fromIter">Flow.fromIter</a> <span class="fn">h</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Dynamics/Flow.html#Flow.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>) (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn">g</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">^[</a><span class="fn">n</span><a href="../.././Mathlib/Logic/Function/Iterate.html#Nat.iterate">]</a> <span class="fn">x</span></span></span>, <span class="fn">cont'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">map_zero'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Dynamics/Flow.html#Flow.mk">}</a></li></ul></details><details id="instances-for-list-Flow.fromIter" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.restrict"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L145-L150">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.restrict"><span class="name">Flow</span>.<span class="name">restrict</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">↑<span class="fn">s</span></span></span></div></div><p>Restriction of a flow onto an invariant set.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.restrict">restrict</a></span> <span class="fn">h</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Dynamics/Flow.html#Flow.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">t</span> : <span class="fn">τ</span>) =&gt; <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.MapsTo.restrict">Set.MapsTo.restrict</a> <span class="fn">(<span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span>)</span> <span class="fn">s</span> <span class="fn">s</span> <span class="fn">⋯</span></span></span>, <span class="fn">cont'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">map_zero'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Dynamics/Flow.html#Flow.mk">}</a></li></ul></details><details id="instances-for-list-Flow.restrict" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.coe_restrict_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L152-L154">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.coe_restrict_apply"><span class="name">Flow</span>.<span class="name">coe_restrict_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">τ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">↑<span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.restrict">restrict</a></span> <span class="fn">h</span>)</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">x</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">↑<span class="fn">x</span></span></span></div></div></div></div><div class="decl" id="Flow.toAddAction"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L157-L162">source</a></div><div class="attributes">@[implicit_reducible]</div>
+<div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.toAddAction"><span class="name">Flow</span>.<span class="name">toAddAction</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction">AddAction</a> <span class="fn">τ</span> <span class="fn">α</span></span></div></div><p>Convert a flow to an additive monoid action.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toAddAction">toAddAction</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction.mk">{</a> <span class="fn">vadd</span> := <span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span>, <span class="fn">add_vadd</span> := <span class="fn">⋯</span>, <span class="fn">zero_vadd</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Algebra/Group/Action/Defs.html#AddAction.mk">}</a></li></ul></details><details id="instances-for-list-Flow.toAddAction" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.restrictAddSubmonoid"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L164-L169">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.restrictAddSubmonoid"><span class="name">Flow</span>.<span class="name">restrictAddSubmonoid</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoid">AddSubmonoid</a> <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">(↥<span class="fn">S</span>)</span> <span class="fn">α</span></span></div></div><p>Restrict a flow by <code>τ</code> to a flow by an additive submonoid of <code>τ</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.restrictAddSubmonoid">restrictAddSubmonoid</a></span> <span class="fn">S</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Dynamics/Flow.html#Flow.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">t</span> : <span class="fn">↥<span class="fn">S</span></span>) (<span class="fn">x</span> : <span class="fn">α</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">(↑<span class="fn">t</span>)</span> <span class="fn">x</span></span></span>, <span class="fn">cont'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">map_zero'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Dynamics/Flow.html#Flow.mk">}</a></li></ul></details><details id="instances-for-list-Flow.restrictAddSubmonoid" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.restrictAddSubmonoid_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L171-L172">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.restrictAddSubmonoid_apply"><span class="name">Flow</span>.<span class="name">restrictAddSubmonoid_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Submonoid/Defs.html#AddSubmonoid">AddSubmonoid</a> <span class="fn">τ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">↥<span class="fn">S</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.restrictAddSubmonoid">restrictAddSubmonoid</a></span> <span class="fn">S</span>)</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">(↑<span class="fn">t</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Flow.orbit"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L176-L177">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit"><span class="name">Flow</span>.<span class="name">orbit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span></div></div><p>The orbit of a point under a flow.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/GroupTheory/GroupAction/Defs.html#AddAction.orbit">AddAction.orbit</a> <span class="fn">τ</span> <span class="fn">x</span></span></li></ul></details><details id="instances-for-list-Flow.orbit" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.orbit_eq_range"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L179-L179">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit_eq_range"><span class="name">Flow</span>.<span class="name">orbit_eq_range</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">fun (<span class="fn">t</span> : <span class="fn">τ</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">x</span></span></span></span></div></div></div></div><div class="decl" id="Flow.mem_orbit_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L181-L181">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.mem_orbit_iff"><span class="name">Flow</span>.<span class="name">mem_orbit_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">x₂</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x₁</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∃ (<span class="fn">t</span> : <span class="fn">τ</span>), <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">x₁</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">x₂</span></span></div></div></div></div><div class="decl" id="Flow.mem_orbit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L183-L184">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.mem_orbit"><span class="name">Flow</span>.<span class="name">mem_orbit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">τ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Flow.mem_orbit_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L186-L186">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.mem_orbit_self"><span class="name">Flow</span>.<span class="name">mem_orbit_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="Flow.nonempty_orbit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L188-L188">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.nonempty_orbit"><span class="name">Flow</span>.<span class="name">nonempty_orbit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x</span>)</span>.<a href="../.././Mathlib/Data/Set/Defs.html#Set.Nonempty">Nonempty</a></span></div></div></div></div><div class="decl" id="Flow.mem_orbit_of_mem_orbit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L190-L191">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.mem_orbit_of_mem_orbit"><span class="name">Flow</span>.<span class="name">mem_orbit_of_mem_orbit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">τ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">x₂</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x₁</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span> <span class="fn">x₂</span></span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x₁</span></span></div></div></div></div><div class="decl" id="Flow.isInvariant_orbit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L193-L195">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.isInvariant_orbit"><span class="name">Flow</span>.<span class="name">isInvariant_orbit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">(<span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x</span>)</span></span></div></div><p>The orbit of a point under a flow <code>ϕ</code> is invariant under <code>ϕ</code>.</p></div></div><div class="decl" id="Flow.orbit_restrict"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L197-L199">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit_restrict"><span class="name">Flow</span>.<span class="name">orbit_restrict</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">↑<span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.restrict">restrict</a></span> <span class="fn">hs</span>)</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Subtype.val">Subtype.val</a> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">↑<span class="fn">x</span></span></span></div></div></div></div><div class="decl" id="Flow.restrictNonneg"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L203-L204">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.restrictNonneg"><span class="name">Flow</span>.<span class="name">restrictNonneg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">(↥<span class="fn">(<a href="../.././Mathlib/Algebra/Order/Monoid/Submonoid.html#AddSubmonoid.nonneg">AddSubmonoid.nonneg</a> <span class="fn">τ</span>)</span>)</span> <span class="fn">α</span></span></div></div><p>Restrict a flow by <code>τ</code> to a flow by the additive submonoid of nonnegative elements of <code>τ</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.restrictNonneg">restrictNonneg</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.restrictAddSubmonoid">restrictAddSubmonoid</a></span> <span class="fn">(<a href="../.././Mathlib/Algebra/Order/Monoid/Submonoid.html#AddSubmonoid.nonneg">AddSubmonoid.nonneg</a> <span class="fn">τ</span>)</span></span></li></ul></details><details id="instances-for-list-Flow.restrictNonneg" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.forwardOrbit"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L206-L207">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.forwardOrbit"><span class="name">Flow</span>.<span class="name">forwardOrbit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span></div></div><p>The forward orbit of a point under a flow.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.forwardOrbit">forwardOrbit</a></span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.restrictNonneg">restrictNonneg</a></span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x</span></span></li></ul></details><details id="instances-for-list-Flow.forwardOrbit" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.forwardOrbit_eq_range_nonneg"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L209-L210">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.forwardOrbit_eq_range_nonneg"><span class="name">Flow</span>.<span class="name">forwardOrbit_eq_range_nonneg</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.forwardOrbit">forwardOrbit</a></span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/Data/Set/Operations.html#Set.range">Set.range</a> <span class="fn">fun (<span class="fn">t</span> : <a href="../.././Init/Prelude.html#Subtype">{</a> <span class="fn">t</span> <a href="../.././Init/Prelude.html#Subtype">:</a> <span class="fn">τ</span> <a href="../.././Init/Prelude.html#Subtype">//</a> <span class="fn">0</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">t</span> <a href="../.././Init/Prelude.html#Subtype">}</a>) =&gt; <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">(↑<span class="fn">t</span>)</span> <span class="fn">x</span></span></span></span></div></div></div></div><div class="decl" id="Flow.isForwardInvariant_forwardOrbit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L212-L214">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.isForwardInvariant_forwardOrbit"><span class="name">Flow</span>.<span class="name">isForwardInvariant_forwardOrbit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsForwardInvariant">IsForwardInvariant</a> <span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">(<span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.forwardOrbit">forwardOrbit</a></span> <span class="fn">x</span>)</span></span></div></div><p>The forward orbit of a point under a flow <code>ϕ</code> is forward-invariant under <code>ϕ</code>.</p></div></div><div class="decl" id="Flow.forwardOrbit_subset_orbit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L216-L218">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.forwardOrbit_subset_orbit"><span class="name">Flow</span>.<span class="name">forwardOrbit_subset_orbit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.forwardOrbit">forwardOrbit</a></span> <span class="fn">x</span></span> <a href="../.././Init/Core.html#HasSubset.Subset">⊆</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x</span></span></div></div><p>The forward orbit of a point <code>x</code> is contained in the orbit of <code>x</code>.</p></div></div><div class="decl" id="Flow.mem_orbit_of_mem_forwardOrbit"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L220-L221">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.mem_orbit_of_mem_forwardOrbit"><span class="name">Flow</span>.<span class="name">mem_orbit_of_mem_forwardOrbit</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Order/Monoid/Unbundled/Defs.html#AddLeftMono">AddLeftMono</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x₁ </span><span class="fn">x₂</span> : <span class="fn">α</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">x₁</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.forwardOrbit">forwardOrbit</a></span> <span class="fn">x₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">x₁</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.orbit">orbit</a></span> <span class="fn">x₂</span></span></div></div></div></div><div class="decl" id="Flow.IsSemiconjugacy"><div class="structure"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L227-L233">source</a></div><div class="decl_header"><span class="decl_kind">structure</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.IsSemiconjugacy"><span class="name">Flow</span>.<span class="name">IsSemiconjugacy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">π</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>Given flows <code>ϕ</code> by <code>τ</code> on <code>α</code> and <code>ψ</code> by <code>τ</code> on <code>β</code>, a function <code>π : α → β</code> is called a
+<em>semiconjugacy</em> from <code>ϕ</code> to <code>ψ</code> if <code>π</code> is continuous and surjective, and <code>π ∘ (ϕ t) = (ψ t) ∘ π</code> for
+all <code>t : τ</code>.</p><ul class="structure_fields" id="Flow.IsSemiconjugacy.mk"><li id="Flow.IsSemiconjugacy.cont" class="structure_field"><div class="structure_field_info">cont : <span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">π</span></span></div></li><li id="Flow.IsSemiconjugacy.surj" class="structure_field"><div class="structure_field_info">surj : <span class="fn"><a href="../.././Init/Data/Function.html#Function.Surjective">Function.Surjective</a> <span class="fn">π</span></span></div></li><li id="Flow.IsSemiconjugacy.semiconj" class="structure_field"><div class="structure_field_info">semiconj<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">τ</span>)</span></span>
+ : <span class="fn"><a href="../.././Mathlib/Logic/Function/Conjugate.html#Function.Semiconj">Function.Semiconj</a> <span class="fn">π</span> <span class="fn">(<span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span>)</span> <span class="fn">(<span class="fn"><span class="fn">ψ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span>)</span></span></div></li></ul><details id="instances-for-list-Flow.IsSemiconjugacy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.IsSemiconjugacy.comp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L235-L238">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.IsSemiconjugacy.comp"><span class="name">Flow</span>.<span class="name">IsSemiconjugacy</span>.<span class="name">comp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">γ</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">π</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn"><span class="fn">β</span> → <span class="fn">γ</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsSemiconjugacy">IsSemiconjugacy</a> <span class="fn">π</span> <span class="fn">ϕ</span> <span class="fn">ψ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsSemiconjugacy">IsSemiconjugacy</a> <span class="fn">ρ</span> <span class="fn">ψ</span> <span class="fn">χ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsSemiconjugacy">IsSemiconjugacy</a> (<span class="fn">ρ</span> <a href="../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">π</span>) <span class="fn">ϕ</span> <span class="fn">χ</span></span></div></div><p>The composition of semiconjugacies is a semiconjugacy.</p></div></div><div class="decl" id="Flow.isSemiconjugacy_id_iff_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L240-L242">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.isSemiconjugacy_id_iff_eq"><span class="name">Flow</span>.<span class="name">isSemiconjugacy_id_iff_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ </span><span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsSemiconjugacy">IsSemiconjugacy</a> <a href="../.././Init/Prelude.html#id">id</a> <span class="fn">ϕ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">ϕ</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">ψ</span></div></div><p>The identity is a semiconjugacy from <code>ϕ</code> to <code>ψ</code> if and only if <code>ϕ</code> and <code>ψ</code> are equal.</p></div></div><div class="decl" id="Flow.IsFactorOf"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L244-L245">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.IsFactorOf"><span class="name">Flow</span>.<span class="name">IsFactorOf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><a href="../.././foundational_types.html">Prop</a></div></div><p>A flow <code>ψ</code> is called a <em>factor</em> of <code>ϕ</code> if there exists a semiconjugacy from <code>ϕ</code> to <code>ψ</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">ψ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsFactorOf">IsFactorOf</a></span> <span class="fn">ϕ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∃ (<span class="fn">π</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>), <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsSemiconjugacy">Flow.IsSemiconjugacy</a> <span class="fn">π</span> <span class="fn">ϕ</span> <span class="fn">ψ</span></span></span></li></ul></details><details id="instances-for-list-Flow.IsFactorOf" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.IsSemiconjugacy.isFactorOf"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L247-L248">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.IsSemiconjugacy.isFactorOf"><span class="name">Flow</span>.<span class="name">IsSemiconjugacy</span>.<span class="name">isFactorOf</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">β</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">π</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">β</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsSemiconjugacy">IsSemiconjugacy</a> <span class="fn">π</span> <span class="fn">ϕ</span> <span class="fn">ψ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ψ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsFactorOf">IsFactorOf</a></span> <span class="fn">ϕ</span></span></div></div></div></div><div class="decl" id="Flow.IsFactorOf.trans"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L250-L252">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.IsFactorOf.trans"><span class="name">Flow</span>.<span class="name">IsFactorOf</span>.<span class="name">trans</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">β</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">γ</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">β</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">γ</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">β</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">γ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₁</span> : <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsFactorOf">IsFactorOf</a></span> <span class="fn">ψ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h₂</span> : <span class="fn"><span class="fn"><span class="fn">ψ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsFactorOf">IsFactorOf</a></span> <span class="fn">χ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsFactorOf">IsFactorOf</a></span> <span class="fn">χ</span></span></div></div><p>Transitivity of factors of flows.</p></div></div><div class="decl" id="Flow.IsFactorOf.self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L254-L255">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.IsFactorOf.self"><span class="name">Flow</span>.<span class="name">IsFactorOf</span>.<span class="name">self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Monoid/Defs.html#ContinuousAdd">ContinuousAdd</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.IsFactorOf">IsFactorOf</a></span> <span class="fn">ϕ</span></span></div></div><p>Every flow is a factor of itself.</p></div></div><div class="decl" id="Flow.isInvariant_iff_image_eq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L264-L268">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.isInvariant_iff_image_eq"><span class="name">Flow</span>.<span class="name">isInvariant_iff_image_eq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#IsInvariant">IsInvariant</a> <span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">s</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">t</span> : <span class="fn">τ</span>), <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">s</span></span></div></div></div></div><div class="decl" id="Flow.reverse"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L270-L276">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.reverse"><span class="name">Flow</span>.<span class="name">reverse</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span></div></div><p>The time-reversal of a flow <code>ϕ</code> by a (commutative, additive) group
+is defined <code>ϕ.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.reverse">reverse</a> t x = ϕ (-t) x</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.reverse">reverse</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Dynamics/Flow.html#Flow.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">t</span> : <span class="fn">τ</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> (<a href="../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">t</span>)</span></span>, <span class="fn">cont'</span> := <span class="fn">⋯</span>, <span class="fn">map_add'</span> := <span class="fn">⋯</span>, <span class="fn">map_zero'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Dynamics/Flow.html#Flow.mk">}</a></li></ul></details><details id="instances-for-list-Flow.reverse" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.continuous_toFun"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L278-L280">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.continuous_toFun"><span class="name">Flow</span>.<span class="name">continuous_toFun</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">τ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#Continuous">Continuous</a> <span class="fn">(<span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span>)</span></span></div></div></div></div><div class="decl" id="Flow.toHomeomorph"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L282-L287">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.toHomeomorph"><span class="name">Flow</span>.<span class="name">toHomeomorph</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">τ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">α</span> <a href="../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph">≃ₜ</a> <span class="fn">α</span></div></div><p>The map <code>ϕ t</code> as a homeomorphism.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toHomeomorph">toHomeomorph</a></span> <span class="fn">t</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph.mk">{</a> <span class="fn">toFun</span> := <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span></span>, <span class="fn">invFun</span> := <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> (<a href="../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">t</span>)</span>, <span class="fn">left_inv</span> := <span class="fn">⋯</span>, <span class="fn">right_inv</span> := <span class="fn">⋯</span>, <span class="fn">continuous_toFun</span> := <span class="fn">⋯</span>,
+    <span class="fn">continuous_invFun</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Topology/Homeomorph/Defs.html#Homeomorph.mk">}</a></li></ul></details><details id="instances-for-list-Flow.toHomeomorph" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Flow.image_eq_preimage_symm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Dynamics/Flow.lean#L289-L290">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Dynamics/Flow.html#Flow.image_eq_preimage_symm"><span class="name">Flow</span>.<span class="name">image_eq_preimage_symm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">τ</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommGroup">AddCommGroup</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Algebra/Group/Defs.html#IsTopologicalAddGroup">IsTopologicalAddGroup</a> <span class="fn">τ</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ϕ</span> : <span class="fn"><a href="../.././Mathlib/Dynamics/Flow.html#Flow">Flow</a> <span class="fn">τ</span> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">τ</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">s</span> : <span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> <span class="fn">t</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#Set.image">''</a> <span class="fn">s</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">ϕ</span>.<a href="../.././Mathlib/Dynamics/Flow.html#Flow.toFun">toFun</a></span> (<a href="../.././Init/Prelude.html#Neg.neg">-</a><span class="fn">t</span>)</span> <a href="../.././Mathlib/Data/Set/Operations.html#Set.preimage">⁻¹'</a> <span class="fn">s</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

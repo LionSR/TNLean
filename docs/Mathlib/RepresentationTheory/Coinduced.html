@@ -1,0 +1,852 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.RepresentationTheory.Coinduced</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.RepresentationTheory.Coinduced";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">RepresentationTheory</span>.<span class="name">Coinduced</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/RepresentationTheory/Intertwining.html">Mathlib.RepresentationTheory.Intertwining</a></li><li><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html">Mathlib.RepresentationTheory.Rep.Basic</a></li><li><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html">Mathlib.RepresentationTheory.Rep.Res</a></li><li><a href="../.././Mathlib/CategoryTheory/Preadditive/Projective/Preserves.html">Mathlib.CategoryTheory.Preadditive.Projective.Preserves</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.RepresentationTheory.Coinduced" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Representation.coindV"><span class="name">Representation</span>.<span class="name">coindV</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.coe_coindV"><span class="name">Representation</span>.<span class="name">coe_coindV</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.mem_coindV"><span class="name">Representation</span>.<span class="name">mem_coindV</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.coind"><span class="name">Representation</span>.<span class="name">coind</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.coind_apply"><span class="name">Representation</span>.<span class="name">coind_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.coindMap"><span class="name">Representation</span>.<span class="name">coindMap</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.coindMap_coe_apply"><span class="name">Representation</span>.<span class="name">coindMap_coe_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.coindMap_coe_apply_apply"><span class="name">Representation</span>.<span class="name">coindMap_coe_apply_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coind"><span class="name">Rep</span>.<span class="name">coind</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindMap"><span class="name">Rep</span>.<span class="name">coindMap</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindFunctor"><span class="name">Rep</span>.<span class="name">coindFunctor</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindFunctor_obj"><span class="name">Rep</span>.<span class="name">coindFunctor_obj</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindFunctor_map"><span class="name">Rep</span>.<span class="name">coindFunctor_map</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.instPreservesEpimorphismsSubtypeMemSubgroupCoindFunctorSubtype"><span class="name">Rep</span>.<span class="name">instPreservesEpimorphismsSubtypeMemSubgroupCoindFunctorSubtype</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.coind'"><span class="name">Representation</span>.<span class="name">coind'</span></a></div><div class="nav_link"><a class="break_within" href="#Representation.coind'_apply_apply"><span class="name">Representation</span>.<span class="name">coind'_apply_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coind'"><span class="name">Rep</span>.<span class="name">coind'</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coind'_ext"><span class="name">Rep</span>.<span class="name">coind'_ext</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coind'_ext_iff"><span class="name">Rep</span>.<span class="name">coind'_ext_iff</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindMap'"><span class="name">Rep</span>.<span class="name">coindMap'</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindFunctor'"><span class="name">Rep</span>.<span class="name">coindFunctor'</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindFunctor'_map"><span class="name">Rep</span>.<span class="name">coindFunctor'_map</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindFunctor'_obj"><span class="name">Rep</span>.<span class="name">coindFunctor'_obj</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindVEquiv"><span class="name">Rep</span>.<span class="name">coindVEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindVEquiv_symm_apply_coe"><span class="name">Rep</span>.<span class="name">coindVEquiv_symm_apply_coe</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindVEquiv_apply"><span class="name">Rep</span>.<span class="name">coindVEquiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindIso"><span class="name">Rep</span>.<span class="name">coindIso</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindFunctorIso"><span class="name">Rep</span>.<span class="name">coindFunctorIso</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindFunctorIso_inv_app_hom_toFun_coe"><span class="name">Rep</span>.<span class="name">coindFunctorIso_inv_app_hom_toFun_coe</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.coindFunctorIso_hom_app_hom_toFun_hom_toFun"><span class="name">Rep</span>.<span class="name">coindFunctorIso_hom_app_hom_toFun_hom_toFun</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.resCoindToHom"><span class="name">Rep</span>.<span class="name">resCoindToHom</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.resCoindToHom_hom_apply_coe"><span class="name">Rep</span>.<span class="name">resCoindToHom_hom_apply_coe</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.resCoindHomEquiv"><span class="name">Rep</span>.<span class="name">resCoindHomEquiv</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.resCoindHomEquiv_symm_apply"><span class="name">Rep</span>.<span class="name">resCoindHomEquiv_symm_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.resCoindHomEquiv_apply"><span class="name">Rep</span>.<span class="name">resCoindHomEquiv_apply</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.resCoindAdjunction"><span class="name">Rep</span>.<span class="name">resCoindAdjunction</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.instIsRightAdjointCoindFunctor"><span class="name">Rep</span>.<span class="name">instIsRightAdjointCoindFunctor</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.instIsLeftAdjointResFunctor"><span class="name">Rep</span>.<span class="name">instIsLeftAdjointResFunctor</span></a></div><div class="nav_link"><a class="break_within" href="#Rep.instPreservesProjectiveObjectsSubtypeMemSubgroupResFunctorSubtype"><span class="name">Rep</span>.<span class="name">instPreservesProjectiveObjectsSubtypeMemSubgroupResFunctorSubtype</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Coinduced-representations" class="markdown-heading">Coinduced representations <a class="hover-link" href="#Coinduced-representations">#</a></h1><p>Given a commutative ring <code>k</code>, a monoid homomorphism <code>φ : G →* H</code>, and a <code>k</code>-linear
+<code>G</code>-representation <code>A</code>, this file introduces the coinduced representation $Coind_G^H(A)$ of <code>A</code> as
+an <code>H</code>-representation.</p><p>By <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ A</code> we mean the submodule of functions <code>H → A</code> such that for all <code>g : G</code>, <code>h : H</code>,
+<code>f (φ g * h) = ρ g (f h)</code>. We define a representation of <code>H</code> on this submodule by sending <code>h : H</code>
+and <code>f : <a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ A</code> to the function <code>H → A</code> sending <code>h₁</code> to <code>f (h₁ * h)</code>.</p><p>Alternatively, we could define $Coind_G^H(A)$ as the morphisms $Hom(k[H], A)$ in the category
+<code><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k G</code>, which we equip with the <code>H</code>-representation sending <code>h : H</code> and <code>f : k[H] ⟶ A</code> to the
+representation morphism sending <code>r · h₁</code> to <code>r • f (h₁ * h)</code>. We include this definition as
+<code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">coind'</a> φ A</code> and prove the two representations are isomorphic.</p><p>We also prove that the restriction functor <code><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k H ⥤ <a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k G</code> along <code>φ</code> is left adjoint to the
+coinduction functor and hence that the coinduction functor preserves limits.</p><h2 id="Main-definitions" class="markdown-heading">Main definitions <a class="hover-link" href="#Main-definitions">#</a></h2><ul><li><code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">Representation.coind</a> φ ρ</code> : the coinduction of <code>ρ</code> along <code>φ</code> defined as the <code>k</code>-submodule of
+<code>G</code>-equivariant functions <code>H → A</code>, with <code>H</code>-action given by <code>(h • f) h₁ := f (h₁ * h)</code> for
+<code>f : H → A</code>, <code>h, h₁ : H</code>.</li><li><code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">Representation.coind'</a> φ A</code> : the coinduction of <code>A</code> along <code>φ</code> defined as the set of
+<code>G</code>-representation morphisms <code>k[H] ⟶ A</code>, with <code>H</code>-action given by
+<code>(h • f) (r • h₁) := r • f(h₁ * h)</code> for <code>f : k[H] ⟶ A</code>, <code>h, h₁ : H</code>, <code>r : k</code>.</li><li><code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindAdjunction">Rep.resCoindAdjunction</a> k φ</code>: given a monoid homomorphism <code>φ : G →* H</code>, this is the adjunction
+between the restriction functor <code><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k H ⥤ <a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k G</code> along <code>φ</code> and the coinduction functor
+along <code>φ</code>.</li></ul></div><div class="decl" id="Representation.coindV"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L56-L66">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV"><span class="name">Representation</span>.<span class="name">coindV</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule">Submodule</a> <span class="fn">k</span> <span class="fn">(<span class="fn">H</span> → <span class="fn">A</span>)</span></span></div></div><p>If <code>ρ : <a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> k G A</code> and <code>φ : G →* H</code> then <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">coindV</a> φ ρ</code> is the sub-<code>k</code>-module of
+functions <code>H → A</code> underlying the coinduction of <code>ρ</code> along <code>φ</code>, i.e., the functions <code>f : H → A</code>
+such that <code>f (φ g * h) = (ρ g) (f h)</code> for all <code>g : G</code> and <code>h : H</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">Representation.coindV</a> <span class="fn">φ</span> <span class="fn">σ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">{</a> <span class="fn">carrier</span> := <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><span class="fn">H</span> → <span class="fn">A</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">∀ (<span class="fn">g</span> : <span class="fn">G</span>) (<span class="fn">h</span> : <span class="fn">H</span>), <span class="fn"><span class="fn">f</span> (<span class="fn"><span class="fn">φ</span> <span class="fn">g</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">h</span>)</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">σ</span> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">h</span>)</span></span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a>, <span class="fn">add_mem'</span> := <span class="fn">⋯</span>, <span class="fn">zero_mem'</span> := <span class="fn">⋯</span>,
+    <span class="fn">smul_mem'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Algebra/Module/Submodule/Defs.html#Submodule.mk">}</a></li></ul></details><details id="instances-for-list-Representation.coindV" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.coe_coindV"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L61-L61">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coe_coindV"><span class="name">Representation</span>.<span class="name">coe_coindV</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">coindV</a> <span class="fn">φ</span> <span class="fn">σ</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">{</a><span class="fn">f</span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">:</a> <span class="fn"><span class="fn">H</span> → <span class="fn">A</span></span> <a href="../.././Mathlib/Data/Set/Defs.html#setOf">|</a> <span class="fn">∀ (<span class="fn">g</span> : <span class="fn">G</span>) (<span class="fn">h</span> : <span class="fn">H</span>), <span class="fn"><span class="fn">f</span> (<span class="fn"><span class="fn">φ</span> <span class="fn">g</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">h</span>)</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">σ</span> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">h</span>)</span></span></span><a href="../.././Mathlib/Data/Set/Defs.html#setOf">}</a></div></div></div></div><div class="decl" id="Representation.mem_coindV"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L68-L70">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.mem_coindV"><span class="name">Representation</span>.<span class="name">mem_coindV</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn">H</span> → <span class="fn">A</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">coindV</a> <span class="fn">φ</span> <span class="fn">σ</span></span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">g</span> : <span class="fn">G</span>) (<span class="fn">h</span> : <span class="fn">H</span>), <span class="fn"><span class="fn">f</span> (<span class="fn"><span class="fn">φ</span> <span class="fn">g</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">h</span>)</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">σ</span> <span class="fn">g</span>)</span> <span class="fn">(<span class="fn">f</span> <span class="fn">h</span>)</span></span></span></div></div></div></div><div class="decl" id="Representation.coind"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L72-L85">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind"><span class="name">Representation</span>.<span class="name">coind</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">H</span> <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">coindV</a> <span class="fn">φ</span> <span class="fn">ρ</span>)</span></span></span></div></div><p>If <code>ρ : <a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> k G A</code> and <code>φ : G →* H</code> then <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ ρ</code> is the representation
+coinduced by <code>ρ</code> along <code>φ</code>, defined as the following action of <code>H</code> on the submodule <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">coindV</a> φ ρ</code>
+of <code>G</code>-equivariant functions from <code>H</code> to <code>A</code>: we let <code>h : H</code> send the function <code>f : H → A</code>
+to the function sending <code>h₁</code> to <code>f (h₁ * h)</code>.</p><p>See also <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind">Rep.coind</a></code> and <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">Representation.coind'</a></code> for variants involving the category <code><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k G</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">Representation.coind</a> <span class="fn">φ</span> <span class="fn">ρ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom.mk">{</a> <span class="fn">toFun</span> := <span class="fn">fun (<span class="fn">h</span> : <span class="fn">H</span>) =&gt; <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Module/Equiv/Basic.html#LinearMap.funLeft">LinearMap.funLeft</a> <span class="fn">k</span> <span class="fn">B</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">H</span>) =&gt; <span class="fn">x</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">h</span></span>)</span>.<a href="../.././Mathlib/Algebra/Module/Submodule/LinearMap.html#LinearMap.restrict">restrict</a></span> <span class="fn">⋯</span></span></span>, <span class="fn">map_one'</span> := <span class="fn">⋯</span>, <span class="fn">map_mul'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom.mk">}</a></li></ul></details><details id="instances-for-list-Representation.coind" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.coind_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L80-L80">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind_apply"><span class="name">Representation</span>.<span class="name">coind_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> <span class="fn">φ</span> <span class="fn">ρ</span>)</span> <span class="fn">h</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/Algebra/Module/Equiv/Basic.html#LinearMap.funLeft">LinearMap.funLeft</a> <span class="fn">k</span> <span class="fn">B</span> <span class="fn">fun (<span class="fn">x</span> : <span class="fn">H</span>) =&gt; <span class="fn">x</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">h</span></span>)</span>.<a href="../.././Mathlib/Algebra/Module/Submodule/LinearMap.html#LinearMap.restrict">restrict</a></span> <span class="fn">⋯</span></span></div></div></div></div><div class="decl" id="Representation.coindMap"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L88-L96">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindMap"><span class="name">Representation</span>.<span class="name">coindMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">B</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">ρ</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> <span class="fn">φ</span> <span class="fn">σ</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> <span class="fn">φ</span> <span class="fn">ρ</span>)</span></span></div></div><p>Given a monoid homomorphism <code>φ : G →* H</code> and an intertwining map <code>f : σ ⟶ ρ</code>, there is a
+natural intertwining map <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ σ ⟶ <a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ ρ</code> given by postcomposition by <code>f</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindMap">Representation.coindMap</a> <span class="fn">φ</span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.mk">{</a> <span class="fn">toLinearMap</span> := <span class="fn"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/LinearAlgebra/Pi.html#LinearMap.compLeft">compLeft</a></span> <span class="fn">H</span>)</span>.<a href="../.././Mathlib/Algebra/Module/Submodule/LinearMap.html#LinearMap.restrict">restrict</a></span> <span class="fn">⋯</span></span>, <span class="fn">isIntertwining'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.mk">}</a></li></ul></details><details id="instances-for-list-Representation.coindMap" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.coindMap_coe_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L98-L99">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindMap_coe_apply"><span class="name">Representation</span>.<span class="name">coindMap_coe_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">ρ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">coindV</a> <span class="fn">φ</span> <span class="fn">σ</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↑<span class="fn">(<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindMap">coindMap</a> <span class="fn">φ</span> <span class="fn">f</span>)</span> <span class="fn">x</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn"><span class="fn">f</span>.<a href="../.././Mathlib/LinearAlgebra/Pi.html#LinearMap.compLeft">compLeft</a></span> <span class="fn">H</span>)</span> <span class="fn">↑<span class="fn">x</span></span></span></div></div></div></div><div class="decl" id="Representation.coindMap_coe_apply_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L101-L103">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindMap_coe_apply_apply"><span class="name">Representation</span>.<span class="name">coindMap_coe_apply_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <a href="../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">B</span> : <a href="../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">A</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">B</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">k</span> <span class="fn">B</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">σ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ρ</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">G</span> <span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><span class="fn"><span class="fn">σ</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap">IntertwiningMap</a></span> <span class="fn">ρ</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">coindV</a> <span class="fn">φ</span> <span class="fn">σ</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">↑<span class="fn">(<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindMap">coindMap</a> <span class="fn">φ</span> <span class="fn">f</span>)</span> <span class="fn">x</span>)</span></span> <span class="fn">h</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">f</span> <span class="fn">(<span class="fn">↑<span class="fn">x</span></span> <span class="fn">h</span>)</span></span></div></div></div></div><div class="decl" id="Rep.coind"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L116-L120">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable abbrev</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind"><span class="name">Rep</span>.<span class="name">coind</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{u_1, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max w u_1, u, w}</a> <span class="fn">k</span> <span class="fn">H</span></span></div></div><p>If <code>φ : G →* H</code> and  <code>A : <a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k G</code> then <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ A</code> is the coinduction of <code>A</code> along <code>φ</code>,
+defined by letting <code>H</code> act on the <code>G</code>-equivariant functions <code>H → A</code> by <code>(h • f) h₁ := f (h₁ * h)</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind">Rep.coind.{?u.44, ?u.43, ?u.42, ?u.41}</a> <span class="fn">φ</span> <span class="fn">A</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.of">Rep.of</a> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">Representation.coind</a> <span class="fn">φ</span> <span class="fn"><span class="fn">A</span>.<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.ρ">ρ</a></span>)</span></span></li></ul></details><details id="instances-for-list-Rep.coind" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.coindMap"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L122-L126">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable abbrev</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindMap"><span class="name">Rep</span>.<span class="name">coindMap</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{u_1, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind">coind.{u, v, w, u_1}</a> <span class="fn">φ</span> <span class="fn">A</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind">coind.{u, v, w, u_1}</a> <span class="fn">φ</span> <span class="fn">B</span></span></div></div><p>Given a monoid morphism <code>φ : G →* H</code> and a morphism of <code>G</code>-representations <code>f : A ⟶ B</code>, there
+is a natural <code>H</code>-representation morphism <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ A ⟶ <a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ B</code>, given by postcomposition by
+<code>f</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindMap">Rep.coindMap</a> <span class="fn">φ</span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.ofHom">Rep.ofHom</a> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindMap">Representation.coindMap</a> <span class="fn">φ</span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Rep.Hom.hom</a> <span class="fn">f</span>)</span>)</span></span></li></ul></details><details id="instances-for-list-Rep.coindMap" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.coindFunctor"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L129-L134">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor"><span class="name">Rep</span>.<span class="name">coindFunctor</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">CategoryTheory.Functor</a> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{t, u, v}</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max w t, u, w}</a> <span class="fn">k</span> <span class="fn">H</span>)</span></span></div></div><p>Given a monoid homomorphism <code>φ : G →* H</code>, this is the functor sending a <code>G</code>-representation <code>A</code>
+to the coinduced <code>H</code>-representation <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ A</code>, with action on maps given by postcomposition.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Rep.coindFunctor" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.coindFunctor_obj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L131-L131">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor_obj"><span class="name">Rep</span>.<span class="name">coindFunctor_obj</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{t, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor">coindFunctor</a> <span class="fn">k</span> <span class="fn">φ</span>)</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">A</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind">coind.{u, v, w, t}</a> <span class="fn">φ</span> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="Rep.coindFunctor_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L131-L131">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor_map"><span class="name">Rep</span>.<span class="name">coindFunctor_map</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X✝ </span><span class="fn">Y✝</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{t, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">X✝</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y✝</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor">coindFunctor</a> <span class="fn">k</span> <span class="fn">φ</span>)</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindMap">coindMap</a> <span class="fn">φ</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Rep.instPreservesEpimorphismsSubtypeMemSubgroupCoindFunctorSubtype"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L137-L153">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.instPreservesEpimorphismsSubtypeMemSubgroupCoindFunctorSubtype"><span class="name">Rep</span>.<span class="name">instPreservesEpimorphismsSubtypeMemSubgroupCoindFunctorSubtype</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v'}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor">coindFunctor</a> <span class="fn">k</span> <span class="fn"><span class="fn">S</span>.<a href="../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.subtype">subtype</a></span>)</span>.<a href="../.././Mathlib/CategoryTheory/Functor/EpiMono.html#CategoryTheory.Functor.PreservesEpimorphisms">PreservesEpimorphisms</a></span></div></div></div></div><div class="decl" id="Representation.coind'"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L158-L176">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'"><span class="name">Representation</span>.<span class="name">coind'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Basic.html#Representation">Representation</a> <span class="fn">k</span> <span class="fn">H</span> (<span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.res">Rep.res</a> <span class="fn">φ</span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.leftRegular">Rep.leftRegular</a> <span class="fn">k</span> <span class="fn">H</span>)</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">A</span>)</span></div></div><p>If <code>φ : G →* H</code> and <code>A : <a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k G</code> then <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">coind'</a> φ A</code>, the coinduction of <code>A</code> along <code>φ</code>,
+is defined as an <code>H</code>-action on <code>Hom_{k[G]}(k[H], A)</code>. If <code>f : k[H] → A</code> is <code>G</code>-equivariant
+then <code>(h • f) (r • h₁) := r • f (h₁ * h)</code>, where <code>r : k</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Representation.coind'" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Representation.coind'_apply_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L163-L163">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'_apply_apply"><span class="name">Representation</span>.<span class="name">coind'_apply_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.res">Rep.res</a> <span class="fn">φ</span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.leftRegular">Rep.leftRegular</a> <span class="fn">k</span> <span class="fn">H</span>)</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">coind'</a> <span class="fn">φ</span> <span class="fn">A</span>)</span> <span class="fn">h</span>)</span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././Mathlib/CategoryTheory/Category/Basic.html#CategoryTheory.CategoryStruct.comp">CategoryTheory.CategoryStruct.comp</a>
+    <span class="fn">(<span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.resFunctor">Rep.resFunctor</a> <span class="fn">φ</span>)</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">(<span class="fn">↑<span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.leftRegular">Rep.leftRegular</a> <span class="fn">k</span> <span class="fn">H</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.leftRegularHomEquiv">leftRegularHomEquiv</a></span>.<a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span></span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">h</span> <span class="fn">1</span>)</span>)</span>)</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Rep.coind'"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L178-L183">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable abbrev</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind'"><span class="name">Rep</span>.<span class="name">coind'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, w}</a> <span class="fn">k</span> <span class="fn">H</span></span></div></div><p>If <code>φ : G →* H</code> and <code>A : <a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k G</code> then <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">coind'</a> φ A</code>, the coinduction of <code>A</code> along <code>φ</code>,
+is defined as an <code>H</code>-action on <code>Hom_{k[G]}(k[H], A)</code>. If <code>f : k[H] → A</code> is <code>G</code>-equivariant
+then <code>(h • f) (r • h₁) := r • f (h₁ * h)</code>, where <code>r : k</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind'">Rep.coind'</a> <span class="fn">φ</span> <span class="fn">A</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.of">Rep.of</a> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">Representation.coind'</a> <span class="fn">φ</span> <span class="fn">A</span>)</span></span></li></ul></details><details id="instances-for-list-Rep.coind'" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.coind'_ext"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L186-L189">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind'_ext"><span class="name">Rep</span>.<span class="name">coind'_ext</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind'">coind'</a> <span class="fn">φ</span> <span class="fn">A</span>)</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hfg</span> : <span class="fn">∀ (<span class="fn">h</span> : <span class="fn">H</span>), <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">f</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.toLinearMap">toLinearMap</a></span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">h</span> <span class="fn">1</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">g</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.toLinearMap">toLinearMap</a></span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">h</span> <span class="fn">1</span>)</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span></div></div></div></div><div class="decl" id="Rep.coind'_ext_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L186-L186">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind'_ext_iff"><span class="name">Rep</span>.<span class="name">coind'_ext_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f </span><span class="fn">g</span> : <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind'">coind'</a> <span class="fn">φ</span> <span class="fn">A</span>)</span></span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn">f</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">g</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">∀ (<span class="fn">h</span> : <span class="fn">H</span>), <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">f</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.toLinearMap">toLinearMap</a></span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">h</span> <span class="fn">1</span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">g</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.toLinearMap">toLinearMap</a></span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">h</span> <span class="fn">1</span>)</span></span></span></div></div></div></div><div class="decl" id="Rep.coindMap'"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L191-L196">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindMap'"><span class="name">Rep</span>.<span class="name">coindMap'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">A </span><span class="fn">B</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">A</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">B</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind'">coind'</a> <span class="fn">φ</span> <span class="fn">A</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind'">coind'</a> <span class="fn">φ</span> <span class="fn">B</span></span></div></div><p>Given a monoid morphism <code>φ : G →* H</code> and a morphism of <code>G</code>-representations <code>f : A ⟶ B</code>, there
+is a natural <code>H</code>-representation morphism <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">coind'</a> φ A ⟶ <a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">coind'</a> φ B</code>, given by postcomposition
+by <code>f</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindMap'">Rep.coindMap'</a> <span class="fn">φ</span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.ofHom">Rep.ofHom</a>
+    <span class="fn">(let <span class="fn">__spread.0</span> := <span class="fn"><a href="../.././Mathlib/CategoryTheory/Linear/Basic.html#CategoryTheory.Linear.rightComp">CategoryTheory.Linear.rightComp</a> <span class="fn">k</span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.res">Rep.res</a> <span class="fn">φ</span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.leftRegular">Rep.leftRegular</a> <span class="fn">k</span> <span class="fn">H</span>)</span>)</span> <span class="fn">f</span></span>;
+    <a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.mk">{</a> <span class="fn">toLinearMap</span> := <span class="fn">__spread.0</span>, <span class="fn">isIntertwining'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.mk">}</a>)</span></span></li></ul></details><details id="instances-for-list-Rep.coindMap'" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.coindFunctor'"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L199-L204">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor'"><span class="name">Rep</span>.<span class="name">coindFunctor'</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor">CategoryTheory.Functor</a> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span>)</span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, w}</a> <span class="fn">k</span> <span class="fn">H</span>)</span></span></div></div><p>Given a monoid homomorphism <code>φ : G →* H</code>, this is the functor sending a <code>G</code>-representation <code>A</code>
+to the coinduced <code>H</code>-representation <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">coind'</a> φ A</code>, with action on maps given by postcomposition.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Rep.coindFunctor'" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.coindFunctor'_map"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L201-L201">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor'_map"><span class="name">Rep</span>.<span class="name">coindFunctor'_map</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X✝ </span><span class="fn">Y✝</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">X✝</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">Y✝</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor'">coindFunctor'</a> <span class="fn">k</span> <span class="fn">φ</span>)</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.map">map</a></span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindMap'">coindMap'</a> <span class="fn">φ</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Rep.coindFunctor'_obj"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L201-L201">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor'_obj"><span class="name">Rep</span>.<span class="name">coindFunctor'_obj</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor'">coindFunctor'</a> <span class="fn">k</span> <span class="fn">φ</span>)</span>.<a href="../.././Mathlib/CategoryTheory/Functor/Basic.html#CategoryTheory.Functor.obj">obj</a></span> <span class="fn">A</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind'">coind'</a> <span class="fn">φ</span> <span class="fn">A</span></span></div></div></div></div><div class="decl" id="Rep.coindVEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L209-L223">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindVEquiv"><span class="name">Rep</span>.<span class="name">coindVEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">↥<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">Representation.coindV</a> <span class="fn">φ</span> <span class="fn"><span class="fn">A</span>.<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.ρ">ρ</a></span>)</span></span> <a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">k</span><a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.res">res</a> <span class="fn">φ</span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.leftRegular">leftRegular</a> <span class="fn">k</span> <span class="fn">H</span>)</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">A</span></div></div><p>If <code>φ : G →* H</code> and <code>A : <a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k G</code> then the <code>k</code>-submodule of functions <code>f : H → A</code>
+such that for all <code>g : G</code>, <code>h : H</code>, <code>f (φ g * h) = A.ρ g (f h)</code>, is <code>k</code>-linearly equivalent
+to the <code>G</code>-representation morphisms <code>k[H] ⟶ A</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Rep.coindVEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.coindVEquiv_symm_apply_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L212-L212">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindVEquiv_symm_apply_coe"><span class="name">Rep</span>.<span class="name">coindVEquiv_symm_apply_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.res">res</a> <span class="fn">φ</span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.leftRegular">leftRegular</a> <span class="fn">k</span> <span class="fn">H</span>)</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">↑<span class="fn">(<span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindVEquiv">coindVEquiv</a> <span class="fn">φ</span> <span class="fn">A</span>)</span>.<a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">f</span>)</span></span> <span class="fn">h</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">f</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.toLinearMap">toLinearMap</a></span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">h</span> <span class="fn">1</span>)</span></span></div></div></div></div><div class="decl" id="Rep.coindVEquiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L212-L212">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindVEquiv_apply"><span class="name">Rep</span>.<span class="name">coindVEquiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">Representation.coindV</a> <span class="fn">φ</span> <span class="fn"><span class="fn">A</span>.<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.ρ">ρ</a></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindVEquiv">coindVEquiv</a> <span class="fn">φ</span> <span class="fn">A</span>)</span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.ofHom">ofHom</a> <a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.mk">{</a> <span class="fn">toLinearMap</span> := <span class="fn"><a href="../.././Mathlib/LinearAlgebra/Finsupp/LinearCombination.html#Finsupp.linearCombination">Finsupp.linearCombination</a> <span class="fn">k</span> <span class="fn">↑<span class="fn">f</span></span></span>, <span class="fn">isIntertwining'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.mk">}</a></span></div></div></div></div><div class="decl" id="Rep.coindIso"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L225-L228">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindIso"><span class="name">Rep</span>.<span class="name">coindIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind">coind.{u, v, w, max u w}</a> <span class="fn">φ</span> <span class="fn">A</span></span> <a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind'">coind'</a> <span class="fn">φ</span> <span class="fn">A</span></span></div></div><p><code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ A</code> and <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind'">coind'</a> φ A</code> are isomorphic representations, with the underlying
+<code>k</code>-linear equivalence given by <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindVEquiv">coindVEquiv</a></code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindIso">Rep.coindIso</a> <span class="fn">φ</span> <span class="fn">A</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.mkIso">Rep.mkIso</a> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.Equiv.mk">Representation.Equiv.mk</a> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindVEquiv">Rep.coindVEquiv</a> <span class="fn">φ</span> <span class="fn">A</span>)</span> <span class="fn">⋯</span>)</span></span></li></ul></details><details id="instances-for-list-Rep.coindIso" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.coindFunctorIso"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L231-L238">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctorIso"><span class="name">Rep</span>.<span class="name">coindFunctorIso</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor">coindFunctor</a> <span class="fn">k</span> <span class="fn">φ</span></span> <a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso">≅</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor'">coindFunctor'</a> <span class="fn">k</span> <span class="fn">φ</span></span></div></div><p>Given a monoid homomorphism <code>φ : G →* H</code>, the coinduction functors <code><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k G ⥤ <a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k H</code> given by
+<code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor">coindFunctor</a> k φ</code> and <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor'">coindFunctor'</a> k φ</code> are naturally isomorphic, with isomorphism on objects
+given by <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindIso">coindIso</a> φ</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctorIso">Rep.coindFunctorIso</a> <span class="fn">φ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/CategoryTheory/NatIso.html#CategoryTheory.NatIso.ofComponents">CategoryTheory.NatIso.ofComponents</a> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindIso">Rep.coindIso</a> <span class="fn">φ</span>)</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-Rep.coindFunctorIso" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.coindFunctorIso_inv_app_hom_toFun_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L234-L234">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctorIso_inv_app_hom_toFun_coe"><span class="name">Rep</span>.<span class="name">coindFunctorIso_inv_app_hom_toFun_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.res">res</a> <span class="fn">φ</span> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.leftRegular">leftRegular</a> <span class="fn">k</span> <span class="fn">H</span>)</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">X</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">↑<span class="fn">(<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctorIso">coindFunctorIso</a> <span class="fn">φ</span>)</span>.<a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.inv">inv</a></span>.<a href="../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span>)</span> <span class="fn">a</span>)</span></span> <span class="fn">h</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">a</span>)</span> <span class="fn">(<a href="../.././Mathlib/Data/Finsupp/Single.html#Finsupp.single">Finsupp.single</a> <span class="fn">h</span> <span class="fn">1</span>)</span></span></div></div></div></div><div class="decl" id="Rep.coindFunctorIso_hom_app_hom_toFun_hom_toFun"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L234-L234">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctorIso_hom_app_hom_toFun_hom_toFun"><span class="name">Rep</span>.<span class="name">coindFunctorIso_hom_app_hom_toFun_hom_toFun</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">↥<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">Representation.coindV</a> <span class="fn">φ</span> <span class="fn"><span class="fn">X</span>.<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.ρ">ρ</a></span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">d</span> : <span class="fn">H</span> <a href="../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">k</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">(<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">(<span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctorIso">coindFunctorIso</a> <span class="fn">φ</span>)</span>.<a href="../.././Mathlib/CategoryTheory/Iso.html#CategoryTheory.Iso.hom">hom</a></span>.<a href="../.././Mathlib/CategoryTheory/NatTrans.html#CategoryTheory.NatTrans.app">app</a></span> <span class="fn">X</span>)</span>)</span> <span class="fn">f</span>)</span>)</span> <span class="fn">d</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">d</span>.<a href="../.././Mathlib/Algebra/BigOperators/Finsupp/Basic.html#Finsupp.sum">sum</a></span> <span class="fn">fun (<span class="fn">i</span> : <span class="fn">H</span>) (<span class="fn">c</span> : <span class="fn">k</span>) =&gt; <span class="fn">c</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><span class="fn">↑<span class="fn">f</span></span> <span class="fn">i</span></span></span></span></div></div></div></div><div class="decl" id="Rep.resCoindToHom"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L244-L250">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindToHom"><span class="name">Rep</span>.<span class="name">resCoindToHom</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u_1 w, u, w}</a> <span class="fn">k</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max u_1 w, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.res">res</a> <span class="fn">φ</span> <span class="fn">B</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind">coind.{u, v, w, max u_1 w}</a> <span class="fn">φ</span> <span class="fn">A</span></span></div></div><p>The morphism induced by the adjunction between <code>res φ</code> and <code><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ</code> sending a morphism
+<code>f : res φ B ⟶ A</code> to the morphism <code>B ⟶ <a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ A</code> given by the underlying linear map sending
+<code>b : B.V</code> to the function sending <code>h : H</code> to <code>f ((B.ρ h) b)</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Rep.resCoindToHom" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.resCoindToHom_hom_apply_coe"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L252-L255">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindToHom_hom_apply_coe"><span class="name">Rep</span>.<span class="name">resCoindToHom_hom_apply_coe</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max w u_1, u, w}</a> <span class="fn">k</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max w u_1, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.res">res</a> <span class="fn">φ</span> <span class="fn">B</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn">↑<span class="fn">B</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">i</span> : <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">↑<span class="fn">(<span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindToHom">resCoindToHom</a> <span class="fn">φ</span> <span class="fn">B</span> <span class="fn">A</span> <span class="fn">f</span>)</span>)</span> <span class="fn">c</span>)</span></span> <span class="fn">i</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">f</span>)</span> <span class="fn">(<span class="fn">(<span class="fn"><span class="fn">B</span>.<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.ρ">ρ</a></span> <span class="fn">i</span>)</span> <span class="fn">c</span>)</span></span></div></div></div></div><div class="decl" id="Rep.resCoindHomEquiv"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L270-L290">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindHomEquiv"><span class="name">Rep</span>.<span class="name">resCoindHomEquiv</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max w t, u, w}</a> <span class="fn">k</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max w t, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.res">res</a> <span class="fn">φ</span> <span class="fn">B</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">A</span>) <a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">≃ₗ[</a><span class="fn">k</span><a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv">]</a> <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind">coind.{u, v, w, max t w}</a> <span class="fn">φ</span> <span class="fn">A</span></span></div></div><p>Given a monoid homomorphism <code>φ : G →* H</code>, an <code>H</code>-representation <code>B</code>, and a <code>G</code>-representation
+<code>A</code>, there is a <code>k</code>-linear equivalence between the <code>G</code>-representation morphisms <code>res φ B ⟶ A</code> and
+the <code>H</code>-representation morphisms <code>B ⟶ <a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coind">coind</a> φ A</code>.</p><p>Note <code>Rep.resCoindHomEquiv.{t, u, v, w}</code> has the property that
+even with all inputs explicitly given, the first universe cannot be synthesized.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Rep.resCoindHomEquiv" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.resCoindHomEquiv_symm_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L277-L277">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindHomEquiv_symm_apply"><span class="name">Rep</span>.<span class="name">resCoindHomEquiv_symm_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max w t, u, w}</a> <span class="fn">k</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max w t, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn">B</span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coind">coind.{u, v, w, max t w}</a> <span class="fn">φ</span> <span class="fn">A</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindHomEquiv">resCoindHomEquiv.{t, u, v, w}</a> <span class="fn">φ</span> <span class="fn">B</span> <span class="fn">A</span>)</span>.<a href="../.././Mathlib/Algebra/Module/Equiv/Defs.html#LinearEquiv.symm">symm</a></span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.ofHom">ofHom</a>
+    <a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.mk">{</a> <span class="fn">toLinearMap</span> := <span class="fn"><span class="fn"><a href="../.././Mathlib/LinearAlgebra/Pi.html#LinearMap.proj">LinearMap.proj</a> <span class="fn">1</span></span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.comp">∘ₗ</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Representation.coindV">Representation.coindV</a> <span class="fn">φ</span> <span class="fn"><span class="fn">A</span>.<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.ρ">ρ</a></span>)</span>.<a href="../.././Mathlib/Algebra/Module/Submodule/LinearMap.html#Submodule.subtype">subtype</a></span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap.comp">∘ₗ</a> <span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep.Hom.hom">Hom.hom</a> <span class="fn">f</span>)</span>.<a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.toLinearMap">toLinearMap</a></span></span></span>,
+      <span class="fn">isIntertwining'</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/RepresentationTheory/Intertwining.html#Representation.IntertwiningMap.mk">}</a></span></div></div></div></div><div class="decl" id="Rep.resCoindHomEquiv_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L277-L277">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindHomEquiv_apply"><span class="name">Rep</span>.<span class="name">resCoindHomEquiv_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">B</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max w t, u, w}</a> <span class="fn">k</span> <span class="fn">H</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep.{max w t, u, v}</a> <span class="fn">k</span> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">f</span> : <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.res">res</a> <span class="fn">φ</span> <span class="fn">B</span></span> <a href="../.././Mathlib/Combinatorics/Quiver/Basic.html#Quiver.Hom">⟶</a> <span class="fn">A</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindHomEquiv">resCoindHomEquiv.{t, u, v, w}</a> <span class="fn">φ</span> <span class="fn">B</span> <span class="fn">A</span>)</span> <span class="fn">f</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindToHom">resCoindToHom</a> <span class="fn">φ</span> <span class="fn">B</span> <span class="fn">A</span> <span class="fn">f</span></span></div></div></div></div><div class="decl" id="Rep.resCoindAdjunction"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L296-L302">source</a></div><div class="attributes">@[reducible, inline]</div>
+<div class="decl_header"><span class="decl_kind">noncomputable abbrev</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.resCoindAdjunction"><span class="name">Rep</span>.<span class="name">resCoindAdjunction</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.resFunctor">resFunctor</a> <span class="fn">φ</span></span> <a href="../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Adjunction">⊣</a> <span class="fn"><a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor">coindFunctor</a> <span class="fn">k</span> <span class="fn">φ</span></span></div></div><p>Given a monoid homomorphism <code>φ : G →* H</code>, the coinduction functor <code><a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k G ⥤ <a href="../.././Mathlib/RepresentationTheory/Rep/Basic.html#Rep">Rep</a> k H</code> is right
+adjoint to the restriction functor along <code>φ</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Rep.resCoindAdjunction" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Rep.instIsRightAdjointCoindFunctor"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L304-L305">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.instIsRightAdjointCoindFunctor"><span class="name">Rep</span>.<span class="name">instIsRightAdjointCoindFunctor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.coindFunctor">coindFunctor</a> <span class="fn">k</span> <span class="fn">φ</span>)</span>.<a href="../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsRightAdjoint">IsRightAdjoint</a></span></div></div></div></div><div class="decl" id="Rep.instIsLeftAdjointResFunctor"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L307-L308">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.instIsLeftAdjointResFunctor"><span class="name">Rep</span>.<span class="name">instIsLeftAdjointResFunctor</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Monoid">Monoid</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">φ</span> : <span class="fn">G</span> <a href="../.././Mathlib/Algebra/Group/Hom/Defs.html#MonoidHom">→*</a> <span class="fn">H</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.resFunctor">resFunctor</a> <span class="fn">φ</span>)</span>.<a href="../.././Mathlib/CategoryTheory/Adjunction/Basic.html#CategoryTheory.Functor.IsLeftAdjoint">IsLeftAdjoint</a></span></div></div></div></div><div class="decl" id="Rep.instPreservesProjectiveObjectsSubtypeMemSubgroupResFunctorSubtype"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/RepresentationTheory/Coinduced.lean#L310-L313">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/RepresentationTheory/Coinduced.html#Rep.instPreservesProjectiveObjectsSubtypeMemSubgroupResFunctorSubtype"><span class="name">Rep</span>.<span class="name">instPreservesProjectiveObjectsSubtypeMemSubgroupResFunctorSubtype</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">k</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">k</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">G</span> : <a href="../.././foundational_types.html">Type</a> w}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#Group">Group</a> <span class="fn">G</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">S</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup">Subgroup</a> <span class="fn">G</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<a href="../.././Mathlib/RepresentationTheory/Rep/Res.html#Rep.resFunctor">resFunctor</a> <span class="fn"><span class="fn">S</span>.<a href="../.././Mathlib/Algebra/Group/Subgroup/Defs.html#Subgroup.subtype">subtype</a></span>)</span>.<a href="../.././Mathlib/CategoryTheory/Preadditive/Projective/Preserves.html#CategoryTheory.Functor.PreservesProjectiveObjects">PreservesProjectiveObjects</a></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

@@ -1,0 +1,429 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../../../.././style.css"></link><link rel="icon" href="../../../../.././favicon.svg"></link><link rel="mask-icon" href="../../../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Geometry.Manifold.VectorBundle.CovariantDerivative.Torsion</title><script defer="true" src="../../../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../../../.././";</script><script>const MODULE_NAME="Mathlib.Geometry.Manifold.VectorBundle.CovariantDerivative.Torsion";</script><script type="module" src="../../../../.././jump-src.js"></script><script type="module" src="../../../../.././search.js"></script><script type="module" src="../../../../.././expand-nav.js"></script><script type="module" src="../../../../.././how-about.js"></script><script type="module" src="../../../../.././instances.js"></script><script type="module" src="../../../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Geometry</span>.<span class="name">Manifold</span>.<span class="name">VectorBundle</span>.<span class="name">CovariantDerivative</span>.<span class="name">Torsion</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../../../.././Init.html">Init</a></li><li><a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html">Mathlib.Topology.FiberBundle.Basic</a></li><li><a href="../../../../.././Mathlib/Geometry/Manifold/VectorField/LieBracket.html">Mathlib.Geometry.Manifold.VectorField.LieBracket</a></li><li><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html">Mathlib.Geometry.Manifold.VectorBundle.CovariantDerivative.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Geometry.Manifold.VectorBundle.CovariantDerivative.Torsion" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#IsCovariantDerivativeOn.torsion"><span class="name">IsCovariantDerivativeOn</span>.<span class="name">torsion</span></a></div><div class="nav_link"><a class="break_within" href="#IsCovariantDerivativeOn.torsion_apply"><span class="name">IsCovariantDerivativeOn</span>.<span class="name">torsion_apply</span></a></div><div class="nav_link"><a class="break_within" href="#IsCovariantDerivativeOn.torsion_apply_eq_extend"><span class="name">IsCovariantDerivativeOn</span>.<span class="name">torsion_apply_eq_extend</span></a></div><div class="nav_link"><a class="break_within" href="#IsCovariantDerivativeOn.torsion_self"><span class="name">IsCovariantDerivativeOn</span>.<span class="name">torsion_self</span></a></div><div class="nav_link"><a class="break_within" href="#IsCovariantDerivativeOn.torsion_antisymm"><span class="name">IsCovariantDerivativeOn</span>.<span class="name">torsion_antisymm</span></a></div><div class="nav_link"><a class="break_within" href="#CovariantDerivative.torsion"><span class="name">CovariantDerivative</span>.<span class="name">torsion</span></a></div><div class="nav_link"><a class="break_within" href="#CovariantDerivative.torsion_apply"><span class="name">CovariantDerivative</span>.<span class="name">torsion_apply</span></a></div><div class="nav_link"><a class="break_within" href="#CovariantDerivative.torsion_apply_eq_extend"><span class="name">CovariantDerivative</span>.<span class="name">torsion_apply_eq_extend</span></a></div><div class="nav_link"><a class="break_within" href="#CovariantDerivative.torsion_self"><span class="name">CovariantDerivative</span>.<span class="name">torsion_self</span></a></div><div class="nav_link"><a class="break_within" href="#CovariantDerivative.torsion_antisymm"><span class="name">CovariantDerivative</span>.<span class="name">torsion_antisymm</span></a></div><div class="nav_link"><a class="break_within" href="#CovariantDerivative.torsion_eq_zero_iff"><span class="name">CovariantDerivative</span>.<span class="name">torsion_eq_zero_iff</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Torsion-of-an-affine-connection" class="markdown-heading">Torsion of an affine connection <a class="hover-link" href="#Torsion-of-an-affine-connection">#</a></h1><p>We define the torsion tensor of an affine connection, i.e. a covariant derivative on the tangent
+bundle <code>TM</code> of some manifold <code>M</code>.</p><h2 id="Main-definitions-and-results" class="markdown-heading">Main definitions and results <a class="hover-link" href="#Main-definitions-and-results">#</a></h2><ul><li><code><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion">IsCovariantDerivativeOn.torsion</a></code>: the torsion tensor of an unbundled covariant derivative
+on <code>TM</code></li><li><code><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion">CovariantDerivative.torsion</a></code>: the torsion tensor of a bundled covariant derivative on <code>TM</code></li><li><code><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion_eq_zero_iff">CovariantDerivative.torsion_eq_zero_iff</a></code>: the torsion tensor of a bundled covariant derivative
+<code>∇</code> vanishes if and only if <code>∇_X Y - ∇_Y X = [X, Y]</code> for all differentiable vector fields
+<code>X</code> and <code>Y</code>.</li></ul></div><div class="mod_doc"><h2 id="Torsion-tensor-of-an-unbundled-covariant-derivative-on-TM-on-a-set-s" class="markdown-heading">Torsion tensor of an unbundled covariant derivative on <code>TM</code> on a set <code>s</code> <a class="hover-link" href="#Torsion-tensor-of-an-unbundled-covariant-derivative-on-TM-on-a-set-s">#</a></h2></div><div class="decl" id="IsCovariantDerivativeOn.torsion"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L74-L79">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion"><span class="name">IsCovariantDerivativeOn</span>.<span class="name">torsion</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">cov</span> : <span class="fn"><span class="fn">((<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span> → <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hcov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#IsCovariantDerivativeOn">IsCovariantDerivativeOn</a> <span class="fn">E</span> <span class="fn">cov</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></div></div><p>The torsion tensor of an unbundled covariant derivative on <code>TM</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">hcov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion">torsion</a></span> <span class="fn">x</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/Tensoriality.html#TensorialAt.mkHom₂">TensorialAt.mkHom₂</a> <span class="fn">(fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>) =&gt; <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#IsCovariantDerivativeOn">IsCovariantDerivativeOn.torsionAux✝</a> <span class="fn">cov</span> <span class="fn">x1</span> <span class="fn">x2</span> <span class="fn">x</span></span>)</span> <span class="fn">x</span> <span class="fn">⋯</span> <span class="fn">⋯</span></span></li></ul></details><details id="instances-for-list-IsCovariantDerivativeOn.torsion" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="IsCovariantDerivativeOn.torsion_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L81-L85">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion_apply"><span class="name">IsCovariantDerivativeOn</span>.<span class="name">torsion_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">cov</span> : <span class="fn"><span class="fn">((<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span> → <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hcov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#IsCovariantDerivativeOn">IsCovariantDerivativeOn</a> <span class="fn">E</span> <span class="fn">cov</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hX</span> : <span class="fn"><span class="fn">MDiffAt <span class="fn">(T% <span class="fn">X</span>)</span></span> <span class="fn">x</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">Y</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hY</span> : <span class="fn"><span class="fn">MDiffAt <span class="fn">(T% <span class="fn">Y</span>)</span></span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">hcov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion">torsion</a></span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">X</span> <span class="fn">x</span>)</span>)</span> <span class="fn">(<span class="fn">Y</span> <span class="fn">x</span>)</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">cov</span> <span class="fn">Y</span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">X</span> <span class="fn">x</span>)</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">(<span class="fn">cov</span> <span class="fn">X</span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">Y</span> <span class="fn">x</span>)</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorField/LieBracket.html#VectorField.mlieBracket">VectorField.mlieBracket</a> <span class="fn">I</span> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="IsCovariantDerivativeOn.torsion_apply_eq_extend"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L87-L92">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion_apply_eq_extend"><span class="name">IsCovariantDerivativeOn</span>.<span class="name">torsion_apply_eq_extend</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">cov</span> : <span class="fn"><span class="fn">((<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span> → <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hcov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#IsCovariantDerivativeOn">IsCovariantDerivativeOn</a> <span class="fn">E</span> <span class="fn">cov</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">X₀ </span><span class="fn">Y₀</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">hcov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion">torsion</a></span> <span class="fn">x</span>)</span> <span class="fn">X₀</span>)</span> <span class="fn">Y₀</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<span class="fn">cov</span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle.extend">FiberBundle.extend</a> <span class="fn">E</span> <span class="fn">Y₀</span>)</span> <span class="fn">x</span>)</span> <span class="fn">X₀</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">(<span class="fn">cov</span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle.extend">FiberBundle.extend</a> <span class="fn">E</span> <span class="fn">X₀</span>)</span> <span class="fn">x</span>)</span> <span class="fn">Y₀</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a>     <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorField/LieBracket.html#VectorField.mlieBracket">VectorField.mlieBracket</a> <span class="fn">I</span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle.extend">FiberBundle.extend</a> <span class="fn">E</span> <span class="fn">X₀</span>)</span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle.extend">FiberBundle.extend</a> <span class="fn">E</span> <span class="fn">Y₀</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="IsCovariantDerivativeOn.torsion_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L95-L98">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion_self"><span class="name">IsCovariantDerivativeOn</span>.<span class="name">torsion_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">cov</span> : <span class="fn"><span class="fn">((<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span> → <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hcov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#IsCovariantDerivativeOn">IsCovariantDerivativeOn</a> <span class="fn">E</span> <span class="fn">cov</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₀</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">hcov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion">torsion</a></span> <span class="fn">x</span>)</span> <span class="fn">X₀</span>)</span> <span class="fn">X₀</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="IsCovariantDerivativeOn.torsion_antisymm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L101-L106">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion_antisymm"><span class="name">IsCovariantDerivativeOn</span>.<span class="name">torsion_antisymm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">cov</span> : <span class="fn"><span class="fn">((<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span> → <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hcov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#IsCovariantDerivativeOn">IsCovariantDerivativeOn</a> <span class="fn">E</span> <span class="fn">cov</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₀ </span><span class="fn">Y₀</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">hcov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion">torsion</a></span> <span class="fn">x</span>)</span> <span class="fn">X₀</span>)</span> <span class="fn">Y₀</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">hcov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion">torsion</a></span> <span class="fn">x</span>)</span> <span class="fn">Y₀</span>)</span> <span class="fn">X₀</span></span></div></div></div></div><div class="mod_doc"><h2 id="Torsion-tensor-of-a-bundled-covariant-derivative-on-TM" class="markdown-heading">Torsion tensor of a bundled covariant derivative on <code>TM</code> <a class="hover-link" href="#Torsion-tensor-of-a-bundled-covariant-derivative-on-TM">#</a></h2></div><div class="decl" id="CovariantDerivative.torsion"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L119-L121">source</a></div><div class="decl_header"><span class="decl_kind">noncomputable def</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion"><span class="name">CovariantDerivative</span>.<span class="name">torsion</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#CovariantDerivative">CovariantDerivative</a> <span class="fn">I</span> <span class="fn">E</span> <span class="fn">(<a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span> <a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">→L[</a><span class="fn">𝕜</span><a href="../../../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap">]</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></div></div><p>The torsion tensor of a covariant derivative on the tangent bundle of a manifold.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">cov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion">torsion</a></span> <span class="fn">x</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">⋯</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#IsCovariantDerivativeOn.torsion">torsion</a></span> <span class="fn">x</span></span></li></ul></details><details id="instances-for-list-CovariantDerivative.torsion" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CovariantDerivative.torsion_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L123-L127">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion_apply"><span class="name">CovariantDerivative</span>.<span class="name">torsion_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#CovariantDerivative">CovariantDerivative</a> <span class="fn">I</span> <span class="fn">E</span> <span class="fn">(<a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span>)</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hX</span> : <span class="fn"><span class="fn">MDiffAt <span class="fn">(T% <span class="fn">X</span>)</span></span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hY</span> : <span class="fn"><span class="fn">MDiffAt <span class="fn">(T% <span class="fn">Y</span>)</span></span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">cov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion">torsion</a></span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">X</span> <span class="fn">x</span>)</span>)</span> <span class="fn">(<span class="fn">Y</span> <span class="fn">x</span>)</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">(<span class="fn">↑<span class="fn">cov</span></span> <span class="fn">Y</span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">X</span> <span class="fn">x</span>)</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">(<span class="fn">↑<span class="fn">cov</span></span> <span class="fn">X</span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">Y</span> <span class="fn">x</span>)</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorField/LieBracket.html#VectorField.mlieBracket">VectorField.mlieBracket</a> <span class="fn">I</span> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="CovariantDerivative.torsion_apply_eq_extend"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L129-L134">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion_apply_eq_extend"><span class="name">CovariantDerivative</span>.<span class="name">torsion_apply_eq_extend</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#CovariantDerivative">CovariantDerivative</a> <span class="fn">I</span> <span class="fn">E</span> <span class="fn">(<a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₀ </span><span class="fn">Y₀</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">cov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion">torsion</a></span> <span class="fn">x</span>)</span> <span class="fn">X₀</span>)</span> <span class="fn">Y₀</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a>   <span class="fn"><span class="fn">(<span class="fn">↑<span class="fn">cov</span></span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle.extend">FiberBundle.extend</a> <span class="fn">E</span> <span class="fn">Y₀</span>)</span> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle.extend">FiberBundle.extend</a> <span class="fn">E</span> <span class="fn">X₀</span> <span class="fn">x</span>)</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a>       <span class="fn"><span class="fn">(<span class="fn">↑<span class="fn">cov</span></span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle.extend">FiberBundle.extend</a> <span class="fn">E</span> <span class="fn">X₀</span>)</span> <span class="fn">x</span>)</span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle.extend">FiberBundle.extend</a> <span class="fn">E</span> <span class="fn">Y₀</span> <span class="fn">x</span>)</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a>     <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorField/LieBracket.html#VectorField.mlieBracket">VectorField.mlieBracket</a> <span class="fn">I</span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle.extend">FiberBundle.extend</a> <span class="fn">E</span> <span class="fn">X₀</span>)</span> <span class="fn">(<a href="../../../../.././Mathlib/Topology/FiberBundle/Basic.html#FiberBundle.extend">FiberBundle.extend</a> <span class="fn">E</span> <span class="fn">Y₀</span>)</span> <span class="fn">x</span></span></div></div></div></div><div class="decl" id="CovariantDerivative.torsion_self"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L136-L138">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion_self"><span class="name">CovariantDerivative</span>.<span class="name">torsion_self</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#CovariantDerivative">CovariantDerivative</a> <span class="fn">I</span> <span class="fn">E</span> <span class="fn">(<a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₀</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">cov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion">torsion</a></span> <span class="fn">x</span>)</span> <span class="fn">X₀</span>)</span> <span class="fn">X₀</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span></div></div></div></div><div class="decl" id="CovariantDerivative.torsion_antisymm"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L140-L141">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion_antisymm"><span class="name">CovariantDerivative</span>.<span class="name">torsion_antisymm</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#CovariantDerivative">CovariantDerivative</a> <span class="fn">I</span> <span class="fn">E</span> <span class="fn">(<a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span>)</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">X₀ </span><span class="fn">Y₀</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">cov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion">torsion</a></span> <span class="fn">x</span>)</span> <span class="fn">X₀</span>)</span> <span class="fn">Y₀</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <a href="../../../../.././Init/Prelude.html#Neg.neg">-</a><span class="fn"><span class="fn">(<span class="fn">(<span class="fn"><span class="fn">cov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion">torsion</a></span> <span class="fn">x</span>)</span> <span class="fn">Y₀</span>)</span> <span class="fn">X₀</span></span></div></div></div></div><div class="decl" id="CovariantDerivative.torsion_eq_zero_iff"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.lean#L143-L156">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion_eq_zero_iff"><span class="name">CovariantDerivative</span>.<span class="name">torsion_eq_zero_iff</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕜</span> : <a href="../../../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <a href="../../../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Group/Defs.html#NormedAddCommGroup">NormedAddCommGroup</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">H</span> : <a href="../../../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">H</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">I</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#ModelWithCorners">ModelWithCorners</a> <span class="fn">𝕜</span> <span class="fn">E</span> <span class="fn">H</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../../../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/Defs/Basic.html#TopologicalSpace">TopologicalSpace</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/ChartedSpace.html#ChartedSpace">ChartedSpace</a> <span class="fn">H</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕜</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/LinearAlgebra/FiniteDimensional/Defs.html#FiniteDimensional">FiniteDimensional</a> <span class="fn">𝕜</span> <span class="fn">E</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#IsManifold">IsManifold</a> <span class="fn">I</span> <span class="fn">2</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">cov</span> : <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Basic.html#CovariantDerivative">CovariantDerivative</a> <span class="fn">I</span> <span class="fn">E</span> <span class="fn">(<a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">cov</span>.<a href="../../../../.././Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/Torsion.html#CovariantDerivative.torsion">torsion</a></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn">0</span> <a href="../../../../.././Init/Core.html#Iff">↔</a>   <span class="fn">∀ {<span class="fn">X </span><span class="fn">Y</span> : <span class="fn">(<span class="fn">x</span> : <span class="fn">M</span>) → <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/IsManifold/Basic.html#TangentSpace">TangentSpace</a> <span class="fn">I</span> <span class="fn">x</span></span></span>} {<span class="fn">x</span> : <span class="fn">M</span>},
+    <span class="fn"><span class="fn"><span class="fn">MDiffAt <span class="fn">(T% <span class="fn">X</span>)</span></span> <span class="fn">x</span></span> → <span class="fn"><span class="fn"><span class="fn">MDiffAt <span class="fn">(T% <span class="fn">Y</span>)</span></span> <span class="fn">x</span></span> → <span class="fn"><span class="fn">(<span class="fn">↑<span class="fn">cov</span></span> <span class="fn">Y</span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">X</span> <span class="fn">x</span>)</span></span> <a href="../../../../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn"><span class="fn">(<span class="fn">↑<span class="fn">cov</span></span> <span class="fn">X</span> <span class="fn">x</span>)</span> <span class="fn">(<span class="fn">Y</span> <span class="fn">x</span>)</span></span> <a href="../../../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../../../.././Mathlib/Geometry/Manifold/VectorField/LieBracket.html#VectorField.mlieBracket">VectorField.mlieBracket</a> <span class="fn">I</span> <span class="fn">X</span> <span class="fn">Y</span> <span class="fn">x</span></span></span></span></span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

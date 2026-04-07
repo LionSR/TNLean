@@ -1,0 +1,316 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.NumberTheory.GaussSum</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.NumberTheory.GaussSum";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">NumberTheory</span>.<span class="name">GaussSum</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Algebra/CharP/CharAndCard.html">Mathlib.Algebra.CharP.CharAndCard</a></li><li><a href="../.././Mathlib/NumberTheory/LegendreSymbol/AddCharacter.html">Mathlib.NumberTheory.LegendreSymbol.AddCharacter</a></li><li><a href="../.././Mathlib/NumberTheory/LegendreSymbol/ZModChar.html">Mathlib.NumberTheory.LegendreSymbol.ZModChar</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.NumberTheory.GaussSum" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#gaussSum"><span class="name">gaussSum</span></a></div><div class="nav_link"><a class="break_within" href="#gaussSum_mulShift"><span class="name">gaussSum_mulShift</span></a></div><div class="nav_link"><a class="break_within" href="#gaussSum_mul"><span class="name">gaussSum_mul</span></a></div><div class="nav_link"><a class="break_within" href="#mul_gaussSum_inv_eq_gaussSum"><span class="name">mul_gaussSum_inv_eq_gaussSum</span></a></div><div class="nav_link"><a class="break_within" href="#gaussSum_mul_gaussSum_eq_card"><span class="name">gaussSum_mul_gaussSum_eq_card</span></a></div><div class="nav_link"><a class="break_within" href="#gaussSum_mul_gaussSum_pow_orderOf_sub_one"><span class="name">gaussSum_mul_gaussSum_pow_orderOf_sub_one</span></a></div><div class="nav_link"><a class="break_within" href="#gaussSum_ne_zero_of_nontrivial"><span class="name">gaussSum_ne_zero_of_nontrivial</span></a></div><div class="nav_link"><a class="break_within" href="#gaussSum_sq"><span class="name">gaussSum_sq</span></a></div><div class="nav_link"><a class="break_within" href="#gaussSum_frob"><span class="name">gaussSum_frob</span></a></div><div class="nav_link"><a class="break_within" href="#MulChar.IsQuadratic.gaussSum_frob"><span class="name">MulChar</span>.<span class="name">IsQuadratic</span>.<span class="name">gaussSum_frob</span></a></div><div class="nav_link"><a class="break_within" href="#MulChar.IsQuadratic.gaussSum_frob_iter"><span class="name">MulChar</span>.<span class="name">IsQuadratic</span>.<span class="name">gaussSum_frob_iter</span></a></div><div class="nav_link"><a class="break_within" href="#Char.card_pow_char_pow"><span class="name">Char</span>.<span class="name">card_pow_char_pow</span></a></div><div class="nav_link"><a class="break_within" href="#Char.card_pow_card"><span class="name">Char</span>.<span class="name">card_pow_card</span></a></div><div class="nav_link"><a class="break_within" href="#FiniteField.two_pow_card"><span class="name">FiniteField</span>.<span class="name">two_pow_card</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Gauss-sums" class="markdown-heading">Gauss sums <a class="hover-link" href="#Gauss-sums">#</a></h1><p>We define the Gauss sum associated to a multiplicative and an additive
+character of a finite field and prove some results about them.</p><h2 id="Main-definition" class="markdown-heading">Main definition <a class="hover-link" href="#Main-definition">#</a></h2><p>Let <code>R</code> be a finite commutative ring and let <code>R'</code> be another commutative ring.
+If <code>χ</code> is a multiplicative character <code>R → R'</code> (type <code><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> R R'</code>) and <code>ψ</code>
+is an additive character <code>R → R'</code> (type <code><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> R R'</code>, which abbreviates
+<code>(Multiplicative R) →* R'</code>), then the <em>Gauss sum</em> of <code>χ</code> and <code>ψ</code> is <code>∑ a, χ a * ψ a</code>.</p><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><p>Some important results are as follows.</p><ul><li><code><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum_mul_gaussSum_eq_card">gaussSum_mul_gaussSum_eq_card</a></code>: The product of the Gauss
+sums of <code>χ</code> and <code>ψ</code> and that of <code>χ⁻¹</code> and <code>ψ⁻¹</code> is the cardinality
+of the source ring <code>R</code> (if <code>χ</code> is nontrivial, <code>ψ</code> is primitive and <code>R</code> is a field).</li><li><code><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum_sq">gaussSum_sq</a></code>: The square of the Gauss sum is <code>χ(-1)</code> times
+the cardinality of <code>R</code> if in addition <code>χ</code> is a quadratic character.</li><li><code><a href="../.././Mathlib/NumberTheory/GaussSum.html#MulChar.IsQuadratic.gaussSum_frob">MulChar.IsQuadratic.gaussSum_frob</a></code>: For a quadratic character <code>χ</code>, raising
+the Gauss sum to the <code>p</code>th power (where <code>p</code> is the characteristic of
+the target ring <code>R'</code>) multiplies it by <code>χ p</code>.</li><li><code><a href="../.././Mathlib/NumberTheory/GaussSum.html#Char.card_pow_card">Char.card_pow_card</a></code>: When <code>F</code> and <code>F'</code> are finite fields and <code>χ : F → F'</code>
+is a nontrivial quadratic character, then <code>(χ (-1) * #F)^(#F'/2) = χ #F'</code>.</li><li><code><a href="../.././Mathlib/NumberTheory/GaussSum.html#FiniteField.two_pow_card">FiniteField.two_pow_card</a></code>: For every finite field <code>F</code> of odd characteristic,
+we have <code>2^(#F/2) = χ₈ #F</code> in <code>F</code>.</li></ul><p>This machinery can be used to derive (a generalization of) the Law of
+Quadratic Reciprocity.</p><h2 id="Tags" class="markdown-heading">Tags <a class="hover-link" href="#Tags">#</a></h2><p>additive character, multiplicative character, Gauss sum</p></div><div class="mod_doc"><h3 id="Definition-and-first-properties" class="markdown-heading">Definition and first properties <a class="hover-link" href="#Definition-and-first-properties">#</a></h3></div><div class="decl" id="gaussSum"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L69-L71">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum"><span class="name">gaussSum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">R'</span></div></div><p>Definition of the Gauss sum associated to a multiplicative and an additive character.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∑ <span class="fn">a</span> : <span class="fn">R</span>, <span class="fn"><span class="fn">χ</span> <span class="fn">a</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">ψ</span> <span class="fn">a</span></span></span></li></ul></details><details id="instances-for-list-gaussSum" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="gaussSum_mulShift"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L73-L78">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum_mulShift"><span class="name">gaussSum_mulShift</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn">R</span><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#Units">ˣ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">χ</span> <span class="fn">↑<span class="fn">a</span></span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">(<span class="fn"><span class="fn">ψ</span>.<a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar.mulShift">mulShift</a></span> <span class="fn">↑<span class="fn">a</span></span>)</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span></div></div><p>Replacing <code>ψ</code> by <code>mulShift ψ a</code> and multiplying the Gauss sum by <code>χ a</code> does not change it.</p></div></div><div class="mod_doc"><h3 id="The-product-of-two-Gauss-sums" class="markdown-heading">The product of two Gauss sums <a class="hover-link" href="#The-product-of-two-Gauss-sums">#</a></h3></div><div class="decl" id="gaussSum_mul"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L89-L102">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum_mul"><span class="name">gaussSum_mul</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ </span><span class="fn">φ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">φ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">∑ <span class="fn">t</span> : <span class="fn">R</span>, <span class="fn">∑ <span class="fn">x</span> : <span class="fn">R</span>, <span class="fn"><span class="fn">χ</span> <span class="fn">x</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">φ</span> (<span class="fn">t</span> <a href="../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">x</span>)</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn">ψ</span> <span class="fn">t</span></span></span></span></div></div><p>A formula for the product of two Gauss sums with the same additive character.</p></div></div><div class="decl" id="mul_gaussSum_inv_eq_gaussSum"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L107-L110">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#mul_gaussSum_inv_eq_gaussSum"><span class="name">mul_gaussSum_inv_eq_gaussSum</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">χ</span> <span class="fn">(-<span class="fn">1</span>)</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span><a href="../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span></div></div></div></div><div class="decl" id="gaussSum_mul_gaussSum_eq_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L127-L142">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum_mul_gaussSum_eq_card"><span class="name">gaussSum_mul_gaussSum_eq_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn">χ</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn"><span class="fn">ψ</span>.<a href="../.././Mathlib/NumberTheory/LegendreSymbol/AddCharacter.html#AddChar.IsPrimitive">IsPrimitive</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span><a href="../.././Init/Prelude.html#Inv.inv">⁻¹</a> <span class="fn">ψ</span><a href="../.././Init/Prelude.html#Inv.inv">⁻¹</a></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">R</span>)</span></span></div></div><p>We have <code><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> χ ψ * <a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> χ⁻¹ ψ⁻¹ = <a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> R</code>
+when <code>χ</code> is nontrivial and <code>ψ</code> is primitive (and <code>R</code> is a field).</p></div></div><div class="decl" id="gaussSum_mul_gaussSum_pow_orderOf_sub_one"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L144-L153">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum_mul_gaussSum_pow_orderOf_sub_one"><span class="name">gaussSum_mul_gaussSum_pow_orderOf_sub_one</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn">χ</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn"><span class="fn">ψ</span>.<a href="../.././Mathlib/NumberTheory/LegendreSymbol/AddCharacter.html#AddChar.IsPrimitive">IsPrimitive</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> (<span class="fn">χ</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn"><a href="../.././Mathlib/GroupTheory/OrderOfElement.html#orderOf">orderOf</a> <span class="fn">χ</span></span> <a href="../.././Init/Prelude.html#HSub.hSub">-</a> <span class="fn">1</span>)) <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> <span class="fn">(-<span class="fn">1</span>)</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">R</span>)</span></span></div></div><p>If <code>χ</code> is a multiplicative character of order <code>n</code> on a finite field <code>F</code>,
+then <code>g(χ) * g(χ^(n-1)) = χ(-1)*#F</code></p></div></div><div class="decl" id="gaussSum_ne_zero_of_nontrivial"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L155-L159">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum_ne_zero_of_nontrivial"><span class="name">gaussSum_ne_zero_of_nontrivial</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">R</span>)</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn">χ</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn"><span class="fn">ψ</span>.<a href="../.././Mathlib/NumberTheory/LegendreSymbol/AddCharacter.html#AddChar.IsPrimitive">IsPrimitive</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></div></div><p>The Gauss sum of a nontrivial character on a finite field does not vanish.</p></div></div><div class="decl" id="gaussSum_sq"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L161-L169">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum_sq"><span class="name">gaussSum_sq</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ₁</span> : <span class="fn">χ</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hχ₂</span> : <span class="fn"><span class="fn">χ</span>.<a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar.IsQuadratic">IsQuadratic</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hψ</span> : <span class="fn"><span class="fn">ψ</span>.<a href="../.././Mathlib/NumberTheory/LegendreSymbol/AddCharacter.html#AddChar.IsPrimitive">IsPrimitive</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> <span class="fn">(-<span class="fn">1</span>)</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">R</span>)</span></span></div></div><p>When <code>χ</code> is a nontrivial quadratic character, then the square of <code><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> χ ψ</code>
+is <code>χ(-1)</code> times the cardinality of <code>R</code>.</p></div></div><div class="mod_doc"><h3 id="Gauss-sums-and-Frobenius" class="markdown-heading">Gauss sums and Frobenius <a class="hover-link" href="#Gauss-sums-and-Frobenius">#</a></h3></div><div class="decl" id="gaussSum_frob"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L184-L190">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum_frob"><span class="name">gaussSum_frob</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">fp</span> : <span class="fn"><a href="../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hch</span> : <span class="fn"><a href="../.././Mathlib/Algebra/CharP/Defs.html#CharP">CharP</a> <span class="fn">R'</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> (<span class="fn">χ</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span>) (<span class="fn">ψ</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span>)</span></div></div><p>When <code>R'</code> has prime characteristic <code>p</code>, then the <code>p</code>th power of the Gauss sum
+of <code>χ</code> and <code>ψ</code> is the Gauss sum of <code>χ^p</code> and <code>ψ^p</code>.</p></div></div><div class="decl" id="MulChar.IsQuadratic.gaussSum_frob"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L192-L200">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#MulChar.IsQuadratic.gaussSum_frob"><span class="name">MulChar</span>.<span class="name">IsQuadratic</span>.<span class="name">gaussSum_frob</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">fp</span> : <span class="fn"><a href="../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hch</span> : <span class="fn"><a href="../.././Mathlib/Algebra/CharP/Defs.html#CharP">CharP</a> <span class="fn">R'</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">↑<span class="fn">p</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn"><span class="fn">χ</span>.<a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar.IsQuadratic">IsQuadratic</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> <span class="fn">↑<span class="fn">p</span></span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span></div></div><p>For a quadratic character <code>χ</code> and when the characteristic <code>p</code> of the target ring
+is a unit in the source ring, the <code>p</code>th power of the Gauss sum of <code>χ</code> and <code>ψ</code> is
+<code>χ p</code> times the original Gauss sum.</p></div></div><div class="decl" id="MulChar.IsQuadratic.gaussSum_frob_iter"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L202-L212">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#MulChar.IsQuadratic.gaussSum_frob_iter"><span class="name">MulChar</span>.<span class="name">IsQuadratic</span>.<span class="name">gaussSum_frob_iter</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">p</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">fp</span> : <span class="fn"><a href="../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hch</span> : <span class="fn"><a href="../.././Mathlib/Algebra/CharP/Defs.html#CharP">CharP</a> <span class="fn">R'</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">↑<span class="fn">p</span></span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn"><span class="fn">χ</span>.<a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar.IsQuadratic">IsQuadratic</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">p</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> (<span class="fn">↑<span class="fn">p</span></span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>)</span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span></div></div><p>For a quadratic character <code>χ</code> and when the characteristic <code>p</code> of the target ring
+is a unit in the source ring and <code>n</code> is a natural number, the <code>p^n</code>th power of the Gauss
+sum of <code>χ</code> and <code>ψ</code> is <code>χ (p^n)</code> times the original Gauss sum.</p></div></div><div class="mod_doc"><h3 id="Values-of-quadratic-characters" class="markdown-heading">Values of quadratic characters <a class="hover-link" href="#Values-of-quadratic-characters">#</a></h3></div><div class="decl" id="Char.card_pow_char_pow"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L224-L240">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#Char.card_pow_char_pow"><span class="name">Char</span>.<span class="name">card_pow_char_pow</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R'</span> : <a href="../.././foundational_types.html">Type</a> v}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#CommRing">CommRing</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#IsDomain">IsDomain</a> <span class="fn">R'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ</span> : <span class="fn"><span class="fn">χ</span>.<a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar.IsQuadratic">IsQuadratic</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">ψ</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/AddChar.html#AddChar">AddChar</a> <span class="fn">R</span> <span class="fn">R'</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">p </span><span class="fn">n</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">fp</span> : <span class="fn"><a href="../.././Mathlib/Logic/Basic.html#Fact">Fact</a> <span class="fn">(<a href="../.././Mathlib/Data/Nat/Prime/Defs.html#Nat.Prime">Nat.Prime</a> <span class="fn">p</span>)</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hch</span> : <span class="fn"><a href="../.././Mathlib/Algebra/CharP/Defs.html#CharP">CharP</a> <span class="fn">R'</span> <span class="fn">p</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hp</span> : <span class="fn"><a href="../.././Mathlib/Algebra/Group/Units/Defs.html#IsUnit">IsUnit</a> <span class="fn">↑<span class="fn">p</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hp'</span> : <span class="fn">p</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hg</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/GaussSum.html#gaussSum">gaussSum</a> <span class="fn">χ</span> <span class="fn">ψ</span></span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">2</span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> <span class="fn">(-<span class="fn">1</span>)</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">R</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">χ</span> <span class="fn">(-<span class="fn">1</span>)</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">R</span>)</span></span>) <a href="../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn">p</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span> <a href="../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">2</span>) <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> (<span class="fn">↑<span class="fn">p</span></span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> <span class="fn">n</span>)</span></div></div><p>If the square of the Gauss sum of a quadratic character is <code>χ(-1) * #R</code>,
+then we get, for all <code>n : ℕ</code>, the relation <code>(χ(-1) * #R) ^ (p^n/2) = χ(p^n)</code>,
+where <code>p</code> is the (odd) characteristic of the target ring <code>R'</code>.
+This version can be used when <code>R</code> is not a field, e.g., <code>ℤ/8ℤ</code>.</p></div></div><div class="decl" id="Char.card_pow_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L242-L260">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#Char.card_pow_card"><span class="name">Char</span>.<span class="name">card_pow_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F'</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F'</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">χ</span> : <span class="fn"><a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar">MulChar</a> <span class="fn">F</span> <span class="fn">F'</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hχ₁</span> : <span class="fn">χ</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">1</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hχ₂</span> : <span class="fn"><span class="fn">χ</span>.<a href="../.././Mathlib/NumberTheory/MulChar/Basic.html#MulChar.IsQuadratic">IsQuadratic</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hch₁</span> : <span class="fn"><a href="../.././Mathlib/Algebra/CharP/Defs.html#ringChar">ringChar</a> <span class="fn">F'</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn"><a href="../.././Mathlib/Algebra/CharP/Defs.html#ringChar">ringChar</a> <span class="fn">F</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hch₂</span> : <span class="fn"><a href="../.././Mathlib/Algebra/CharP/Defs.html#ringChar">ringChar</a> <span class="fn">F'</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type">(<span class="fn"><span class="fn">χ</span> <span class="fn">(-<span class="fn">1</span>)</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F</span>)</span></span>) <a href="../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F'</span></span> <a href="../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">2</span>) <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn">χ</span> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F'</span>)</span></span></span></div></div><p>When <code>F</code> and <code>F'</code> are finite fields and <code>χ : F → F'</code> is a nontrivial quadratic character,
+then <code>(χ(-1) * #F)^(#F'/2) = χ #F'</code>.</p></div></div><div class="mod_doc"><h3 id="The-quadratic-character-of-2" class="markdown-heading">The quadratic character of 2 <a class="hover-link" href="#The-quadratic-character-of-2">#</a></h3><p>This section proves the following result.</p><p>For every finite field <code>F</code> of odd characteristic, we have <code>2^(#F/2) = χ₈#F</code> in <code>F</code>.
+This can be used to show that the quadratic character of <code>F</code> takes the value
+<code>χ₈#F</code> at <code>2</code>.</p><p>The proof uses the Gauss sum of <code>χ₈</code> and a primitive additive character on <code>ℤ/8ℤ</code>;
+in this way, the result is reduced to <code><a href="../.././Mathlib/NumberTheory/GaussSum.html#Char.card_pow_char_pow">card_pow_char_pow</a></code>.</p></div><div class="decl" id="FiniteField.two_pow_card"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/NumberTheory/GaussSum.lean#L282-L342">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/NumberTheory/GaussSum.html#FiniteField.two_pow_card"><span class="name">FiniteField</span>.<span class="name">two_pow_card</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">F</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Data/Fintype/Defs.html#Fintype">Fintype</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Field/Defs.html#Field">Field</a> <span class="fn">F</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hF</span> : <span class="fn"><a href="../.././Mathlib/Algebra/CharP/Defs.html#ringChar">ringChar</a> <span class="fn">F</span></span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">2</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">2</span> <a href="../.././Init/Prelude.html#HPow.hPow">^</a> (<span class="fn"><a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F</span></span> <a href="../.././Init/Prelude.html#HDiv.hDiv">/</a> <span class="fn">2</span>) <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/NumberTheory/LegendreSymbol/ZModChar.html#ZMod.χ₈">ZMod.χ₈</a> <span class="fn">↑<span class="fn">(<a href="../.././Mathlib/Data/Fintype/Card.html#Fintype.card">Fintype.card</a> <span class="fn">F</span>)</span></span>)</span></span></div></div><p>For every finite field <code>F</code> of odd characteristic, we have <code>2^(#F/2) = χ₈ #F</code> in <code>F</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

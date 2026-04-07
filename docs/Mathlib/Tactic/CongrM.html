@@ -1,0 +1,33 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Tactic.CongrM</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Tactic.CongrM";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">CongrM</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/CongrM.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Tactic/TermCongr.html">Mathlib.Tactic.TermCongr</a></li><li><a href="../.././Lean/Meta/Tactic/Rfl.html">Lean.Meta.Tactic.Rfl</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Tactic.CongrM" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Mathlib.Tactic.congrM"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">congrM</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="The-congrm-tactic" class="markdown-heading">The <code>congrm</code> tactic <a class="hover-link" href="#The-congrm-tactic">#</a></h1><p>The <code>congrm</code> tactic (&quot;<code><a href="../.././Init/Prelude.html#congr">congr</a></code> with matching&quot;)
+is a convenient frontend for <code>congr(...)</code> congruence quotations.
+Roughly, <code>congrm e</code> is <code>refine congr(e')</code>, where <code>e'</code> is <code>e</code> with every <code>?m</code> placeholder
+replaced by <code>$(?m)</code>.</p></div><div class="decl" id="Mathlib.Tactic.congrM"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Tactic/CongrM.lean#L27-L62">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Tactic/CongrM.html#Mathlib.Tactic.congrM"><span class="name">Mathlib</span>.<span class="name">Tactic</span>.<span class="name">congrM</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../.././Init/Prelude.html#Lean.ParserDescr">Lean.ParserDescr</a></div></div><p><code>congrm e</code> is a tactic for proving goals of the form <code>lhs = rhs</code>, <code>lhs ↔ rhs</code>, <code>lhs ≍ rhs</code>,
+or <code>R lhs rhs</code> when <code>R</code> is a reflexive relation.
+The expression <code>e</code> is a pattern containing placeholders <code>?_</code>,
+and this pattern is matched against <code>lhs</code> and <code>rhs</code> simultaneously.
+These placeholders generate new goals that state that corresponding subexpressions
+in <code>lhs</code> and <code>rhs</code> are equal.
+If the placeholders have names, such as <code>?m</code>, then the new goals are given tags with those names.</p><p>Examples:</p><pre><code class="language-lean">example {a b c d : ℕ} :
+    <a href="../.././Init/Prelude.html#Nat.pred">Nat.pred</a> a.succ * (d + (c + a.pred)) = <a href="../.././Init/Prelude.html#Nat.pred">Nat.pred</a> b.succ * (b + (c + d.pred)) := by
+  congrm <a href="../.././Init/Prelude.html#Nat.pred">Nat.pred</a> (Nat.succ ?h1) * (?h2 + ?h3)
+  /-  Goals left:
+  case h1 ⊢ a = b
+  case h2 ⊢ d = b
+  case h3 ⊢ c + a.pred = c + d.pred
+  -/
+  sorry
+  sorry
+  sorry
+
+example {a b : ℕ} (h : a = b) : (fun y : ℕ =&gt; ∀ z, a + a = z) = (fun x =&gt; ∀ z, b + a = z) := by
+  congrm fun x =&gt; ∀ w, ?_ + a = w
+  -- ⊢ a = b
+  exact h
+</code></pre><p>The <code>congrm</code> command is a convenient frontend to <code>congr(...)</code> congruence quotations.
+If the goal is an equality, <code>congrm e</code> is equivalent to <code>refine congr(e')</code> where <code>e'</code> is
+built from <code>e</code> by replacing each placeholder <code>?m</code> by <code>$(?m)</code>.
+The pattern <code>e</code> is allowed to contain <code>$(...)</code> expressions to immediately substitute
+equality proofs into the congruence, just like for congruence quotations.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Mathlib.Tactic.congrM" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

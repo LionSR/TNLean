@@ -1,0 +1,303 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.LinearAlgebra.Multilinear.TensorProduct</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.LinearAlgebra.Multilinear.TensorProduct";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">LinearAlgebra</span>.<span class="name">Multilinear</span>.<span class="name">TensorProduct</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Multilinear/TensorProduct.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html">Mathlib.LinearAlgebra.Multilinear.Basic</a></li><li><a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Basic.html">Mathlib.LinearAlgebra.TensorProduct.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.LinearAlgebra.Multilinear.TensorProduct" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#MultilinearMap.domCoprodDep"><span class="name">MultilinearMap</span>.<span class="name">domCoprodDep</span></a></div><div class="nav_link"><a class="break_within" href="#MultilinearMap.domCoprodDep_apply"><span class="name">MultilinearMap</span>.<span class="name">domCoprodDep_apply</span></a></div><div class="nav_link"><a class="break_within" href="#MultilinearMap.domCoprodDep'"><span class="name">MultilinearMap</span>.<span class="name">domCoprodDep'</span></a></div><div class="nav_link"><a class="break_within" href="#MultilinearMap.domCoprodDep'_apply"><span class="name">MultilinearMap</span>.<span class="name">domCoprodDep'_apply</span></a></div><div class="nav_link"><a class="break_within" href="#MultilinearMap.domCoprod"><span class="name">MultilinearMap</span>.<span class="name">domCoprod</span></a></div><div class="nav_link"><a class="break_within" href="#MultilinearMap.domCoprod_apply"><span class="name">MultilinearMap</span>.<span class="name">domCoprod_apply</span></a></div><div class="nav_link"><a class="break_within" href="#MultilinearMap.domCoprod'"><span class="name">MultilinearMap</span>.<span class="name">domCoprod'</span></a></div><div class="nav_link"><a class="break_within" href="#MultilinearMap.domCoprod'_apply"><span class="name">MultilinearMap</span>.<span class="name">domCoprod'_apply</span></a></div><div class="nav_link"><a class="break_within" href="#MultilinearMap.domCoprod_domDomCongr_sumCongr"><span class="name">MultilinearMap</span>.<span class="name">domCoprod_domDomCongr_sumCongr</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Constructions-relating-multilinear-maps-and-tensor-products" class="markdown-heading">Constructions relating multilinear maps and tensor products. <a class="hover-link" href="#Constructions-relating-multilinear-maps-and-tensor-products">#</a></h1></div><div class="decl" id="MultilinearMap.domCoprodDep"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Multilinear/TensorProduct.lean#L34-L50">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep"><span class="name">MultilinearMap</span>.<span class="name">domCoprodDep</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span> → <a href="../../.././foundational_types.html">Type</a> u_8</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">N</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">(<span class="fn">N</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">i₁</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn"><span class="fn">N</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inl">Sum.inl</a> <span class="fn">i₁</span>)</span></span>)</span> <span class="fn">N₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">i₂</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn"><span class="fn">N</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inr">Sum.inr</a> <span class="fn">i₂</span>)</span></span>)</span> <span class="fn">N₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">N</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">N₁</span> <span class="fn">N₂</span>)</span></span></div></div><p>Given a family of modules <code>N</code> indexed by a type <code>ι₁ ⊕ ι₂</code>,
+a multilinear map from the modules <code>N (.inl i₁)</code> to <code>N₁</code> and
+a multilinear map from the modules <code>N (.inr i₁)</code> to <code>N₂</code>, this
+is the induced multilinear map from all the modules <code>N i</code> to <code>N₁ ⊗ N₂</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-MultilinearMap.domCoprodDep" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MultilinearMap.domCoprodDep_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Multilinear/TensorProduct.lean#L38-L38">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep_apply"><span class="name">MultilinearMap</span>.<span class="name">domCoprodDep_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span> → <a href="../../.././foundational_types.html">Type</a> u_8</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">N</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">(<span class="fn">N</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">i₁</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn"><span class="fn">N</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inl">Sum.inl</a> <span class="fn">i₁</span>)</span></span>)</span> <span class="fn">N₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">i₂</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn"><span class="fn">N</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inr">Sum.inr</a> <span class="fn">i₂</span>)</span></span>)</span> <span class="fn">N₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">(<span class="fn">i</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) → <span class="fn"><span class="fn">N</span> <span class="fn">i</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">a</span>.<a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep">domCoprodDep</a></span> <span class="fn">b</span>)</span> <span class="fn">v</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<span class="fn">a</span> <span class="fn">fun (<span class="fn">i₁</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn"><span class="fn">v</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inl">Sum.inl</a> <span class="fn">i₁</span>)</span></span></span>)</span> <a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn"><span class="fn">b</span> <span class="fn">fun (<span class="fn">i₂</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn"><span class="fn">v</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inr">Sum.inr</a> <span class="fn">i₂</span>)</span></span></span></span></div></div></div></div><div class="decl" id="MultilinearMap.domCoprodDep'"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Multilinear/TensorProduct.lean#L52-L58">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep'"><span class="name">MultilinearMap</span>.<span class="name">domCoprodDep'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span> → <a href="../../.././foundational_types.html">Type</a> u_8</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">N</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">(<span class="fn">N</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">i₁</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn"><span class="fn">N</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inl">Sum.inl</a> <span class="fn">i₁</span>)</span></span>)</span> <span class="fn">N₁</span>)</span>
+    <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">i₂</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn"><span class="fn">N</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inr">Sum.inr</a> <span class="fn">i₂</span>)</span></span>)</span> <span class="fn">N₂</span>)</span></span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a>   <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">N</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">N₁</span> <span class="fn">N₂</span>)</span></span></div></div><p>A more bundled version of <code><a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep">MultilinearMap.domCoprodDep</a></code>, as a linear map
+from the tensor product of spaces of multilinear maps.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep'">MultilinearMap.domCoprodDep'</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Basic.html#TensorProduct.lift">TensorProduct.lift</a> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/BilinearMap.html#LinearMap.mk₂">LinearMap.mk₂</a> <span class="fn">R</span> <a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep">MultilinearMap.domCoprodDep</a> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">⋯</span> <span class="fn">⋯</span>)</span></span></li></ul></details><details id="instances-for-list-MultilinearMap.domCoprodDep'" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MultilinearMap.domCoprodDep'_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Multilinear/TensorProduct.lean#L60-L64">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep'_apply"><span class="name">MultilinearMap</span>.<span class="name">domCoprodDep'_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <span class="fn"><span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span> → <a href="../../.././foundational_types.html">Type</a> u_8</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">(<span class="fn">N</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">(<span class="fn">i</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) → <span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">(<span class="fn">N</span> <span class="fn">i</span>)</span></span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">i₁</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn"><span class="fn">N</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inl">Sum.inl</a> <span class="fn">i₁</span>)</span></span>)</span> <span class="fn">N₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">i₂</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn"><span class="fn">N</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inr">Sum.inr</a> <span class="fn">i₂</span>)</span></span>)</span> <span class="fn">N₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep'">domCoprodDep'</a> (<span class="fn">a</span> <a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">b</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">a</span>.<a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep">domCoprodDep</a></span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="MultilinearMap.domCoprod"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Multilinear/TensorProduct.lean#L70-L87">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod"><span class="name">MultilinearMap</span>.<span class="name">domCoprod</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">N₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">N₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">N₁</span> <span class="fn">N₂</span>)</span></span></div></div><p>Given two multilinear maps <code>(ι₁ → N) → N₁</code> and <code>(ι₂ → N) → N₂</code>, this produces the map
+<code>(ι₁ ⊕ ι₂ → N) → N₁ ⊗ N₂</code> by taking the coproduct of the domain and the tensor product
+of the codomain.</p><p>This can be thought of as combining <code>Equiv.sumArrowEquivProdArrow.<a href="../../.././Mathlib/Order/Defs/Unbundled.html#symm">symm</a></code> with
+<code><a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Map.html#TensorProduct.map">TensorProduct.map</a></code>, noting that the two operations can't be separated as the intermediate result
+is not a <code><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a></code>.</p><p>While this can be generalized to work for dependent <code>Π i : ι₁, N'₁ i</code> instead of <code>ι₁ → N</code>, doing so
+introduces <code><a href="../../.././Init/Data/Sum/Basic.html#Sum.elim">Sum.elim</a> N'₁ N'₂</code> types in the result which are difficult to work with and not defeq
+to the simple case defined here. See <a href="https://leanprover.zulipchat.com/#narrow/stream/217875-Is-there.20code.20for.20X.3F/topic/Instances.20on.20.60sum.2Eelim.20A.20B.20i.60/near/218484619">this zulip thread</a>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">a</span>.<a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod">domCoprod</a></span> <span class="fn">b</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">a</span>.<a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep">domCoprodDep</a></span> <span class="fn">b</span></span></li></ul></details><details id="instances-for-list-MultilinearMap.domCoprod" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MultilinearMap.domCoprod_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Multilinear/TensorProduct.lean#L83-L83">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod_apply"><span class="name">MultilinearMap</span>.<span class="name">domCoprod_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">N₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">N₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">v</span> : <span class="fn">(<span class="fn">i</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) → <span class="fn"><span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">i</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">(<span class="fn"><span class="fn">a</span>.<a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod">domCoprod</a></span> <span class="fn">b</span>)</span> <span class="fn">v</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn">(<span class="fn">a</span> <span class="fn">fun (<span class="fn">i₁</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn"><span class="fn">v</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inl">Sum.inl</a> <span class="fn">i₁</span>)</span></span></span>)</span> <a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn"><span class="fn">b</span> <span class="fn">fun (<span class="fn">i₂</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn"><span class="fn">v</span> <span class="fn">(<a href="../../.././Init/Core.html#Sum.inr">Sum.inr</a> <span class="fn">i₂</span>)</span></span></span></span></div></div></div></div><div class="decl" id="MultilinearMap.domCoprod'"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Multilinear/TensorProduct.lean#L89-L94">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod'"><span class="name">MultilinearMap</span>.<span class="name">domCoprod'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">N₁</span>)</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">N₂</span>)</span></span> <a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a>   <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₁</span> <a href="../../.././Init/Core.html#Sum">⊕</a> <span class="fn">ι₂</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct">TensorProduct</a> <span class="fn">R</span> <span class="fn">N₁</span> <span class="fn">N₂</span>)</span></span></div></div><p>A more bundled version of <code><a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod">MultilinearMap.domCoprod</a></code> that maps
+<code>((ι₁ → N) → N₁) ⊗ ((ι₂ → N) → N₂)</code> to <code>(ι₁ ⊕ ι₂ → N) → N₁ ⊗ N₂</code>.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod'">MultilinearMap.domCoprod'</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprodDep'">MultilinearMap.domCoprodDep'</a></li></ul></details><details id="instances-for-list-MultilinearMap.domCoprod'" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="MultilinearMap.domCoprod'_apply"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Multilinear/TensorProduct.lean#L96-L99">source</a></div><div class="attributes">@[simp]</div>
+<div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod'_apply"><span class="name">MultilinearMap</span>.<span class="name">domCoprod'_apply</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">N₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">N₂</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod'">domCoprod'</a> (<span class="fn">a</span> <a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">⊗ₜ[</a><span class="fn">R</span><a href="../../.././Mathlib/LinearAlgebra/TensorProduct/Defs.html#TensorProduct.tmul">]</a> <span class="fn">b</span>)</span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">a</span>.<a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod">domCoprod</a></span> <span class="fn">b</span></span></div></div></div></div><div class="decl" id="MultilinearMap.domCoprod_domDomCongr_sumCongr"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/LinearAlgebra/Multilinear/TensorProduct.lean#L101-L107">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod_domDomCongr_sumCongr"><span class="name">MultilinearMap</span>.<span class="name">domCoprod_domDomCongr_sumCongr</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₁</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₂</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₃</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι₄</span> : <a href="../../.././foundational_types.html">Type</a> u_5}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Ring/Defs.html#CommSemiring">CommSemiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₁</span> : <a href="../../.././foundational_types.html">Type</a> u_6}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₁</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N₂</span> : <a href="../../.././foundational_types.html">Type</a> u_7}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N₂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_8}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">a</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₁</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">N₁</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">b</span> : <span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap">MultilinearMap</a> <span class="fn">R</span> <span class="fn">(fun (<span class="fn">x</span> : <span class="fn">ι₂</span>) =&gt; <span class="fn">N</span>)</span> <span class="fn">N₂</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">σa</span> : <span class="fn">ι₁</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">ι₃</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">σb</span> : <span class="fn">ι₂</span> <a href="../../.././Mathlib/Logic/Equiv/Defs.html#Equiv">≃</a> <span class="fn">ι₄</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap.domDomCongr">domDomCongr</a> <span class="fn">(<span class="fn"><span class="fn">σa</span>.<a href="../../.././Mathlib/Logic/Equiv/Sum.html#Equiv.sumCongr">sumCongr</a></span> <span class="fn">σb</span>)</span> <span class="fn">(<span class="fn"><span class="fn">a</span>.<a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod">domCoprod</a></span> <span class="fn">b</span>)</span></span> <a href="../../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap.domDomCongr">domDomCongr</a> <span class="fn">σa</span> <span class="fn">a</span>)</span>.<a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod">domCoprod</a></span> <span class="fn">(<a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap.domDomCongr">domDomCongr</a> <span class="fn">σb</span> <span class="fn">b</span>)</span></span></div></div><p>When passed an <code><a href="../../.././Mathlib/Logic/Equiv/Sum.html#Equiv.sumCongr">Equiv.sumCongr</a></code>, <code><a href="../../.././Mathlib/LinearAlgebra/Multilinear/Basic.html#MultilinearMap.domDomCongr">MultilinearMap.domDomCongr</a></code> distributes over
+<code><a href="../../.././Mathlib/LinearAlgebra/Multilinear/TensorProduct.html#MultilinearMap.domCoprod">MultilinearMap.domCoprod</a></code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

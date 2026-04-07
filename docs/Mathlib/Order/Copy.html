@@ -1,0 +1,445 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Order.Copy</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="Mathlib.Order.Copy";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Order</span>.<span class="name">Copy</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Basic.html">Mathlib.Order.ConditionallyCompleteLattice.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Order.Copy" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#OrderTop.copy"><span class="name">OrderTop</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#OrderBot.copy"><span class="name">OrderBot</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#BoundedOrder.copy"><span class="name">BoundedOrder</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#Lattice.copy"><span class="name">Lattice</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#DistribLattice.copy"><span class="name">DistribLattice</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#GeneralizedHeytingAlgebra.copy"><span class="name">GeneralizedHeytingAlgebra</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#GeneralizedCoheytingAlgebra.copy"><span class="name">GeneralizedCoheytingAlgebra</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#HeytingAlgebra.copy"><span class="name">HeytingAlgebra</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#CoheytingAlgebra.copy"><span class="name">CoheytingAlgebra</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#BiheytingAlgebra.copy"><span class="name">BiheytingAlgebra</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#CompleteLattice.copy"><span class="name">CompleteLattice</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#Frame.copy"><span class="name">Frame</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#Coframe.copy"><span class="name">Coframe</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#CompleteDistribLattice.copy"><span class="name">CompleteDistribLattice</span>.<span class="name">copy</span></a></div><div class="nav_link"><a class="break_within" href="#ConditionallyCompleteLattice.copy"><span class="name">ConditionallyCompleteLattice</span>.<span class="name">copy</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Tooling-to-make-copies-of-lattice-structures" class="markdown-heading">Tooling to make copies of lattice structures <a class="hover-link" href="#Tooling-to-make-copies-of-lattice-structures">#</a></h1><p>Sometimes it is useful to make a copy of a lattice structure
+where one replaces the data parts with provably equal definitions
+that have better definitional properties.</p></div><div class="decl" id="OrderTop.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L29-L34">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#OrderTop.copy"><span class="name">OrderTop</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h </span><span class="fn">h'</span> : <span class="fn"><a href="../.././Init/Prelude.html#LE">LE</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderTop">OrderTop</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">top</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_top</span> : <span class="fn">top</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le_eq</span> : <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>), <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderTop">OrderTop</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a top order
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#OrderTop.copy">copy</a></span> <span class="fn">top</span> <span class="fn">eq_top</span> <span class="fn">le_eq</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderTop.mk">{</a> <span class="fn">top</span> := <span class="fn">top</span>, <span class="fn">le_top</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderTop.mk">}</a></li></ul></details><details id="instances-for-list-OrderTop.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="OrderBot.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L38-L43">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#OrderBot.copy"><span class="name">OrderBot</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h </span><span class="fn">h'</span> : <span class="fn"><a href="../.././Init/Prelude.html#LE">LE</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bot</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_bot</span> : <span class="fn">bot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le_eq</span> : <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>), <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot">OrderBot</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a bottom order
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#OrderBot.copy">copy</a></span> <span class="fn">bot</span> <span class="fn">eq_bot</span> <span class="fn">le_eq</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot.mk">{</a> <span class="fn">bot</span> := <span class="fn">bot</span>, <span class="fn">bot_le</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Order/BoundedOrder/Basic.html#OrderBot.mk">}</a></li></ul></details><details id="instances-for-list-OrderBot.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="BoundedOrder.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L47-L54">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#BoundedOrder.copy"><span class="name">BoundedOrder</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">h </span><span class="fn">h'</span> : <span class="fn"><a href="../.././Init/Prelude.html#LE">LE</a> <span class="fn">α</span></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#BoundedOrder">BoundedOrder</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">top</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_top</span> : <span class="fn">top</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bot</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_bot</span> : <span class="fn">bot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le_eq</span> : <span class="fn">∀ (<span class="fn">x </span><span class="fn">y</span> : <span class="fn">α</span>), <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span> <a href="../.././Init/Core.html#Iff">↔</a> <span class="fn">x</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">y</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/BoundedOrder/Basic.html#BoundedOrder">BoundedOrder</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a bounded order
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#BoundedOrder.copy">copy</a></span> <span class="fn">top</span> <span class="fn">eq_top</span> <span class="fn">bot</span> <span class="fn">eq_bot</span> <span class="fn">le_eq</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/BoundedOrder/Basic.html#BoundedOrder.mk">{</a> <span class="fn">top</span> := <span class="fn">top</span>, <span class="fn">le_top</span> := <span class="fn">⋯</span>, <span class="fn">bot</span> := <span class="fn">bot</span>, <span class="fn">bot_le</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Order/BoundedOrder/Basic.html#BoundedOrder.mk">}</a></li></ul></details><details id="instances-for-list-BoundedOrder.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Lattice.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L58-L76">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#Lattice.copy"><span class="name">Lattice</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Lattice.html#Lattice">Lattice</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a lattice
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Lattice.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="DistribLattice.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L81-L88">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#DistribLattice.copy"><span class="name">DistribLattice</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/Lattice.html#DistribLattice">DistribLattice</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Lattice.html#DistribLattice">DistribLattice</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a distributive lattice
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#DistribLattice.copy">copy</a></span> <span class="fn">le</span> <span class="fn">eq_le</span> <span class="fn">sup</span> <span class="fn">eq_sup</span> <span class="fn">inf</span> <span class="fn">eq_inf</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Lattice.html#DistribLattice.mk">{</a> <span class="fn">toLattice</span> := <span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#Lattice.copy">copy</a></span> <span class="fn">le</span> <span class="fn">eq_le</span> <span class="fn">sup</span> <span class="fn">eq_sup</span> <span class="fn">inf</span> <span class="fn">eq_inf</span></span>, <span class="fn">le_sup_inf</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Order/Lattice.html#DistribLattice.mk">}</a></li></ul></details><details id="instances-for-list-DistribLattice.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="GeneralizedHeytingAlgebra.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L93-L106">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#GeneralizedHeytingAlgebra.copy"><span class="name">GeneralizedHeytingAlgebra</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/Heyting/Basic.html#GeneralizedHeytingAlgebra">GeneralizedHeytingAlgebra</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">top</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_top</span> : <span class="fn">top</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">himp</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_himp</span> : <span class="fn">himp</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#HImp.himp">HImp.himp</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Heyting/Basic.html#GeneralizedHeytingAlgebra">GeneralizedHeytingAlgebra</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a generalised heyting algebra
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#GeneralizedHeytingAlgebra.copy">copy</a></span> <span class="fn">le</span> <span class="fn">eq_le</span> <span class="fn">top</span> <span class="fn">eq_top</span> <span class="fn">sup</span> <span class="fn">eq_sup</span> <span class="fn">inf</span> <span class="fn">eq_inf</span> <span class="fn">himp</span> <span class="fn">eq_himp</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Order/Heyting/Basic.html#GeneralizedHeytingAlgebra.mk">{</a> <span class="fn">toLattice</span> := <span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#Lattice.copy">copy</a></span> <span class="fn">le</span> <span class="fn">eq_le</span> <span class="fn">sup</span> <span class="fn">eq_sup</span> <span class="fn">inf</span> <span class="fn">eq_inf</span></span>, <span class="fn">toOrderTop</span> := <span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#OrderTop.copy">copy</a></span> <span class="fn">top</span> <span class="fn">eq_top</span> <span class="fn">⋯</span></span>, <span class="fn">himp</span> := <span class="fn">himp</span>,
+    <span class="fn">le_himp_iff</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Order/Heyting/Basic.html#GeneralizedHeytingAlgebra.mk">}</a></li></ul></details><details id="instances-for-list-GeneralizedHeytingAlgebra.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="GeneralizedCoheytingAlgebra.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L111-L124">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#GeneralizedCoheytingAlgebra.copy"><span class="name">GeneralizedCoheytingAlgebra</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/Heyting/Basic.html#GeneralizedCoheytingAlgebra">GeneralizedCoheytingAlgebra</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bot</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_bot</span> : <span class="fn">bot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sdiff</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sdiff</span> : <span class="fn">sdiff</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Core.html#SDiff.sdiff">SDiff.sdiff</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Heyting/Basic.html#GeneralizedCoheytingAlgebra">GeneralizedCoheytingAlgebra</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a generalised co-Heyting algebra
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#GeneralizedCoheytingAlgebra.copy">copy</a></span> <span class="fn">le</span> <span class="fn">eq_le</span> <span class="fn">bot</span> <span class="fn">eq_bot</span> <span class="fn">sup</span> <span class="fn">eq_sup</span> <span class="fn">inf</span> <span class="fn">eq_inf</span> <span class="fn">sdiff</span> <span class="fn">eq_sdiff</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Order/Heyting/Basic.html#GeneralizedCoheytingAlgebra.mk">{</a> <span class="fn">toLattice</span> := <span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#Lattice.copy">copy</a></span> <span class="fn">le</span> <span class="fn">eq_le</span> <span class="fn">sup</span> <span class="fn">eq_sup</span> <span class="fn">inf</span> <span class="fn">eq_inf</span></span>, <span class="fn">toOrderBot</span> := <span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#OrderBot.copy">copy</a></span> <span class="fn">bot</span> <span class="fn">eq_bot</span> <span class="fn">⋯</span></span>, <span class="fn">sdiff</span> := <span class="fn">sdiff</span>,
+    <span class="fn">sdiff_le_iff</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Order/Heyting/Basic.html#GeneralizedCoheytingAlgebra.mk">}</a></li></ul></details><details id="instances-for-list-GeneralizedCoheytingAlgebra.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="HeytingAlgebra.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L129-L146">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#HeytingAlgebra.copy"><span class="name">HeytingAlgebra</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/Heyting/Basic.html#HeytingAlgebra">HeytingAlgebra</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">top</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_top</span> : <span class="fn">top</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bot</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_bot</span> : <span class="fn">bot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">himp</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_himp</span> : <span class="fn">himp</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#HImp.himp">HImp.himp</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">compl</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_compl</span> : <span class="fn">compl</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Compl.compl">Compl.compl</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Heyting/Basic.html#HeytingAlgebra">HeytingAlgebra</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a heyting algebra
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-HeytingAlgebra.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CoheytingAlgebra.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L151-L168">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#CoheytingAlgebra.copy"><span class="name">CoheytingAlgebra</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/Heyting/Basic.html#CoheytingAlgebra">CoheytingAlgebra</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">top</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_top</span> : <span class="fn">top</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bot</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_bot</span> : <span class="fn">bot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sdiff</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sdiff</span> : <span class="fn">sdiff</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Core.html#SDiff.sdiff">SDiff.sdiff</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hnot</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_hnot</span> : <span class="fn">hnot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#HNot.hnot">HNot.hnot</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Heyting/Basic.html#CoheytingAlgebra">CoheytingAlgebra</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a co-Heyting algebra
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CoheytingAlgebra.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="BiheytingAlgebra.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L172-L188">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#BiheytingAlgebra.copy"><span class="name">BiheytingAlgebra</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/Heyting/Basic.html#BiheytingAlgebra">BiheytingAlgebra</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">top</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_top</span> : <span class="fn">top</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bot</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_bot</span> : <span class="fn">bot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sdiff</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sdiff</span> : <span class="fn">sdiff</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Core.html#SDiff.sdiff">SDiff.sdiff</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hnot</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_hnot</span> : <span class="fn">hnot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#HNot.hnot">HNot.hnot</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">himp</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_himp</span> : <span class="fn">himp</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#HImp.himp">HImp.himp</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">compl</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_compl</span> : <span class="fn">compl</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Compl.compl">Compl.compl</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/Heyting/Basic.html#BiheytingAlgebra">BiheytingAlgebra</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a bi-Heyting algebra
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-BiheytingAlgebra.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CompleteLattice.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L193-L212">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#CompleteLattice.copy"><span class="name">CompleteLattice</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">top</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_top</span> : <span class="fn">top</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bot</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_bot</span> : <span class="fn">bot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sSup</span> : <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sSup</span> : <span class="fn">sSup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">SupSet.sSup</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sInf</span> : <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sInf</span> : <span class="fn">sInf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/SetNotation.html#InfSet.sInf">InfSet.sInf</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/CompleteLattice/Defs.html#CompleteLattice">CompleteLattice</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a complete lattice
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CompleteLattice.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Frame.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L216-L230">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#Frame.copy"><span class="name">Frame</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/CompleteBooleanAlgebra.html#Order.Frame">Order.Frame</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">top</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_top</span> : <span class="fn">top</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bot</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_bot</span> : <span class="fn">bot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">himp</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_himp</span> : <span class="fn">himp</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#HImp.himp">HImp.himp</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">compl</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_compl</span> : <span class="fn">compl</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Compl.compl">Compl.compl</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sSup</span> : <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sSup</span> : <span class="fn">sSup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">SupSet.sSup</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sInf</span> : <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sInf</span> : <span class="fn">sInf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/SetNotation.html#InfSet.sInf">InfSet.sInf</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/CompleteBooleanAlgebra.html#Order.Frame">Order.Frame</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a frame with possibly different definitional
+equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Frame.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="Coframe.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L234-L248">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#Coframe.copy"><span class="name">Coframe</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/CompleteBooleanAlgebra.html#Order.Coframe">Order.Coframe</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">top</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_top</span> : <span class="fn">top</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bot</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_bot</span> : <span class="fn">bot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sdiff</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sdiff</span> : <span class="fn">sdiff</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Core.html#SDiff.sdiff">SDiff.sdiff</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hnot</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_hnot</span> : <span class="fn">hnot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#HNot.hnot">HNot.hnot</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sSup</span> : <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sSup</span> : <span class="fn">sSup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">SupSet.sSup</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sInf</span> : <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sInf</span> : <span class="fn">sInf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/SetNotation.html#InfSet.sInf">InfSet.sInf</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/CompleteBooleanAlgebra.html#Order.Coframe">Order.Coframe</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a coframe with possibly different definitional
+equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-Coframe.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="CompleteDistribLattice.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L252-L270">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#CompleteDistribLattice.copy"><span class="name">CompleteDistribLattice</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/CompleteBooleanAlgebra.html#CompleteDistribLattice">CompleteDistribLattice</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">top</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_top</span> : <span class="fn">top</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Top.top">⊤</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">bot</span> : <span class="fn">α</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_bot</span> : <span class="fn">bot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Bot.bot">⊥</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sdiff</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sdiff</span> : <span class="fn">sdiff</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Core.html#SDiff.sdiff">SDiff.sdiff</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hnot</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_hnot</span> : <span class="fn">hnot</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#HNot.hnot">HNot.hnot</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">himp</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_himp</span> : <span class="fn">himp</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#HImp.himp">HImp.himp</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">compl</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_compl</span> : <span class="fn">compl</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/Notation.html#Compl.compl">Compl.compl</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sSup</span> : <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sSup</span> : <span class="fn">sSup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">SupSet.sSup</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sInf</span> : <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sInf</span> : <span class="fn">sInf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/SetNotation.html#InfSet.sInf">InfSet.sInf</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/CompleteBooleanAlgebra.html#CompleteDistribLattice">CompleteDistribLattice</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a complete distributive lattice
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation">One or more equations did not get rendered due to their size.</li></ul></details><details id="instances-for-list-CompleteDistribLattice.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div><div class="decl" id="ConditionallyCompleteLattice.copy"><div class="def"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Order/Copy.lean#L274-L288">source</a></div><div class="decl_header"><span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="../.././Mathlib/Order/Copy.html#ConditionallyCompleteLattice.copy"><span class="name">ConditionallyCompleteLattice</span>.<span class="name">copy</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../.././foundational_types.html">Type</a> u}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">c</span> : <span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">le</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_le</span> : <span class="fn">le</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#LE.le">LE.le</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sup</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sup</span> : <span class="fn">sup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Max.max">max</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">inf</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_inf</span> : <span class="fn">inf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Init/Prelude.html#Min.min">min</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sSup</span> : <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sSup</span> : <span class="fn">sSup</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/SetNotation.html#SupSet.sSup">SupSet.sSup</a>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">sInf</span> : <span class="fn"><span class="fn"><a href="../.././Mathlib/Data/Set/Defs.html#Set">Set</a> <span class="fn">α</span></span> → <span class="fn">α</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">eq_sInf</span> : <span class="fn">sInf</span> <a href="../.././Init/Prelude.html#Eq">=</a> <a href="../.././Mathlib/Order/SetNotation.html#InfSet.sInf">InfSet.sInf</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice">ConditionallyCompleteLattice</a> <span class="fn">α</span></span></div></div><p>A function to create a provable equal copy of a conditionally complete lattice
+with possibly different definitional equalities.</p><details><summary>Equations</summary><ul class="equations"><li class="equation"><span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#ConditionallyCompleteLattice.copy">copy</a></span> <span class="fn">le</span> <span class="fn">eq_le</span> <span class="fn">sup</span> <span class="fn">eq_sup</span> <span class="fn">inf</span> <span class="fn">eq_inf</span> <span class="fn">sSup</span> <span class="fn">eq_sSup</span> <span class="fn">sInf</span> <span class="fn">eq_sInf</span></span> <a href="../.././Init/Prelude.html#Eq">=</a>   <a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice.mk">{</a> <span class="fn">toLattice</span> := <span class="fn"><span class="fn"><span class="fn">c</span>.<a href="../.././Mathlib/Order/Copy.html#Lattice.copy">copy</a></span> <span class="fn">le</span> <span class="fn">eq_le</span> <span class="fn">sup</span> <span class="fn">eq_sup</span> <span class="fn">inf</span> <span class="fn">eq_inf</span></span>, <span class="fn">sSup</span> := <span class="fn">sSup</span>, <span class="fn">sInf</span> := <span class="fn">sInf</span>, <span class="fn">isLUB_csSup</span> := <span class="fn">⋯</span>, <span class="fn">isGLB_csInf</span> := <span class="fn">⋯</span> <a href="../.././Mathlib/Order/ConditionallyCompleteLattice/Defs.html#ConditionallyCompleteLattice.mk">}</a></li></ul></details><details id="instances-for-list-ConditionallyCompleteLattice.copy" class="instances-for-list"><summary>Instances For</summary><ul class="instances-for-enum"></ul></details></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

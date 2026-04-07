@@ -1,0 +1,669 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Analysis.SpecialFunctions.Exponential</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Analysis.SpecialFunctions.Exponential";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Analysis</span>.<span class="name">SpecialFunctions</span>.<span class="name">Exponential</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Analysis/Complex/Exponential.html">Mathlib.Analysis.Complex.Exponential</a></li><li><a href="../../.././Mathlib/Topology/MetricSpace/CauSeqFilter.html">Mathlib.Topology.MetricSpace.CauSeqFilter</a></li><li><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Analytic.html">Mathlib.Analysis.Calculus.FDeriv.Analytic</a></li><li><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html">Mathlib.Analysis.Normed.Algebra.Exponential</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Analysis.SpecialFunctions.Exponential" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#hasStrictFDerivAt_exp_zero_of_radius_pos"><span class="name">hasStrictFDerivAt_exp_zero_of_radius_pos</span></a></div><div class="nav_link"><a class="break_within" href="#hasFDerivAt_exp_zero_of_radius_pos"><span class="name">hasFDerivAt_exp_zero_of_radius_pos</span></a></div><div class="nav_link"><a class="break_within" href="#hasFDerivAt_exp_of_mem_ball"><span class="name">hasFDerivAt_exp_of_mem_ball</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictFDerivAt_exp_of_mem_ball"><span class="name">hasStrictFDerivAt_exp_of_mem_ball</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictDerivAt_exp_of_mem_ball"><span class="name">hasStrictDerivAt_exp_of_mem_ball</span></a></div><div class="nav_link"><a class="break_within" href="#hasDerivAt_exp_of_mem_ball"><span class="name">hasDerivAt_exp_of_mem_ball</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictDerivAt_exp_zero_of_radius_pos"><span class="name">hasStrictDerivAt_exp_zero_of_radius_pos</span></a></div><div class="nav_link"><a class="break_within" href="#hasDerivAt_exp_zero_of_radius_pos"><span class="name">hasDerivAt_exp_zero_of_radius_pos</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictFDerivAt_exp_zero"><span class="name">hasStrictFDerivAt_exp_zero</span></a></div><div class="nav_link"><a class="break_within" href="#hasFDerivAt_exp_zero"><span class="name">hasFDerivAt_exp_zero</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictFDerivAt_exp"><span class="name">hasStrictFDerivAt_exp</span></a></div><div class="nav_link"><a class="break_within" href="#hasFDerivAt_exp"><span class="name">hasFDerivAt_exp</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictDerivAt_exp"><span class="name">hasStrictDerivAt_exp</span></a></div><div class="nav_link"><a class="break_within" href="#hasDerivAt_exp"><span class="name">hasDerivAt_exp</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictDerivAt_exp_zero"><span class="name">hasStrictDerivAt_exp_zero</span></a></div><div class="nav_link"><a class="break_within" href="#hasDerivAt_exp_zero"><span class="name">hasDerivAt_exp_zero</span></a></div><div class="nav_link"><a class="break_within" href="#Complex.exp_eq_exp_ℂ"><span class="name">Complex</span>.<span class="name">exp_eq_exp_ℂ</span></a></div><div class="nav_link"><a class="break_within" href="#Real.exp_eq_exp_ℝ"><span class="name">Real</span>.<span class="name">exp_eq_exp_ℝ</span></a></div><div class="nav_link"><a class="break_within" href="#hasFDerivAt_exp_smul_const_of_mem_ball"><span class="name">hasFDerivAt_exp_smul_const_of_mem_ball</span></a></div><div class="nav_link"><a class="break_within" href="#hasFDerivAt_exp_smul_const_of_mem_ball'"><span class="name">hasFDerivAt_exp_smul_const_of_mem_ball'</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictFDerivAt_exp_smul_const_of_mem_ball"><span class="name">hasStrictFDerivAt_exp_smul_const_of_mem_ball</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictFDerivAt_exp_smul_const_of_mem_ball'"><span class="name">hasStrictFDerivAt_exp_smul_const_of_mem_ball'</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictDerivAt_exp_smul_const_of_mem_ball"><span class="name">hasStrictDerivAt_exp_smul_const_of_mem_ball</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictDerivAt_exp_smul_const_of_mem_ball'"><span class="name">hasStrictDerivAt_exp_smul_const_of_mem_ball'</span></a></div><div class="nav_link"><a class="break_within" href="#hasDerivAt_exp_smul_const_of_mem_ball"><span class="name">hasDerivAt_exp_smul_const_of_mem_ball</span></a></div><div class="nav_link"><a class="break_within" href="#hasDerivAt_exp_smul_const_of_mem_ball'"><span class="name">hasDerivAt_exp_smul_const_of_mem_ball'</span></a></div><div class="nav_link"><a class="break_within" href="#hasFDerivAt_exp_smul_const"><span class="name">hasFDerivAt_exp_smul_const</span></a></div><div class="nav_link"><a class="break_within" href="#hasFDerivAt_exp_smul_const'"><span class="name">hasFDerivAt_exp_smul_const'</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictFDerivAt_exp_smul_const"><span class="name">hasStrictFDerivAt_exp_smul_const</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictFDerivAt_exp_smul_const'"><span class="name">hasStrictFDerivAt_exp_smul_const'</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictDerivAt_exp_smul_const"><span class="name">hasStrictDerivAt_exp_smul_const</span></a></div><div class="nav_link"><a class="break_within" href="#hasStrictDerivAt_exp_smul_const'"><span class="name">hasStrictDerivAt_exp_smul_const'</span></a></div><div class="nav_link"><a class="break_within" href="#hasDerivAt_exp_smul_const"><span class="name">hasDerivAt_exp_smul_const</span></a></div><div class="nav_link"><a class="break_within" href="#hasDerivAt_exp_smul_const'"><span class="name">hasDerivAt_exp_smul_const'</span></a></div><div class="nav_link"><a class="break_within" href="#HasSum.exp"><span class="name">HasSum</span>.<span class="name">exp</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Calculus-results-on-exponential-in-a-Banach-algebra" class="markdown-heading">Calculus results on exponential in a Banach algebra <a class="hover-link" href="#Calculus-results-on-exponential-in-a-Banach-algebra">#</a></h1><p>In this file, we prove basic properties about the derivative of the exponential map <code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#HasSum.exp">exp</a></code>
+in a Banach algebra <code>𝔸</code> over a field <code>𝕂</code>. We keep them separate from the main file
+<code>Analysis.Normed.Algebra.Exponential</code> in order to minimize dependencies.</p><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><p>We prove most results for an arbitrary field <code>𝕂</code>, and then specialize to <code>𝕂 = ℝ</code> or <code>𝕂 = ℂ</code>.</p><h3 id="General-case" class="markdown-heading">General case <a class="hover-link" href="#General-case">#</a></h3><ul><li><code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_zero_of_radius_pos">hasStrictFDerivAt_exp_zero_of_radius_pos</a></code> : <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a></code> has strict Fréchet derivative
+<code>1 : 𝔸 →L[𝕂] 𝔸</code> at zero, as long as it converges on a neighborhood of zero
+(see also <code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp_zero_of_radius_pos">hasStrictDerivAt_exp_zero_of_radius_pos</a></code> for the case <code>𝔸 = 𝕂</code>)</li><li><code>hasStrictFDerivAt_exp_of_lt_radius</code> : if <code>𝕂</code> has characteristic zero and <code>𝔸</code> is commutative,
+then given a point <code>x</code> in the disk of convergence, <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a></code> has strict Fréchet
+derivative <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> x • 1 : 𝔸 →L[𝕂] 𝔸</code> at x
+(see also <code>hasStrictDerivAt_exp_of_lt_radius</code> for the case <code>𝔸 = 𝕂</code>)</li><li><code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_smul_const_of_mem_ball">hasStrictFDerivAt_exp_smul_const_of_mem_ball</a></code>: even when <code>𝔸</code> is non-commutative,
+if we have an intermediate algebra <code>𝕊</code> which is commutative, the function
+<code>(u : 𝕊) ↦ <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (u • x)</code>, still has strict Fréchet derivative
+<code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (t • x) • (1 : 𝕊 →L[𝕂] 𝕊).smulRight x</code> at <code>t</code> if
+<code>t • x</code> is in the radius of convergence.</li></ul><h3 id="𝕂-=-ℝ-or-𝕂-=-ℂ" class="markdown-heading"><code>𝕂 = ℝ</code> or <code>𝕂 = ℂ</code> <a class="hover-link" href="#𝕂-=-ℝ-or-𝕂-=-ℂ">#</a></h3><ul><li><code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_zero">hasStrictFDerivAt_exp_zero</a></code> : <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a></code> has strict Fréchet derivative <code>1 : 𝔸 →L[𝕂] 𝔸</code>
+at zero (see also <code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp_zero">hasStrictDerivAt_exp_zero</a></code> for the case <code>𝔸 = 𝕂</code>)</li><li><code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp">hasStrictFDerivAt_exp</a></code> : if <code>𝔸</code> is commutative, then given any point <code>x</code>, <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a></code>
+has strict Fréchet derivative <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> x • 1 : 𝔸 →L[𝕂] 𝔸</code> at x
+(see also <code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp">hasStrictDerivAt_exp</a></code> for the case <code>𝔸 = 𝕂</code>)</li><li><code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_smul_const">hasStrictFDerivAt_exp_smul_const</a></code>: even when <code>𝔸</code> is non-commutative, if we have
+an intermediate algebra <code>𝕊</code> which is commutative, the function
+<code>(u : 𝕊) ↦ <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (u • x)</code> still has strict Fréchet derivative
+<code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (t • x) • (1 : 𝔸 →L[𝕂] 𝔸).smulRight x</code> at <code>t</code>.</li></ul><h3 id="Compatibility-with-Real-exp-and-Complex-exp" class="markdown-heading">Compatibility with <code><a href="../../.././Mathlib/Analysis/Complex/Exponential.html#Real.exp">Real.exp</a></code> and <code><a href="../../.././Mathlib/Analysis/Complex/Exponential.html#Complex.exp">Complex.exp</a></code> <a class="hover-link" href="#Compatibility-with-Real-exp-and-Complex-exp">#</a></h3><ul><li><code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#Complex.exp_eq_exp_ℂ">Complex.exp_eq_exp_ℂ</a></code> : <code><a href="../../.././Mathlib/Analysis/Complex/Exponential.html#Complex.exp">Complex.exp</a> = <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> ℂ ℂ</code></li><li><code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#Real.exp_eq_exp_ℝ">Real.exp_eq_exp_ℝ</a></code> : <code><a href="../../.././Mathlib/Analysis/Complex/Exponential.html#Real.exp">Real.exp</a> = <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> ℝ ℝ</code></li></ul></div><div class="decl" id="hasStrictFDerivAt_exp_zero_of_radius_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L70-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_zero_of_radius_pos"><span class="name">hasStrictFDerivAt_exp_zero_of_radius_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasStrictFDerivAt">HasStrictFDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">1</span> <span class="fn">0</span></span></div></div><p>The exponential in a Banach algebra <code>𝔸</code> over a normed field <code>𝕂</code> has strict Fréchet derivative
+<code>1 : 𝔸 →L[𝕂] 𝔸</code> at zero, as long as it converges on a neighborhood of zero.</p></div></div><div class="decl" id="hasFDerivAt_exp_zero_of_radius_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L79-L83">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_zero_of_radius_pos"><span class="name">hasFDerivAt_exp_zero_of_radius_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasFDerivAt">HasFDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">1</span> <span class="fn">0</span></span></div></div><p>The exponential in a Banach algebra <code>𝔸</code> over a normed field <code>𝕂</code> has Fréchet derivative
+<code>1 : 𝔸 →L[𝕂] 𝔸</code> at zero, as long as it converges on a neighborhood of zero.</p></div></div><div class="decl" id="hasFDerivAt_exp_of_mem_ball"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L92-L110">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_of_mem_ball"><span class="name">hasFDerivAt_exp_of_mem_ball</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝔸</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasFDerivAt">HasFDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">1</span>) <span class="fn">x</span></span></div></div><p>The exponential map in a commutative Banach algebra <code>𝔸</code> over a normed field <code>𝕂</code> of
+characteristic zero has Fréchet derivative <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> x • 1 : 𝔸 →L[𝕂] 𝔸</code>
+at any point <code>x</code> in the disk of convergence.</p></div></div><div class="decl" id="hasStrictFDerivAt_exp_of_mem_ball"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L112-L119">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_of_mem_ball"><span class="name">hasStrictFDerivAt_exp_of_mem_ball</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝔸</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasStrictFDerivAt">HasStrictFDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">1</span>) <span class="fn">x</span></span></div></div><p>The exponential map in a commutative Banach algebra <code>𝔸</code> over a normed field <code>𝕂</code> of
+characteristic zero has strict Fréchet derivative <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> x • 1 : 𝔸 →L[𝕂] 𝔸</code>
+at any point <code>x</code> in the disk of convergence.</p></div></div><div class="decl" id="hasStrictDerivAt_exp_of_mem_ball"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L127-L132">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp_of_mem_ball"><span class="name">hasStrictDerivAt_exp_of_mem_ball</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝕂</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasStrictDerivAt">HasStrictDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span>)</span> <span class="fn">x</span></span></div></div><p>The exponential map in a complete normed field <code>𝕂</code> of characteristic zero has strict derivative
+<code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> x</code> at any point <code>x</code> in the disk of convergence.</p></div></div><div class="decl" id="hasDerivAt_exp_of_mem_ball"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L134-L138">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasDerivAt_exp_of_mem_ball"><span class="name">hasDerivAt_exp_of_mem_ball</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕂</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hx</span> : <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝕂</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasDerivAt">HasDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span>)</span> <span class="fn">x</span></span></div></div><p>The exponential map in a complete normed field <code>𝕂</code> of characteristic zero has derivative
+<code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> x</code> at any point <code>x</code> in the disk of convergence.</p></div></div><div class="decl" id="hasStrictDerivAt_exp_zero_of_radius_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L140-L144">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp_zero_of_radius_pos"><span class="name">hasStrictDerivAt_exp_zero_of_radius_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝕂</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasStrictDerivAt">HasStrictDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">1</span> <span class="fn">0</span></span></div></div><p>The exponential map in a complete normed field <code>𝕂</code> of characteristic zero has strict derivative
+<code>1</code> at zero, as long as it converges on a neighborhood of zero.</p></div></div><div class="decl" id="hasDerivAt_exp_zero_of_radius_pos"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L146-L150">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasDerivAt_exp_zero_of_radius_pos"><span class="name">hasDerivAt_exp_zero_of_radius_pos</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">0</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝕂</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasDerivAt">HasDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">1</span> <span class="fn">0</span></span></div></div><p>The exponential map in a complete normed field <code>𝕂</code> of characteristic zero has derivative
+<code>1</code> at zero, as long as it converges on a neighborhood of zero.</p></div></div><div class="decl" id="hasStrictFDerivAt_exp_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L158-L161">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_zero"><span class="name">hasStrictFDerivAt_exp_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasStrictFDerivAt">HasStrictFDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">1</span> <span class="fn">0</span></span></div></div><p>The exponential in a Banach algebra <code>𝔸</code> over <code>𝕂 = ℝ</code> or <code>𝕂 = ℂ</code> has strict Fréchet derivative
+<code>1 : 𝔸 →L[𝕂] 𝔸</code> at zero.</p></div></div><div class="decl" id="hasFDerivAt_exp_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L163-L166">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_zero"><span class="name">hasFDerivAt_exp_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasFDerivAt">HasFDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">1</span> <span class="fn">0</span></span></div></div><p>The exponential in a Banach algebra <code>𝔸</code> over <code>𝕂 = ℝ</code> or <code>𝕂 = ℂ</code> has Fréchet derivative
+<code>1 : 𝔸 →L[𝕂] 𝔸</code> at zero.</p></div></div><div class="decl" id="hasStrictFDerivAt_exp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L174-L177">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp"><span class="name">hasStrictFDerivAt_exp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝔸</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasStrictFDerivAt">HasStrictFDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">1</span>) <span class="fn">x</span></span></div></div><p>The exponential map in a commutative Banach algebra <code>𝔸</code> over <code>𝕂 = ℝ</code> or <code>𝕂 = ℂ</code> has strict
+Fréchet derivative <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> x • 1 : 𝔸 →L[𝕂] 𝔸</code> at any point <code>x</code>.</p></div></div><div class="decl" id="hasFDerivAt_exp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L179-L182">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp"><span class="name">hasFDerivAt_exp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝔸</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasFDerivAt">HasFDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span></span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">1</span>) <span class="fn">x</span></span></div></div><p>The exponential map in a commutative Banach algebra <code>𝔸</code> over <code>𝕂 = ℝ</code> or <code>𝕂 = ℂ</code> has
+Fréchet derivative <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> x • 1 : 𝔸 →L[𝕂] 𝔸</code> at any point <code>x</code>.</p></div></div><div class="decl" id="hasStrictDerivAt_exp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L190-L193">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp"><span class="name">hasStrictDerivAt_exp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕂</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasStrictDerivAt">HasStrictDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span>)</span> <span class="fn">x</span></span></div></div><p>The exponential map in <code>𝕂 = ℝ</code> or <code>𝕂 = ℂ</code> has strict derivative <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> x</code>
+at any point <code>x</code>.</p></div></div><div class="decl" id="hasDerivAt_exp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L195-L198">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasDerivAt_exp"><span class="name">hasDerivAt_exp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">x</span> : <span class="fn">𝕂</span>}</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasDerivAt">HasDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">x</span>)</span> <span class="fn">x</span></span></div></div><p>The exponential map in <code>𝕂 = ℝ</code> or <code>𝕂 = ℂ</code> has derivative <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> x</code>
+at any point <code>x</code>.</p></div></div><div class="decl" id="hasStrictDerivAt_exp_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L200-L202">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp_zero"><span class="name">hasStrictDerivAt_exp_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasStrictDerivAt">HasStrictDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">1</span> <span class="fn">0</span></span></div></div><p>The exponential map in <code>𝕂 = ℝ</code> or <code>𝕂 = ℂ</code> has strict derivative <code>1</code> at zero.</p></div></div><div class="decl" id="hasDerivAt_exp_zero"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L204-L206">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasDerivAt_exp_zero"><span class="name">hasDerivAt_exp_zero</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasDerivAt">HasDerivAt</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">1</span> <span class="fn">0</span></span></div></div><p>The exponential map in <code>𝕂 = ℝ</code> or <code>𝕂 = ℂ</code> has derivative <code>1</code> at zero.</p></div></div><div class="decl" id="Complex.exp_eq_exp_ℂ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L210-L213">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#Complex.exp_eq_exp_ℂ"><span class="name">Complex</span>.<span class="name">exp_eq_exp_ℂ</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Analysis/Complex/Exponential.html#Complex.exp">exp</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a></div></div></div></div><div class="decl" id="Real.exp_eq_exp_ℝ"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L215-L216">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#Real.exp_eq_exp_ℝ"><span class="name">Real</span>.<span class="name">exp_eq_exp_ℝ</span></a></span><span class="decl_args"> :</span><div class="decl_type"><a href="../../.././Mathlib/Analysis/Complex/Exponential.html#Real.exp">exp</a> <a href="../../.././Init/Prelude.html#Eq">=</a> <a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a></div></div></div></div><div class="mod_doc"><h3 id="Derivative-of-exp-ux-by-u" class="markdown-heading">Derivative of $\exp (ux)$ by $u$ <a class="hover-link" href="#Derivative-of-exp-ux-by-u">#</a></h3><p>Note that since for <code>x : 𝔸</code> we have <code><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> 𝔸</code> not <code><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> 𝔸</code>, we cannot deduce
+these results from <code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_of_mem_ball">hasFDerivAt_exp_of_mem_ball</a></code> applied to the algebra <code>𝔸</code>.</p><p>One possible solution for that would be to apply <code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_of_mem_ball">hasFDerivAt_exp_of_mem_ball</a></code> to the
+commutative algebra <code>Algebra.elementalAlgebra 𝕊 x</code>. Unfortunately we don't have all the required
+API, so we leave that to a future refactor (see <a href="https://github.com/leanprover-community/mathlib3/pull/19062">https://github.com/leanprover-community/mathlib3/pull/19062</a> for discussion).</p><p>We could also go the other way around and deduce <code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_of_mem_ball">hasFDerivAt_exp_of_mem_ball</a></code> from
+<code><a href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_smul_const_of_mem_ball">hasFDerivAt_exp_smul_const_of_mem_ball</a></code> applied to <code>𝕊 := 𝔸</code>, <code>x := (1 : 𝔸)</code>, and <code>t := x</code>.
+However, doing so would make the aforementioned <code>elementalAlgebra</code> refactor harder, so for now we
+just prove these two lemmas independently.</p><p>A last strategy would be to deduce everything from the more general non-commutative case,
+$$\frac{d}{dt}e^{x(t)} = \int_0^1 e^{sx(t)} \left(\frac{d}{dt}e^{x(t)}\right) e^{(1-s)x(t)} ds$$
+but this is harder to prove, and typically is shown by going via these results first.</p><p>TODO: prove this result too!</p></div><div class="decl" id="hasFDerivAt_exp_smul_const_of_mem_ball"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L257-L285">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_smul_const_of_mem_ball"><span class="name">hasFDerivAt_exp_smul_const_of_mem_ball</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕊</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕊</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htx</span> : <span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasFDerivAt">HasFDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕊</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">ContinuousLinearMap.smulRight</a> <span class="fn">1</span> <span class="fn">x</span></span>) <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasFDerivAt_exp_smul_const_of_mem_ball'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L287-L294">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_smul_const_of_mem_ball'"><span class="name">hasFDerivAt_exp_smul_const_of_mem_ball'</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕊</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕊</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htx</span> : <span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasFDerivAt">HasFDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕊</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span>
+  <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">ContinuousLinearMap.smulRight</a> <span class="fn">1</span> <span class="fn">x</span>)</span>.<a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">smulRight</a></span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>))</span>)</span> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasStrictFDerivAt_exp_smul_const_of_mem_ball"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L296-L305">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_smul_const_of_mem_ball"><span class="name">hasStrictFDerivAt_exp_smul_const_of_mem_ball</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕊</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕊</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htx</span> : <span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasStrictFDerivAt">HasStrictFDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕊</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">ContinuousLinearMap.smulRight</a> <span class="fn">1</span> <span class="fn">x</span></span>)
+  <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasStrictFDerivAt_exp_smul_const_of_mem_ball'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L307-L315">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_smul_const_of_mem_ball'"><span class="name">hasStrictFDerivAt_exp_smul_const_of_mem_ball'</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕊</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedSpace">NormedSpace</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕊</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htx</span> : <span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasStrictFDerivAt">HasStrictFDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕊</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span>
+  <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">ContinuousLinearMap.smulRight</a> <span class="fn">1</span> <span class="fn">x</span>)</span>.<a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">smulRight</a></span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>))</span>)</span> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasStrictDerivAt_exp_smul_const_of_mem_ball"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L319-L322">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp_smul_const_of_mem_ball"><span class="name">hasStrictDerivAt_exp_smul_const_of_mem_ball</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htx</span> : <span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasStrictDerivAt">HasStrictDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕂</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">x</span>) <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasStrictDerivAt_exp_smul_const_of_mem_ball'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L324-L327">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp_smul_const_of_mem_ball'"><span class="name">hasStrictDerivAt_exp_smul_const_of_mem_ball'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htx</span> : <span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasStrictDerivAt">HasStrictDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕂</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>) <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasDerivAt_exp_smul_const_of_mem_ball"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L329-L332">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasDerivAt_exp_smul_const_of_mem_ball"><span class="name">hasDerivAt_exp_smul_const_of_mem_ball</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htx</span> : <span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasDerivAt">HasDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕂</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">x</span>) <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasDerivAt_exp_smul_const_of_mem_ball'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L334-L337">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasDerivAt_exp_smul_const_of_mem_ball'"><span class="name">hasDerivAt_exp_smul_const_of_mem_ball'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Field/Basic.html#NontriviallyNormedField">NontriviallyNormedField</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/CharZero/Defs.html#CharZero">CharZero</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕂</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">htx</span> : <span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span> <a href="../../.././Init/Prelude.html#Membership.mem">∈</a> <span class="fn"><a href="../../.././Mathlib/Topology/EMetricSpace/Defs.html#Metric.eball">Metric.eball</a> <span class="fn">0</span> <span class="fn"><span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.expSeries">NormedSpace.expSeries</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span>)</span>.<a href="../../.././Mathlib/Analysis/Analytic/ConvergenceRadius.html#FormalMultilinearSeries.radius">radius</a></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasDerivAt">HasDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕂</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>) <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasFDerivAt_exp_smul_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L349-L352">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_smul_const"><span class="name">hasFDerivAt_exp_smul_const</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕊</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕊</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasFDerivAt">HasFDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕊</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">ContinuousLinearMap.smulRight</a> <span class="fn">1</span> <span class="fn">x</span></span>) <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasFDerivAt_exp_smul_const'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L354-L358">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasFDerivAt_exp_smul_const'"><span class="name">hasFDerivAt_exp_smul_const'</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕊</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕊</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasFDerivAt">HasFDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕊</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span>
+  <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">ContinuousLinearMap.smulRight</a> <span class="fn">1</span> <span class="fn">x</span>)</span>.<a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">smulRight</a></span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>))</span>)</span> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasStrictFDerivAt_exp_smul_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L360-L364">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_smul_const"><span class="name">hasStrictFDerivAt_exp_smul_const</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕊</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕊</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasStrictFDerivAt">HasStrictFDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕊</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">ContinuousLinearMap.smulRight</a> <span class="fn">1</span> <span class="fn">x</span></span>)
+  <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasStrictFDerivAt_exp_smul_const'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L366-L370">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictFDerivAt_exp_smul_const'"><span class="name">hasStrictFDerivAt_exp_smul_const'</span></a></span><span class="decl_args">
+<span class="fn">(<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕊</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Algebra/Defs.html#Algebra">Algebra</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/Algebra/MulAction.html#ContinuousSMul">ContinuousSMul</a> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Action/Defs.html#IsScalarTower">IsScalarTower</a> <span class="fn">𝕂</span> <span class="fn">𝕊</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕊</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/FDeriv/Defs.html#HasStrictFDerivAt">HasStrictFDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕊</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span>
+  <span class="fn">(<span class="fn"><span class="fn">(<a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">ContinuousLinearMap.smulRight</a> <span class="fn">1</span> <span class="fn">x</span>)</span>.<a href="../../.././Mathlib/Topology/Algebra/Module/LinearMap.html#ContinuousLinearMap.smulRight">smulRight</a></span> <span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>))</span>)</span> <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasStrictDerivAt_exp_smul_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L374-L377">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp_smul_const"><span class="name">hasStrictDerivAt_exp_smul_const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasStrictDerivAt">HasStrictDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕂</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">x</span>) <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasStrictDerivAt_exp_smul_const'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L379-L382">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasStrictDerivAt_exp_smul_const'"><span class="name">hasStrictDerivAt_exp_smul_const'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasStrictDerivAt">HasStrictDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕂</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>) <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasDerivAt_exp_smul_const"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L384-L386">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasDerivAt_exp_smul_const"><span class="name">hasDerivAt_exp_smul_const</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasDerivAt">HasDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕂</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn">x</span>) <span class="fn">t</span></span></div></div></div></div><div class="decl" id="hasDerivAt_exp_smul_const'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L388-L391">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#hasDerivAt_exp_smul_const'"><span class="name">hasDerivAt_exp_smul_const'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝕂</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/RCLike/Basic.html#RCLike">RCLike</a> <span class="fn">𝕂</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedRing">NormedRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <span class="fn">𝕂</span> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">𝔸</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">t</span> : <span class="fn">𝕂</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Analysis/Calculus/Deriv/Basic.html#HasDerivAt">HasDerivAt</a> <span class="fn">(fun (<span class="fn">u</span> : <span class="fn">𝕂</span>) =&gt; <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">u</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>)</span> (<span class="fn">x</span> <a href="../../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> (<span class="fn">t</span> <a href="../../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">x</span>)</span>) <span class="fn">t</span></span></div></div></div></div><div class="decl" id="HasSum.exp"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Analysis/SpecialFunctions/Exponential.lean#L401-L404">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Analysis/SpecialFunctions/Exponential.html#HasSum.exp"><span class="name">HasSum</span>.<span class="name">exp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">𝔸</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Ring/Basic.html#NormedCommRing">NormedCommRing</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Analysis/Normed/Module/Basic.html#NormedAlgebra">NormedAlgebra</a> <a href="../../.././Init/Data/Rat/Basic.html#Rat">ℚ</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Topology/UniformSpace/Cauchy.html#CompleteSpace">CompleteSpace</a> <span class="fn">𝔸</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ι</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">f</span> : <span class="fn"><span class="fn">ι</span> → <span class="fn">𝔸</span></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">a</span> : <span class="fn">𝔸</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn"><a href="../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasSum">HasSum</a> <span class="fn">f</span> <span class="fn">a</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Topology/Algebra/InfiniteSum/Defs.html#HasProd">HasProd</a> (<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <a href="../../.././Init/Prelude.html#Function.comp">∘</a> <span class="fn">f</span>) <span class="fn">(<a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> <span class="fn">a</span>)</span></span></div></div><p>If <code>f</code> has sum <code>a</code>, then <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> ∘ f</code> has product <code><a href="../../.././Mathlib/Analysis/Normed/Algebra/Exponential.html#NormedSpace.exp">NormedSpace.exp</a> a</code>.</p></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

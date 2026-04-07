@@ -1,0 +1,187 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../../.././style.css"></link><link rel="icon" href="../../.././favicon.svg"></link><link rel="mask-icon" href="../../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../../.././/declarations/declaration-data.bmp" as="image"></link><title>Mathlib.Data.Finsupp.WellFounded</title><script defer="true" src="../../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../../.././";</script><script>const MODULE_NAME="Mathlib.Data.Finsupp.WellFounded";</script><script type="module" src="../../.././jump-src.js"></script><script type="module" src="../../.././search.js"></script><script type="module" src="../../.././expand-nav.js"></script><script type="module" src="../../.././how-about.js"></script><script type="module" src="../../.././instances.js"></script><script type="module" src="../../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">Mathlib</span>.<span class="name">Data</span>.<span class="name">Finsupp</span>.<span class="name">WellFounded</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../../.././Init.html">Init</a></li><li><a href="../../.././Mathlib/Data/DFinsupp/WellFounded.html">Mathlib.Data.DFinsupp.WellFounded</a></li><li><a href="../../.././Mathlib/Data/Finsupp/Lex.html">Mathlib.Data.Finsupp.Lex</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-Mathlib.Data.Finsupp.WellFounded" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Finsupp.Lex.acc"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">acc</span></a></div><div class="nav_link"><a class="break_within" href="#Finsupp.Lex.wellFounded"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">wellFounded</span></a></div><div class="nav_link"><a class="break_within" href="#Finsupp.Lex.wellFounded'"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">wellFounded'</span></a></div><div class="nav_link"><a class="break_within" href="#Finsupp.Lex.wellFoundedLT"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">wellFoundedLT</span></a></div><div class="nav_link"><a class="break_within" href="#Finsupp.Colex.wellFoundedLT"><span class="name">Finsupp</span>.<span class="name">Colex</span>.<span class="name">wellFoundedLT</span></a></div><div class="nav_link"><a class="break_within" href="#Finsupp.Lex.wellFounded_of_finite"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">wellFounded_of_finite</span></a></div><div class="nav_link"><a class="break_within" href="#Finsupp.Lex.wellFoundedLT_of_finite"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">wellFoundedLT_of_finite</span></a></div><div class="nav_link"><a class="break_within" href="#Finsupp.Colex.wellFoundedLT_of_finite"><span class="name">Finsupp</span>.<span class="name">Colex</span>.<span class="name">wellFoundedLT_of_finite</span></a></div><div class="nav_link"><a class="break_within" href="#Finsupp.wellFoundedLT"><span class="name">Finsupp</span>.<span class="name">wellFoundedLT</span></a></div><div class="nav_link"><a class="break_within" href="#Finsupp.wellFoundedLT'"><span class="name">Finsupp</span>.<span class="name">wellFoundedLT'</span></a></div><div class="nav_link"><a class="break_within" href="#Finsupp.wellFoundedLT_of_finite"><span class="name">Finsupp</span>.<span class="name">wellFoundedLT_of_finite</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Well-foundedness-of-the-lexicographic-and-product-orders-on-Finsupp" class="markdown-heading">Well-foundedness of the lexicographic and product orders on <code><a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">Finsupp</a></code> <a class="hover-link" href="#Well-foundedness-of-the-lexicographic-and-product-orders-on-Finsupp">#</a></h1><p><code><a href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Lex.wellFounded">Finsupp.Lex.wellFounded</a></code> and the two variants that follow it essentially say that if <code>(· &gt; ·)</code> is
+a well order on <code>α</code>, <code>(· &lt; ·)</code> is well-founded on <code>N</code>, and <code>0</code> is a bottom element in <code>N</code>, then the
+lexicographic <code>(· &lt; ·)</code> is well-founded on <code>α →₀ N</code>.</p><p><code><a href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Lex.wellFoundedLT_of_finite">Finsupp.Lex.wellFoundedLT_of_finite</a></code> says that if <code>α</code> is finite and equipped with a linear order
+and <code>(· &lt; ·)</code> is well-founded on <code>N</code>, then the lexicographic <code>(· &lt; ·)</code> is well-founded on <code>α →₀ N</code>.</p><p><code><a href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.wellFoundedLT">Finsupp.wellFoundedLT</a></code> and <code><a href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Lex.wellFoundedLT_of_finite">wellFoundedLT_of_finite</a></code> state the same results for the product
+order <code>(· &lt; ·)</code>, but without the ordering conditions on <code>α</code>.</p><p>All results are transferred from <code><a href="../../.././Mathlib/Data/DFinsupp/Defs.html#DFinsupp">DFinsupp</a></code> via <code><a href="../../.././Mathlib/Data/Finsupp/ToDFinsupp.html#Finsupp.toDFinsupp">Finsupp.toDFinsupp</a></code>.</p></div><div class="decl" id="Finsupp.Lex.acc"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L36-L44">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Lex.acc"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">acc</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><span class="fn">N</span> → <span class="fn">N</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hbot</span> : <span class="fn">∀ ⦃<span class="fn">n</span> : <span class="fn">N</span>⦄, <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn">s</span> <span class="fn">n</span> <span class="fn">0</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Init/WF.html#WellFounded">WellFounded</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">x</span> : <span class="fn">α</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">N</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">h</span> : <span class="fn">∀ <span class="fn">a</span> ∈ <span class="fn"><span class="fn">x</span>.<a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp.support">support</a></span>, <span class="fn"><a href="../../.././Init/WF.html#Acc">Acc</a> <span class="fn">(<span class="fn">r</span><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a> ⊓ <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">α</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">x2</span></span>)</span> <span class="fn">a</span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/WF.html#Acc">Acc</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Lex.html#Finsupp.Lex">Finsupp.Lex</a> <span class="fn">r</span> <span class="fn">s</span>)</span> <span class="fn">x</span></span></div></div><p>Transferred from <code><a href="../../.././Mathlib/Data/DFinsupp/WellFounded.html#DFinsupp.Lex.acc">DFinsupp.Lex.acc</a></code>. See the top of that file for an explanation for the
+appearance of the relation <code>rᶜ ⊓ (≠)</code>.</p></div></div><div class="decl" id="Finsupp.Lex.wellFounded"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L46-L48">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Lex.wellFounded"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">wellFounded</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><span class="fn">N</span> → <span class="fn">N</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hbot</span> : <span class="fn">∀ ⦃<span class="fn">n</span> : <span class="fn">N</span>⦄, <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn">s</span> <span class="fn">n</span> <span class="fn">0</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Init/WF.html#WellFounded">WellFounded</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn"><a href="../../.././Init/WF.html#WellFounded">WellFounded</a> <span class="fn">(<span class="fn">r</span><a href="../../.././Mathlib/Order/Notation.html#Compl.compl">ᶜ</a> ⊓ <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">α</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Init/Core.html#Ne">≠</a> <span class="fn">x2</span></span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/WF.html#WellFounded">WellFounded</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Lex.html#Finsupp.Lex">Finsupp.Lex</a> <span class="fn">r</span> <span class="fn">s</span>)</span></span></div></div></div></div><div class="decl" id="Finsupp.Lex.wellFounded'"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L50-L53">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Lex.wellFounded'"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">wellFounded'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><span class="fn">N</span> → <span class="fn">N</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hbot</span> : <span class="fn">∀ ⦃<span class="fn">n</span> : <span class="fn">N</span>⦄, <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn"><span class="fn">s</span> <span class="fn">n</span> <span class="fn">0</span></span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Init/WF.html#WellFounded">WellFounded</a> <span class="fn">s</span></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Core.html#Std.Trichotomous">Std.Trichotomous</a> <span class="fn">r</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn"><a href="../../.././Init/WF.html#WellFounded">WellFounded</a> <span class="fn">(<a href="../../.././Mathlib/Logic/Function/Defs.html#Function.swap">Function.swap</a> <span class="fn">r</span>)</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/WF.html#WellFounded">WellFounded</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Lex.html#Finsupp.Lex">Finsupp.Lex</a> <span class="fn">r</span> <span class="fn">s</span>)</span></span></div></div></div></div><div class="decl" id="Finsupp.Lex.wellFoundedLT"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L55-L58">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Lex.wellFoundedLT"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">wellFoundedLT</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LT">LT</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Core.html#Std.Trichotomous">Std.Trichotomous</a> <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">α</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">x2</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hα</span> : <span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedGT">WellFoundedGT</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hN</span> : <span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">(<a href="../../.././Mathlib/Order/Lex.html#Lex">Lex</a> (<span class="fn">α</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">N</span>))</span></span></div></div></div></div><div class="decl" id="Finsupp.Colex.wellFoundedLT"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L60-L63">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Colex.wellFoundedLT"><span class="name">Finsupp</span>.<span class="name">Colex</span>.<span class="name">wellFoundedLT</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_4}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LT">LT</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Core.html#Std.Trichotomous">Std.Trichotomous</a> <span class="fn">fun (<span class="fn">x1</span> <span class="fn">x2</span> : <span class="fn">α</span>) =&gt; <span class="fn">x1</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">x2</span></span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">(<a href="../../.././Mathlib/Order/Lex.html#Colex">Colex</a> (<span class="fn">α</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">N</span>))</span></span></div></div></div></div><div class="decl" id="Finsupp.Lex.wellFounded_of_finite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L67-L69">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Lex.wellFounded_of_finite"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">wellFounded_of_finite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">r</span> : <span class="fn"><span class="fn">α</span> → <span class="fn">α</span> → <a href="../../.././foundational_types.html">Prop</a></span>)</span></span>
+<span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">s</span> : <span class="fn"><span class="fn">N</span> → <span class="fn">N</span> → <a href="../../.././foundational_types.html">Prop</a></span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/Unbundled.html#IsStrictTotalOrder">IsStrictTotalOrder</a> <span class="fn">α</span> <span class="fn">r</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hs</span> : <span class="fn"><a href="../../.././Init/WF.html#WellFounded">WellFounded</a> <span class="fn">s</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Init/WF.html#WellFounded">WellFounded</a> <span class="fn">(<a href="../../.././Mathlib/Data/Finsupp/Lex.html#Finsupp.Lex">Finsupp.Lex</a> <span class="fn">r</span> <span class="fn">s</span>)</span></span></div></div></div></div><div class="decl" id="Finsupp.Lex.wellFoundedLT_of_finite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L71-L73">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Lex.wellFoundedLT_of_finite"><span class="name">Finsupp</span>.<span class="name">Lex</span>.<span class="name">wellFoundedLT_of_finite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LT">LT</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn">hwf</span> : <span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">(<a href="../../.././Mathlib/Order/Lex.html#Lex">Lex</a> (<span class="fn">α</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">N</span>))</span></span></div></div></div></div><div class="decl" id="Finsupp.Colex.wellFoundedLT_of_finite"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L75-L77">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.Colex.wellFoundedLT_of_finite"><span class="name">Finsupp</span>.<span class="name">Colex</span>.<span class="name">wellFoundedLT_of_finite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/LinearOrder.html#LinearOrder">LinearOrder</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#LT">LT</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">(<a href="../../.././Mathlib/Order/Lex.html#Colex">Colex</a> (<span class="fn">α</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">N</span>))</span></span></div></div></div></div><div class="decl" id="Finsupp.wellFoundedLT"><div class="theorem"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L79-L81">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.wellFoundedLT"><span class="name">Finsupp</span>.<span class="name">wellFoundedLT</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hbot</span> : <span class="fn">∀ (<span class="fn">n</span> : <span class="fn">N</span>), <a href="../../.././Init/Prelude.html#Not">¬</a><span class="fn">n</span> <a href="../../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">0</span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> (<span class="fn">α</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">N</span>)</span></div></div></div></div><div class="decl" id="Finsupp.wellFoundedLT'"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L83-L86">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.wellFoundedLT'"><span class="name">Finsupp</span>.<span class="name">wellFoundedLT'</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_3}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Group/Defs.html#AddMonoid">AddMonoid</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#PartialOrder">PartialOrder</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Algebra/Order/Monoid/Canonical/Defs.html#CanonicallyOrderedAdd">CanonicallyOrderedAdd</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> (<span class="fn">α</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">N</span>)</span></div></div></div></div><div class="decl" id="Finsupp.wellFoundedLT_of_finite"><div class="instance"><div class="gh_link"><a href="https://github.com/leanprover-community/mathlib4/blob/8a178386ffc0f5fef0b77738bb5449d50efeea95/Mathlib/Data/Finsupp/WellFounded.lean#L88-L90">source</a></div><div class="decl_header"><span class="decl_kind">instance</span>
+<span class="decl_name"><a class="break_within" href="../../.././Mathlib/Data/Finsupp/WellFounded.html#Finsupp.wellFoundedLT_of_finite"><span class="name">Finsupp</span>.<span class="name">wellFoundedLT_of_finite</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">α</span> : <a href="../../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">N</span> : <a href="../../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Init/Prelude.html#Zero">Zero</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Data/Finite/Defs.html#Finite">Finite</a> <span class="fn">α</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/Defs/PartialOrder.html#Preorder">Preorder</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> <span class="fn">N</span></span>]</span></span>
+</span><span class="decl_args"> :</span><div class="decl_type"><span class="fn"><a href="../../.././Mathlib/Order/RelClasses.html#WellFoundedLT">WellFoundedLT</a> (<span class="fn">α</span> <a href="../../.././Mathlib/Data/Finsupp/Defs.html#Finsupp">→₀</a> <span class="fn">N</span>)</span></div></div></div></div></main>
+<nav class="nav"><iframe src="../../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>
